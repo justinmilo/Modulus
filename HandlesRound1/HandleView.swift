@@ -10,7 +10,6 @@ import UIKit
 
 import AudioToolbox
 
-private let isDevice = TARGET_OS_SIMULATOR == 0
 
 
 //Just in case - here're examples for iPhone 7/7+.
