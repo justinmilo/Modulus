@@ -64,7 +64,9 @@ class ViewController: UIViewController {
       return v
     }
     
-  
+    let gV = GameView()
+    self.view.addSubview(gV)
+    self.view.sendSubview(toBack: gV)
   
   }
   
