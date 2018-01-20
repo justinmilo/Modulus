@@ -38,7 +38,7 @@ class ViewController: UIViewController {
     let b3 = UIView()
     self.view.addSubview(b3)
     self.view.sendSubview(toBack: b3)
-    b3.backgroundColor = #colorLiteral(red: 0.1349328756, green: 0.1356815994, blue: 0.1134604588, alpha: 1)
+    b3.backgroundColor = #colorLiteral(red: 0.7808889747, green: 0.8120988011, blue: 0.9180557132, alpha: 0.1101177377)
     b3.layer.cornerRadius = buttonSize.width/4
     
     outerBoundaryView = b3
@@ -67,15 +67,17 @@ class ViewController: UIViewController {
     let gV = GameView()
     self.view.addSubview(gV)
     self.view.sendSubview(toBack: gV)
-  
+    self.twoDView = gV
   }
+  
+  private var twoDView : GameView!
   
   var initialOffset = CGPoint.zero
   
   
-    var point : TensionedPoint!
-    
-    
+  var point : TensionedPoint!
+  
+  
   
   
   @objc func press( _ gesture:UIGestureRecognizer )
@@ -107,6 +109,7 @@ class ViewController: UIViewController {
             
             layout(gesture)
           
+          
           //handles[nextLeft].center = CGPoint(
           
         case .ended:
@@ -136,6 +139,8 @@ class ViewController: UIViewController {
     for var outline in outlines {
       outline.layout(in: master)
     }
+    
+    self.twoDView.model = Model2D(dx: master.width, dy: master.height)
   }
 
 }

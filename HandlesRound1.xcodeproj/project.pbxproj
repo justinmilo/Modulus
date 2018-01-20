@@ -17,7 +17,7 @@
 		D0006A02200BD09A00E8D5F3 /* HandleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0006A01200BD09A00E8D5F3 /* HandleView.swift */; };
 		D03E03D82011653B002D47F3 /* DeepPressGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03E03D72011653B002D47F3 /* DeepPressGestureRecognizer.swift */; };
 		D03E03DA20124DB8002D47F3 /* Testing.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03E03D920124DB8002D47F3 /* Testing.swift */; };
-		D03E040020125DF8002D47F3 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03E03F720125DF8002D47F3 /* GameViewController.swift */; };
+		D03E040020125DF8002D47F3 /* GameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03E03F720125DF8002D47F3 /* GameView.swift */; };
 		D03E040320125DF8002D47F3 /* GrasshopperFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03E03FB20125DF8002D47F3 /* GrasshopperFunctions.swift */; };
 		D03E040520125DF8002D47F3 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03E03FD20125DF8002D47F3 /* GameScene.swift */; };
 		D03E040620125DF8002D47F3 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D03E03FE20125DF8002D47F3 /* Info.plist */; };
@@ -95,7 +95,7 @@
 		D0006A01200BD09A00E8D5F3 /* HandleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandleView.swift; sourceTree = "<group>"; };
 		D03E03D72011653B002D47F3 /* DeepPressGestureRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DeepPressGestureRecognizer.swift; path = HandlesRound1/DeepPressGestureRecognizer.swift; sourceTree = "<group>"; };
 		D03E03D920124DB8002D47F3 /* Testing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Testing.swift; sourceTree = "<group>"; };
-		D03E03F720125DF8002D47F3 /* GameViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
+		D03E03F720125DF8002D47F3 /* GameView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameView.swift; sourceTree = "<group>"; };
 		D03E03FB20125DF8002D47F3 /* GrasshopperFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GrasshopperFunctions.swift; sourceTree = "<group>"; };
 		D03E03FD20125DF8002D47F3 /* GameScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
 		D03E03FE20125DF8002D47F3 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -224,7 +224,7 @@
 		D03E03F520125DF8002D47F3 /* GrasshopperRound2 */ = {
 			isa = PBXGroup;
 			children = (
-				D03E03F720125DF8002D47F3 /* GameViewController.swift */,
+				D03E03F720125DF8002D47F3 /* GameView.swift */,
 				D03E03FB20125DF8002D47F3 /* GrasshopperFunctions.swift */,
 				D03E03FD20125DF8002D47F3 /* GameScene.swift */,
 				D03E03FE20125DF8002D47F3 /* Info.plist */,
@@ -473,7 +473,7 @@
 				D064BE14200D94C60032C153 /* CGPoint+Utility.swift in Sources */,
 				D064BE0F200D94C60032C153 /* CGScale+Math.swift in Sources */,
 				D064BE0C200D94C60032C153 /* CGFloat+Utility.swift in Sources */,
-				D03E040020125DF8002D47F3 /* GameViewController.swift in Sources */,
+				D03E040020125DF8002D47F3 /* GameView.swift in Sources */,
 				D064BE06200D94C60032C153 /* CGRect+Utility.swift in Sources */,
 				D0006A02200BD09A00E8D5F3 /* HandleView.swift in Sources */,
 				D064BE08200D94C60032C153 /* CGAngle+Math.swift in Sources */,
@@ -667,7 +667,7 @@
 				DEVELOPMENT_TEAM = V69QAU95S7;
 				INFOPLIST_FILE = HandlesRound1/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.sound.HandlesRound1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.sound.HandlesRound2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -682,7 +682,7 @@
 				DEVELOPMENT_TEAM = V69QAU95S7;
 				INFOPLIST_FILE = HandlesRound1/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.sound.HandlesRound1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.sound.HandlesRound2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
