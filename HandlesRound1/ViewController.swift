@@ -18,39 +18,37 @@ class ViewController: UIViewController {
   let buttonSize = CGSize(44, 44)
   var outlines: [AnyLayout<UIView>] = []
   var outerBoundaryView : UIView!
+  private var twoDView : Sprite2DGraph!
+  var initialOffset = CGPoint.zero
+  var point : TensionedPoint!
     
   override func loadView() {
-    let view = UIView()
-    self.view = view
+    
+    view = UIView()
     view.backgroundColor = #colorLiteral(red: 0.05504439026, green: 0.06437031925, blue: 0.06856494397, alpha: 1)
     
-    let border = UIView()
-    self.view.addSubview(border)
-    border.layer.borderWidth = 1.0
-    border.layer.borderColor = UIColor.white.cgColor
-    
+    // Create Borders ...
+    let b1 = UIView()
+    b1.layer.borderWidth = 1.0
+    b1.layer.borderColor = UIColor.white.cgColor
     let b2 = UIView()
-    self.view.addSubview(b2)
     b2.layer.borderWidth = 1.0
     b2.layer.borderColor = UIColor.gray.cgColor
     b2.layer.cornerRadius = buttonSize.width/4
     
-    let b3 = UIView()
-    self.view.addSubview(b3)
-    self.view.sendSubview(toBack: b3)
-    b3.backgroundColor = #colorLiteral(red: 0.7808889747, green: 0.8120988011, blue: 0.9180557132, alpha: 0.1101177377)
-    b3.layer.cornerRadius = buttonSize.width/4
-    
-    outerBoundaryView = b3
-    b3.frame = view.frame.insetBy(dx: 100, dy: 100)
-
-    
+       // Make Layouts for outlines
     let outside = MarginLayout(content:b2, margin: -buttonSize.width/4)
-    outlines += [AnyLayout(border), AnyLayout(outside)]
+    outlines += [AnyLayout(b1), AnyLayout(outside)]
     for var o in outlines { o.layout(in: rectangle)}
+    // ... End borders
     
+    // Create Background View
+    outerBoundaryView = UIView()
+    outerBoundaryView.backgroundColor = #colorLiteral(red: 0.7808889747, green: 0.8120988011, blue: 0.9180557132, alpha: 0.1101177377)
+    outerBoundaryView.layer.cornerRadius = buttonSize.width/4
+    outerBoundaryView.frame = view.frame.insetBy(dx: 100, dy: 100)
     
-    // Handles
+    // Handles...
     let buttonFrames : [CGRect] = [rectangle.topLeft, rectangle.topRight, rectangle.bottomRight, rectangle.bottomLeft].map{
       let centerOffset = -(buttonSize.asVector()/2)
       return CGRect(origin: $0 + centerOffset, size: buttonSize)
@@ -59,23 +57,21 @@ class ViewController: UIViewController {
     // Set handles with side effects
     handles = buttonFrames.map {
       let v = ButtonView(frame: $0)
-      self.view.addSubview(v)
       v.callBack = self.press(_:)
       return v
     }
+    //...Handles
     
-    let gV = GameView()
-    self.view.addSubview(gV)
-    self.view.sendSubview(toBack: gV)
-    self.twoDView = gV
+    // Create sprite graph
+    twoDView = Sprite2DGraph(model: Model2D(origin: rectangle.origin, dx: rectangle.width, dy: rectangle.height, col: 2, rows: 2))
+    
+    // Order Subviews and add to view
+    for v in [outerBoundaryView!, twoDView, b2, b1] + handles { view.addSubview(v) }
+    
+    
   }
   
-  private var twoDView : GameView!
   
-  var initialOffset = CGPoint.zero
-  
-  
-  var point : TensionedPoint!
   
   
   
@@ -140,7 +136,9 @@ class ViewController: UIViewController {
       outline.layout(in: master)
     }
     
-    self.twoDView.model = Model2D(dx: master.width, dy: master.height)
+    let m = Model2D(origin: master.origin, dx: master.width, dy: master.height, col: 2, rows: 2)
+    let o = master.origin - CGVector(master.width * CGFloat(m.col), master.height * CGFloat(m.rows))
+    self.twoDView.model = Model2D(origin: o, dx: m.dx, dy: m.dy, col: m.col, rows: m.rows)
   }
 
 }

@@ -17,7 +17,7 @@
 		D0006A02200BD09A00E8D5F3 /* HandleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0006A01200BD09A00E8D5F3 /* HandleView.swift */; };
 		D03E03D82011653B002D47F3 /* DeepPressGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03E03D72011653B002D47F3 /* DeepPressGestureRecognizer.swift */; };
 		D03E03DA20124DB8002D47F3 /* Testing.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03E03D920124DB8002D47F3 /* Testing.swift */; };
-		D03E040020125DF8002D47F3 /* GameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03E03F720125DF8002D47F3 /* GameView.swift */; };
+		D03E040020125DF8002D47F3 /* Sprite2DGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03E03F720125DF8002D47F3 /* Sprite2DGraph.swift */; };
 		D03E040320125DF8002D47F3 /* GrasshopperFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03E03FB20125DF8002D47F3 /* GrasshopperFunctions.swift */; };
 		D03E040520125DF8002D47F3 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03E03FD20125DF8002D47F3 /* GameScene.swift */; };
 		D03E040620125DF8002D47F3 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D03E03FE20125DF8002D47F3 /* Info.plist */; };
@@ -85,7 +85,7 @@
 		D00069D8200BD08300E8D5F3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		D00069DA200BD08300E8D5F3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D00069DD200BD08300E8D5F3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		D00069DF200BD08300E8D5F3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D00069DF200BD08300E8D5F3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = Info.plist; path = "/Users/justin/Dropbox/Developer/To Delete at some point/HandlesRound1/HandlesRound1/Other Stuff/Info.plist"; sourceTree = "<absolute>"; };
 		D00069E4200BD08300E8D5F3 /* HandlesRound1Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HandlesRound1Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D00069E8200BD08300E8D5F3 /* HandlesRound1Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandlesRound1Tests.swift; sourceTree = "<group>"; };
 		D00069EA200BD08300E8D5F3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -93,9 +93,9 @@
 		D00069F3200BD08300E8D5F3 /* HandlesRound1UITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandlesRound1UITests.swift; sourceTree = "<group>"; };
 		D00069F5200BD08300E8D5F3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D0006A01200BD09A00E8D5F3 /* HandleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandleView.swift; sourceTree = "<group>"; };
-		D03E03D72011653B002D47F3 /* DeepPressGestureRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DeepPressGestureRecognizer.swift; path = HandlesRound1/DeepPressGestureRecognizer.swift; sourceTree = "<group>"; };
+		D03E03D72011653B002D47F3 /* DeepPressGestureRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepPressGestureRecognizer.swift; sourceTree = "<group>"; };
 		D03E03D920124DB8002D47F3 /* Testing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Testing.swift; sourceTree = "<group>"; };
-		D03E03F720125DF8002D47F3 /* GameView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameView.swift; sourceTree = "<group>"; };
+		D03E03F720125DF8002D47F3 /* Sprite2DGraph.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sprite2DGraph.swift; sourceTree = "<group>"; };
 		D03E03FB20125DF8002D47F3 /* GrasshopperFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GrasshopperFunctions.swift; sourceTree = "<group>"; };
 		D03E03FD20125DF8002D47F3 /* GameScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
 		D03E03FE20125DF8002D47F3 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -167,7 +167,6 @@
 		D00069C7200BD08300E8D5F3 = {
 			isa = PBXGroup;
 			children = (
-				D03E03D72011653B002D47F3 /* DeepPressGestureRecognizer.swift */,
 				D00069D2200BD08300E8D5F3 /* HandlesRound1 */,
 				D00069E7200BD08300E8D5F3 /* HandlesRound1Tests */,
 				D00069F2200BD08300E8D5F3 /* HandlesRound1UITests */,
@@ -193,12 +192,9 @@
 				D00069D5200BD08300E8D5F3 /* ViewController.swift */,
 				D0931FD520113DCA007BFCC3 /* Layouts */,
 				D064BDD9200D94C50032C153 /* SwiftGeometry */,
-				D0006A01200BD09A00E8D5F3 /* HandleView.swift */,
-				D00069D7200BD08300E8D5F3 /* Main.storyboard */,
-				D00069DA200BD08300E8D5F3 /* Assets.xcassets */,
-				D00069DC200BD08300E8D5F3 /* LaunchScreen.storyboard */,
-				D00069DF200BD08300E8D5F3 /* Info.plist */,
 				D03E03F520125DF8002D47F3 /* GrasshopperRound2 */,
+				D0006A01200BD09A00E8D5F3 /* HandleView.swift */,
+				D0AEF45D2013A6FC005F761B /* Other Stuff */,
 			);
 			path = HandlesRound1;
 			sourceTree = "<group>";
@@ -224,7 +220,7 @@
 		D03E03F520125DF8002D47F3 /* GrasshopperRound2 */ = {
 			isa = PBXGroup;
 			children = (
-				D03E03F720125DF8002D47F3 /* GameView.swift */,
+				D03E03F720125DF8002D47F3 /* Sprite2DGraph.swift */,
 				D03E03FB20125DF8002D47F3 /* GrasshopperFunctions.swift */,
 				D03E03FD20125DF8002D47F3 /* GameScene.swift */,
 				D03E03FE20125DF8002D47F3 /* Info.plist */,
@@ -315,6 +311,18 @@
 			children = (
 			);
 			path = "Layout - VirtualSize - Intrinsic";
+			sourceTree = "<group>";
+		};
+		D0AEF45D2013A6FC005F761B /* Other Stuff */ = {
+			isa = PBXGroup;
+			children = (
+				D00069DF200BD08300E8D5F3 /* Info.plist */,
+				D00069DC200BD08300E8D5F3 /* LaunchScreen.storyboard */,
+				D00069DA200BD08300E8D5F3 /* Assets.xcassets */,
+				D00069D7200BD08300E8D5F3 /* Main.storyboard */,
+				D03E03D72011653B002D47F3 /* DeepPressGestureRecognizer.swift */,
+			);
+			path = "Other Stuff";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -473,7 +481,7 @@
 				D064BE14200D94C60032C153 /* CGPoint+Utility.swift in Sources */,
 				D064BE0F200D94C60032C153 /* CGScale+Math.swift in Sources */,
 				D064BE0C200D94C60032C153 /* CGFloat+Utility.swift in Sources */,
-				D03E040020125DF8002D47F3 /* GameView.swift in Sources */,
+				D03E040020125DF8002D47F3 /* Sprite2DGraph.swift in Sources */,
 				D064BE06200D94C60032C153 /* CGRect+Utility.swift in Sources */,
 				D0006A02200BD09A00E8D5F3 /* HandleView.swift in Sources */,
 				D064BE08200D94C60032C153 /* CGAngle+Math.swift in Sources */,

@@ -11,12 +11,15 @@ import SpriteKit
 import GameplayKit
 
 struct Model2D {
+  var origin: CGPoint
   var dx: CGFloat
   var dy: CGFloat
+  var col: Int
+  var rows: Int
 }
 
 
-class GameView : SKView {
+class Sprite2DGraph : SKView {
   
   var geometries : [[[Geometry]]] = []
   var index: Int = 0
@@ -32,7 +35,7 @@ class GameView : SKView {
       
       // First Geometry Set...
       // Grid
-      let gridTup = gridWithOptions(p: origin, dx: model.dx, dy: model.dy, ex: col, ey: rows)
+      let gridTup = gridWithOptions(p: model.origin, dx: model.dx, dy: model.dy, ex: col, ey: rows)
       let rectangles = (gridTup.edges.horizontals + gridTup.edges.verticals).map{ StrokedLine.init( line: $0, strokeWidth: 3.0) }
       
       // Handle Points
@@ -81,38 +84,32 @@ class GameView : SKView {
       self.geometries = [gridItems, boundingItems, selectedItems]
       self.index = 0
       
-      // Specialtiy SpriteKitScene
-      let aScene = GameScene(size: UIScreen.main.bounds.size)
-      self.presentScene(aScene)
-      
-      // Load the SKScene from 'GameScene.sks'
-      // Set the scale mode to scale to fit the window
-      scene!.scaleMode = .aspectFill
-      
-      // Present the scene
-      self.presentScene(scene)
-      self.ignoresSiblingOrder = true
-      self.showsFPS = true
-      self.showsNodeCount = true
       
       
-      
-      
-      self.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(GameView.tapped)))
-      
-      for list in gridItems
-      {
-        for item in list {
-          self.addChildR(item)
-        }
-      }
+      tapped()
     }
   }
   
-  init()
+  init(model : Model2D)
   {
+    
+    self.model = model
+    
     super.init(frame: UIScreen.main.bounds)
+    
+    // Specialtiy SpriteKitScene
+    let aScene = GameScene(size: UIScreen.main.bounds.size)
+    self.presentScene(aScene)
+    
+    
+    self.ignoresSiblingOrder = true
+    self.showsFPS = true
+    self.showsNodeCount = true
+    
+    self.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(Sprite2DGraph.tapped)))
   }
+  
+  
   
   @objc func tapped()
   {
