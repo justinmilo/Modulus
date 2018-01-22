@@ -299,7 +299,7 @@ extension Array
 
 // Helper
 let unitX = CGVector(dx: 1, dy: 0)
-let unitY = CGVector(dx: 0, dy: 1)
+let unitY = CGVector(dx: 0, dy: -1)
 
 let redCirc = { pointToCircle2($0, #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1))}
 let blueCirc = { pointToCircle2($0, #colorLiteral(red: 0.2196078449, green: 0.007843137719, blue: 0.5504655855, alpha: 1))}

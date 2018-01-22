@@ -84,10 +84,13 @@ class ViewController: UIViewController {
         case .began:
             initialOffset = (gesture.view!.frame.origin - loc).asPoint()
         case .changed:
-            
-            var testFrame = view.bounds.insetBy(dx: 100, dy: 100)
+          
+          // Setup the
+            var testFrame = view.bounds.insetBy(dx: 10, dy: 10)
             testFrame.size.width = testFrame.width - gesture.view!.frame.width
             testFrame.size.height = testFrame.height - gesture.view!.frame.height
+            
+            
             outerBoundaryView.frame = view.frame.insetBy(dx: 100, dy: 100)
 
             
@@ -122,90 +125,38 @@ class ViewController: UIViewController {
     }
   
   fileprivate func layout(_ gesture: UIGestureRecognizer) {
+    // Create Master rectangle from gesture
     let indexOfHandle = handles.index(of: gesture.view!)!
     let opposingHandleIndex = indexOfHandle + 2 < handles.count ? indexOfHandle + 2 : indexOfHandle - 2
     let master = handles[indexOfHandle].center + handles[opposingHandleIndex].center
     
+    // set handles
     handles[0].center = master.topLeft
     handles[1].center = master.topRight
     handles[2].center = master.bottomRight
     handles[3].center = master.bottomLeft
     
-    
+    // layout my view's outlines
     for var outline in outlines {
       outline.layout(in: master)
     }
     
-    let m = Model2D(origin: master.origin, dx: master.width, dy: master.height, col: 2, rows: 2)
-    let o = master.origin - CGVector(master.width * CGFloat(m.col), master.height * CGFloat(m.rows))
-    self.twoDView.model = Model2D(origin: o, dx: m.dx, dy: m.dy, col: m.col, rows: m.rows)
+    // Scale
+    
+    
+    // Find appropriate model
+    twoMeterModel(targetSize: master.size)
+    
+    // "layout" my subview grid, witha model2d
+    let col = 2, rows = 2
+    let dx = master.width / CGFloat(col), dy = master.height / CGFloat(rows)
+    let m = Model2D(origin: master.origin, dx: dx, dy: dy, col: col, rows: rows)
+    self.twoDView.model = m
   }
 
-}
-
-struct TensionedPoint { var x:CGFloat, y: CGFloat, anchor: CGPoint }
-
-// Takes a tensionedPoint (for chaining) and a lower X Bounds returns a tensionedPoint
-// that is a square root of the diference
-func boundsLower(springX: TensionedPoint, lowerBounds: CGFloat) -> TensionedPoint
-{
-  let x = springX.x
-  if x < lowerBounds
-  {
-    let newX = pow((lowerBounds-x)*4,1/2)*2
-    return TensionedPoint(
-      x: lowerBounds - newX,
-      y: springX.y,
-      anchor: CGPoint(x:lowerBounds, y:springX.anchor.y)
-    )
+  override var shouldAutorotate: Bool {
+    return true
   }
-  return springX
-}
-
-func boundsXUpper(springX: TensionedPoint, upperBounds: CGFloat) -> TensionedPoint
-{
-  let x = springX.x
-  if x > upperBounds
-  {
-    let newX = pow((x-upperBounds)*4,1/2)*2
-    return TensionedPoint(
-      x:upperBounds + newX,
-      y: springX.y,
-      anchor: CGPoint(x:upperBounds, y:springX.anchor.y)
-    )
-  }
-  return springX
-}
-
-// Changes the Y in returned TensionPoint (in both the y and anchor.y) in relation to an upper bounnds check
-func boundsY(springY: TensionedPoint, lowerBounds: CGFloat) -> TensionedPoint
-{
-  let y = springY.y
-  if y < lowerBounds
-  {
-    let a = pow((lowerBounds-y)*4,1/2)*2
-    return TensionedPoint(
-      x: springY.x,
-      y:lowerBounds - a,
-      anchor: CGPoint(x:springY.anchor.x, y:lowerBounds)
-    )
-  }
-  return springY
-}
-
-func boundsYUpper(springY: TensionedPoint, upperBounds: CGFloat) -> TensionedPoint
-{
-  let y = springY.y
-  if y > upperBounds
-  {
-    let a = pow((y-upperBounds)*4,1/2)*2
-    return TensionedPoint(
-      x: springY.x,
-      y: upperBounds + a,
-      anchor: CGPoint(x:springY.anchor.x, y:upperBounds)
-    )
-  }
-  return springY
 }
 
 

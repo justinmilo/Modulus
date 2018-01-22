@@ -18,29 +18,35 @@ struct Model2D {
   var rows: Int
 }
 
+// Used to be view controller
 
 class Sprite2DGraph : SKView {
   
   var geometries : [[[Geometry]]] = []
   var index: Int = 0
   
+  private var _skCordinateModel : Model2D!
   var model : Model2D! {
+    
     didSet {
+      
+      //_skCordinateModel = model
+      let origin = CGPoint(model.origin.x, self.bounds.size.height - model.origin.y)
+      _skCordinateModel = Model2D(origin: origin, dx: model.dx, dy: -model.dy, col: model.col, rows: model.rows)
+      // transform Cordinate Space
+      
+      
       // offset distance
       let d : CGFloat = 40.0
       
-      let width : CGFloat = 240, height : CGFloat = 300
-      let rows = 3, col = 4
-      let origin = CGPoint( -width/2, -height/2)
-      
       // First Geometry Set...
       // Grid
-      let gridTup = gridWithOptions(p: model.origin, dx: model.dx, dy: model.dy, ex: col, ey: rows)
-      let rectangles = (gridTup.edges.horizontals + gridTup.edges.verticals).map{ StrokedLine.init( line: $0, strokeWidth: 3.0) }
+      let grid = gridWithOptions(p: _skCordinateModel.origin, dx: _skCordinateModel.dx, dy: _skCordinateModel.dy, ex: _skCordinateModel.col, ey: _skCordinateModel.rows)
+      let rectangles = (grid.edges.horizontals + grid.edges.verticals).map{ StrokedLine.init( line: $0, strokeWidth: 3.0) }
       
       // Handle Points
-      let gridHandlePoints = getHandlePoints(points: gridTup.points, offset: d)
-      let handleLines = zip(gridTup.points.boundaries, gridHandlePoints.flatMap{$0}).map(Line.init)
+      let gridHandlePoints = getHandlePoints(points: grid.points, offset: d)
+      let handleLines = zip(grid.points.boundaries, gridHandlePoints.flatMap{$0}).map(Line.init)
       
       // Mid Points
       let mids = dimPoints(points: gridHandlePoints, offset: 40)
@@ -51,7 +57,7 @@ class Sprite2DGraph : SKView {
       
       
       // Corner Ovals
-      let top = gridTup.points.top, bottom = gridTup.points.bottom
+      let top = grid.points.top, bottom = grid.points.bottom
       let corners : [CGPoint] = [top.first!, top.last!, bottom.last!, bottom.first!]
       let corOv : [Oval] = corners.map(redCirc)
       
@@ -75,19 +81,32 @@ class Sprite2DGraph : SKView {
       var boundingItems : [[Geometry]] = [
         rectangles, corOv, overallDimes]
       
-      let firstBay = Array(gridTup.points.top[0...1] + gridTup.points.bottom[0...1].reversed()) + [gridTup.points.top[0]]
+      let firstBay = Array(grid.points.top[0...1] + grid.points.bottom[0...1].reversed()) + [grid.points.top[0]]
       let circles = centers(between: firstBay).map(redCirc)
       var selectedItems : [[Geometry]] = [rectangles, circles]
       
       
       
-      self.geometries = [gridItems, boundingItems, selectedItems]
-      self.index = 0
       
       
+      var gridFromZero =  testingGrid(origin: _skCordinateModel.origin)
       
-      tapped()
+      self.geometries = [gridFromZero, [rectangles, mids],  gridItems, boundingItems, selectedItems]
+      redraw(index)
     }
+  }
+  
+  func testingGrid(origin:CGPoint) -> [[Geometry]]
+  {
+    var gPoints =
+      [CGPoint(0,0),
+       CGPoint(100,100),
+       CGPoint(200,200)]
+    gPoints = gPoints.map{ $0 + origin.asVector() }
+    let gCircles = gPoints.map(redCirc)
+    let labels : [Label] = gPoints.map(pointToLabel).map{ var a = $0;
+      a.text = String(describing: $0.position); return a }
+    return [gCircles, labels]
   }
   
   init(model : Model2D)
@@ -114,10 +133,13 @@ class Sprite2DGraph : SKView {
   @objc func tapped()
   {
     index = (index + 1) < geometries.count ? index + 1 : 0
-    
+    redraw(index)
+  }
+  
+  func redraw(_ i:Int) {
     self.scene!.removeAllChildren()
     
-    for list in geometries[index]
+    for list in geometries[i]
     {
       for item in list {
         self.addChildR(item)
