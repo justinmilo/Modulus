@@ -29,13 +29,16 @@ class Sprite2DGraph : SKView {
   var geometries : [[[Geometry]]] = []
   var index: Int = 0
   
+  var scale : CGFloat = 1.0
   private var _skCordinateModel : Model2D!
   var model : Model2D! {
     
     didSet {
       
       //_skCordinateModel = model
-      let origin = CGPoint(model.origin.x, self.bounds.size.height - model.origin.y)
+      // IMPORTANT: Scale the orgin by opposite of scale! for some reason
+      // rest of scaling in addChildR 
+      let origin = CGPoint(model.origin.x / scale, self.bounds.size.height / scale - model.origin.y / scale)
       _skCordinateModel = Model2D(origin: origin, dx: model.dx, dy: -model.dy, col: model.col, rows: model.rows)
       // transform Cordinate Space
       
@@ -180,7 +183,7 @@ class Sprite2DGraph : SKView {
     if let oval = node as? Oval
     {
       let node = SKShapeNode(ellipseOf: oval.ellipseOf)
-      node.position = oval.position
+      node.position = oval.position  * scale
       node.fillColor = oval.fillColor
       node.lineWidth = 0.0
       scene!.addChild(node)
@@ -191,7 +194,7 @@ class Sprite2DGraph : SKView {
       let node = SKLabelNode(text: label.text)
       node.fontName = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.bold).fontName
       node.fontSize = 18
-      node.position = label.position
+      node.position = label.position * scale
       node.zRotation = label.rotation == .h ? 0.0 : 0.5 * CGFloat.pi
       node.verticalAlignmentMode = .center
       scene!.addChild(node)
@@ -200,8 +203,8 @@ class Sprite2DGraph : SKView {
     if let line = node as? Line
     {
       let path = CGMutablePath()
-      path.move(to: line.start)
-      path.addLine(to: line.end)
+      path.move(to: line.start  * scale)
+      path.addLine(to: line.end  * scale)
       let node = SKShapeNode(path: path)
       scene!.addChild(node)
       
@@ -210,8 +213,8 @@ class Sprite2DGraph : SKView {
     if let line = node as? StrokedLine
     {
       let path = CGMutablePath()
-      path.move(to: line.line.start)
-      path.addLine(to: line.line.end)
+      path.move(to: line.line.start  * scale)
+      path.addLine(to: line.line.end  * scale)
       let node = SKShapeNode(path: path)
       node.lineWidth = line.strokeWidth
       node.strokeColor = #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)
