@@ -12,7 +12,7 @@ import UIKit
 
 class ViewController: UIViewController {
 
-  let rectangle = CGRect(x: 120, y: 140, width: 140, height: 200)
+  let rectangle = CGRect(x: 120, y: 140, width: 200, height: 200)
   
   var handles : [UIView] = [] // Clockwise from topLeft
   let buttonSize = CGSize(44, 44)
@@ -143,13 +143,21 @@ class ViewController: UIViewController {
     
     // Scale
     
-    
     // Find appropriate model
-    twoMeterModel(targetSize: master.size)
+    let counts = twoMeterModel(targetSize: master.size) |> twoMeterModelCounts
+    print(twoMeterModel(targetSize: master.size))
+    print(
+      twoMeterModelCounts(
+      x: (twoMeterModel(targetSize: master.size)).x,
+      y:(twoMeterModel(targetSize: master.size)).y)
+    )
+    print(counts)
+    
     
     // "layout" my subview grid, witha model2d
-    let col = 2, rows = 2
-    let dx = master.width / CGFloat(col), dy = master.height / CGFloat(rows)
+    let col = counts.x, rows = counts.y
+    let dx : CGFloat = 200, dy : CGFloat = 200
+    // create model
     let m = Model2D(origin: master.origin, dx: dx, dy: dy, col: col, rows: rows)
     self.twoDView.model = m
   }

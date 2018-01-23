@@ -18,6 +18,10 @@ struct Model2D {
   var rows: Int
 }
 
+
+
+
+
 // Used to be view controller
 
 class Sprite2DGraph : SKView {
@@ -81,17 +85,29 @@ class Sprite2DGraph : SKView {
       var boundingItems : [[Geometry]] = [
         rectangles, corOv, overallDimes]
       
-      let firstBay = Array(grid.points.top[0...1] + grid.points.bottom[0...1].reversed()) + [grid.points.top[0]]
-      let circles = centers(between: firstBay).map(redCirc)
-      var selectedItems : [[Geometry]] = [rectangles, circles]
+      var selectedItems : [[Geometry]]
+      if grid.points.top.count > 1, grid.points.bottom.count > 1
+      {
+        // top left to right
+        let first = grid.points.top[0...1]
+        // bottom right to left
+        let second = grid.points.bottom[0...1].reversed()
+        // and back to the top
+        let final = grid.points.top[0]
+        let firstBay =  Array(first + second ) + [final]
+        let circles = centers(between: firstBay).map(redCirc)
+        selectedItems = [rectangles, circles]
+      }
+      else {
+        selectedItems = []
+      }
       
       
       
       
       
-      var gridFromZero =  testingGrid(origin: _skCordinateModel.origin)
       
-      self.geometries = [gridFromZero, [rectangles, mids],  gridItems, boundingItems, selectedItems]
+      self.geometries = [[rectangles, mids],  gridItems, boundingItems, selectedItems]
       redraw(index)
     }
   }

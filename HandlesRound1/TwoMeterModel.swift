@@ -45,11 +45,11 @@ func twoMeterModel(
 func twoMeterModelCounts(x:[CGFloat], y:[CGFloat]) -> (x:Int, y: Int)
 {
   let count200s = { (res :Int , flo:CGFloat) -> Int in
-    return flo == 200.0 ? res + 1 : 0
+    return flo == 200.0 ? res + 1 : res
   }
   return (
     x: x.reduce(0, count200s),
-    y: x.reduce(0, count200s)
+    y: y.reduce(0, count200s)
   )
 }
 

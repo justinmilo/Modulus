@@ -10,7 +10,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "HandlesRound1/ViewController.swift"
-            timestampString = "538280450.3549449"
+            timestampString = "538365910.832468"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "56"
@@ -26,7 +26,7 @@
                   moduleName = "HandlesRound1"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/justin/Dropbox/Developer/To%20Delete%20at%20some%20point/HandlesRound1/HandlesRound1/ViewController.swift"
-                  timestampString = "538163754.414645"
+                  timestampString = "538281134.283666"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "58"
@@ -41,7 +41,7 @@
                   moduleName = "HandlesRound1"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/justin/Dropbox/Developer/To%20Delete%20at%20some%20point/HandlesRound1/HandlesRound1/ViewController.swift"
-                  timestampString = "538163754.417812"
+                  timestampString = "538281134.285933"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "59"
@@ -49,22 +49,6 @@
                   offsetFromSymbolStart = "34">
                </Location>
             </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "GrasshopperRound2/Sprite2DGraph.swift"
-            timestampString = "538265982.172827"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "90"
-            endingLineNumber = "90"
-            landmarkName = "model"
-            landmarkType = "24">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
