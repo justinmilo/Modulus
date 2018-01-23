@@ -142,16 +142,11 @@ class ViewController: UIViewController {
     }
     
     // Scale
+    let scaleFactor : CGFloat = 3.0
+    let scaledMaster = master * scaleFactor
     
     // Find appropriate model
-    let counts = twoMeterModel(targetSize: master.size) |> twoMeterModelCounts
-    print(twoMeterModel(targetSize: master.size))
-    print(
-      twoMeterModelCounts(
-      x: (twoMeterModel(targetSize: master.size)).x,
-      y:(twoMeterModel(targetSize: master.size)).y)
-    )
-    print(counts)
+    let counts = twoMeterModel(targetSize: scaledMaster.size) |> twoMeterModelCounts
     
     
     // "layout" my subview grid, witha model2d
@@ -159,7 +154,9 @@ class ViewController: UIViewController {
     let dx : CGFloat = 200, dy : CGFloat = 200
     // create model
     let m = Model2D(origin: master.origin, dx: dx, dy: dy, col: col, rows: rows)
+    self.twoDView.scale = 1/scaleFactor
     self.twoDView.model = m
+    
   }
 
   override var shouldAutorotate: Bool {
