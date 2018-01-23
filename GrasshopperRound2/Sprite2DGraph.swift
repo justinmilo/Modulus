@@ -18,6 +18,50 @@ struct Model2D {
   var rows: Int
 }
 
+struct NonuniformModel2D {
+  var origin: CGPoint
+  var rowSizes: Grid
+  var colSizes: Grid
+}
+
+extension NonuniformModel2D {
+  var edgesAndPoints : (edges: EdgeCollection, points: PointCollection)
+  {
+    get {
+      
+      let xPoints = self.colSizes.positions.map { $0 + self.origin.x }
+      let yPoints = self.rowSizes.positions.map { $0 + self.origin.y }
+      
+      let pointsLeftToRight = xPoints.map { x in
+        yPoints.map { y in
+          return CGPoint(x,y)
+        }
+      }
+      
+      let pointsUpToDown = yPoints.map { y in
+        xPoints.map { x in
+          return CGPoint(x,y)
+        }
+      }
+        
+        let linesUp = pointsLeftToRight.map{ Line(start: $0.first!, end: $0.last!) }
+        let linesAcross = pointsUpToDown.map{ Line(start: $0.first!, end: $0.last!) }
+        
+        return (edges: EdgeCollection(verticals:linesUp, horizontals:linesAcross), points: PointCollection(
+          all: pointsLeftToRight.flatMap{ $0 },
+          top: pointsUpToDown.last!,
+          right: pointsLeftToRight[0],
+          bottom: pointsUpToDown[0],
+          left: pointsLeftToRight.last!
+        ))
+      }
+      
+      
+    
+  }
+}
+
+
 
 
 
@@ -30,8 +74,8 @@ class Sprite2DGraph : SKView {
   var index: Int = 0
   
   var scale : CGFloat = 1.0
-  private var _skCordinateModel : Model2D!
-  var model : Model2D! {
+  private var _skCordinateModel : NonuniformModel2D!
+  var model : NonuniformModel2D! {
     
     didSet {
       
@@ -39,7 +83,7 @@ class Sprite2DGraph : SKView {
       // IMPORTANT: Scale the orgin by opposite of scale! for some reason
       // rest of scaling in addChildR 
       let origin = CGPoint(model.origin.x / scale, self.bounds.size.height / scale - model.origin.y / scale)
-      _skCordinateModel = Model2D(origin: origin, dx: model.dx, dy: -model.dy, col: model.col, rows: model.rows)
+      _skCordinateModel = NonuniformModel2D(origin: origin, rowSizes: Grid(model.rowSizes.map{ -$0}), colSizes: model.colSizes)
       // transform Cordinate Space
       
       
@@ -48,7 +92,7 @@ class Sprite2DGraph : SKView {
       
       // First Geometry Set...
       // Grid
-      let grid = gridWithOptions(p: _skCordinateModel.origin, dx: _skCordinateModel.dx, dy: _skCordinateModel.dy, ex: _skCordinateModel.col, ey: _skCordinateModel.rows)
+      let grid = _skCordinateModel.edgesAndPoints
       let rectangles = (grid.edges.horizontals + grid.edges.verticals).map{ StrokedLine.init( line: $0, strokeWidth: 3.0) }
       
       // Handle Points
@@ -131,7 +175,7 @@ class Sprite2DGraph : SKView {
   init(model : Model2D)
   {
     
-    self.model = model
+    self.model = NonuniformModel2D(origin: model.origin, rowSizes: Grid((0...model.rows).map{ CGFloat($0) * model.dx }) , colSizes: Grid((0...model.col).map{ CGFloat($0) * model.dy }))
     
     super.init(frame: UIScreen.main.bounds)
     
@@ -192,8 +236,8 @@ class Sprite2DGraph : SKView {
     if let label = node as? Label
     {
       let node = SKLabelNode(text: label.text)
-      node.fontName = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.bold).fontName
-      node.fontSize = 18
+      node.fontName = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.medium).fontName
+      node.fontSize = 14// * scale
       node.position = label.position * scale
       node.zRotation = label.rotation == .h ? 0.0 : 0.5 * CGFloat.pi
       node.verticalAlignmentMode = .center

@@ -23,6 +23,8 @@
 		D03E040620125DF8002D47F3 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D03E03FE20125DF8002D47F3 /* Info.plist */; };
 		D056A3992015696A00C3B3B1 /* TwoMeterModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D056A3982015696A00C3B3B1 /* TwoMeterModel.swift */; };
 		D056A39B2015815000C3B3B1 /* ForwardPipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = D056A39A2015815000C3B3B1 /* ForwardPipe.swift */; };
+		D056A39E20177F0B00C3B3B1 /* Grid.swift in Sources */ = {isa = PBXBuildFile; fileRef = D056A39C20177F0B00C3B3B1 /* Grid.swift */; };
+		D056A39F20177F0B00C3B3B1 /* PlanModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D056A39D20177F0B00C3B3B1 /* PlanModel.swift */; };
 		D064BDFE200D94C60032C153 /* CGAngle+Exploration.swift in Sources */ = {isa = PBXBuildFile; fileRef = D064BDDB200D94C50032C153 /* CGAngle+Exploration.swift */; };
 		D064BE00200D94C60032C153 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = D064BDDD200D94C60032C153 /* .gitignore */; };
 		D064BE02200D94C60032C153 /* CGRect+Math.swift in Sources */ = {isa = PBXBuildFile; fileRef = D064BDE0200D94C60032C153 /* CGRect+Math.swift */; };
@@ -104,6 +106,8 @@
 		D03E03FE20125DF8002D47F3 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D056A3982015696A00C3B3B1 /* TwoMeterModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwoMeterModel.swift; sourceTree = "<group>"; };
 		D056A39A2015815000C3B3B1 /* ForwardPipe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForwardPipe.swift; sourceTree = "<group>"; };
+		D056A39C20177F0B00C3B3B1 /* Grid.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Grid.swift; sourceTree = "<group>"; };
+		D056A39D20177F0B00C3B3B1 /* PlanModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlanModel.swift; sourceTree = "<group>"; };
 		D064BDDB200D94C50032C153 /* CGAngle+Exploration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CGAngle+Exploration.swift"; sourceTree = "<group>"; };
 		D064BDDD200D94C60032C153 /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		D064BDE0200D94C60032C153 /* CGRect+Math.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CGRect+Math.swift"; sourceTree = "<group>"; };
@@ -196,9 +200,9 @@
 			children = (
 				D00069D3200BD08300E8D5F3 /* AppDelegate.swift */,
 				D00069D5200BD08300E8D5F3 /* ViewController.swift */,
-				D056A3982015696A00C3B3B1 /* TwoMeterModel.swift */,
 				D056A39A2015815000C3B3B1 /* ForwardPipe.swift */,
 				D0AEF45F2013D507005F761B /* TensionedPoint.swift */,
+				D056A3A020177F1000C3B3B1 /* Grids */,
 				D0931FD520113DCA007BFCC3 /* Layouts */,
 				D064BDD9200D94C50032C153 /* SwiftGeometry */,
 				D03E03F520125DF8002D47F3 /* GrasshopperRound2 */,
@@ -236,6 +240,16 @@
 			);
 			path = GrasshopperRound2;
 			sourceTree = SOURCE_ROOT;
+		};
+		D056A3A020177F1000C3B3B1 /* Grids */ = {
+			isa = PBXGroup;
+			children = (
+				D056A3982015696A00C3B3B1 /* TwoMeterModel.swift */,
+				D056A39C20177F0B00C3B3B1 /* Grid.swift */,
+				D056A39D20177F0B00C3B3B1 /* PlanModel.swift */,
+			);
+			path = Grids;
+			sourceTree = "<group>";
 		};
 		D064BDD9200D94C50032C153 /* SwiftGeometry */ = {
 			isa = PBXGroup;
@@ -470,6 +484,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D056A39F20177F0B00C3B3B1 /* PlanModel.swift in Sources */,
 				D064BE05200D94C60032C153 /* CGAngle+Utility.swift in Sources */,
 				D064BE0D200D94C60032C153 /* CGSegment+Math.swift in Sources */,
 				D064BE1B200D94C60032C153 /* CGPoint+Utility+Nonstandard.swift in Sources */,
@@ -510,6 +525,7 @@
 				D064BE10200D94C60032C153 /* CGVector+Utility.swift in Sources */,
 				D064BE0A200D94C60032C153 /* CGPoint+Math.swift in Sources */,
 				D03E040520125DF8002D47F3 /* GameScene.swift in Sources */,
+				D056A39E20177F0B00C3B3B1 /* Grid.swift in Sources */,
 				D064BE1A200D94C60032C153 /* CGScale+Utility+Nonstandard.swift in Sources */,
 				D03E03DA20124DB8002D47F3 /* Testing.swift in Sources */,
 				D093215120113DCB007BFCC3 /* Layout.swift in Sources */,
@@ -688,7 +704,7 @@
 				DEVELOPMENT_TEAM = V69QAU95S7;
 				INFOPLIST_FILE = HandlesRound1/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.sound.HandlesRound3;
+				PRODUCT_BUNDLE_IDENTIFIER = com.sound.HandlesRound4;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;
@@ -705,7 +721,7 @@
 				DEVELOPMENT_TEAM = V69QAU95S7;
 				INFOPLIST_FILE = HandlesRound1/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.sound.HandlesRound3;
+				PRODUCT_BUNDLE_IDENTIFIER = com.sound.HandlesRound4;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;
