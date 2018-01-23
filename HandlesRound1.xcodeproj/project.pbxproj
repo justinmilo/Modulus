@@ -688,7 +688,7 @@
 				DEVELOPMENT_TEAM = V69QAU95S7;
 				INFOPLIST_FILE = HandlesRound1/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.sound.HandlesRound2;
+				PRODUCT_BUNDLE_IDENTIFIER = com.sound.HandlesRound3;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;
@@ -705,7 +705,7 @@
 				DEVELOPMENT_TEAM = V69QAU95S7;
 				INFOPLIST_FILE = HandlesRound1/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.sound.HandlesRound2;
+				PRODUCT_BUNDLE_IDENTIFIER = com.sound.HandlesRound3;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;
