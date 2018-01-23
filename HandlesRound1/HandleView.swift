@@ -42,8 +42,6 @@ class ButtonView : UIView
         self.addSubview(interiorView)
       
       self.addGestureRecognizer(movingGestureRecognizer)
-      let hold = UILongPressGestureRecognizer(target: self, action: #selector(ButtonView.press(_:)))
-
     }
   var deepPressRecognized = false
   var movingGestureRecognizer : UIGestureRecognizer

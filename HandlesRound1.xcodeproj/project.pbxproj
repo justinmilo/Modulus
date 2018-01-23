@@ -146,7 +146,7 @@
 		D093209620113DCB007BFCC3 /* BackgroundLayoutSimple.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BackgroundLayoutSimple.swift; sourceTree = "<group>"; };
 		D093209820113DCB007BFCC3 /* MarginIntrinsicSizeLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MarginIntrinsicSizeLayout.swift; sourceTree = "<group>"; };
 		D093215720114134007BFCC3 /* AnyLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnyLayout.swift; sourceTree = "<group>"; };
-		D0AEF45F2013D507005F761B /* TensionedPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TensionedPoint.swift; path = HandlesRound1/TensionedPoint.swift; sourceTree = SOURCE_ROOT; };
+		D0AEF45F2013D507005F761B /* TensionedPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TensionedPoint.swift; path = GrasshopperRound2/TensionedPoint.swift; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -200,9 +200,7 @@
 			children = (
 				D00069D3200BD08300E8D5F3 /* AppDelegate.swift */,
 				D00069D5200BD08300E8D5F3 /* ViewController.swift */,
-				D056A39A2015815000C3B3B1 /* ForwardPipe.swift */,
-				D0AEF45F2013D507005F761B /* TensionedPoint.swift */,
-				D056A3A020177F1000C3B3B1 /* Grids */,
+				D03E03FD20125DF8002D47F3 /* GameScene.swift */,
 				D0931FD520113DCA007BFCC3 /* Layouts */,
 				D064BDD9200D94C50032C153 /* SwiftGeometry */,
 				D03E03F520125DF8002D47F3 /* GrasshopperRound2 */,
@@ -233,9 +231,11 @@
 		D03E03F520125DF8002D47F3 /* GrasshopperRound2 */ = {
 			isa = PBXGroup;
 			children = (
+				D056A3A020177F1000C3B3B1 /* Grids */,
+				D056A39A2015815000C3B3B1 /* ForwardPipe.swift */,
+				D0AEF45F2013D507005F761B /* TensionedPoint.swift */,
 				D03E03F720125DF8002D47F3 /* Sprite2DGraph.swift */,
 				D03E03FB20125DF8002D47F3 /* GrasshopperFunctions.swift */,
-				D03E03FD20125DF8002D47F3 /* GameScene.swift */,
 				D03E03FE20125DF8002D47F3 /* Info.plist */,
 			);
 			path = GrasshopperRound2;

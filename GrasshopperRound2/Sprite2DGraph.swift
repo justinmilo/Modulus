@@ -103,7 +103,7 @@ class Sprite2DGraph : SKView {
       let mids = dimPoints(points: gridHandlePoints, offset: 40)
       
       // put in on screen when gameScene loads into View
-      var gridItems : [[Geometry]] = [rectangles, handleLines, gridHandlePoints.flatMap { $0 }, mids]
+      let gridItems : [[Geometry]] = [rectangles, handleLines, gridHandlePoints.flatMap { $0 }, mids]
       
       
       
@@ -129,7 +129,7 @@ class Sprite2DGraph : SKView {
       
       
       // put in on screen when gameScene loads into View
-      var boundingItems : [[Geometry]] = [
+      let boundingItems : [[Geometry]] = [
         rectangles, corOv, overallDimes]
       
       var selectedItems : [[Geometry]]
@@ -222,7 +222,7 @@ class Sprite2DGraph : SKView {
   //var scene : SKScene
   
   // put on the canvas!!
-  func addChildR<T>(_ node: T) -> SKNode
+  @discardableResult func addChildR<T>(_ node: T) -> SKNode
   {
     if let oval = node as? Oval
     {

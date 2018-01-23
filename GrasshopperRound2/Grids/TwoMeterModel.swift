@@ -8,9 +8,9 @@
 
 import CoreGraphics
 
-func twoMeterModel(
+func maximizedGrid(
   availableInventory : [CGFloat] = [25, 50, 100, 150, 200],
-  targetSize : CGSize
+  lessThan targetSize : CGSize
   )
   -> (x:[CGFloat], y:[CGFloat])
 {
@@ -18,7 +18,7 @@ func twoMeterModel(
   func maximumRepeated(availableInventory : [CGFloat], targetMaximum: CGFloat) -> [CGFloat]
   {
     let orderedInventory = availableInventory.sorted(by: >)
-    let (remaining, standards) : (CGFloat , [CGFloat]) = orderedInventory.reduce((targetMaximum, []))
+    let (_, standards) : (CGFloat , [CGFloat]) = orderedInventory.reduce((targetMaximum, []))
     {
       (balance :(heightRemain : CGFloat, standards : [CGFloat]), heightToTry) in
     

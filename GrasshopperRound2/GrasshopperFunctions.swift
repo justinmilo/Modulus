@@ -68,12 +68,9 @@ extension Line {
 }
 func divideLine(line: Line, segments: Int)->([CGPoint])
 {
-  segments
   let unitLine = line.unitLine
   
   return (1...segments).map {
-    $0
-    segments
     let ratio = CGFloat($0)/CGFloat(segments)
     let x = ratio * unitLine.end.x
     let y = ratio * unitLine.end.y

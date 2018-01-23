@@ -143,21 +143,16 @@ class ViewController: UIViewController {
     
     // Scale
     let scaleFactor : CGFloat = 3.0
-    let scaledMaster = master * scaleFactor
+    let scaledMasterSize = master.size * scaleFactor
     
     // Find appropriate model
-    let x111 = twoMeterModel(targetSize: scaledMaster.size)
-    let counts = x111 |> twoMeterModelCounts
+    let x111 = maximizedGrid(lessThan: scaledMasterSize)
     let grid = PlanModel(x: Grid(x111.x), y: Grid(x111.y))
       //twoMeterModel(targetSize: scaledMaster.size)
     
     // "layout" my subview grid, witha model2d
-    let col = counts.x, rows = counts.y
-    let dx : CGFloat = 200, dy : CGFloat = 200
-    // create model
-    let m = Model2D(origin: master.origin, dx: dx, dy: dy, col: col, rows: rows)
     self.twoDView.scale = 1/scaleFactor
-    self.twoDView.model = NonuniformModel2D(origin: m.origin, rowSizes: grid.y, colSizes: grid.x)
+    self.twoDView.model = NonuniformModel2D(origin: master.origin, rowSizes: grid.y, colSizes: grid.x)
     
   }
 
