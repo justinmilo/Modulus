@@ -37,7 +37,22 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0JV-Qi-4Zo" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1116" y="69"/>
+            <point key="canvasLocation" x="1450" y="0.0"/>
+        </scene>
+        <!--Third View Controller-->
+        <scene sceneID="HDq-3V-toM">
+            <objects>
+                <viewController id="6hI-qB-crO" customClass="ThirdViewController" customModule="HandlesRound1" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="9rG-zN-Uh6">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="TsT-1M-otj"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="jFk-tH-hBM" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2170" y="73"/>
         </scene>
     </scenes>
 </document>

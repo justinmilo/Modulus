@@ -56,6 +56,8 @@
 		D064BE1C200D94C60032C153 /* CGSize+Utility+Nonstandard.swift in Sources */ = {isa = PBXBuildFile; fileRef = D064BDFB200D94C60032C153 /* CGSize+Utility+Nonstandard.swift */; };
 		D064BE1D200D94C60032C153 /* CGAffineTransform+Utility+Nonstandard.swift in Sources */ = {isa = PBXBuildFile; fileRef = D064BDFC200D94C60032C153 /* CGAffineTransform+Utility+Nonstandard.swift */; };
 		D064BE1E200D94C60032C153 /* CGAngle+Utility+Nonstandard.swift in Sources */ = {isa = PBXBuildFile; fileRef = D064BDFD200D94C60032C153 /* CGAngle+Utility+Nonstandard.swift */; };
+		D079B6BC201D193E0070EB40 /* CGRect+Inset.swift in Sources */ = {isa = PBXBuildFile; fileRef = D079B6BB201D193E0070EB40 /* CGRect+Inset.swift */; };
+		D079B6BE201D19600070EB40 /* EdgeAlignments.swift in Sources */ = {isa = PBXBuildFile; fileRef = D079B6BD201D19600070EB40 /* EdgeAlignments.swift */; };
 		D093209A20113DCB007BFCC3 /* MultipleLayouts.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0931FD720113DCA007BFCC3 /* MultipleLayouts.swift */; };
 		D093209D20113DCB007BFCC3 /* Layout-Logging.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0931FDA20113DCA007BFCC3 /* Layout-Logging.swift */; };
 		D093215120113DCB007BFCC3 /* Layout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D093209420113DCB007BFCC3 /* Layout.swift */; };
@@ -141,6 +143,8 @@
 		D064BDFB200D94C60032C153 /* CGSize+Utility+Nonstandard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CGSize+Utility+Nonstandard.swift"; sourceTree = "<group>"; };
 		D064BDFC200D94C60032C153 /* CGAffineTransform+Utility+Nonstandard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CGAffineTransform+Utility+Nonstandard.swift"; sourceTree = "<group>"; };
 		D064BDFD200D94C60032C153 /* CGAngle+Utility+Nonstandard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CGAngle+Utility+Nonstandard.swift"; sourceTree = "<group>"; };
+		D079B6BB201D193E0070EB40 /* CGRect+Inset.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "CGRect+Inset.swift"; path = "../../Deploy/Deploy/Drawing/CG and UIKit/CGRect+Inset.swift"; sourceTree = "<group>"; };
+		D079B6BD201D19600070EB40 /* EdgeAlignments.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EdgeAlignments.swift; path = ../../Control/Control/Sources/EdgeAlignments.swift; sourceTree = "<group>"; };
 		D0931FD720113DCA007BFCC3 /* MultipleLayouts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MultipleLayouts.swift; sourceTree = "<group>"; };
 		D0931FDA20113DCA007BFCC3 /* Layout-Logging.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Layout-Logging.swift"; sourceTree = "<group>"; };
 		D093209420113DCB007BFCC3 /* Layout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Layout.swift; sourceTree = "<group>"; };
@@ -260,6 +264,8 @@
 		D064BDD9200D94C50032C153 /* SwiftGeometry */ = {
 			isa = PBXGroup;
 			children = (
+				D079B6BD201D19600070EB40 /* EdgeAlignments.swift */,
+				D079B6BB201D193E0070EB40 /* CGRect+Inset.swift */,
 				D064BDDA200D94C50032C153 /* Explorations */,
 				D064BDDD200D94C60032C153 /* .gitignore */,
 				D064BDDF200D94C60032C153 /* Sources */,
@@ -280,28 +286,28 @@
 		D064BDDF200D94C60032C153 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
-				D064BDE0200D94C60032C153 /* CGRect+Math.swift */,
-				D064BDE1200D94C60032C153 /* CGSegment.swift */,
-				D064BDE2200D94C60032C153 /* CGScale+Utility.swift */,
-				D064BDE3200D94C60032C153 /* CGAngle+Utility.swift */,
-				D064BDE4200D94C60032C153 /* CGRect+Utility.swift */,
-				D064BDE5200D94C60032C153 /* CGAffineTransform+Utility.swift */,
-				D064BDE6200D94C60032C153 /* CGAngle+Math.swift */,
-				D064BDE7200D94C60032C153 /* CGSize+Utility.swift */,
-				D064BDE8200D94C60032C153 /* CGPoint+Math.swift */,
-				D064BDE9200D94C60032C153 /* CGAngle.swift */,
-				D064BDEA200D94C60032C153 /* CGFloat+Utility.swift */,
-				D064BDEB200D94C60032C153 /* CGSegment+Math.swift */,
-				D064BDEC200D94C60032C153 /* CGRay.swift */,
-				D064BDED200D94C60032C153 /* CGScale+Math.swift */,
-				D064BDEE200D94C60032C153 /* CGVector+Utility.swift */,
-				D064BDEF200D94C60032C153 /* CGVector+Math.swift */,
-				D064BDF0200D94C60032C153 /* CGSize+Math.swift */,
-				D064BDF1200D94C60032C153 /* CGScale.swift */,
-				D064BDF2200D94C60032C153 /* CGPoint+Utility.swift */,
 				D064BDF3200D94C60032C153 /* CGAffineTransform+Math.swift */,
+				D064BDE5200D94C60032C153 /* CGAffineTransform+Utility.swift */,
+				D064BDE9200D94C60032C153 /* CGAngle.swift */,
+				D064BDE6200D94C60032C153 /* CGAngle+Math.swift */,
+				D064BDE3200D94C60032C153 /* CGAngle+Utility.swift */,
 				D064BDF4200D94C60032C153 /* CGDouble+Utility.swift */,
+				D064BDEA200D94C60032C153 /* CGFloat+Utility.swift */,
+				D064BDE8200D94C60032C153 /* CGPoint+Math.swift */,
+				D064BDF2200D94C60032C153 /* CGPoint+Utility.swift */,
+				D064BDEC200D94C60032C153 /* CGRay.swift */,
+				D064BDE0200D94C60032C153 /* CGRect+Math.swift */,
+				D064BDE4200D94C60032C153 /* CGRect+Utility.swift */,
+				D064BDF1200D94C60032C153 /* CGScale.swift */,
+				D064BDED200D94C60032C153 /* CGScale+Math.swift */,
+				D064BDE2200D94C60032C153 /* CGScale+Utility.swift */,
+				D064BDE1200D94C60032C153 /* CGSegment.swift */,
+				D064BDEB200D94C60032C153 /* CGSegment+Math.swift */,
 				D064BDF5200D94C60032C153 /* CGSegment+Utility.swift */,
+				D064BDF0200D94C60032C153 /* CGSize+Math.swift */,
+				D064BDE7200D94C60032C153 /* CGSize+Utility.swift */,
+				D064BDEF200D94C60032C153 /* CGVector+Math.swift */,
+				D064BDEE200D94C60032C153 /* CGVector+Utility.swift */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -495,6 +501,7 @@
 				D064BE0D200D94C60032C153 /* CGSegment+Math.swift in Sources */,
 				D064BE1B200D94C60032C153 /* CGPoint+Utility+Nonstandard.swift in Sources */,
 				D064BE18200D94C60032C153 /* CGRect+Utility+Nonstandard.swift in Sources */,
+				D079B6BE201D19600070EB40 /* EdgeAlignments.swift in Sources */,
 				D064BE16200D94C60032C153 /* CGDouble+Utility.swift in Sources */,
 				D064BE0E200D94C60032C153 /* CGRay.swift in Sources */,
 				D064BE12200D94C60032C153 /* CGSize+Math.swift in Sources */,
@@ -520,6 +527,7 @@
 				D064BE08200D94C60032C153 /* CGAngle+Math.swift in Sources */,
 				D064BE0B200D94C60032C153 /* CGAngle.swift in Sources */,
 				D03E040320125DF8002D47F3 /* GrasshopperFunctions.swift in Sources */,
+				D079B6BC201D193E0070EB40 /* CGRect+Inset.swift in Sources */,
 				D064BE09200D94C60032C153 /* CGSize+Utility.swift in Sources */,
 				D064BE02200D94C60032C153 /* CGRect+Math.swift in Sources */,
 				D064BE19200D94C60032C153 /* CGVector+Utility+Nonstandard.swift in Sources */,

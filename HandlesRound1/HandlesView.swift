@@ -131,7 +131,7 @@ class HandleViewRound1: UIView {
     handleBoundary[1].backgroundColor = #colorLiteral(red: 0.7808889747, green: 0.8120988011, blue: 0.9180557132, alpha: 0.04869058104)
     handleBoundary[0].backgroundColor = #colorLiteral(red: 0.4666666687, green: 0.7647058964, blue: 0.2666666806, alpha: 0.0459672095)
     handleBoundary[2].backgroundColor = #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 0.05251430462)
-    //for v in handleBoundary { v.isHidden = true }
+    for v in handleBoundary { v.isHidden = true }
     
     // Order Subviews and add to view
     for v in handleBoundary + handles { self.addSubview(v) }
