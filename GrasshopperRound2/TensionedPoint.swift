@@ -8,67 +8,68 @@
 
 import CoreGraphics
 
-struct TensionedPoint { var x:CGFloat, y: CGFloat, anchor: CGPoint }
+
+struct TensionedPoint {
+  var projection: CGPoint
+  var initial: CGPoint
+  var anchor: CGPoint
+}
 
 // Takes a tensionedPoint (for chaining) and a lower X Bounds returns a tensionedPoint
 // that is a square root of the diference
-func boundsLower(springX: TensionedPoint, lowerBounds: CGFloat) -> TensionedPoint
-{
-  let x = springX.x
-  if x < lowerBounds
-  {
-    let newX = pow((lowerBounds-x)*4,1/2)*2
-    return TensionedPoint(
-      x: lowerBounds - newX,
-      y: springX.y,
-      anchor: CGPoint(x:lowerBounds, y:springX.anchor.y)
-    )
-  }
-  return springX
+
+
+func powerSlope(_ x:CGFloat, lowerBounds:CGFloat)->CGFloat {
+  return pow((abs(x-lowerBounds))*4,1/2)*2
 }
 
-func boundsXUpper(springX: TensionedPoint, upperBounds: CGFloat) -> TensionedPoint
-{
-  let x = springX.x
-  if x > upperBounds
-  {
-    let newX = pow((x-upperBounds)*4,1/2)*2
-    return TensionedPoint(
-      x:upperBounds + newX,
-      y: springX.y,
-      anchor: CGPoint(x:upperBounds, y:springX.anchor.y)
-    )
-  }
-  return springX
+func otherSlope(_ x:CGFloat, lowerBounds:CGFloat)->CGFloat {
+  return pow((abs(x-lowerBounds)),1/2)*2
 }
 
-// Changes the Y in returned TensionPoint (in both the y and anchor.y) in relation to an upper bounnds check
-func boundsY(springY: TensionedPoint, lowerBounds: CGFloat) -> TensionedPoint
-{
-  let y = springY.y
-  if y < lowerBounds
-  {
-    let a = pow((lowerBounds-y)*4,1/2)*2
-    return TensionedPoint(
-      x: springY.x,
-      y:lowerBounds - a,
-      anchor: CGPoint(x:springY.anchor.x, y:lowerBounds)
-    )
-  }
-  return springY
+func constrained(_ x:CGFloat, lowerBounds:CGFloat)->CGFloat {
+  return 0
 }
 
-func boundsYUpper(springY: TensionedPoint, upperBounds: CGFloat) -> TensionedPoint
-{
-  let y = springY.y
-  if y > upperBounds
+
+
+extension CGPoint {
+  func tensionedPoint(within bounds:CGRect) -> TensionedPoint
   {
-    let a = pow((y-upperBounds)*4,1/2)*2
+    
+    let xPoint = x.boundsTest(lowerBounds: bounds.minX, upperBounds: bounds.maxX, transform: otherSlope)
+    
+    let yPoint = y.boundsTest(lowerBounds: bounds.minY, upperBounds: bounds.maxY, transform: otherSlope)
+    
     return TensionedPoint(
-      x: springY.x,
-      y: upperBounds + a,
-      anchor: CGPoint(x:springY.anchor.x, y:upperBounds)
-    )
+      projection: CGPoint(xPoint.0, yPoint.0),
+      initial: CGPoint(
+        x:xPoint.1?.0 ?? xPoint.0,
+        y: yPoint.1?.0 ?? yPoint.0
+      ),
+      anchor: CGPoint(
+        x:xPoint.1?.1 ?? xPoint.0,
+        y: yPoint.1?.1 ?? yPoint.0
+    ))
   }
-  return springY
 }
+
+extension CGFloat
+{
+  func boundsTest(lowerBounds: CGFloat, upperBounds: CGFloat, transform: (CGFloat, CGFloat) -> CGFloat ) -> (CGFloat, (CGFloat, CGFloat)?)
+  {
+    
+    if self < lowerBounds
+    {
+      return (lowerBounds - transform(self, lowerBounds), (self, lowerBounds))
+    }
+    else if self > upperBounds
+    {
+      return (upperBounds + transform(self, upperBounds), (self, upperBounds))
+    }
+    else { return (self, nil) }
+  }
+}
+
+
+

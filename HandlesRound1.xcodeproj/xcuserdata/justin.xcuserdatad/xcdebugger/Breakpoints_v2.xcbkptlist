@@ -9,46 +9,14 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "HandlesRound1/ViewController.swift"
-            timestampString = "538439061.191933"
+            filePath = "HandlesRound1/ButtonView.swift"
+            timestampString = "538773630.567715"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "56"
-            endingLineNumber = "56"
-            landmarkName = "loadView()"
+            startingLineNumber = "29"
+            endingLineNumber = "29"
+            landmarkName = "animateOpen()"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "HandlesRound1.ViewController.loadView() -&gt; ()"
-                  moduleName = "HandlesRound1"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/justin/Dropbox/Developer/To%20Delete%20at%20some%20point/HandlesRound1/HandlesRound1/ViewController.swift"
-                  timestampString = "538281134.283666"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "58"
-                  endingLineNumber = "58"
-                  offsetFromSymbolStart = "5572">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #2 (__C.CGRect) -&gt; __ObjC.UIView in HandlesRound1.ViewController.loadView() -&gt; ()"
-                  moduleName = "HandlesRound1"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/justin/Dropbox/Developer/To%20Delete%20at%20some%20point/HandlesRound1/HandlesRound1/ViewController.swift"
-                  timestampString = "538281134.285933"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "59"
-                  endingLineNumber = "59"
-                  offsetFromSymbolStart = "34">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

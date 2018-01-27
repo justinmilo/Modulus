@@ -200,6 +200,8 @@ class Sprite2DGraph : SKView {
   }
   
   func redraw(_ i:Int) {
+    guard i < geometries.count else { return }
+    
     self.scene!.removeAllChildren()
     
     for list in geometries[i]

@@ -23,9 +23,13 @@ class ViewController: UIViewController {
   var point : TensionedPoint!
     
   override func loadView() {
+  
+    
     
     view = UIView()
     view.backgroundColor = #colorLiteral(red: 0.05504439026, green: 0.06437031925, blue: 0.06856494397, alpha: 1)
+    
+    
     
     // Create Borders ...
     let b1 = UIView()
@@ -68,7 +72,10 @@ class ViewController: UIViewController {
     // Order Subviews and add to view
     for v in [outerBoundaryView!, twoDView, b2, b1] + handles { view.addSubview(v) }
     
-    
+    // Test view
+    let v = HandleViewRound1(frame: self.view.frame, state: .edge) { _ in }
+      view.backgroundColor = .black
+      self.view.addSubview(v)
   }
   
   
@@ -95,17 +102,11 @@ class ViewController: UIViewController {
             
             
             let targetFrameOrign = loc + initialOffset.asVector()
-            let x = targetFrameOrign.x, y = targetFrameOrign.y
             
-            let springX = TensionedPoint(x:x, y:y, anchor: targetFrameOrign)
-            point = boundsLower(springX: springX, lowerBounds: testFrame.origin.x)
-            point = boundsXUpper(springX: point, upperBounds: testFrame.origin.x + testFrame.size.width)
-            point = boundsY(springY: point, lowerBounds: testFrame.origin.y)
-            point = boundsYUpper(springY: point, upperBounds: testFrame.origin.y + testFrame.size.height)
+            point = targetFrameOrign.tensionedPoint(within: testFrame)
             
-            gesture.view?.frame.origin.x = point.x
-            gesture.view?.frame.origin.y = point.y
-            
+            gesture.view?.frame.origin = point.projection
+
             layout(gesture)
           
           
@@ -113,8 +114,7 @@ class ViewController: UIViewController {
           
         case .ended:
           UIView.animate(withDuration: 0.3, delay: 0.0, usingSpringWithDamping: 0.4, initialSpringVelocity: 1.0, options: UIViewAnimationOptions.allowUserInteraction, animations: {
-            gesture.view?.frame.origin.x = self.point.anchor.x
-            gesture.view?.frame.origin.y = self.point.anchor.y
+            gesture.view?.frame.origin = self.point.anchor
             
             self.layout(gesture)
           }, completion: { (bo) in
