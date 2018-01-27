@@ -8,8 +8,16 @@
 
 import CoreGraphics
 
+
+  
+
+
+
+
+
+
 func maximizedGrid(
-  availableInventory : [CGFloat] = [25, 50, 100, 150, 200],
+  availableInventory : [CGFloat] = [100, 150, 200],
   lessThan targetSize : CGSize
   )
   -> (x:[CGFloat], y:[CGFloat])

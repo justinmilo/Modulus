@@ -92,7 +92,7 @@ class ViewController: UIViewController {
             
             
             outerBoundaryView.frame = view.frame.insetBy(dx: 100, dy: 100)
-
+            
             
             let targetFrameOrign = loc + initialOffset.asVector()
             let x = targetFrameOrign.x, y = targetFrameOrign.y
@@ -102,7 +102,7 @@ class ViewController: UIViewController {
             point = boundsXUpper(springX: point, upperBounds: testFrame.origin.x + testFrame.size.width)
             point = boundsY(springY: point, lowerBounds: testFrame.origin.y)
             point = boundsYUpper(springY: point, upperBounds: testFrame.origin.y + testFrame.size.height)
-
+            
             gesture.view?.frame.origin.x = point.x
             gesture.view?.frame.origin.y = point.y
             
@@ -112,34 +112,59 @@ class ViewController: UIViewController {
           //handles[nextLeft].center = CGPoint(
           
         case .ended:
+          UIView.animate(withDuration: 0.3, delay: 0.0, usingSpringWithDamping: 0.4, initialSpringVelocity: 1.0, options: UIViewAnimationOptions.allowUserInteraction, animations: {
+            gesture.view?.frame.origin.x = self.point.anchor.x
+            gesture.view?.frame.origin.y = self.point.anchor.y
+            
+            self.layout(gesture)
+          }, completion: { (bo) in
+            
             UIView.animate(withDuration: 0.3, delay: 0.0, usingSpringWithDamping: 0.4, initialSpringVelocity: 1.0, options: UIViewAnimationOptions.allowUserInteraction, animations: {
-                gesture.view?.frame.origin.x = self.point.anchor.x
-                gesture.view?.frame.origin.y = self.point.anchor.y
+              let master = ViewController.masterRect(from: gesture, and: self.handles)
+              // Scale
+              let scaleFactor : CGFloat = 3.0
+              let scaledMasterSize = master.size * scaleFactor
               
-              self.layout(gesture)
-            }
-            )
-        default:
-            return
+              // Find appropriate model
+              let x111 = CGSize( Grid(maximizedGrid(lessThan: scaledMasterSize).x).sum / scaleFactor, Grid(maximizedGrid(lessThan: scaledMasterSize).y).sum / scaleFactor)
+              
+              self.layout(in: CGRect(origin: master.origin, size: x111))
+            })
+      })
+      
+      default:
+      return
         }
     }
   
-  fileprivate func layout(_ gesture: UIGestureRecognizer) {
+  
+  static func masterRect(from gesture: UIGestureRecognizer, and handles:[UIView]) -> CGRect {
     // Create Master rectangle from gesture
     let indexOfHandle = handles.index(of: gesture.view!)!
     let opposingHandleIndex = indexOfHandle + 2 < handles.count ? indexOfHandle + 2 : indexOfHandle - 2
     let master = handles[indexOfHandle].center + handles[opposingHandleIndex].center
-    
+    return master
+  }
+  
+  func layout(in rect: CGRect)
+  {
     // set handles
-    handles[0].center = master.topLeft
-    handles[1].center = master.topRight
-    handles[2].center = master.bottomRight
-    handles[3].center = master.bottomLeft
+    handles[0].center = rect.topLeft
+    handles[1].center = rect.topRight
+    handles[2].center = rect.bottomRight
+    handles[3].center = rect.bottomLeft
     
     // layout my view's outlines
     for var outline in outlines {
-      outline.layout(in: master)
+      outline.layout(in: rect)
     }
+  }
+  
+  fileprivate func layout(_ gesture: UIGestureRecognizer) {
+   
+    let master = ViewController.masterRect(from: gesture, and: handles)
+    
+    self.layout(in: master)
     
     // Scale
     let scaleFactor : CGFloat = 3.0
@@ -153,6 +178,8 @@ class ViewController: UIViewController {
     // "layout" my subview grid, witha model2d
     self.twoDView.scale = 1/scaleFactor
     self.twoDView.model = NonuniformModel2D(origin: master.origin, rowSizes: grid.y, colSizes: grid.x)
+    
+    
     
   }
 

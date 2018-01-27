@@ -20,7 +20,7 @@ func is3dTouchAvailable(traitCollection: UITraitCollection) -> Bool {
 }
 
 
-class ButtonView : UIView
+public class ButtonView : UIView
 {
   
 
