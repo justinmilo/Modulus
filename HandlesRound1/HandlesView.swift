@@ -8,6 +8,9 @@
 
 import CoreGraphics
 
+
+
+
 // Pure functions
 
 func corners(in rect: CGRect) -> [CGPoint]
@@ -62,58 +65,79 @@ func centerDefinedRect(from points:[CGPoint]) -> CGRect {
 
 import UIKit
 
+
+// HANDLEVIEW
+// A rect input machine
 class HandleViewRound1: UIView {
-  
+  // Collection of functions
   struct StateMachine{
     enum State {
       case corner
       case edge
     }
-    
+    // Set immutable functions based on state enum
     init (state: State)
     {
-      
       switch state {
       case .corner:
         self.centers = corners(in:)
         self.redefine = masterRect(from:in:)
-        
+        self.positions = {
+          switch $0 {
+          case 0: return (.top, .left)
+          case 1: return (.top, .right)
+          case 2: return (.bottom, .right)
+          case 3: return (.bottom, .left)
+          default: fatalError()
+          }
+        }
       case .edge:
         self.centers = edges(in:)
         self.redefine = centerDefinedRect(from:in:)
+        self.positions = {
+          switch $0 {
+          case 0: return (.top, .center)
+          case 1: return (.center, .right)
+          case 2: return (.bottom, .center)
+          case 3: return (.center, .left)
+          default: fatalError()
+          }
+        }
       }
-      
     }
-    
+    // State based functions : Assignment Based
     let centers : (CGRect) -> [CGPoint]
     let redefine : (Int, [CGPoint]) -> CGRect
+    let positions: (Int) -> (VerticalPosition,HorizontalPosition)
+    
   }
-  var stateMachine : StateMachine!
   
+  // whole class properties
+  var stateMachine : StateMachine!
   var handles : [UIView] = [] // Clockwise from topLeft
   var point : TensionedPoint!
   let buttonSize = CGSize(44, 44)
-  var handler : (CGRect)->() = { _ in }
-  var completed : (CGRect)->() = { _ in }
+  var handler : ( CGRect,
+    (VerticalPosition,HorizontalPosition)
+    )->() = { _,_ in }
+  var completed : (CGRect,(VerticalPosition,HorizontalPosition))->() = { _, _ in }
   
-  convenience init(frame: CGRect, state: StateMachine.State, handler: @escaping (CGRect)->() )
+  
+  convenience init(frame: CGRect, state: StateMachine.State, handler: @escaping (CGRect,
+    (VerticalPosition,HorizontalPosition))->() )
   {
     self.init(frame: frame, state: state)
     self.handler = handler
-
   }
-    
+  
+  // Main init
     init(frame: CGRect, state: StateMachine.State )
   {
-    
-    
     stateMachine = StateMachine(state: state)
-    
     super.init(frame: frame)
     
     // Handles...
     let rectangle = CGRect(x: 120, y: 140, width: 200, height: 200)
-    
     let buttonCenters : [CGPoint] = stateMachine.centers( rectangle)
     
     // Set handles with side effects
@@ -131,7 +155,7 @@ class HandleViewRound1: UIView {
     handleBoundary[1].backgroundColor = #colorLiteral(red: 0.7808889747, green: 0.8120988011, blue: 0.9180557132, alpha: 0.04869058104)
     handleBoundary[0].backgroundColor = #colorLiteral(red: 0.4666666687, green: 0.7647058964, blue: 0.2666666806, alpha: 0.0459672095)
     handleBoundary[2].backgroundColor = #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 0.05251430462)
-    for v in handleBoundary { v.isHidden = true }
+    //for v in handleBoundary { v.isHidden = true }
     
     // Order Subviews and add to view
     for v in handleBoundary + handles { self.addSubview(v) }
@@ -186,7 +210,8 @@ class HandleViewRound1: UIView {
       let centers = stateMachine.centers(master2)
       for t in zip(centers, handles) { t.1.center = t.0 }
       
-      self.handler(master2)
+      let positions = stateMachine.positions(indexOfHandle)
+      self.handler(master2, positions)
       
     case .ended:
       UIView.animate(withDuration: 0.3, delay: 0.0, usingSpringWithDamping: 0.4, initialSpringVelocity: 1.0, options: UIViewAnimationOptions.allowUserInteraction, animations: {
@@ -200,8 +225,9 @@ class HandleViewRound1: UIView {
         let centers = self.stateMachine.centers(master2)
         for t in zip(centers, self.handles) { t.1.center = t.0 }
         
-        self.handler(master2)
-        self.completed(master2)
+        let positions = self.stateMachine.positions(indexOfHandle)
+        self.handler(master2, positions)
+        self.completed(master2, positions)
         
       }, completion: { _ in
         

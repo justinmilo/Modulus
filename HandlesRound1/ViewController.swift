@@ -73,7 +73,7 @@ class ViewController: UIViewController {
     for v in [outerBoundaryView!, twoDView, b2, b1] + handles { view.addSubview(v) }
     
     // Test view
-    let v = HandleViewRound1(frame: self.view.frame, state: .edge) { _ in }
+    let v = HandleViewRound1(frame: self.view.frame, state: .edge) { _, _ in }
       view.backgroundColor = .black
       self.view.addSubview(v)
   }

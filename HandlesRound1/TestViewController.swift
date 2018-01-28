@@ -25,19 +25,19 @@ class TestViewController : UIViewController {
     
     let box = HandleViewRound1(frame: UIScreen.main.bounds, state: .edge)
     
-    box.handler =    {  master in
+    box.handler =    {  master, positions in
       // Scale
       let (grid, rect) = self.foo(master: master)
-      let aligned = master.withInsetRect( ofSize: rect.size, hugging: (.center, .right))
+      let aligned = master.withInsetRect( ofSize: rect.size, hugging: (positions.0.oposite, positions.1.oposite))
       
       // "layout" my subview grid, witha model2d
       twoDView.scale = 1/self.scaleFactor
       twoDView.model = NonuniformModel2D(origin: aligned.origin, rowSizes: grid.y, colSizes: grid.x)
     }
     
-    box.completed = {  master in
+    box.completed = {  master, positions in
       let (_, rect) = self.foo(master: master)
-      let aligned = master.withInsetRect( ofSize: rect.size, hugging: (.center, .right))
+      let aligned = master.withInsetRect( ofSize: rect.size, hugging:  (positions.0.oposite, positions.1.oposite))
       box.set(master: aligned )
     }
     for v in [twoDView, box]{ self.view.addSubview(v) }
