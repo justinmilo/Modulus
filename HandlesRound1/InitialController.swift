@@ -16,30 +16,26 @@ class InitialController: UIViewController, UIPageViewControllerDataSource  {
 
   var pageViewController: UIPageViewController!
   var content : [UIViewController]!
+  var topContent : [UIViewController]!
   
   override func viewDidLoad() {
-      
-      self.content = [ViewController(), TestViewController()]
-      
-      
-      super.viewDidLoad()
-      self.view.backgroundColor = UIColor.white
-      
-      self.pageViewController = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
-      self.pageViewController.dataSource = self
-      self.restartAction(sender: self)
-      self.addChildViewController(self.pageViewController)
-      
-      let views = [
-        "pg": self.pageViewController.view
-        ]
-      for (_, v) in views {
-        //v?.translatesAutoresizingMaskIntoConstraints = false
-        self.view.addSubview(v!)
-      }
-     
-      self.pageViewController.didMove(toParentViewController: self)
-    }
+    
+    self.content = [ViewController(), TestViewController()]
+    self.topContent = [ViewController(), TestViewController()]
+    
+    super.viewDidLoad()
+    
+    let pc = UIPageControl.appearance()
+    pc.pageIndicatorTintColor = .lightGray
+    pc.currentPageIndicatorTintColor = .white
+    self.pageViewController = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
+    self.pageViewController.dataSource = self
+    self.restartAction(sender: self)
+    self.addChildViewController(self.pageViewController)
+    self.view.addSubview(pageViewController.view)
+    self.pageViewController.didMove(toParentViewController: self)
+    
+  }
     
     func restartAction(sender: AnyObject) {
       self.pageViewController.setViewControllers([self.viewControllerAtIndex(index: 0)], direction: .forward, animated: true, completion: nil)
