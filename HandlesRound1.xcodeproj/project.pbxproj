@@ -68,6 +68,7 @@
 		D093215820114134007BFCC3 /* AnyLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D093215720114134007BFCC3 /* AnyLayout.swift */; };
 		D0AEF4602013D507005F761B /* TensionedPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0AEF45F2013D507005F761B /* TensionedPoint.swift */; };
 		D0B218D0201F6491004684FC /* HorizontalController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B218CF201F6491004684FC /* HorizontalController.swift */; };
+		D0B218D220215E90004684FC /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D0B218D120215E8F004684FC /* Media.xcassets */; };
 		D0BCAFBB201CDC4300C4EAA5 /* TestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BCAFBA201CDC4300C4EAA5 /* TestViewController.swift */; };
 		D0F09A56201CCD3C00720FD5 /* HandlesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0F09A55201CCD3C00720FD5 /* HandlesView.swift */; };
 /* End PBXBuildFile section */
@@ -157,6 +158,7 @@
 		D093215720114134007BFCC3 /* AnyLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnyLayout.swift; sourceTree = "<group>"; };
 		D0AEF45F2013D507005F761B /* TensionedPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TensionedPoint.swift; path = GrasshopperRound2/TensionedPoint.swift; sourceTree = SOURCE_ROOT; };
 		D0B218CF201F6491004684FC /* HorizontalController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HorizontalController.swift; sourceTree = "<group>"; };
+		D0B218D120215E8F004684FC /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
 		D0BCAFBA201CDC4300C4EAA5 /* TestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestViewController.swift; sourceTree = "<group>"; };
 		D0F09A55201CCD3C00720FD5 /* HandlesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandlesView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -212,6 +214,7 @@
 			children = (
 				D00069D3200BD08300E8D5F3 /* AppDelegate.swift */,
 				D0B218CF201F6491004684FC /* HorizontalController.swift */,
+				D0B218D120215E8F004684FC /* Media.xcassets */,
 				D00069D5200BD08300E8D5F3 /* ViewController.swift */,
 				D0BCAFBA201CDC4300C4EAA5 /* TestViewController.swift */,
 				D0F09A55201CCD3C00720FD5 /* HandlesView.swift */,
@@ -477,6 +480,7 @@
 				D00069DE200BD08300E8D5F3 /* LaunchScreen.storyboard in Resources */,
 				D00069DB200BD08300E8D5F3 /* Assets.xcassets in Resources */,
 				D00069D9200BD08300E8D5F3 /* Main.storyboard in Resources */,
+				D0B218D220215E90004684FC /* Media.xcassets in Resources */,
 				D03E040620125DF8002D47F3 /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
