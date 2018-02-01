@@ -27,7 +27,7 @@ class ViewController: UIViewController {
     
     
     view = UIView()
-    view.backgroundColor = #colorLiteral(red: 0.05504439026, green: 0.06437031925, blue: 0.06856494397, alpha: 1)
+    view.backgroundColor = #colorLiteral(red: 0.9085299373, green: 0.9152075648, blue: 0.8781220317, alpha: 1)
     
     
     
@@ -72,10 +72,7 @@ class ViewController: UIViewController {
     // Order Subviews and add to view
     for v in [outerBoundaryView!, twoDView, b2, b1] + handles { view.addSubview(v) }
     
-    // Test view
-    let v = HandleViewRound1(frame: self.view.frame, state: .edge) { _, _ in }
-      view.backgroundColor = .black
-      self.view.addSubview(v)
+   
   }
   
   
@@ -122,7 +119,7 @@ class ViewController: UIViewController {
             UIView.animate(withDuration: 0.3, delay: 0.0, usingSpringWithDamping: 0.4, initialSpringVelocity: 1.0, options: UIViewAnimationOptions.allowUserInteraction, animations: {
               let master = ViewController.masterRect(from: gesture, and: self.handles)
               // Scale
-              let scaleFactor : CGFloat = 3.0
+              let scaleFactor : CGFloat = 1.0
               let scaledMasterSize = master.size * scaleFactor
               
               // Find appropriate model
@@ -167,7 +164,7 @@ class ViewController: UIViewController {
     self.layout(in: master)
     
     // Scale
-    let scaleFactor : CGFloat = 3.0
+    let scaleFactor : CGFloat = 1.0
     let scaledMasterSize = master.size * scaleFactor
     
     // Find appropriate model

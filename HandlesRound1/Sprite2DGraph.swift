@@ -25,41 +25,68 @@ struct NonuniformModel2D {
 }
 
 extension NonuniformModel2D {
+  
   var edgesAndPoints : (edges: EdgeCollection, points: PointCollection)
   {
     get {
       
-      let xPoints = self.colSizes.positions.map { $0 + self.origin.x }
-      let yPoints = self.rowSizes.positions.map { $0 + self.origin.y }
       
-      let pointsLeftToRight = xPoints.map { x in
-        yPoints.map { y in
-          return CGPoint(x,y)
-        }
-      }
+      let pointsLeftToRight = orderedPointsLeftToRight
       
-      let pointsUpToDown = yPoints.map { y in
-        xPoints.map { x in
-          return CGPoint(x,y)
-        }
-      }
-        
-        let linesUp = pointsLeftToRight.map{ Line(start: $0.first!, end: $0.last!) }
-        let linesAcross = pointsUpToDown.map{ Line(start: $0.first!, end: $0.last!) }
-        
-        return (edges: EdgeCollection(verticals:linesUp, horizontals:linesAcross), points: PointCollection(
-          all: pointsLeftToRight.flatMap{ $0 },
-          top: pointsUpToDown.last!,
-          right: pointsLeftToRight[0],
-          bottom: pointsUpToDown[0],
-          left: pointsLeftToRight.last!
-        ))
-      }
+      let pointsUpToDown = orderedPointsUpToDown
       
+      let linesUp = pointsLeftToRight.map{ Line(start: $0.first!, end: $0.last!) }
+      let linesAcross = pointsUpToDown.map{ Line(start: $0.first!, end: $0.last!) }
       
+      return (edges: EdgeCollection(verticals:linesUp, horizontals:linesAcross), points: PointCollection(
+        all: pointsLeftToRight.flatMap{ $0 },
+        top: pointsUpToDown.last!,
+        right: pointsLeftToRight[0],
+        bottom: pointsUpToDown[0],
+        left: pointsLeftToRight.last!
+      ))
+    }
+    
+    
     
   }
+  
+  var xOrigins : [CGFloat] { return self.colSizes.positions.map { $0 + self.origin.x } }
+  var yOrigins : [CGFloat] { return self.rowSizes.positions.map { $0 + self.origin.y } }
+  
+  var orderedPointsLeftToRight : [[CGPoint]]
+  {
+    return xOrigins.map { x in
+      yOrigins.map { y in
+        return CGPoint(x,y)
+      }
+    }
+  }
+    
+    var orderedPointsUpToDown : [[CGPoint]]
+    {
+      return  yOrigins.map { y in
+        xOrigins.map { x in
+          return CGPoint(x,y)
+        }
+      }
+    }
+    
+  
+  
 }
+
+extension Array where Element == CGPoint
+{
+  var texturedLines : [TextureLine] {
+
+  let b = self.dropFirst()
+  return zip(self, b).map {
+  return TextureLine(start:$0.0, end:$0.1)
+  }
+  }
+}
+
 
 
 
@@ -93,7 +120,11 @@ class Sprite2DGraph : SKView {
       // First Geometry Set...
       // Grid
       let grid = _skCordinateModel.edgesAndPoints
-      let rectangles = (grid.edges.horizontals + grid.edges.verticals).map{ StrokedLine.init( line: $0, strokeWidth: 3.0) }
+      
+      let horizontals : [[TextureLine]] = _skCordinateModel.orderedPointsLeftToRight.map{ $0.texturedLines }
+      let verticals : [[TextureLine]] = _skCordinateModel.orderedPointsUpToDown.map{ $0.texturedLines }
+      
+      let rectangles : [Geometry] = (horizontals + verticals).flatMap { $0 }
       
       // Handle Points
       let gridHandlePoints = getHandlePoints(points: grid.points, offset: d)
@@ -185,8 +216,8 @@ class Sprite2DGraph : SKView {
     
     
     self.ignoresSiblingOrder = true
-    self.showsFPS = true
-    self.showsNodeCount = true
+    //self.showsFPS = true
+    //self.showsNodeCount = true
     
     self.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(Sprite2DGraph.tapped)))
   }
@@ -256,19 +287,35 @@ class Sprite2DGraph : SKView {
       
       return node
     }
-    if let line = node as? StrokedLine
+    if let line = node as? TextureLine
     {
-      let path = CGMutablePath()
-      path.move(to: line.line.start  * scale)
-      path.addLine(to: line.line.end  * scale)
-      let node = SKShapeNode(path: path)
-      node.lineWidth = line.strokeWidth
-      node.strokeColor = #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)
+      let node : SKSpriteNode
+      
+      if cache.map({ $0.name }).contains("2.0m") {
+        let nodeIndex = cache.index(where: { (candidate) -> Bool in
+          candidate.name == "2.0m"
+        })!
+        let nodeToClone = cache[nodeIndex]
+        node = nodeToClone.copy() as! SKSpriteNode
+      }
+      else {
+        node = SKSpriteNode(texture: SKTexture(image:#imageLiteral(resourceName: "2.0m plan")), size: CGSize(486/3, 14/3))
+        cache.append(node)
+      }
+      
+      let twometer : CGFloat = 2.00/1.6476
+      //let scale = self.scale + twometer
+      node.setScale( twometer)
+      node.position = (line.line.start+line.line.end).center  * scale
+      node.zRotation = CGFloat(line.line.start.x == line.line.end.x ? CGFloat.halfPi : 0)
       scene!.addChild(node)
+      node.name = "2.0m"
       return node
     }
     fatalError()
   }
+  
+  var cache : [SKSpriteNode] = []
   
   // ...SceneKit Handlering
 

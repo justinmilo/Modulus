@@ -14,7 +14,7 @@ import UIKit
 class TestViewController : UIViewController {
   
   let rectangle = CGRect(x: 120, y: 140, width: 200, height: 200)
-  let scaleFactor : CGFloat = 3.0
+  let scaleFactor : CGFloat = 1.0
   
   override func loadView() {
     view = UIView()

@@ -219,6 +219,7 @@
 				D0BCAFBA201CDC4300C4EAA5 /* TestViewController.swift */,
 				D0F09A55201CCD3C00720FD5 /* HandlesView.swift */,
 				D03E03FD20125DF8002D47F3 /* GameScene.swift */,
+				D03E03F720125DF8002D47F3 /* Sprite2DGraph.swift */,
 				D0006A01200BD09A00E8D5F3 /* ButtonView.swift */,
 				D0931FD520113DCA007BFCC3 /* Layouts */,
 				D064BDD9200D94C50032C153 /* SwiftGeometry */,
@@ -252,7 +253,6 @@
 				D056A3A020177F1000C3B3B1 /* Grids */,
 				D056A39A2015815000C3B3B1 /* ForwardPipe.swift */,
 				D0AEF45F2013D507005F761B /* TensionedPoint.swift */,
-				D03E03F720125DF8002D47F3 /* Sprite2DGraph.swift */,
 				D03E03FB20125DF8002D47F3 /* GrasshopperFunctions.swift */,
 				D03E03FE20125DF8002D47F3 /* Info.plist */,
 			);
@@ -732,7 +732,7 @@
 				DEVELOPMENT_TEAM = V69QAU95S7;
 				INFOPLIST_FILE = HandlesRound1/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.sound.HandlesRound4;
+				PRODUCT_BUNDLE_IDENTIFIER = com.sound.HandlesRound.Draw;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;
@@ -749,7 +749,7 @@
 				DEVELOPMENT_TEAM = V69QAU95S7;
 				INFOPLIST_FILE = HandlesRound1/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.sound.HandlesRound4;
+				PRODUCT_BUNDLE_IDENTIFIER = com.sound.HandlesRound.Draw;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;
