@@ -137,7 +137,7 @@ class HorizontalHolder: UIViewController, UIPageViewControllerDataSource  {
     super.init(nibName: nil, bundle: nil)
     
     
-    self.content = [ViewController(), TestViewController()]
+    self.content = [TestViewController(), TestViewController()]
   }
   
   

@@ -56,6 +56,12 @@ struct Line : Geometry {
   init(start: Geometry, end:Geometry) { self.start = start.position; self.end = end.position}
 }
 
+struct StrokedLine : Geometry {
+  var line : Line
+  let strokeWidth : CGFloat
+  var position: CGPoint { get { return line.position } set { line.position = newValue }}
+}
+
 struct TextureLine : Geometry {
   var line : Line
   var position: CGPoint { get { return line.position } set { line.position = newValue }}

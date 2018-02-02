@@ -8,8 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		D00069D4200BD08300E8D5F3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00069D3200BD08300E8D5F3 /* AppDelegate.swift */; };
-		D00069D6200BD08300E8D5F3 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00069D5200BD08300E8D5F3 /* ViewController.swift */; };
-		D00069D9200BD08300E8D5F3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D00069D7200BD08300E8D5F3 /* Main.storyboard */; };
 		D00069DB200BD08300E8D5F3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D00069DA200BD08300E8D5F3 /* Assets.xcassets */; };
 		D00069DE200BD08300E8D5F3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D00069DC200BD08300E8D5F3 /* LaunchScreen.storyboard */; };
 		D00069E9200BD08300E8D5F3 /* HandlesRound1Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00069E8200BD08300E8D5F3 /* HandlesRound1Tests.swift */; };
@@ -22,6 +20,7 @@
 		D03E040320125DF8002D47F3 /* GrasshopperFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03E03FB20125DF8002D47F3 /* GrasshopperFunctions.swift */; };
 		D03E040520125DF8002D47F3 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03E03FD20125DF8002D47F3 /* GameScene.swift */; };
 		D03E040620125DF8002D47F3 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D03E03FE20125DF8002D47F3 /* Info.plist */; };
+		D04A73752022B4C900C46501 /* NonuniformModel2D.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04A73742022B4C900C46501 /* NonuniformModel2D.swift */; };
 		D056A3992015696A00C3B3B1 /* TwoMeterModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D056A3982015696A00C3B3B1 /* TwoMeterModel.swift */; };
 		D056A39B2015815000C3B3B1 /* ForwardPipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = D056A39A2015815000C3B3B1 /* ForwardPipe.swift */; };
 		D056A39E20177F0B00C3B3B1 /* Grid.swift in Sources */ = {isa = PBXBuildFile; fileRef = D056A39C20177F0B00C3B3B1 /* Grid.swift */; };
@@ -93,8 +92,6 @@
 /* Begin PBXFileReference section */
 		D00069D0200BD08300E8D5F3 /* HandlesRound1.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HandlesRound1.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D00069D3200BD08300E8D5F3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		D00069D5200BD08300E8D5F3 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		D00069D8200BD08300E8D5F3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		D00069DA200BD08300E8D5F3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D00069DD200BD08300E8D5F3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D00069DF200BD08300E8D5F3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = Info.plist; path = "/Users/justin/Dropbox/Developer/To Delete at some point/HandlesRound1/HandlesRound1/Other Stuff/Info.plist"; sourceTree = "<absolute>"; };
@@ -112,6 +109,7 @@
 		D03E03FB20125DF8002D47F3 /* GrasshopperFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GrasshopperFunctions.swift; sourceTree = "<group>"; };
 		D03E03FD20125DF8002D47F3 /* GameScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
 		D03E03FE20125DF8002D47F3 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D04A73742022B4C900C46501 /* NonuniformModel2D.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NonuniformModel2D.swift; sourceTree = "<group>"; };
 		D056A3982015696A00C3B3B1 /* TwoMeterModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwoMeterModel.swift; sourceTree = "<group>"; };
 		D056A39A2015815000C3B3B1 /* ForwardPipe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForwardPipe.swift; sourceTree = "<group>"; };
 		D056A39C20177F0B00C3B3B1 /* Grid.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Grid.swift; sourceTree = "<group>"; };
@@ -215,11 +213,10 @@
 				D00069D3200BD08300E8D5F3 /* AppDelegate.swift */,
 				D0B218CF201F6491004684FC /* HorizontalController.swift */,
 				D0B218D120215E8F004684FC /* Media.xcassets */,
-				D00069D5200BD08300E8D5F3 /* ViewController.swift */,
 				D0BCAFBA201CDC4300C4EAA5 /* TestViewController.swift */,
 				D0F09A55201CCD3C00720FD5 /* HandlesView.swift */,
 				D03E03FD20125DF8002D47F3 /* GameScene.swift */,
-				D03E03F720125DF8002D47F3 /* Sprite2DGraph.swift */,
+				D04A73742022B4C900C46501 /* NonuniformModel2D.swift */,
 				D0006A01200BD09A00E8D5F3 /* ButtonView.swift */,
 				D0931FD520113DCA007BFCC3 /* Layouts */,
 				D064BDD9200D94C50032C153 /* SwiftGeometry */,
@@ -253,6 +250,7 @@
 				D056A3A020177F1000C3B3B1 /* Grids */,
 				D056A39A2015815000C3B3B1 /* ForwardPipe.swift */,
 				D0AEF45F2013D507005F761B /* TensionedPoint.swift */,
+				D03E03F720125DF8002D47F3 /* Sprite2DGraph.swift */,
 				D03E03FB20125DF8002D47F3 /* GrasshopperFunctions.swift */,
 				D03E03FE20125DF8002D47F3 /* Info.plist */,
 			);
@@ -362,7 +360,6 @@
 				D00069DF200BD08300E8D5F3 /* Info.plist */,
 				D00069DC200BD08300E8D5F3 /* LaunchScreen.storyboard */,
 				D00069DA200BD08300E8D5F3 /* Assets.xcassets */,
-				D00069D7200BD08300E8D5F3 /* Main.storyboard */,
 				D0051E25201D2BC900C0128A /* PageViewController.swift */,
 				D03E03D72011653B002D47F3 /* DeepPressGestureRecognizer.swift */,
 			);
@@ -432,7 +429,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0920;
-				LastUpgradeCheck = 0920;
+				LastUpgradeCheck = 0930;
 				ORGANIZATIONNAME = "Justin Smith";
 				TargetAttributes = {
 					D00069CF200BD08300E8D5F3 = {
@@ -479,7 +476,6 @@
 				D064BE00200D94C60032C153 /* .gitignore in Resources */,
 				D00069DE200BD08300E8D5F3 /* LaunchScreen.storyboard in Resources */,
 				D00069DB200BD08300E8D5F3 /* Assets.xcassets in Resources */,
-				D00069D9200BD08300E8D5F3 /* Main.storyboard in Resources */,
 				D0B218D220215E90004684FC /* Media.xcassets in Resources */,
 				D03E040620125DF8002D47F3 /* Info.plist in Resources */,
 			);
@@ -519,7 +515,6 @@
 				D0AEF4602013D507005F761B /* TensionedPoint.swift in Sources */,
 				D093215820114134007BFCC3 /* AnyLayout.swift in Sources */,
 				D03E03D82011653B002D47F3 /* DeepPressGestureRecognizer.swift in Sources */,
-				D00069D6200BD08300E8D5F3 /* ViewController.swift in Sources */,
 				D00069D4200BD08300E8D5F3 /* AppDelegate.swift in Sources */,
 				D064BE1D200D94C60032C153 /* CGAffineTransform+Utility+Nonstandard.swift in Sources */,
 				D064BE07200D94C60032C153 /* CGAffineTransform+Utility.swift in Sources */,
@@ -550,6 +545,7 @@
 				D093215420113DCB007BFCC3 /* MarginIntrinsicSizeLayout.swift in Sources */,
 				D064BE10200D94C60032C153 /* CGVector+Utility.swift in Sources */,
 				D0F09A56201CCD3C00720FD5 /* HandlesView.swift in Sources */,
+				D04A73752022B4C900C46501 /* NonuniformModel2D.swift in Sources */,
 				D064BE0A200D94C60032C153 /* CGPoint+Math.swift in Sources */,
 				D03E040520125DF8002D47F3 /* GameScene.swift in Sources */,
 				D056A39E20177F0B00C3B3B1 /* Grid.swift in Sources */,
@@ -597,14 +593,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		D00069D7200BD08300E8D5F3 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				D00069D8200BD08300E8D5F3 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		D00069DC200BD08300E8D5F3 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -630,6 +618,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -637,6 +626,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -687,6 +677,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -694,6 +685,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -718,6 +710,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				VALIDATE_PRODUCT = YES;
 			};
@@ -727,6 +720,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = V69QAU95S7;
@@ -744,6 +738,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = V69QAU95S7;
@@ -762,6 +757,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = V69QAU95S7;
 				INFOPLIST_FILE = HandlesRound1Tests/Info.plist;
@@ -779,6 +775,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = V69QAU95S7;
 				INFOPLIST_FILE = HandlesRound1Tests/Info.plist;
@@ -795,6 +792,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = V69QAU95S7;
 				INFOPLIST_FILE = HandlesRound1UITests/Info.plist;
@@ -811,6 +809,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = V69QAU95S7;
 				INFOPLIST_FILE = HandlesRound1UITests/Info.plist;

@@ -20,7 +20,7 @@ class TestViewController : UIViewController {
     view = UIView()
 
     
-    let twoDView = Sprite2DGraph(model: Model2D(origin: rectangle.origin, dx: rectangle.width, dy: rectangle.height, col: 2, rows: 2))
+    let twoDView = Sprite2DGraph(model: NonuniformModel2D(origin: rectangle.origin, dx: rectangle.width, dy: rectangle.height, col: 2, rows: 2))
    
     
     let box = HandleViewRound1(frame: UIScreen.main.bounds, state: .edge)
@@ -48,7 +48,7 @@ class TestViewController : UIViewController {
     let scaledMasterSize = master.size * self.scaleFactor
     
     // Find appropriate model
-    let x111 = maximizedGrid(availableInventory:[200], lessThan: scaledMasterSize)
+    let x111 = maximizedGrid(availableInventory:[100,150,200], lessThan: scaledMasterSize)
     let grid = PlanModel(
       x: Grid(x111.x),
       y: Grid(x111.y)

@@ -53,7 +53,7 @@ class PageViewController: UIPageViewController, UIPageViewControllerDelegate, UI
     override func viewDidLoad() {
         super.viewDidLoad()
       self.controller1 = TestViewController()
-      self.controller2 = ViewController()
+      self.controller2 = TestViewController()
       self.delegate = self
       self.dataSource = self
         // Do any additional setup after loading the view.

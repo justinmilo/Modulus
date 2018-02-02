@@ -24,14 +24,26 @@ public class ButtonView : UIView
     self.movingGestureRecognizer = UIPanGestureRecognizer()
     self.movingGestureRecognizer.isEnabled = false
     
+    let bounds = CGRect(origin:CGPoint.zero, size: frame.size)
+    let interiorFrame = bounds.insetBy(dx: bounds.width/4, dy: bounds.height/4)
+    beganFrame = interiorFrame.insetBy(dx: -sizeChange, dy: -sizeChange)
+    endedFrame = interiorFrame
+    beganRadius = CGFloat(frame.size.width/4) + sizeChange
+    endedRadius = CGFloat(frame.size.width/4)
+    
+    
     super.init(frame: frame)
     
+
     
     
-    self.interiorView.frame = bounds.insetBy(dx: bounds.width/4, dy: bounds.height/4)
-    interiorView.layer.cornerRadius = CGFloat(frame.size.width/4)
+    self.interiorView.frame = interiorFrame
+    interiorView.layer.cornerRadius = endedRadius
     interiorView.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
     interiorView.layer.opacity = 0.6
+    
+    
+    
     
     self.addSubview(interiorView)
     
@@ -80,6 +92,11 @@ public class ButtonView : UIView
   
   
   let sizeChange : CGFloat = 30.0
+  let beganFrame : CGRect
+  let endedFrame : CGRect
+  let endedRadius : CGFloat
+  let beganRadius : CGFloat
+  
   required public init?(coder aDecoder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
@@ -100,16 +117,16 @@ public class ButtonView : UIView
       //AudioServicesPlaySystemSound(1520) // Actuate `Pop` feedback (strong boom)
       
       let h = self.interiorView
-      h.frame = h.frame.insetBy(dx: -sizeChange, dy: -sizeChange)
-      h.layer.cornerRadius = h.layer.cornerRadius + sizeChange
+      h.frame = beganFrame
+      h.layer.cornerRadius = beganRadius
       h.layer.opacity = 0.5
       
       
     case .ended:
       
       let h = self.interiorView
-      h.layer.cornerRadius = h.layer.cornerRadius - sizeChange
-      h.frame = h.frame.insetBy(dx: sizeChange, dy: sizeChange)
+      h.layer.cornerRadius = endedRadius
+      h.frame = endedFrame
       h.layer.opacity = 1.0
       self.deepPressRecognized = false
       return
