@@ -18,7 +18,6 @@
 		D03E03DA20124DB8002D47F3 /* Testing.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03E03D920124DB8002D47F3 /* Testing.swift */; };
 		D03E040020125DF8002D47F3 /* Sprite2DGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03E03F720125DF8002D47F3 /* Sprite2DGraph.swift */; };
 		D03E040320125DF8002D47F3 /* GrasshopperFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03E03FB20125DF8002D47F3 /* GrasshopperFunctions.swift */; };
-		D03E040520125DF8002D47F3 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03E03FD20125DF8002D47F3 /* GameScene.swift */; };
 		D03E040620125DF8002D47F3 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D03E03FE20125DF8002D47F3 /* Info.plist */; };
 		D04A73752022B4C900C46501 /* NonuniformModel2D.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04A73742022B4C900C46501 /* NonuniformModel2D.swift */; };
 		D056A3992015696A00C3B3B1 /* TwoMeterModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D056A3982015696A00C3B3B1 /* TwoMeterModel.swift */; };
@@ -107,7 +106,6 @@
 		D03E03D920124DB8002D47F3 /* Testing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Testing.swift; sourceTree = "<group>"; };
 		D03E03F720125DF8002D47F3 /* Sprite2DGraph.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sprite2DGraph.swift; sourceTree = "<group>"; };
 		D03E03FB20125DF8002D47F3 /* GrasshopperFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GrasshopperFunctions.swift; sourceTree = "<group>"; };
-		D03E03FD20125DF8002D47F3 /* GameScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
 		D03E03FE20125DF8002D47F3 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D04A73742022B4C900C46501 /* NonuniformModel2D.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NonuniformModel2D.swift; sourceTree = "<group>"; };
 		D056A3982015696A00C3B3B1 /* TwoMeterModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwoMeterModel.swift; sourceTree = "<group>"; };
@@ -215,7 +213,6 @@
 				D0B218D120215E8F004684FC /* Media.xcassets */,
 				D0BCAFBA201CDC4300C4EAA5 /* TestViewController.swift */,
 				D0F09A55201CCD3C00720FD5 /* HandlesView.swift */,
-				D03E03FD20125DF8002D47F3 /* GameScene.swift */,
 				D04A73742022B4C900C46501 /* NonuniformModel2D.swift */,
 				D0006A01200BD09A00E8D5F3 /* ButtonView.swift */,
 				D0931FD520113DCA007BFCC3 /* Layouts */,
@@ -547,7 +544,6 @@
 				D0F09A56201CCD3C00720FD5 /* HandlesView.swift in Sources */,
 				D04A73752022B4C900C46501 /* NonuniformModel2D.swift in Sources */,
 				D064BE0A200D94C60032C153 /* CGPoint+Math.swift in Sources */,
-				D03E040520125DF8002D47F3 /* GameScene.swift in Sources */,
 				D056A39E20177F0B00C3B3B1 /* Grid.swift in Sources */,
 				D0051E26201D2BC900C0128A /* PageViewController.swift in Sources */,
 				D064BE1A200D94C60032C153 /* CGScale+Utility+Nonstandard.swift in Sources */,

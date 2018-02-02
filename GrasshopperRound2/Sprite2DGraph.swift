@@ -153,7 +153,7 @@ class Sprite2DGraph : SKView {
     super.init(frame: UIScreen.main.bounds)
     
     // Specialtiy SpriteKitScene
-    let aScene = GameScene(size: UIScreen.main.bounds.size)
+    let aScene = SKScene(size: UIScreen.main.bounds.size)
     self.presentScene(aScene)
     
     
