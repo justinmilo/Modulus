@@ -61,7 +61,11 @@ func centerDefinedRect(from points:[CGPoint]) -> CGRect {
   })
 }
 
+protocol Hideable {
+  var isHidden: Bool { get set }
+}
 
+extension UIView : Hideable { }
 
 import UIKit
 
@@ -70,7 +74,7 @@ import UIKit
 // A rect input machine
 class HandleViewRound1: UIView {
   // Collection of functions
-  struct StateMachine{
+  struct StateFactory{
     enum State {
       case corner
       case edge
@@ -113,7 +117,7 @@ class HandleViewRound1: UIView {
   }
   
   // whole class properties
-  var stateMachine : StateMachine!
+  var stateMachine : StateFactory!
   var handles : [UIView] = [] // Clockwise from topLeft
   var point : TensionedPoint!
   let buttonSize = CGSize(44, 44)
@@ -121,9 +125,13 @@ class HandleViewRound1: UIView {
     (VerticalPosition,HorizontalPosition)
     )->() = { _,_ in }
   var completed : (CGRect,(VerticalPosition,HorizontalPosition))->() = { _, _ in }
+  var outlines: [AnyLayout<UIView>] = []
+  var hideables: [Hideable] = []
+  var outerBoundaryView : UIView!
+
+
   
-  
-  convenience init(frame: CGRect, state: StateMachine.State, handler: @escaping (CGRect,
+  convenience init(frame: CGRect, state: StateFactory.State, handler: @escaping (CGRect,
     (VerticalPosition,HorizontalPosition))->() )
   {
     self.init(frame: frame, state: state)
@@ -131,9 +139,9 @@ class HandleViewRound1: UIView {
   }
   
   // Main init
-    init(frame: CGRect, state: StateMachine.State )
+    init(frame: CGRect, state: StateFactory.State )
   {
-    stateMachine = StateMachine(state: state)
+    stateMachine = StateFactory(state: state)
     super.init(frame: frame)
     
     // Handles...
@@ -157,8 +165,33 @@ class HandleViewRound1: UIView {
     handleBoundary[2].backgroundColor = #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 0.05251430462)
     for v in handleBoundary { v.isHidden = true }
     
+    // Create Borders ...
+    let b1 = UIView()
+    b1.layer.borderWidth = 1.0
+    b1.layer.borderColor = UIColor.white.cgColor
+    let b2 = UIView()
+    b2.layer.borderWidth = 1.0
+    b2.layer.borderColor = UIColor.gray.cgColor
+    b2.layer.cornerRadius = buttonSize.width/4
+
+    
+    // Make Layouts for outlines
+    let outside = MarginLayout(content:b2, margin: -buttonSize.width/4)
+    outlines += [AnyLayout(b1), AnyLayout(outside)]
+    hideables = [b1, b2]
+    for var o in outlines { o.layout(in: rectangle)}
+    for var h in hideables { h.isHidden = true }
+    // ... End borders
+    
+    // Create Background View
+    outerBoundaryView = UIView()
+    outerBoundaryView.backgroundColor = #colorLiteral(red: 0.7808889747, green: 0.8120988011, blue: 0.9180557132, alpha: 0.1101177377)
+    outerBoundaryView.layer.cornerRadius = buttonSize.width/4
+    outerBoundaryView.frame = self.frame.insetBy(dx: 100, dy: 100)
+
     // Order Subviews and add to view
-    for v in handleBoundary + handles { self.addSubview(v) }
+    for v in [outerBoundaryView!, b2, b1] + handleBoundary + handles { self.addSubview(v) }
+    
   }
   
   required init?(coder aDecoder: NSCoder) {
@@ -184,6 +217,8 @@ class HandleViewRound1: UIView {
       let m1 = stateMachine.redefine(handles.index(of:gesture.view!)!, handles.map{ $0.center })
       frozenBounds = insetIf( m1)
       outerBounds = self.bounds.insetBy(dx: 20, dy: 20)
+      for var h in hideables { h.isHidden = false }
+
       
     case .changed:
       
@@ -210,10 +245,19 @@ class HandleViewRound1: UIView {
       let centers = stateMachine.centers(master2)
       for t in zip(centers, handles) { t.1.center = t.0 }
       
+      // layout my view's outlines
+      for var outline in outlines {
+        outline.layout(in: master2)
+      }
+
+
+      
       let positions = stateMachine.positions(indexOfHandle)
       self.handler(master2, positions)
       
     case .ended:
+      for var h in hideables { h.isHidden = true }
+
       UIView.animate(withDuration: 0.3, delay: 0.0, usingSpringWithDamping: 0.4, initialSpringVelocity: 1.0, options: UIViewAnimationOptions.allowUserInteraction, animations: {
         gesture.view?.center = self.point.anchor
         

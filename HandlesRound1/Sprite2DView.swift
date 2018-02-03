@@ -31,10 +31,6 @@ extension Array where Element == CGPoint
 
 
 
-
-
-
-
 // Used to be view controller
 
 class Sprite2DView : SKView {

@@ -10,12 +10,15 @@ import Foundation
 
 import Foundation
 
+precedencegroup ForwardApplication {
+  associativity: left
+}
 
 
-infix operator |> : AdditionPrecedence // Forward pipe operator
-infix operator |>> : AdditionPrecedence // Pipe into second argument
-infix operator |>>> : AdditionPrecedence // Pipe into third argument
-infix operator |< : AdditionPrecedence // Pipe into last argument
+infix operator |> : ForwardApplication // Forward pipe operator
+infix operator |>> : ForwardApplication // Pipe into second argument
+infix operator |>>> : ForwardApplication // Pipe into third argument
+infix operator |< : ForwardApplication // Pipe into last argument
 // MARK: First argument
 public func |> <A,Z>(lhs: A, rhs: (A) -> Z) -> Z {
   return rhs(lhs)
