@@ -164,7 +164,7 @@ class Sprite2DView : SKView {
     //self.showsFPS = true
     //self.showsNodeCount = true
     
-    self.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(Sprite2DView.tapped)))
+    
   }
   
   

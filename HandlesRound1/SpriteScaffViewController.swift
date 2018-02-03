@@ -21,7 +21,8 @@ class SpriteScaffViewController : UIViewController {
 
     
     let twoDView = Sprite2DView(model: NonuniformModel2D(origin: rectangle.origin, dx: rectangle.width, dy: rectangle.height, col: 2, rows: 2))
-   
+    
+    view.addGestureRecognizer(UITapGestureRecognizer(target: twoDView, action: #selector(Sprite2DView.tapped)))
     
     let boundingGrips = HandleViewRound1(frame: UIScreen.main.bounds, state: .edge)
     boundingGrips.isExclusiveTouch = false
@@ -44,6 +45,7 @@ class SpriteScaffViewController : UIViewController {
     }
     for v in [twoDView, boundingGrips]{ self.view.addSubview(v) }
   }
+  
   
   
   
