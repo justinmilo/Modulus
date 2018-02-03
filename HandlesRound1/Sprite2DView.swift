@@ -37,7 +37,10 @@ extension Array where Element == CGPoint
 
 // Used to be view controller
 
-class Sprite2DGraph : SKView {
+class Sprite2DView : SKView {
+  
+    
+
   
   var geometries : [[[Geometry]]] = []
   var index: Int = 0
@@ -161,13 +164,14 @@ class Sprite2DGraph : SKView {
     //self.showsFPS = true
     //self.showsNodeCount = true
     
-    self.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(Sprite2DGraph.tapped)))
+    self.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(Sprite2DView.tapped)))
   }
   
   
   
   @objc func tapped()
   {
+    print("tapped")
     index = (index + 1) < geometries.count ? index + 1 : 0
     redraw(index)
   }

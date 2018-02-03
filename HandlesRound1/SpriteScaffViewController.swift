@@ -11,7 +11,7 @@ import UIKit
 
 
 
-class TestViewController : UIViewController {
+class SpriteScaffViewController : UIViewController {
   
   let rectangle = CGRect(x: 120, y: 140, width: 200, height: 200)
   let scaleFactor : CGFloat = 1.0
@@ -20,12 +20,14 @@ class TestViewController : UIViewController {
     view = UIView()
 
     
-    let twoDView = Sprite2DGraph(model: NonuniformModel2D(origin: rectangle.origin, dx: rectangle.width, dy: rectangle.height, col: 2, rows: 2))
+    let twoDView = Sprite2DView(model: NonuniformModel2D(origin: rectangle.origin, dx: rectangle.width, dy: rectangle.height, col: 2, rows: 2))
    
     
-    let box = HandleViewRound1(frame: UIScreen.main.bounds, state: .edge)
+    let boundingGrips = HandleViewRound1(frame: UIScreen.main.bounds, state: .edge)
+    boundingGrips.isExclusiveTouch = false
     
-    box.handler =    {  master, positions in
+    
+    boundingGrips.handler =    {  master, positions in
       // Scale
       let (grid, rect) = self.foo(master: master)
       let aligned = master.withInsetRect( ofSize: rect.size, hugging: (positions.0.oposite, positions.1.oposite))
@@ -35,14 +37,17 @@ class TestViewController : UIViewController {
       twoDView.model = NonuniformModel2D(origin: aligned.origin, rowSizes: grid.y, colSizes: grid.x)
     }
     
-    box.completed = {  master, positions in
+    boundingGrips.completed = {  master, positions in
       let (_, rect) = self.foo(master: master)
       let aligned = master.withInsetRect( ofSize: rect.size, hugging:  (positions.0.oposite, positions.1.oposite))
-      box.set(master: aligned )
+      boundingGrips.set(master: aligned )
     }
-    for v in [twoDView, box]{ self.view.addSubview(v) }
+    for v in [twoDView, boundingGrips]{ self.view.addSubview(v) }
   }
   
+  
+  
+  // Plan and target rect based on a Rect
   func foo(master: CGRect) -> (PlanModel, CGRect)
   {
     let scaledMasterSize = master.size * self.scaleFactor
@@ -54,7 +59,7 @@ class TestViewController : UIViewController {
       y: Grid(x111.y)
     )
     
-    // Find appropriate model
+    // Find appropriate model scaled
     let x222 = CGSize(
       width: Grid(x111.x).sum / self.scaleFactor,
       height: Grid(x111.y).sum / self.scaleFactor

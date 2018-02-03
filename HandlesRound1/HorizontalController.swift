@@ -137,7 +137,7 @@ class HorizontalHolder: UIViewController, UIPageViewControllerDataSource  {
     super.init(nibName: nil, bundle: nil)
     
     
-    self.content = [TestViewController(), TestViewController()]
+    self.content = [SpriteScaffViewController(), SpriteScaffViewController()]
   }
   
   
