@@ -168,29 +168,19 @@ class HandleViewRound1: UIView {
     // Create Borders ...
     let b1 = UIView()
     b1.layer.borderWidth = 1.0
-    b1.layer.borderColor = UIColor.white.cgColor
-    let b2 = UIView()
-    b2.layer.borderWidth = 1.0
-    b2.layer.borderColor = UIColor.gray.cgColor
-    b2.layer.cornerRadius = buttonSize.width/4
+    b1.layer.borderColor = UIColor.gray.cgColor
 
     
     // Make Layouts for outlines
-    let outside = MarginLayout(content:b2, margin: -buttonSize.width/4)
-    outlines += [AnyLayout(b1), AnyLayout(outside)]
-    hideables = [b1, b2]
+    outlines += [AnyLayout(b1)]
+    hideables = [b1]
     for var o in outlines { o.layout(in: rectangle)}
     for var h in hideables { h.isHidden = true }
     // ... End borders
     
-    // Create Background View
-    outerBoundaryView = UIView()
-    outerBoundaryView.backgroundColor = #colorLiteral(red: 0.7808889747, green: 0.8120988011, blue: 0.9180557132, alpha: 0.1101177377)
-    outerBoundaryView.layer.cornerRadius = buttonSize.width/4
-    outerBoundaryView.frame = self.frame.insetBy(dx: 100, dy: 100)
 
     // Order Subviews and add to view
-    for v in [outerBoundaryView!, b2, b1] + handleBoundary + handles { self.addSubview(v) }
+    for v in [b1] + handleBoundary + handles { self.addSubview(v) }
     
   }
   

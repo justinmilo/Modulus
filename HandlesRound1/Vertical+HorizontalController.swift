@@ -14,7 +14,18 @@ class VerticalController: UIViewController, UIPageViewControllerDataSource, UIPa
   
   override func viewDidLoad() {
     
-    self.content = [HorizontalHolder(), HorizontalHolder()]
+    let size = CGSize3(width: 150, depth: 150, elev: 820)
+    let graph = createSegments(with: size)
+    let specialCase = SpriteScaffViewController()
+    let geometry = C2Edge2DView().modelToLinework(edges: graph.frontEdgesNoZeros)
+    specialCase.twoDView.geometries.append( [ geometry ])
+    specialCase.twoDView.redraw(0)
+    
+    print(graph.frontEdgesNoZeros)
+    self.content = [
+      HorizontalHolder(content:  [specialCase, SpriteScaffViewController()]),
+      HorizontalHolder(content:  [SpriteScaffViewController(), SpriteScaffViewController()])
+    ]
     
     super.viewDidLoad()
     
@@ -131,13 +142,13 @@ class HorizontalHolder: UIViewController, UIPageViewControllerDataSource  {
     fatalError()
   }
   
-  init()
+  init(content: [UIViewController])
   {
     self.pageViewController = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
     super.init(nibName: nil, bundle: nil)
     
     
-    self.content = [SpriteScaffViewController(), SpriteScaffViewController()]
+    self.content = content
   }
   
   

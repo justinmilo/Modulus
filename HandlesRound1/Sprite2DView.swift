@@ -26,8 +26,15 @@ extension Array where Element == CGPoint
         return transform($0.0, $0.1)
     }
   }
-  
 }
+
+func segments(_ array: [CGPoint]) -> [(CGPoint, CGPoint)]
+{
+  return Array( zip(array, array.dropFirst()) )
+}
+
+
+typealias MapDiagram = (NonuniformModel2D)->[Geometry]
 
 
 
@@ -61,6 +68,10 @@ class Sprite2DView : SKView {
       // First Geometry Set...
       // Grid
       let grid = _skCordinateModel.edgesAndPoints
+      
+      let points = grid.points.all.map {
+        return LabeledPoint(position: $0, label: "Std")
+      }
       
       let horizontals : [[TextureLine]] = _skCordinateModel.orderedPointsLeftToRight.map{ $0.texturedLines }
       let verticals : [[TextureLine]] = _skCordinateModel.orderedPointsUpToDown.map{ $0.texturedLines }
@@ -124,43 +135,71 @@ class Sprite2DView : SKView {
       
       
       
+      let elevations = createELevation(_skCordinateModel: _skCordinateModel)
       
-      
-      self.geometries = [[rectangles, mids],  gridItems, boundingItems, selectedItems]
+      self.geometries = [
+        [rectangles, mids, points], elevations,
+        gridItems, boundingItems, selectedItems]
       redraw(index)
     }
   }
   
-  func testingGrid(origin:CGPoint) -> [[Geometry]]
+  
+  func createELevation( _skCordinateModel: NonuniformModel2D) -> [[Geometry]]
   {
-    var gPoints =
-      [CGPoint(0,0),
-       CGPoint(100,100),
-       CGPoint(200,200)]
-    gPoints = gPoints.map{ $0 + origin.asVector() }
-    let gCircles = gPoints.map(redCirc)
-    let labels : [Label] = gPoints.map(pointToLabel).map{ var a = $0;
-      a.text = String(describing: $0.position); return a }
-    return [gCircles, labels]
+    let horizontals = _skCordinateModel.orderedPointsUpToDown.map
+    { $0.segments(connectedBy:
+      { (a, b) -> TextureLine in
+        return TextureLine(label: "ledger elev", start: a, end: b)
+    })
+    }
+    let verticals = _skCordinateModel.edgesAndPoints.edges.verticals.map
+    {
+      line  -> [TextureLine] in
+      
+      let distance = line.start.y - line.end.y
+      print(distance)
+      let stds = maximumRepeated(availableInventory: [50, 100], targetMaximum: distance)
+      let g = Grid(stds)
+    
+      return zip(g.positions, g.positions.dropFirst()).map
+        {
+          arg -> TextureLine in
+          
+          return TextureLine(label: "std elev",
+                             start: CGPoint( line.start.x, line.start.y - arg.0) ,
+                             end: CGPoint( line.end.x, line.start.y - arg.1))
+      }
+      
+    }
+    let base = _skCordinateModel.edgesAndPoints.points.top.map {
+      return [
+        TextureLine(label: "base",
+                    start: $0 ,
+                    end: $0),
+        
+        
+        TextureLine(label: "sj",
+                    start: $0 ,
+                    end: $0)
+      ]
+    }
+    
+      
+    return horizontals + verticals + base
   }
   
   init(model : NonuniformModel2D)
   {
-    
     self.model = model
-    
+
     super.init(frame: UIScreen.main.bounds)
     
     // Specialtiy SpriteKitScene
     let aScene = SKScene(size: UIScreen.main.bounds.size)
     self.presentScene(aScene)
     
-    
     self.ignoresSiblingOrder = true
-    //self.showsFPS = true
-    //self.showsNodeCount = true
-    
-    
   }
   
   
@@ -240,62 +279,196 @@ class Sprite2DView : SKView {
       scene!.addChild(node)
       return node
     }
-    if let line = node as? TextureLine
+    if let p = node as? LabeledPoint
     {
       let node : SKSpriteNode
       // list of assets
-      let dict : [CGFloat : (String, UIImage)] = [
-        200 : ("2.0m", #imageLiteral(resourceName: "2.0m plan")),
-        100 : ("1.0m", #imageLiteral(resourceName: "1m plan.png")),
-        150 : ("1.5m", #imageLiteral(resourceName: "1.5m Plan.png"))
-      ]
+      let dict : [String : UIImage] = [ "Std" : #imageLiteral(resourceName: "Std Plan.png") ]
       
       // match asset to length of line
       let options = dict.filter
       {
         (tup) -> Bool in
-        if tup.key == CGSegment(p1: line.line.start, p2: line.line.end).length
+        if tup.key == p.label
         {
           return true
         }
         return false
       }
       
-      let second = (options.first)
-      let name = second?.value.0 ?? "NA"
-      let image = second?.value.1 ?? #imageLiteral(resourceName: "Screw Jack.png")
-
+      let second = options[p.label]!
       
-      
-      if cache.map({ $0.name }).contains(name) {
+      if cache.map({ $0.name }).contains(p.label) {
         let nodeIndex = cache.index(where: { (candidate) -> Bool in
-          candidate.name == name
+          candidate.name == p.label
         })!
         let nodeToClone = cache[nodeIndex]
         node = nodeToClone.copy() as! SKSpriteNode
       }
       else {
-        node = SKSpriteNode(texture: SKTexture(image:image))
+        node = SKSpriteNode(texture: SKTexture(image: second))
         cache.append(node)
       }
       
       let twometer : CGFloat = 2.00/1.6476
       //let scale = self.scale + twometer
       node.setScale( twometer)
+      node.position = p.position  * scale
+      scene!.addChild(node)
+      node.name = p.label
+      return node
+      
+      
+    }
+    if let line = node as? TextureLine, line.label != ""
+    {
+      print("WE HAVE TIME")
+      let node : SKSpriteNode
+      // list of assets
+      let ledgers : [CGFloat : (String, UIImage)] = [
+        200 : ("2.0m Ledger", UIImage(named: "2m")!),
+        100 : ("1.0m Ledger", UIImage(named: "1m")!),
+        150 : ("1.5m Ledger", UIImage(named: "1.5m")!)
+      ]
+      let stds : [CGFloat : (String, UIImage)] = [
+        100 : ("1.0m stds", UIImage(named: "2.0m Std")!),
+        50 : ("0.5m stds", UIImage(named: "0.5m Std")!),
+        ]
+      
+      let pts : [String : UIImage] = [
+        "base" : UIImage(named: "Base Collar")!,
+        "sj" : UIImage(named: "Screw Jack")!
+      ]
+      
+      
+      let options : [CGFloat : (String, UIImage)]
+      
+      var adjujstmentV = CGVector.zero
+      if ( line.label == "ledger elev" )
+      {
+        
+        adjujstmentV = CGVector(0, -1.44)
+        // match asset to length of line
+        options = ledgers.filter
+          {
+            (tup) -> Bool in
+            if tup.key == CGSegment(p1: line.line.start, p2: line.line.end).length
+            {
+              return true
+            }
+            return false
+        }
+      }
+      else if ( line.label ==  "std elev")
+      {
+        adjujstmentV = CGVector(0, 8.64)
+        
+        
+        options = stds.filter
+          {
+            (tup) -> Bool in
+            print("(p1: \(line.line.start), p2: \(line.line.end)) -> \t \(CGSegment(p1: line.line.start, p2: line.line.end).length) ")
+            if tup.key == CGSegment(p1: line.line.start, p2: line.line.end).length
+            {
+              return true
+            }
+            return false
+        }
+      }
+      else
+      {
+        let foo = pts[line.label]
+        options = [ 0.0 : (line.label, foo!)]
+      }
+      
+      
+      let second = (options.first)
+      let name = second?.value.0 ?? "NA"
+      let image = second?.value.1 ?? #imageLiteral(resourceName: "Screw Jack.png")
+      
+      let optNode = cache.first {
+        $0.name == name
+      }
+      if let real = optNode {
+        node = real.copy() as! SKSpriteNode
+      }
+      else {
+        node = SKSpriteNode(texture: SKTexture(image:image))
+        cache.append(node)
+      }
+      
+      node.setScale( 2.00/1.6476)
       node.position = (line.line.start+line.line.end).center  * scale
-      node.zRotation = CGFloat(line.line.start.x == line.line.end.x ? CGFloat.halfPi : 0)
+      print(adjujstmentV)
+      //print(adjujstmentV / scale)
+      node.position = node.position + ( adjujstmentV *  2.00/1.6476)
+      //node.zRotation = CGFloat(line.line.start.x == line.line.end.x ? CGFloat.halfPi : 0)
       scene!.addChild(node)
       node.name = name
       return node
+      
+      fatalError()
+      
     }
-    fatalError()
+    if let line = node as? TextureLine, line.label == ""
+    {
+      
+  
+  
+  let node : SKSpriteNode
+  // list of assets
+  let dict : [CGFloat : (String, UIImage)] = [
+  200 : ("2.0m", #imageLiteral(resourceName: "2.0m plan")),
+  100 : ("1.0m", #imageLiteral(resourceName: "1m plan.png")),
+  150 : ("1.5m", #imageLiteral(resourceName: "1.5m Plan.png"))
+  ]
+  
+  // match asset to length of line
+  let options = dict.filter
+{
+  (tup) -> Bool in
+  if tup.key == CGSegment(p1: line.line.start, p2: line.line.end).length
+  {
+  return true
+  }
+  return false
   }
   
-  var cache : [SKSpriteNode] = []
+  let second = (options.first)
+  let name = second?.value.0 ?? "NA"
+  let image = second?.value.1 ?? #imageLiteral(resourceName: "Screw Jack.png")
   
-  // ...SceneKit Handlering
+  
+  
+  if cache.map({ $0.name }).contains(name) {
+  let nodeIndex = cache.index(where: { (candidate) -> Bool in
+  candidate.name == name
+  })!
+  let nodeToClone = cache[nodeIndex]
+  node = nodeToClone.copy() as! SKSpriteNode
+  }
+  else {
+  node = SKSpriteNode(texture: SKTexture(image:image))
+  cache.append(node)
+  }
+  
+  let twometer : CGFloat = 2.00/1.6476
+  //let scale = self.scale + twometer
+  node.setScale( twometer)
+  node.position = (line.line.start+line.line.end).center  * scale
+  node.zRotation = CGFloat(line.line.start.x == line.line.end.x ? CGFloat.halfPi : 0)
+  scene!.addChild(node)
+  node.name = name
+  return node
+  }
+  fatalError()
+}
 
-  
+var cache : [SKSpriteNode] = []
+
+// ...SceneKit Handlering
+
+
   
   // Viewcontroller Functions
 

@@ -16,11 +16,12 @@ class SpriteScaffViewController : UIViewController {
   let rectangle = CGRect(x: 120, y: 140, width: 200, height: 200)
   let scaleFactor : CGFloat = 1.0
   
+  var twoDView : Sprite2DView
+  
   override func loadView() {
     view = UIView()
 
     
-    let twoDView = Sprite2DView(model: NonuniformModel2D(origin: rectangle.origin, dx: rectangle.width, dy: rectangle.height, col: 2, rows: 2))
     
     view.addGestureRecognizer(UITapGestureRecognizer(target: twoDView, action: #selector(Sprite2DView.tapped)))
     
@@ -34,8 +35,8 @@ class SpriteScaffViewController : UIViewController {
       let aligned = master.withInsetRect( ofSize: rect.size, hugging: (positions.0.oposite, positions.1.oposite))
       
       // "layout" my subview grid, witha model2d
-      twoDView.scale = 1/self.scaleFactor
-      twoDView.model = NonuniformModel2D(origin: aligned.origin, rowSizes: grid.y, colSizes: grid.x)
+      self.twoDView.scale = 1/self.scaleFactor
+      self.twoDView.model = NonuniformModel2D(origin: aligned.origin, rowSizes: grid.y, colSizes: grid.x)
     }
     
     boundingGrips.completed = {  master, positions in
@@ -47,7 +48,15 @@ class SpriteScaffViewController : UIViewController {
   }
   
   
+  init()
+  {
+    twoDView = Sprite2DView(model: NonuniformModel2D(origin: rectangle.origin, dx: rectangle.width, dy: rectangle.height, col: 2, rows: 2))
+    super.init(nibName: nil, bundle: nil)
+  }
   
+  required init?(coder aDecoder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
   
   // Plan and target rect based on a Rect
   func foo(master: CGRect) -> (PlanModel, CGRect)

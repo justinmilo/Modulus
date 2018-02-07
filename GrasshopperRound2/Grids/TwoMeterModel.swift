@@ -10,10 +10,30 @@ import CoreGraphics
 
 
   
+func maximumRepeatedWithR(availableInventory : [CGFloat], targetMaximum: CGFloat) -> ([CGFloat], CGFloat)
+{
+  let orderedInventory = availableInventory.sorted(by: >)
+  let (remainder, standards) : (CGFloat , [CGFloat]) = orderedInventory.reduce((targetMaximum, []))
+  {
+    (balance :(heightRemain : CGFloat, standards : [CGFloat]), heightToTry) in
+    
+    guard balance.heightRemain >= heightToTry else { return (balance.heightRemain, balance.standards) }
+    
+    let times = Int( floor( balance.heightRemain / heightToTry))
+    let remaining = balance.heightRemain.truncatingRemainder(dividingBy: heightToTry)
+    
+    let array = Array<CGFloat>(repeating: heightToTry, count: times)
+    
+    return (remaining, balance.standards + array)
+  }
+  return (standards, remainder)
+}
 
 
-
-
+func maximumRepeated(availableInventory : [CGFloat], targetMaximum: CGFloat) -> [CGFloat]
+{
+  return maximumRepeatedWithR(availableInventory: availableInventory, targetMaximum: targetMaximum).0
+}
 
 
 func maximizedGrid(
@@ -23,24 +43,7 @@ func maximizedGrid(
   -> (x:[CGFloat], y:[CGFloat])
 {
   
-  func maximumRepeated(availableInventory : [CGFloat], targetMaximum: CGFloat) -> [CGFloat]
-  {
-    let orderedInventory = availableInventory.sorted(by: >)
-    let (_, standards) : (CGFloat , [CGFloat]) = orderedInventory.reduce((targetMaximum, []))
-    {
-      (balance :(heightRemain : CGFloat, standards : [CGFloat]), heightToTry) in
-    
-      guard balance.heightRemain >= heightToTry else { return (balance.heightRemain, balance.standards) }
-      
-      let times = Int( floor( balance.heightRemain / heightToTry))
-      let remaining = balance.heightRemain.truncatingRemainder(dividingBy: heightToTry)
-      
-      let array = Array<CGFloat>(repeating: heightToTry, count: times)
-      
-      return (remaining, balance.standards + array)
-    }
-    return standards
-  }
+  
   
   
   return (

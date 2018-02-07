@@ -24,6 +24,8 @@ struct Label : Geometry {
   var text : String
   var position : CGPoint = CGPoint.zero
   var rotation : Rotation = .h
+}
+extension Label {
   init(text: String) { self.text = text }
 }
 
@@ -62,17 +64,33 @@ struct StrokedLine : Geometry {
   var position: CGPoint { get { return line.position } set { line.position = newValue }}
 }
 
+
+
 struct TextureLine : Geometry {
+  var label : String
   var line : Line
   var position: CGPoint { get { return line.position } set { line.position = newValue }}
-  
 }
 extension TextureLine{
   init( start: Geometry, end: Geometry)
   {
+    self.label = ""
+    self.line = Line(start: start, end: end)
+  }
+  init( label: String, start: Geometry, end: Geometry)
+  {
+    print(label)
+    self.label = label
     self.line = Line(start: start, end: end)
   }
 }
+
+struct LabeledPoint : Geometry {
+  var position : CGPoint
+  var label : String
+}
+
+
 
 extension Line {
   var unitLine : Line { return Line(start: CGPoint(x:0,y:0), end: CGPoint(x:self.end.x - self.start.x,y: self.end.y - self.start.y))
