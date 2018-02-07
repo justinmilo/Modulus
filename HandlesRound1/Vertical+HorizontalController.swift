@@ -17,9 +17,17 @@ class VerticalController: UIViewController, UIPageViewControllerDataSource, UIPa
     let size = CGSize3(width: 150, depth: 150, elev: 820)
     let graph = createSegments(with: size)
     let specialCase = SpriteScaffViewController()
+    
     let geometry = C2Edge2DView().modelToLinework(edges: graph.frontEdgesNoZeros)
     specialCase.twoDView.geometries.append( [ geometry ])
     specialCase.twoDView.redraw(0)
+    let geoFirst = (geometry.first?.position)! +  (geometry.first?.position)!
+    let geoMinus = geometry.dropFirst()
+    let rect = geoMinus.reduce(geoFirst) {
+      (res : CGRect, geo : Geometry) -> CGRect in
+      return 
+    }
+    specialCase.handleView.set(master: rect )
     
     print(graph.frontEdgesNoZeros)
     self.content = [

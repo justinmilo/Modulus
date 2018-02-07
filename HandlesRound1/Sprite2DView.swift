@@ -12,31 +12,6 @@ import GameplayKit
 
 
 
-extension Array where Element == CGPoint
-{
-  var texturedLines : [TextureLine]
-  {
-    return segments(connectedBy: TextureLine.init)
-  }
-  
-  func segments<T>(connectedBy transform: (CGPoint, CGPoint) -> T) -> [T]
-  {
-    return zip(self, self.dropFirst()).map
-      {
-        return transform($0.0, $0.1)
-    }
-  }
-}
-
-func segments(_ array: [CGPoint]) -> [(CGPoint, CGPoint)]
-{
-  return Array( zip(array, array.dropFirst()) )
-}
-
-
-typealias MapDiagram = (NonuniformModel2D)->[Geometry]
-
-
 
 // Used to be view controller
 

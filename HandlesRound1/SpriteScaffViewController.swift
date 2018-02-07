@@ -17,6 +17,7 @@ class SpriteScaffViewController : UIViewController {
   let scaleFactor : CGFloat = 1.0
   
   var twoDView : Sprite2DView
+  var handleView : HandleViewRound1
   
   override func loadView() {
     view = UIView()
@@ -25,7 +26,7 @@ class SpriteScaffViewController : UIViewController {
     
     view.addGestureRecognizer(UITapGestureRecognizer(target: twoDView, action: #selector(Sprite2DView.tapped)))
     
-    let boundingGrips = HandleViewRound1(frame: UIScreen.main.bounds, state: .edge)
+    let boundingGrips = self.handleView
     boundingGrips.isExclusiveTouch = false
     
     
@@ -51,6 +52,8 @@ class SpriteScaffViewController : UIViewController {
   init()
   {
     twoDView = Sprite2DView(model: NonuniformModel2D(origin: rectangle.origin, dx: rectangle.width, dy: rectangle.height, col: 2, rows: 2))
+    self.handleView = HandleViewRound1(frame: UIScreen.main.bounds, state: .edge)
+
     super.init(nibName: nil, bundle: nil)
   }
   

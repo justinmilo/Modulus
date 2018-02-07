@@ -113,7 +113,6 @@ class HandleViewRound1: UIView {
     let centers : (CGRect) -> [CGPoint]
     let redefine : (Int, [CGPoint]) -> CGRect
     let positions: (Int) -> (VerticalPosition,HorizontalPosition)
-    
   }
   
   // whole class properties
@@ -121,9 +120,7 @@ class HandleViewRound1: UIView {
   var handles : [UIView] = [] // Clockwise from topLeft
   var point : TensionedPoint!
   let buttonSize = CGSize(44, 44)
-  var handler : ( CGRect,
-    (VerticalPosition,HorizontalPosition)
-    )->() = { _,_ in }
+  var handler : ( CGRect, (VerticalPosition,HorizontalPosition))->() = { _,_ in }
   var completed : (CGRect,(VerticalPosition,HorizontalPosition))->() = { _, _ in }
   var outlines: [AnyLayout<UIView>] = []
   var hideables: [Hideable] = []
