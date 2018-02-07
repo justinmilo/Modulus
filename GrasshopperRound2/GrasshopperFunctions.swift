@@ -79,7 +79,6 @@ extension TextureLine{
   }
   init( label: String, start: Geometry, end: Geometry)
   {
-    print(label)
     self.label = label
     self.line = Line(start: start, end: end)
   }

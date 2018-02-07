@@ -26,7 +26,6 @@ class CElevation {
       line  -> [TextureLine] in
       
       let distance = line.start.y - line.end.y
-      print(distance)
       let stds = maximumRepeated(availableInventory: [50, 100], targetMaximum: distance)
       let g = Grid(stds)
       
@@ -58,11 +57,7 @@ class CElevation {
   }
 }
 
-class CEverything {
-  
-  init() {
-    
-  }
+struct CEverything {
   
   func geometries (model: NonuniformModel2D, scale: CGFloat, bounds: CGRect) -> [[Geometry]]
   {
@@ -201,7 +196,6 @@ class C2Edge2DView {
     {
       (res, geo) -> [Label] in
       
-      print( res.map{ ($0.text, $0.position) }, geo.position)
       if res.contains(where: {
         
         let r = CGRect.around($0.position, size: CGSize(40,40))

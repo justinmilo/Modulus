@@ -223,12 +223,12 @@
 				D0B218CF201F6491004684FC /* Vertical+HorizontalController.swift */,
 				D0B218D120215E8F004684FC /* Media.xcassets */,
 				D0BCAFBA201CDC4300C4EAA5 /* SpriteScaffViewController.swift */,
-				D04A73742022B4C900C46501 /* NonuniformModel2D.swift */,
-				D03E03F720125DF8002D47F3 /* Sprite2DView.swift */,
 				D08A6F92202AA58E00EF9E68 /* C2Edge2DView.swift */,
+				D03E03F720125DF8002D47F3 /* Sprite2DView.swift */,
 				D04153C3202B9FB400BD7B72 /* View.swift */,
 				D0F09A55201CCD3C00720FD5 /* HandlesView.swift */,
 				D0006A01200BD09A00E8D5F3 /* ButtonView.swift */,
+				D04153C5202BB18C00BD7B72 /* Model */,
 				D0931FD520113DCA007BFCC3 /* Layouts */,
 				D064BDD9200D94C50032C153 /* SwiftGeometry */,
 				D03E03F520125DF8002D47F3 /* GrasshopperRound2 */,
@@ -268,6 +268,14 @@
 			);
 			path = GrasshopperRound2;
 			sourceTree = SOURCE_ROOT;
+		};
+		D04153C5202BB18C00BD7B72 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				D04A73742022B4C900C46501 /* NonuniformModel2D.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
 		};
 		D056A3A020177F1000C3B3B1 /* Grids */ = {
 			isa = PBXGroup;

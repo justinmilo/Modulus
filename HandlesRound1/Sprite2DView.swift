@@ -22,9 +22,7 @@ class Sprite2DView : SKView {
   
   var geometries : [[[Geometry]]] = []
   var index: Int = 0
-  
   var scale : CGFloat = 1.0
-  
   
   override init(frame: CGRect)
   {
@@ -42,7 +40,6 @@ class Sprite2DView : SKView {
   
   @objc func tapped()
   {
-    print("tapped")
     index = (index + 1) < geometries.count ? index + 1 : 0
     redraw(index)
   }
@@ -58,7 +55,7 @@ class Sprite2DView : SKView {
         self.addChildR(item)
       }
     }
-    
+    print(self.scene!.children)
   }
   
   
@@ -158,7 +155,6 @@ class Sprite2DView : SKView {
     }
     if let line = node as? TextureLine, line.label != ""
     {
-      print("WE HAVE TIME")
       let node : SKSpriteNode
       // list of assets
       let ledgers : [CGFloat : (String, UIImage)] = [
@@ -203,7 +199,6 @@ class Sprite2DView : SKView {
         options = stds.filter
           {
             (tup) -> Bool in
-            print("(p1: \(line.line.start), p2: \(line.line.end)) -> \t \(CGSegment(p1: line.line.start, p2: line.line.end).length) ")
             if tup.key == CGSegment(p1: line.line.start, p2: line.line.end).length
             {
               return true
@@ -235,76 +230,71 @@ class Sprite2DView : SKView {
       
       node.setScale( 2.00/1.6476)
       node.position = (line.line.start+line.line.end).center  * scale
-      print(adjujstmentV)
-      //print(adjujstmentV / scale)
       node.position = node.position + ( adjujstmentV *  2.00/1.6476)
       //node.zRotation = CGFloat(line.line.start.x == line.line.end.x ? CGFloat.halfPi : 0)
       scene!.addChild(node)
       node.name = name
       return node
-      
-      fatalError()
-      
     }
     if let line = node as? TextureLine, line.label == ""
     {
       
-  
-  
-  let node : SKSpriteNode
-  // list of assets
-  let dict : [CGFloat : (String, UIImage)] = [
-  200 : ("2.0m", #imageLiteral(resourceName: "2.0m plan")),
-  100 : ("1.0m", #imageLiteral(resourceName: "1m plan.png")),
-  150 : ("1.5m", #imageLiteral(resourceName: "1.5m Plan.png"))
-  ]
-  
-  // match asset to length of line
-  let options = dict.filter
-{
-  (tup) -> Bool in
-  if tup.key == CGSegment(p1: line.line.start, p2: line.line.end).length
-  {
-  return true
+      
+      
+      let node : SKSpriteNode
+      // list of assets
+      let dict : [CGFloat : (String, UIImage)] = [
+        200 : ("2.0m", #imageLiteral(resourceName: "2.0m plan")),
+        100 : ("1.0m", #imageLiteral(resourceName: "1m plan.png")),
+        150 : ("1.5m", #imageLiteral(resourceName: "1.5m Plan.png"))
+      ]
+      
+      // match asset to length of line
+      let options = dict.filter
+      {
+        (tup) -> Bool in
+        if tup.key == CGSegment(p1: line.line.start, p2: line.line.end).length
+        {
+          return true
+        }
+        return false
+      }
+      
+      let second = (options.first)
+      let name = second?.value.0 ?? "NA"
+      let image = second?.value.1 ?? #imageLiteral(resourceName: "Screw Jack.png")
+      
+      
+      
+      if cache.map({ $0.name }).contains(name) {
+        let nodeIndex = cache.index(where: { (candidate) -> Bool in
+          candidate.name == name
+        })!
+        let nodeToClone = cache[nodeIndex]
+        node = nodeToClone.copy() as! SKSpriteNode
+      }
+      else {
+        node = SKSpriteNode(texture: SKTexture(image:image))
+        cache.append(node)
+      }
+      
+      let twometer : CGFloat = 2.00/1.6476
+      //let scale = self.scale + twometer
+      node.setScale( twometer)
+      node.position = (line.line.start+line.line.end).center  * scale
+      node.zRotation = CGFloat(line.line.start.x == line.line.end.x ? CGFloat.halfPi : 0)
+      scene!.addChild(node)
+      node.name = name
+      return node
+    }
+    fatalError()
   }
-  return false
-  }
   
-  let second = (options.first)
-  let name = second?.value.0 ?? "NA"
-  let image = second?.value.1 ?? #imageLiteral(resourceName: "Screw Jack.png")
+  var cache : [SKSpriteNode] = []
+  
+  // ...SceneKit Handlering
   
   
-  
-  if cache.map({ $0.name }).contains(name) {
-  let nodeIndex = cache.index(where: { (candidate) -> Bool in
-  candidate.name == name
-  })!
-  let nodeToClone = cache[nodeIndex]
-  node = nodeToClone.copy() as! SKSpriteNode
-  }
-  else {
-  node = SKSpriteNode(texture: SKTexture(image:image))
-  cache.append(node)
-  }
-  
-  let twometer : CGFloat = 2.00/1.6476
-  //let scale = self.scale + twometer
-  node.setScale( twometer)
-  node.position = (line.line.start+line.line.end).center  * scale
-  node.zRotation = CGFloat(line.line.start.x == line.line.end.x ? CGFloat.halfPi : 0)
-  scene!.addChild(node)
-  node.name = name
-  return node
-  }
-  fatalError()
-}
-
-var cache : [SKSpriteNode] = []
-
-// ...SceneKit Handlering
-
-
   
   // Viewcontroller Functions
 

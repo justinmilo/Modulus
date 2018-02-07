@@ -434,7 +434,7 @@ func createSegments(with bounding: CGSize3) -> ScaffGraph
     // sZ is the ledger bays not the standards
     sZ: ([50, 100, 150, 200], bounding.elev) |> maximumRepeatedWithR |> { [$0.1] + $0.0 }
   )
-  var s = ScaffGraph( grid : graphSegments |> segToPos, edges : [] )
+  let s = ScaffGraph( grid : graphSegments |> segToPos, edges : [] )
   s.addScaff()
   return s
 }
@@ -442,7 +442,6 @@ func createSegments(with bounding: CGSize3) -> ScaffGraph
 //
 //let size = CGSize3(width: 150, depth: 150, elev: 0.0)
 //let graph = createSegments(with: size)
-//print(graph.sideEdges)
 //
 
 

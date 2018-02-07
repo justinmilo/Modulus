@@ -18,15 +18,12 @@ class SpriteScaffViewController : UIViewController {
   var handleView : HandleViewRound1
   
   override func loadView() {
+    
     view = UIView()
-
-    
-    
     view.addGestureRecognizer(UITapGestureRecognizer(target: twoDView, action: #selector(Sprite2DView.tapped)))
     
     let boundingGrips = self.handleView
     boundingGrips.isExclusiveTouch = false
-    
     
     boundingGrips.handler =    {  master, positions in
       // Scale
@@ -36,8 +33,9 @@ class SpriteScaffViewController : UIViewController {
       // "layout" my subview grid, witha model2d
       self.twoDView.scale = 1/self.scaleFactor
       let model = NonuniformModel2D(origin: aligned.origin, rowSizes: grid.y, colSizes: grid.x)
-      self.twoDView.geometries = [CEverything().geometries(model: model, scale: 1/self.scaleFactor
-        , bounds: UIScreen.main.bounds)]
+      let geometries = CEverything().geometries(model: model, scale: 1/self.scaleFactor, bounds: self.view.frame)
+      self.twoDView.geometries = [geometries]
+      self.twoDView.redraw( self.twoDView.index )
     }
     
     boundingGrips.completed = {  master, positions in

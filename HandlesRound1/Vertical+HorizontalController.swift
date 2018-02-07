@@ -15,10 +15,9 @@ class VerticalController: UIViewController, UIPageViewControllerDataSource, UIPa
   override func viewDidLoad() {
     
     let size = CGSize3(width: 150, depth: 150, elev: 820)
-    let graph = createSegments(with: size)
+    _ = createSegments(with: size)
     let specialCase = SpriteScaffViewController()
     
-    print(graph.frontEdgesNoZeros)
     self.content = [
       HorizontalHolder(content:  [specialCase, SpriteScaffViewController()]),
       HorizontalHolder(content:  [SpriteScaffViewController(), SpriteScaffViewController()])
@@ -50,7 +49,6 @@ class VerticalController: UIViewController, UIPageViewControllerDataSource, UIPa
   
   func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
    
-    print("Got here")
     
     if pageViewController == content[0].pageViewController, completed == true
     {
