@@ -215,11 +215,16 @@ func cedge(graph: GraphPositions, edge: Edge) -> (CEdge)
 
 
 
-struct ScaffGraph{
+class ScaffGraph{
+  init(grid: GraphPositions, edges:[Edge])
+  {
+    self.grid = grid
+    self.edges = edges
+  }
   var grid : GraphPositions
   var edges : [Edge]
   
-  mutating func addEdge(_ cedge : CEdge) {
+  func addEdge(_ cedge : CEdge) {
     let new = (grid, cedge) |> add
     grid = new.0
     edges.append(new.1)
@@ -293,7 +298,7 @@ extension ScaffGraph {
   }
   
   
-  mutating func addScaff() {
+  func addScaff() {
     let g =  grid
     let sj = (g.pX.count, g.pY.count) |> screwJacks
     let l = (g.pX.count, g.pY.count, g.pZ.count) |> everyLedger
