@@ -9,8 +9,6 @@
 import UIKit
 
 
-
-
 class SpriteScaffViewController : UIViewController {
   
   let rectangle = CGRect(x: 120, y: 140, width: 200, height: 200)
@@ -37,7 +35,9 @@ class SpriteScaffViewController : UIViewController {
       
       // "layout" my subview grid, witha model2d
       self.twoDView.scale = 1/self.scaleFactor
-      self.twoDView.model = NonuniformModel2D(origin: aligned.origin, rowSizes: grid.y, colSizes: grid.x)
+      let model = NonuniformModel2D(origin: aligned.origin, rowSizes: grid.y, colSizes: grid.x)
+      self.twoDView.geometries = [CEverything().geometries(model: model, scale: 1/self.scaleFactor
+        , bounds: UIScreen.main.bounds)]
     }
     
     boundingGrips.completed = {  master, positions in
@@ -51,7 +51,8 @@ class SpriteScaffViewController : UIViewController {
   
   init()
   {
-    twoDView = Sprite2DView(model: NonuniformModel2D(origin: rectangle.origin, dx: rectangle.width, dy: rectangle.height, col: 2, rows: 2))
+    twoDView = Sprite2DView()
+    
     self.handleView = HandleViewRound1(frame: UIScreen.main.bounds, state: .edge)
 
     super.init(nibName: nil, bundle: nil)
