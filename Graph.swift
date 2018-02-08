@@ -279,12 +279,7 @@ extension ScaffGraph {
   
   
   
-  
-  func standards(in g:GraphPositions, sizes:[CGFloat]) -> Edge
-  {
-    return Edge(content: "Standard", p1: (0,0,1), p2: (0,0,1))
-  }
-  
+ 
   
   func everyBC(to xCount:Int, yCount:Int ) -> [Edge]
   {
@@ -338,7 +333,7 @@ extension ScaffGraph {
 
 func maximumStandards(in height:CGFloat) -> [CGFloat]
 {
-  return maximumRepeated(availableInventory:[50,100,150,200,250,300], targetMaximum: height)
+  return maximumRepeated(availableInventory:[50,100], targetMaximum: height)
   
 }
 
@@ -419,6 +414,11 @@ func posToSize(position: GraphPositions) -> CGSize3
     elev: position.pZ.last! - position.pZ.first!)
 }
 
+func dropBottomZBay( position: GraphPositions ) -> GraphPositions
+{
+  return GraphPositions(pX: position.pX, pY: position.pY, pZ: Array(position.pZ.dropFirst()) )
+}
+
 extension ScaffGraph
 {
   var planEdges : [C2Edge] {
@@ -440,6 +440,11 @@ extension ScaffGraph
   var bounds: CGSize3 {
     return self.grid |> posToSize
   }
+  
+  var boundsOfGrid: (CGSize3, CGFloat) {
+    return (self.grid |> dropBottomZBay |> posToSize, (self.grid.pZ |> posToSeg |> { ($0.first)!} ))
+  }
+  
 }
 
 
@@ -450,6 +455,20 @@ func createScaffolding(with bounding: CGSize3) -> ScaffGraph
     sY: ([50, 100, 150, 200], bounding.depth) |> maximumRepeated,
     // sZ is the ledger bays not the standards
     sZ: ([50, 100, 150, 200], bounding.elev) |> maximumRepeatedWithR |> { [$0.1] + $0.0 }
+  )
+  let s = ScaffGraph( grid : graphSegments |> segToPos, edges : [] )
+  s.addScaff()
+  return s
+}
+
+func createGrid(with bounding: CGSize3) -> ScaffGraph
+{
+  let screwJack : [CGFloat] = [30]
+  let graphSegments = GraphSegments(
+    sX: ([50, 100, 150, 200], bounding.width) |> maximumRepeated,
+    sY: ([50, 100, 150, 200], bounding.depth) |> maximumRepeated,
+    // sZ is the ledger bays not the standards
+    sZ: ([50, 100, 150, 200], bounding.elev) |> maximumRepeated |> { screwJack + $0  }
   )
   let s = ScaffGraph( grid : graphSegments |> segToPos, edges : [] )
   s.addScaff()

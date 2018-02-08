@@ -162,22 +162,14 @@ func modelToTexturesElev ( edges: [C2Edge], origin: CGPoint) -> [Geometry]
     }
   }
   
-  let verticals = edges.filter{ $0.content == "Standard"}.flatMap
+  let verticals = edges.filter{ $0.content == "Standard"}.map
   {
-    line  -> [TextureLine] in
-
-    let distance = (line.p1 + line.p2).diagonalExtent
-    let stds = maximumRepeated(availableInventory: [50, 100], targetMaximum: distance)
-    let g = Grid(stds)
-
-    return zip(g.positions, g.positions.dropFirst()).map
-      {
-        arg -> TextureLine in
+    line  -> TextureLine in
 
         return TextureLine(label: "std elev",
-                           start: CGPoint( line.p1.x, line.p1.y - arg.0) ,
-                           end: CGPoint( line.p2.x, line.p1.y - arg.1))
-    }
+                           start: CGPoint( line.p1.x, line.p1.y) ,
+                           end: CGPoint( line.p2.x, line.p2.y))
+    
 
   }
   let base = edges.filter{ $0.content == "BC"}.map

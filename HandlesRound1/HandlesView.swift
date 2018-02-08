@@ -141,6 +141,9 @@ class HandleViewRound1: UIView {
     stateMachine = StateFactory(state: state)
     super.init(frame: frame)
     
+    outerBounds = self.bounds.insetBy(dx: 20, dy: 20)
+    
+    
     // Handles...
     let rectangle = CGRect(x: 120, y: 140, width: 200, height: 200)
     let buttonCenters : [CGPoint] = stateMachine.centers( rectangle)
@@ -156,28 +159,21 @@ class HandleViewRound1: UIView {
     
     // Create Background View
     
-    handleBoundary = [UIView(), UIView(), UIView()]
-    handleBoundary[1].backgroundColor = #colorLiteral(red: 0.7808889747, green: 0.8120988011, blue: 0.9180557132, alpha: 0.04869058104)
-    handleBoundary[0].backgroundColor = #colorLiteral(red: 0.4666666687, green: 0.7647058964, blue: 0.2666666806, alpha: 0.0459672095)
-    handleBoundary[2].backgroundColor = #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 0.05251430462)
-    for v in handleBoundary { v.isHidden = true }
-    
     // Create Borders ...
     let b1 = UIView()
     b1.layer.borderWidth = 1.0
     b1.layer.borderColor = UIColor.gray.cgColor
-
     
     // Make Layouts for outlines
-    outlines += [AnyLayout(b1)]
+    outlines += [AnyLayout(LayoutLogger(child: b1))]
     hideables = [b1]
     for var o in outlines { o.layout(in: rectangle)}
-    for var h in hideables { h.isHidden = true }
+    //for var h in hideables { h.isHidden = true }
     // ... End borders
     
 
     // Order Subviews and add to view
-    for v in [b1] + handleBoundary + handles { self.addSubview(v) }
+    for v in [b1]  + handles { self.addSubview(v) }
     
   }
   
@@ -186,7 +182,7 @@ class HandleViewRound1: UIView {
   }
   
   
-  var handleBoundary : [UIView] = []
+
   var initialOffset = CGPoint.zero // delta between touchDown center and handle center
   var frozenBounds = CGRect.zero
   var outerBounds = CGRect.zero
@@ -203,7 +199,6 @@ class HandleViewRound1: UIView {
       initialOffset = (gesture.view!.center - loc).asPoint()
       let m1 = stateMachine.redefine(handles.index(of:gesture.view!)!, handles.map{ $0.center })
       frozenBounds = insetIf( m1)
-      outerBounds = self.bounds.insetBy(dx: 20, dy: 20)
       for var h in hideables { h.isHidden = false }
 
       
@@ -215,10 +210,6 @@ class HandleViewRound1: UIView {
       // bounds rects
       let me = boundsChecking(handles.index(of:gesture.view!)!, outerBounds, frozenBounds)
       
-      // viewing bounds for handles
-      handleBoundary[0].frame = frozenBounds
-      handleBoundary[1].frame = outerBounds
-      handleBoundary[2].frame = me
       
       // set point thats being moved
       point = t.tensionedPoint(within: me)
@@ -226,7 +217,8 @@ class HandleViewRound1: UIView {
       
       // Create Master rectangle from newly moved point and other points
       let indexOfHandle = handles.index(of: gesture.view!)!
-      let master2 = stateMachine.redefine(indexOfHandle, self.handles.map{$0.center})//masterRect(from: indexOfHandle, in: handles.map{ $0.center })
+      let master2 = stateMachine.redefine(indexOfHandle, self.handles.map{$0.center})
+
       
       // update all handles to correct points
       let centers = stateMachine.centers(master2)
@@ -243,7 +235,7 @@ class HandleViewRound1: UIView {
       self.handler(master2, positions)
       
     case .ended:
-      for var h in hideables { h.isHidden = true }
+      //for var h in hideables { h.isHidden = true }
 
       UIView.animate(withDuration: 0.3, delay: 0.0, usingSpringWithDamping: 0.4, initialSpringVelocity: 1.0, options: UIViewAnimationOptions.allowUserInteraction, animations: {
         gesture.view?.center = self.point.anchor
@@ -251,7 +243,7 @@ class HandleViewRound1: UIView {
         // Create Master rectangle from gesture
         let indexOfHandle = self.handles.index(of: gesture.view!)!
         let master2 = self.stateMachine.redefine(indexOfHandle, self.handles.map{ $0.center })
-        
+      
         // update all handles to correct points
         let centers = self.stateMachine.centers(master2)
         for t in zip(centers, self.handles) { t.1.center = t.0 }
@@ -260,12 +252,6 @@ class HandleViewRound1: UIView {
         self.handler(master2, positions)
         self.completed(master2, positions)
         
-      }, completion: { _ in
-        
-//        // Create Master rectangle from gesture
-//        let indexOfHandle = self.handles.index(of: gesture.view!)!
-//        let master2 = self.stateMachine.redefine(indexOfHandle, self.handles.map{ $0.center })
-//        self.completed(master2)
       })
     //
     default:
@@ -280,6 +266,14 @@ class HandleViewRound1: UIView {
       // update all handles to correct points
       let centers = self.stateMachine.centers(master)
       for t in zip(centers, self.handles) { t.1.center = t.0 }
+      
+      
+      // layout my view's outlines
+      for var outline in self.outlines {
+        outline.layout(in: master)
+      }
+      
+      
       
     })
   }

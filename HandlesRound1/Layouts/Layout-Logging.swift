@@ -3,11 +3,11 @@ import CoreGraphics
 public struct LayoutLogger <Child:Layout> : Layout {
     var child : Child
     mutating public func layout(in rect:CGRect) {
-        //print("——————————————————————————")
-        //print("Child: \(Child.self)")
-        //print("Content: \(Content.self)")
-        //print("to Layout(in: \(rect)")
-        //print("——————————————————————————\n")
+        print("——————————————————————————")
+        print("Child: \(Child.self)")
+        print("Content: \(Content.self)")
+        print("to Layout(in: \(rect)")
+        print("——————————————————————————\n")
         child.layout(in: rect)
     }
     /// The type of the leaf content elements in this layout.
