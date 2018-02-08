@@ -17,9 +17,6 @@ import GameplayKit
 
 class Sprite2DView : SKView {
   
-    
-
-  
   var geometries : [[[Geometry]]] = []
   var index: Int = 0
   var scale : CGFloat = 1.0
@@ -33,10 +30,18 @@ class Sprite2DView : SKView {
     let aScene = SKScene(size: frame.size)
     self.presentScene(aScene)
     
+    
+    self.showsFPS = true
+    
+    self.showsDrawCount = true
+    
+    self.showsNodeCount = true
     self.ignoresSiblingOrder = true
   }
   
-  
+  required init?(coder aDecoder: NSCoder) {
+    fatalError()
+  }
   
   @objc func tapped()
   {
@@ -55,13 +60,6 @@ class Sprite2DView : SKView {
         self.addChildR(item)
       }
     }
-    print(self.scene!.children)
-  }
-  
-  
-  
-  required init?(coder aDecoder: NSCoder) {
-    fatalError()
   }
   
   // SceneKit Handlering...

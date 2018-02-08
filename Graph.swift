@@ -404,7 +404,20 @@ func reduceZeros(_ array: [C2Edge] ) -> [C2Edge] {
   return array.filter(filterLedgers)
 }
 
+func positionSorted(p: GraphPositions) -> GraphPositions
+{
+  return GraphPositions(pX: p.pX.sorted(), pY: p.pY.sorted(), pZ: p.pZ.sorted())
+}
 
+func posToSize(position: GraphPositions) -> CGSize3
+{
+  let position = position |> positionSorted
+  
+  return CGSize3(
+    width: position.pX.last! - position.pX.first! ,
+    depth: position.pY.last! - position.pY.first!,
+    elev: position.pZ.last! - position.pZ.first!)
+}
 
 extension ScaffGraph
 {
@@ -423,10 +436,14 @@ extension ScaffGraph
     let consumer3D = try! self.edges.map( self.grid |> cedgeMaker)
     return  consumer3D |> side |> reduceDup
   }
+  
+  var bounds: CGSize3 {
+    return self.grid |> posToSize
+  }
 }
 
 
-func createSegments(with bounding: CGSize3) -> ScaffGraph
+func createScaffolding(with bounding: CGSize3) -> ScaffGraph
 {
   let graphSegments = GraphSegments(
     sX: ([50, 100, 150, 200], bounding.width) |> maximumRepeated,

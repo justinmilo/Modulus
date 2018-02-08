@@ -150,13 +150,65 @@ struct CEverything {
   }
 }
 
+func modelToTexturesElev ( edges: [C2Edge], origin: CGPoint) -> [Geometry]
+{
+  let horizontals = edges.filter{ $0.content == "Ledger"}.map
+  {
+    ledge in
+    return (ledge.p1, ledge.p2) |>
+      {
+        (a, b) -> TextureLine in
+        return TextureLine(label: "ledger elev", start: a, end: b)
+    }
+  }
+  
+  let verticals = edges.filter{ $0.content == "Standard"}.flatMap
+  {
+    line  -> [TextureLine] in
 
+    let distance = (line.p1 + line.p2).diagonalExtent
+    let stds = maximumRepeated(availableInventory: [50, 100], targetMaximum: distance)
+    let g = Grid(stds)
+
+    return zip(g.positions, g.positions.dropFirst()).map
+      {
+        arg -> TextureLine in
+
+        return TextureLine(label: "std elev",
+                           start: CGPoint( line.p1.x, line.p1.y - arg.0) ,
+                           end: CGPoint( line.p2.x, line.p1.y - arg.1))
+    }
+
+  }
+  let base = edges.filter{ $0.content == "BC"}.map
+  {
+    return
+      TextureLine(label: "base",
+                  start: $0.p1 ,
+                  end: $0.p2 )
+    
+  }
+  let jack = edges.filter{ $0.content == "Jack"}.map
+  {
+    
+    TextureLine(label: "sj",
+                start: $0.p1 ,
+                end: $0.p2 )
+  }
+  
+  let combined = horizontals + verticals + base + jack
+  
+  let thirdPass : [Geometry] = (combined).map{
+    var new = $0
+    new.position = $0.position + origin.asVector()
+    return new
+  }
+  return thirdPass
+}
 
 
 // Used to be view controller
 
-class C2Edge2DView {
-  
   
   //  func modelToPlanGeometry ( edges: [C2Edge]) -> [Geometry]
   //  {
@@ -176,57 +228,58 @@ class C2Edge2DView {
   //      }
   //
   //    }
-  //  }
+//  }
+
+
+
+
+func modelToLinework ( edges: [C2Edge], origin: CGPoint) -> [Geometry]
+{
+  let lines : [Geometry] = edges.map { edge in
+    return Line(start: edge.p1, end: edge.p2)
+  }
   
-  func modelToLinework ( edges: [C2Edge]) -> [Geometry]
+  let labels = edges.map { edge -> Label in
+    let direction : Label.Rotation = edge.content == "Ledger" || edge.content == "Diag" ? .h : .v
+    let vector = direction == .h ? unitY * 10 : unitX * 10
+    return Label(text: edge.content, position: (edge.p1 + edge.p2).center + vector, rotation: direction)
+  }
+  
+  let labelsSecondPass : [Geometry] = labels.reduce([])
   {
-    let lines : [Geometry] = edges.map { edge in
-      return Line(start: edge.p1, end: edge.p2)
-    }
+    (res, geo) -> [Label] in
     
-    let labels = edges.map { edge -> Label in
+    if res.contains(where: {
       
-      let direction : Label.Rotation = edge.content == "Ledger" || edge.content == "Diag" ? .h : .v
-      let vector = direction == .h ? unitY * 10 : unitX * 10
-      return Label(text: edge.content, position: (edge.p1 + edge.p2).center + vector, rotation: direction)
+      let r = CGRect.around($0.position, size: CGSize(40,40))
+      return r.contains(geo.position)
       
-    }
-    
-    let labelsSecondPass : [Geometry] = labels.reduce([])
+    })
     {
-      (res, geo) -> [Label] in
-      
-      if res.contains(where: {
-        
-        let r = CGRect.around($0.position, size: CGSize(40,40))
-        return r.contains(geo.position)
-        
-      })
-      {
-        var new = geo
-        new.position = new.position + CGVector(dx: 15, dy: 15)
-        return res + [new]
-      }
-      
-      return res + [geo]
+      var new = geo
+      new.position = new.position + CGVector(dx: 15, dy: 15)
+      return res + [new]
     }
     
-    let thirdPass : [Geometry] = (lines + labelsSecondPass).map{
-      var new = $0
-      new.position = $0.position + CGVector(dx: 80, dy: 200)
-      return new
-    }
-    
-    
-    
-    return thirdPass
+    return res + [geo]
   }
   
   
-  var scale : CGFloat = 1.0
+  /// Move to orign
+  
+  let thirdPass : [Geometry] = (lines + labelsSecondPass).map{
+    var new = $0
+    new.position = $0.position + origin.asVector()
+    return new
+  }
   
   
   
+  return thirdPass
+}
+
+
+ 
   
   // ...SceneKit Handlering
   
@@ -234,4 +287,4 @@ class C2Edge2DView {
   
   // Viewcontroller Functions
   
-}
+

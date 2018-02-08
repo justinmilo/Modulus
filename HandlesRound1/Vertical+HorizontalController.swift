@@ -14,8 +14,7 @@ class VerticalController: UIViewController, UIPageViewControllerDataSource, UIPa
   
   override func viewDidLoad() {
     
-    let size = CGSize3(width: 150, depth: 150, elev: 820)
-    _ = createSegments(with: size)
+    
     let specialCase = SpriteScaffViewController()
     
     self.content = [

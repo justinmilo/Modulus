@@ -8,14 +8,24 @@
 
 import UIKit
 
+func originSwap(origin: CGRect, height: CGFloat) -> CGPoint
+{
+  return CGPoint(origin.x, height - origin.y - origin.height)
+}
+
 
 class SpriteScaffViewController : UIViewController {
   
-  let rectangle = CGRect(x: 120, y: 140, width: 200, height: 200)
-  let scaleFactor : CGFloat = 1.0
-  
   var twoDView : Sprite2DView
   var handleView : HandleViewRound1
+  var graph : ScaffGraph
+  
+  let add3rdDim : (CGSize) -> CGSize3 = {
+    return CGSize3(width: $0.width, depth: 400, elev : $0.height)
+  }
+  let remove3rdDim : (CGSize3) -> CGSize = {
+    return CGSize(width: $0.width, height:  $0.elev)
+  }
   
   override func loadView() {
     
@@ -23,25 +33,26 @@ class SpriteScaffViewController : UIViewController {
     view.addGestureRecognizer(UITapGestureRecognizer(target: twoDView, action: #selector(Sprite2DView.tapped)))
     
     let boundingGrips = self.handleView
-    boundingGrips.isExclusiveTouch = false
-    
-    boundingGrips.handler =    {  master, positions in
-      // Scale
-      let (grid, rect) = self.foo(master: master)
-      let aligned = master.withInsetRect( ofSize: rect.size, hugging: (positions.0.oposite, positions.1.oposite))
-      
-      // "layout" my subview grid, witha model2d
-      self.twoDView.scale = 1/self.scaleFactor
-      let model = NonuniformModel2D(origin: aligned.origin, rowSizes: grid.y, colSizes: grid.x)
-      let geometries = CEverything().geometries(model: model, scale: 1/self.scaleFactor, bounds: self.view.frame)
-      self.twoDView.geometries = [geometries]
+    boundingGrips.handler =    {
+      master, positions in
+      let foo1 = master.size |> self.add3rdDim |> createScaffolding
+      self.graph = foo1
+      let swappedOrigin = (master, self.twoDView.bounds.height) |> originSwap
+      let g = (self.graph.frontEdgesNoZeros, swappedOrigin) |> modelToLinework
+      let b = (self.graph.frontEdgesNoZeros, swappedOrigin) |> modelToTexturesElev
+      self.twoDView.geometries = [[g], [b]]
       self.twoDView.redraw( self.twoDView.index )
     }
-    
-    boundingGrips.completed = {  master, positions in
-      let (_, rect) = self.foo(master: master)
-      let aligned = master.withInsetRect( ofSize: rect.size, hugging:  (positions.0.oposite, positions.1.oposite))
-      boundingGrips.set(master: aligned )
+    boundingGrips.completed = {
+      master, positions in
+      let foo1 = master.size |> self.add3rdDim |> createScaffolding
+      self.graph = foo1
+      print(self.graph.grid)
+      let size = self.graph.bounds |> self.remove3rdDim
+      let new = CGRect(origin: master.origin, size:size)
+      self.handleView.set(master: new )
+      
+      
     }
     for v in [twoDView, boundingGrips]{ self.view.addSubview(v) }
   }
@@ -49,36 +60,17 @@ class SpriteScaffViewController : UIViewController {
   
   init()
   {
-    twoDView = Sprite2DView()
-    
+    twoDView = Sprite2DView(frame: UIScreen.main.bounds)
     self.handleView = HandleViewRound1(frame: UIScreen.main.bounds, state: .edge)
-
+    self.graph = (CGSize3(width: 150, depth: 150, elev: 820) |> createScaffolding)
     super.init(nibName: nil, bundle: nil)
   }
+
   
   required init?(coder aDecoder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
   
-  // Plan and target rect based on a Rect
-  func foo(master: CGRect) -> (PlanModel, CGRect)
-  {
-    let scaledMasterSize = master.size * self.scaleFactor
-    
-    // Find appropriate model
-    let x111 = maximizedGrid(availableInventory:[100,150,200], lessThan: scaledMasterSize)
-    let grid = PlanModel(
-      x: Grid(x111.x),
-      y: Grid(x111.y)
-    )
-    
-    // Find appropriate model scaled
-    let x222 = CGSize(
-      width: Grid(x111.x).sum / self.scaleFactor,
-      height: Grid(x111.y).sum / self.scaleFactor
-    )
-    
-    return (grid, CGRect(origin: master.origin, size: x222))
-  }
+
   
 }
