@@ -201,6 +201,8 @@ class HandleViewRound1: UIView {
       initialOffset = (gesture.view!.center - loc).asPoint()
       let m1 = stateMachine.redefine(handles.index(of:gesture.view!)!, handles.map{ $0.center })
       frozenBounds = insetIf( m1)
+      
+      // Show Border
       for var h in hideables { h.isHidden = false }
 
       
@@ -238,7 +240,8 @@ class HandleViewRound1: UIView {
       
       self.lastMaster  = master2
     case .ended:
-      //for var h in hideables { h.isHidden = true }
+      // Show Border
+      for var h in hideables { h.isHidden = true }
 
       UIView.animate(withDuration: 0.3, delay: 0.0, usingSpringWithDamping: 0.4, initialSpringVelocity: 1.0, options: UIViewAnimationOptions.allowUserInteraction, animations: {
         gesture.view?.center = self.point.anchor
@@ -254,7 +257,6 @@ class HandleViewRound1: UIView {
         let positions = self.stateMachine.positions(indexOfHandle)
         self.handler(master2, positions)
         self.completed(master2, positions)
-        self.lastMaster  = master2
       })
     //
     default:
@@ -264,7 +266,7 @@ class HandleViewRound1: UIView {
   
   func set(master: CGRect)
   {
-    self.lastMaster  = master
+   
     UIView.animate(withDuration: 0.3, delay: 0.0, usingSpringWithDamping: 0.4, initialSpringVelocity: 1.0, options: UIViewAnimationOptions.allowUserInteraction, animations: {
       
       // update all handles to correct points
@@ -277,6 +279,7 @@ class HandleViewRound1: UIView {
         outline.layout(in: master)
       }
       
+       self.lastMaster  = master
       
       
     })

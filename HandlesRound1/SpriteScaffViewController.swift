@@ -104,7 +104,6 @@ class SpriteScaffViewController : UIViewController {
       // Create New Model
       self.graph = (master.size |> self.create)
       let size = self.graph |> self.size
-      
       let  newRect = (master, size, positions) |> bindSize
       self.handleView.set(master: newRect )
     }

@@ -204,6 +204,18 @@ class Sprite2DView : SKView {
             return false
         }
       }
+      else if ( line.label ==  "base")
+      {
+        let foo = pts[line.label]
+        adjujstmentV = CGVector(0, 4.74)
+        options = [ 0.0 : (line.label, foo!)]
+      }
+      else if ( line.label ==  "sj")
+      {
+        let foo = pts[line.label]
+        adjujstmentV = CGVector(0, 12.48)
+        options = [ 0.0 : (line.label, foo!)]
+      }
       else
       {
         let foo = pts[line.label]
@@ -228,8 +240,11 @@ class Sprite2DView : SKView {
       
       node.setScale( 2.00/1.6476)
       node.position = (line.line.start+line.line.end).center  * scale
+      if ( line.label ==  "sj")
+      {
+        node.position = line.line.start * scale
+      }
       node.position = node.position + ( adjujstmentV *  2.00/1.6476)
-      //node.zRotation = CGFloat(line.line.start.x == line.line.end.x ? CGFloat.halfPi : 0)
       scene!.addChild(node)
       node.name = name
       return node

@@ -20,7 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
       self.window = UIWindow(frame: UIScreen.main.bounds)
 
       self.window?.makeKeyAndVisible()
-      self.window?.rootViewController = SpriteScaffViewController()//VerticalController()
+      self.window?.rootViewController = VerticalController()
       
       
         return true
