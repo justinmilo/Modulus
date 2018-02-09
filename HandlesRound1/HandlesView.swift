@@ -125,7 +125,7 @@ class HandleViewRound1: UIView {
   var outlines: [AnyLayout<UIView>] = []
   var hideables: [Hideable] = []
   var outerBoundaryView : UIView!
-
+  var lastMaster : CGRect
 
   
   convenience init(frame: CGRect, state: StateFactory.State, handler: @escaping (CGRect,
@@ -138,6 +138,8 @@ class HandleViewRound1: UIView {
   // Main init
     init(frame: CGRect, state: StateFactory.State )
   {
+    let rectangle = CGRect(x: 120, y: 140, width: 200, height: 200)
+    self.lastMaster = rectangle
     stateMachine = StateFactory(state: state)
     super.init(frame: frame)
     
@@ -145,7 +147,6 @@ class HandleViewRound1: UIView {
     
     
     // Handles...
-    let rectangle = CGRect(x: 120, y: 140, width: 200, height: 200)
     let buttonCenters : [CGPoint] = stateMachine.centers( rectangle)
     
     // Set handles with side effects
@@ -175,6 +176,7 @@ class HandleViewRound1: UIView {
     // Order Subviews and add to view
     for v in [b1]  + handles { self.addSubview(v) }
     
+
   }
   
   required init?(coder aDecoder: NSCoder) {
@@ -234,6 +236,7 @@ class HandleViewRound1: UIView {
       let positions = stateMachine.positions(indexOfHandle)
       self.handler(master2, positions)
       
+      self.lastMaster  = master2
     case .ended:
       //for var h in hideables { h.isHidden = true }
 
@@ -251,7 +254,7 @@ class HandleViewRound1: UIView {
         let positions = self.stateMachine.positions(indexOfHandle)
         self.handler(master2, positions)
         self.completed(master2, positions)
-        
+        self.lastMaster  = master2
       })
     //
     default:
@@ -261,6 +264,7 @@ class HandleViewRound1: UIView {
   
   func set(master: CGRect)
   {
+    self.lastMaster  = master
     UIView.animate(withDuration: 0.3, delay: 0.0, usingSpringWithDamping: 0.4, initialSpringVelocity: 1.0, options: UIViewAnimationOptions.allowUserInteraction, animations: {
       
       // update all handles to correct points
