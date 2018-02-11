@@ -52,8 +52,7 @@ class PageViewController: UIPageViewController, UIPageViewControllerDelegate, UI
   
     override func viewDidLoad() {
         super.viewDidLoad()
-      self.controller1 = SpriteScaffViewController()
-      self.controller2 = SpriteScaffViewController()
+      
       self.delegate = self
       self.dataSource = self
         // Do any additional setup after loading the view.

@@ -422,19 +422,26 @@ func dropBottomZBay( position: GraphPositions ) -> GraphPositions
 extension ScaffGraph
 {
   var planEdges : [C2Edge] {
-    return (self.edges, self.grid |> cedgeMaker) |> mapEdges |> plan |> reduceDup
+    let planedges = (self.edges, self.grid |> cedgeMaker) |> mapEdges |> plan |> reduceDup
+    return planedges
+  }
+  var planEdgesNoZeros : [C2Edge] {
+    let new = self.planEdges.filter { $0.content == "Ledger" || $0.content == "Standard" }
+    return new
   }
   var frontEdges : [C2Edge] {
     let consumer3D = try! self.edges.map( self.grid |> cedgeMaker)
     return  consumer3D |> front |> reduceDup
   }
   var frontEdgesNoZeros : [C2Edge] {
-    let consumer3D = try! self.edges.map( self.grid |> cedgeMaker)
-    return  consumer3D |> front |> reduceDup |> reduceZeros
+    return self.frontEdges |> reduceZeros
   }
   var sideEdges : [C2Edge] {
     let consumer3D = try! self.edges.map( self.grid |> cedgeMaker)
     return  consumer3D |> side |> reduceDup
+  }
+  var sideEdgesNoZeros : [C2Edge] {
+    return self.sideEdges |> reduceZeros
   }
   
   var bounds: CGSize3 {
@@ -448,7 +455,7 @@ extension ScaffGraph
 }
 
 
-func createScaffolding(with bounding: CGSize3) -> ScaffGraph
+func createScaffolding(with bounding: CGSize3) -> (GraphPositions, [Edge])
 {
   let graphSegments = GraphSegments(
     sX: ([50, 100, 150, 200], bounding.width) |> maximumRepeated,
@@ -458,10 +465,10 @@ func createScaffolding(with bounding: CGSize3) -> ScaffGraph
   )
   let s = ScaffGraph( grid : graphSegments |> segToPos, edges : [] )
   s.addScaff()
-  return s
+  return (s.grid, s.edges)
 }
 
-func createGrid(with bounding: CGSize3) -> ScaffGraph
+func createGrid(with bounding: CGSize3) -> (GraphPositions, [Edge])
 {
   let screwJack : [CGFloat] = [30]
   let graphSegments = GraphSegments(
@@ -472,7 +479,7 @@ func createGrid(with bounding: CGSize3) -> ScaffGraph
   )
   let s = ScaffGraph( grid : graphSegments |> segToPos, edges : [] )
   s.addScaff()
-  return s
+  return (s.grid, s.edges)
 }
 
 //

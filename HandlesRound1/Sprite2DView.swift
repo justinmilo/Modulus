@@ -23,7 +23,7 @@ class Sprite2DView : SKView {
   
   override init(frame: CGRect)
   {
-
+    
     super.init(frame: frame)
     
     // Specialtiy SpriteKitScene
@@ -63,12 +63,14 @@ class Sprite2DView : SKView {
   }
   
   // SceneKit Handlering...
-
+  
   //var scene : SKScene
   
   // put on the canvas!!
-  @discardableResult func addChildR<T>(_ node: T) -> SKNode
+  func addChildR<T>(_ node: T)
   {
+    
+    
     if let oval = node as? Oval
     {
       let node = SKShapeNode(ellipseOf: oval.ellipseOf)
@@ -76,9 +78,8 @@ class Sprite2DView : SKView {
       node.fillColor = oval.fillColor
       node.lineWidth = 0.0
       scene!.addChild(node)
-      return node
     }
-    if let label = node as? Label
+    else if let label = node as? Label
     {
       let node = SKLabelNode(text: label.text)
       node.fontName = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.medium).fontName
@@ -87,19 +88,16 @@ class Sprite2DView : SKView {
       node.zRotation = label.rotation == .h ? 0.0 : 0.5 * CGFloat.pi
       node.verticalAlignmentMode = .center
       scene!.addChild(node)
-      return node
     }
-    if let line = node as? Line
+    else if let line = node as? Line
     {
       let path = CGMutablePath()
       path.move(to: line.start  * scale)
       path.addLine(to: line.end  * scale)
       let node = SKShapeNode(path: path)
       scene!.addChild(node)
-      
-      return node
     }
-    if let line = node as? StrokedLine
+    else if let line = node as? StrokedLine
     {
       let path = CGMutablePath()
       path.move(to: line.line.start  * scale)
@@ -108,13 +106,13 @@ class Sprite2DView : SKView {
       node.lineWidth = line.strokeWidth
       node.strokeColor = #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)
       scene!.addChild(node)
-      return node
     }
-    if let p = node as? LabeledPoint
+    else if let p = node as? LabeledPoint
     {
       let node : SKSpriteNode
       // list of assets
-      let dict : [String : UIImage] = [ "Std" : #imageLiteral(resourceName: "Std Plan.png") ]
+      let dict : [String : UIImage] = [
+        "Std" : #imageLiteral(resourceName: "Std Plan.png") ]
       
       // match asset to length of line
       let options = dict.filter
@@ -129,15 +127,12 @@ class Sprite2DView : SKView {
       
       let second = options[p.label]!
       
-      if cache.map({ $0.name }).contains(p.label) {
-        let nodeIndex = cache.index(where: { (candidate) -> Bool in
-          candidate.name == p.label
-        })!
-        let nodeToClone = cache[nodeIndex]
-        node = nodeToClone.copy() as! SKSpriteNode
+      let optNode = cache.first( where: { $0.name == p.label })
+      if let real = optNode {
+        node = real.copy() as! SKSpriteNode
       }
       else {
-        node = SKSpriteNode(texture: SKTexture(image: second))
+        node = SKSpriteNode(texture: SKTexture(image:second))
         cache.append(node)
       }
       
@@ -147,15 +142,14 @@ class Sprite2DView : SKView {
       node.position = p.position  * scale
       scene!.addChild(node)
       node.name = p.label
-      return node
-      
       
     }
-    if let line = node as? TextureLine, line.label != ""
+    else if let line = node as? TextureLine, line.label != ""
     {
       let node : SKSpriteNode
       // list of assets
       let ledgers : [CGFloat : (String, UIImage)] = [
+        50 : ("0.5m Ledger", UIImage(named: "0.5m")!),
         200 : ("2.0m Ledger", UIImage(named: "2m")!),
         100 : ("1.0m Ledger", UIImage(named: "1m")!),
         150 : ("1.5m Ledger", UIImage(named: "1.5m")!)
@@ -247,60 +241,33 @@ class Sprite2DView : SKView {
       node.position = node.position + ( adjujstmentV *  2.00/1.6476)
       scene!.addChild(node)
       node.name = name
-      return node
     }
-    if let line = node as? TextureLine, line.label == ""
+    
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+    else if let line = node as? Scaff2D
     {
       
+      let newNode = convert(item: line)
+      if let n = newNode { scene!.addChild(n) }
       
-      
-      let node : SKSpriteNode
-      // list of assets
-      let dict : [CGFloat : (String, UIImage)] = [
-        200 : ("2.0m", #imageLiteral(resourceName: "2.0m plan")),
-        100 : ("1.0m", #imageLiteral(resourceName: "1m plan.png")),
-        150 : ("1.5m", #imageLiteral(resourceName: "1.5m Plan.png"))
-      ]
-      
-      // match asset to length of line
-      let options = dict.filter
-      {
-        (tup) -> Bool in
-        if tup.key == CGSegment(p1: line.line.start, p2: line.line.end).length
-        {
-          return true
-        }
-        return false
-      }
-      
-      let second = (options.first)
-      let name = second?.value.0 ?? "NA"
-      let image = second?.value.1 ?? #imageLiteral(resourceName: "Screw Jack.png")
-      
-      
-      
-      if cache.map({ $0.name }).contains(name) {
-        let nodeIndex = cache.index(where: { (candidate) -> Bool in
-          candidate.name == name
-        })!
-        let nodeToClone = cache[nodeIndex]
-        node = nodeToClone.copy() as! SKSpriteNode
-      }
-      else {
-        node = SKSpriteNode(texture: SKTexture(image:image))
-        cache.append(node)
-      }
-      
-      let twometer : CGFloat = 2.00/1.6476
-      //let scale = self.scale + twometer
-      node.setScale( twometer)
-      node.position = (line.line.start+line.line.end).center  * scale
-      node.zRotation = CGFloat(line.line.start.x == line.line.end.x ? CGFloat.halfPi : 0)
-      scene!.addChild(node)
-      node.name = name
-      return node
     }
-    fatalError()
+    else { fatalError()}
+    
+    
+    
+    
+    
   }
   
   var cache : [SKSpriteNode] = []
@@ -310,6 +277,86 @@ class Sprite2DView : SKView {
   
   
   // Viewcontroller Functions
-
+  
+  
+  let image : ( CGFloat, Scaff2D.ScaffType, Scaff2D.DrawingType) -> String? = {
+    switch ($0, $1, $2)
+    {
+    case (50, .ledger, .plan): return "0.5m Plan"
+    case (100, .ledger, .plan): return "1m plan"
+    case (150, .ledger, .plan): return "1.5m Plan"
+    case (200, .ledger, .plan): return "2.0m plan"
+    case (0, .standard, .plan): return "Std Plan"
+    default:  return nil
+    }
+  }
+  
+  
+  
+  //NOT PURE
+  func grabFromCacheOrCreate(name: String, imageName: String) -> SKSpriteNode
+  {
+    let node: SKSpriteNode
+    let optNode = cache.first( where: { $0.name == name })
+    if let real = optNode {
+      node = real.copy() as! SKSpriteNode
+    }
+    else {
+      let image = UIImage(named: imageName)
+      node = SKSpriteNode(texture: SKTexture(image:image!))
+      cache.append(node)
+      node.name = name
+    }
+    return node
+  }
+  
+  
+  
+  
+  func convertGeneral ( item: Scaff2D) -> SKSpriteNode {
+    let length = CGSegment(p1:item.start, p2:item.end).length
+    let name = (length, item.part, item.view) |> nameHash
+    let path = (length, item.part, item.view) |> image
+    let ledgerNode = (name, path!) |> grabFromCacheOrCreate
+    
+    let twometer : CGFloat = 2.00/1.6476
+    ledgerNode.setScale( twometer)
+    ledgerNode.position = (item.start + item.end).center * scale
+    ledgerNode.zRotation = CGFloat(item.start.x == item.end.x ? CGFloat.halfPi : 0)
+    return ledgerNode
+  }
+  
+  func convert (item: Scaff2D) -> SKSpriteNode?
+  {
+    switch item.part {
+    case .ledger: return convertGeneral(item: item)
+    case .standard: return convertGeneral(item: item)
+    case .jack: return nil
+    case .basecollar: return nil
+    }
+  }
   
 }
+
+let descriptionScaff : (Scaff2D.ScaffType) -> String =
+{ type in
+  switch type {
+  case .ledger: return "Ledger"
+  case .jack: return "Jack"
+  case .standard: return "Standard"
+  case .basecollar: return "Basecollar"
+  }
+}
+let descriptionDrawing : (Scaff2D.DrawingType) -> String =
+{
+  view in
+  switch  view {
+  case .cross: return "Cross"
+  case .longitudinal: return "Longitudinal"
+  case .plan: return "Plan"
+  }
+}
+
+let nameHash : ( CGFloat, Scaff2D.ScaffType, Scaff2D.DrawingType)  -> String = { (float, type,view) in return "\(float),-" + ((type |> descriptionScaff) +  (view |> descriptionDrawing)) }
+
+

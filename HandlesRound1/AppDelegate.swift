@@ -8,6 +8,7 @@
 
 import UIKit
 
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -20,7 +21,34 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
       self.window = UIWindow(frame: UIScreen.main.bounds)
 
       self.window?.makeKeyAndVisible()
-      self.window?.rootViewController = VerticalController()
+      
+      let postis = CGSize3(width: 100, depth: 100, elev: 350) |> createGrid
+      let graph = ScaffGraph(grid: postis.0, edges: postis.1)
+      
+      let sizePlan : (CGSize) -> CGSize3 = { CGSize3(width: $0.width, depth: $0.height, elev: graph.bounds.elev) }
+      let sizeFront : (CGSize) -> CGSize3 = { CGSize3(width: $0.width, depth: graph.bounds.depth, elev: $0.height) }
+      let sizeSide : (CGSize) -> CGSize3 = { CGSize3(width: graph.bounds.depth, depth:$0.width, elev: $0.height) }
+      
+
+      
+      let frontMap = GraphMapping(f_flattenGraph: { $0.frontEdgesNoZeros },
+                                      f_edgesToTexture: modelToTexturesElev,
+                                      f_graphToSize: sizeFromFullScaff,
+                                      f_sizeToGraph: sizeFront >>> createScaffolding)
+      let sideMap = GraphMapping(f_flattenGraph: { $0.sideEdgesNoZeros },
+                                      f_edgesToTexture: modelToTexturesElev,
+                                      f_graphToSize: sizeFromFullScaffSide,
+                                      f_sizeToGraph: sizeSide >>> createScaffolding)
+      let planMap = GraphMapping(f_flattenGraph: { $0.planEdgesNoZeros },
+                                 f_edgesToTexture: planEdgeToGeometry,
+                                 f_graphToSize: sizeFromPlanScaff,
+                                 f_sizeToGraph: sizePlan >>> createScaffolding)
+      
+      let uL = SpriteScaffViewController(graph: graph, mapping: planMap)
+      let uR = SpriteScaffViewController(graph: graph, mapping: planMap)
+      let ll = SpriteScaffViewController(graph: graph, mapping: frontMap)
+      let lr = SpriteScaffViewController(graph: graph, mapping: sideMap)
+      self.window?.rootViewController = VerticalController(upperLeft: uL, upperRight: uR, lowerLeft: ll, lowerRight: lr)
       
       
         return true

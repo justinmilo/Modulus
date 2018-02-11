@@ -12,14 +12,23 @@ class VerticalController: UIViewController, UIPageViewControllerDataSource, UIPa
   var pageViewController: UIPageViewController!
   var content : [HorizontalHolder]!
   
+  var conts : [UIViewController]
+  init(upperLeft: UIViewController, upperRight: UIViewController, lowerLeft: UIViewController, lowerRight: UIViewController)
+  {
+    self.conts = [upperLeft, upperRight, lowerLeft, lowerRight]
+    super.init(nibName: nil, bundle: nil)
+  }
+  
+  required init?(coder aDecoder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
+  
   override func viewDidLoad() {
     
     
-    let specialCase = SpriteScaffViewController()
-    
     self.content = [
-      HorizontalHolder(content:  [specialCase, SpriteScaffViewController()]),
-      HorizontalHolder(content:  [SpriteScaffViewController(), SpriteScaffViewController()])
+      HorizontalHolder(content:  [conts[0], conts[1]]),
+      HorizontalHolder(content:  [conts[2], conts[3]])
     ]
     
     super.viewDidLoad()

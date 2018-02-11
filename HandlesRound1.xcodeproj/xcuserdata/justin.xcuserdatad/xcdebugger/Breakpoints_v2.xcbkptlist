@@ -35,53 +35,5 @@
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "HandlesRound1/HandlesView.swift"
-            timestampString = "539893299.610459"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "128"
-            endingLineNumber = "128"
-            landmarkName = "HandleViewRound1"
-            landmarkType = "3">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "HandlesRound1.HandleViewRound1.lastMaster.getter : __C.CGRect"
-                  moduleName = "HandlesRound1"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/justin/Dropbox/Developer/To%20Delete%20at%20some%20point/HandlesRound1/HandlesRound1/HandlesView.swift"
-                  timestampString = "539893206.971302"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "128"
-                  endingLineNumber = "128"
-                  offsetFromSymbolStart = "132">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "HandlesRound1.HandleViewRound1.lastMaster.setter : __C.CGRect"
-                  moduleName = "HandlesRound1"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/justin/Dropbox/Developer/To%20Delete%20at%20some%20point/HandlesRound1/HandlesRound1/HandlesView.swift"
-                  timestampString = "539893206.974286"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "128"
-                  endingLineNumber = "128"
-                  offsetFromSymbolStart = "172">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
    </Breakpoints>
 </Bucket>

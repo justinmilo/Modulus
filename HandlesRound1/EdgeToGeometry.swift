@@ -190,39 +190,95 @@ func modelToTexturesElev ( edges: [C2Edge], origin: CGPoint) -> [Geometry]
   
   let combined = horizontals + verticals + base + jack
   
-  let thirdPass : [Geometry] = (combined).map{
-    var new = $0
-    new.position = $0.position + origin.asVector()
-    return new
-  }
+  let thirdPass : [Geometry] = (combined, origin.asVector()) |> moveGroup
+  
   return thirdPass
 }
 
 
+struct Scaff2D {
+  enum ScaffType
+  {
+    case ledger
+    case basecollar
+    case jack
+    case standard
+  }
+  enum DrawingType
+  {
+    case plan
+    case cross
+    case longitudinal
+  }
+  
+  var start: CGPoint
+  var end: CGPoint
+  let part : ScaffType
+  let view : DrawingType
+}
+extension Scaff2D : Geometry {
+  var position: CGPoint {
+    get { return (self.start + self.end).center }
+    set(newValue){
+      let previous = (self.start + self.end).center
+      let dif = newValue - previous
+      start = start + dif
+      end = end + dif
+    }
+  }
+}
+
+extension Scaff2D : CustomStringConvertible {
+  var description: String {
+    return "\(part) \(view) - \(CGSegment(p1:start, p2:end).length), \(position)"
+  }
+}
+
 // Used to be view controller
 
   
-  //  func modelToPlanGeometry ( edges: [C2Edge]) -> [Geometry]
-  //  {
-  //    fatalError("Some other type showed up")
-  //
-  //    return edges.map { edge in
-  //
-  //      switch edge.content
-  //      {
-  //      case "Standards": break
-  //      case "Jack" : break
-  //      case "Ledger" : break
-  //      case "BC" : break
-  //
-  //      default :
-  //        fatalError("Some other type showed up")
-  //      }
-  //
-  //    }
-//  }
 
 
+let planEdgeToGeometry : ([C2Edge], CGPoint) -> [Geometry] = { edges, origin in
+  let geo1 = edges |> modelToPlanGeometry
+  let geo2 :  [Geometry] = (geo1, origin.asVector() ) |> moveGroup
+  return geo2
+}
+
+
+
+func modelToPlanGeometry ( edges: [C2Edge]) -> [Scaff2D]
+{
+  
+  return edges.map { edge in
+    
+    switch edge.content
+    {
+    case "Standard": return Scaff2D(start: edge.p1, end: edge.p2, part: .standard, view: .plan)
+    case "Jack" : return Scaff2D(start: edge.p1, end: edge.p2, part: .jack, view: .plan)
+    case "Ledger" : return Scaff2D(start: edge.p1, end: edge.p2, part: .ledger, view: .plan)
+    case "BC" : return Scaff2D(start: edge.p1, end: edge.p2, part: .basecollar, view: .plan)
+      
+    default :
+      fatalError("Some other type showed up")
+    }
+    
+  }
+  
+}
+func move(item:Geometry, vector: CGVector)->Geometry
+{
+  var item = item
+  item.position = item.position + vector
+  return item
+}
+
+
+func moveGroup(items:[Geometry], vector: CGVector)-> [Geometry]
+{
+  let a = items.map{ ($0, vector) |> move}
+  return a
+}
 
 
 func modelToLinework ( edges: [C2Edge], origin: CGPoint) -> [Geometry]

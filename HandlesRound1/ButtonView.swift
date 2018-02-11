@@ -63,7 +63,6 @@ public class ButtonView : UIView
   func setupGesturesBased(onTrait: UITraitCollection)
   {
     if(onTrait.forceTouchCapability == UIForceTouchCapability.available) {
-      print("3d Touch Available")
       let deep = DeepPressGestureRecognizer(
         target: self,
         action: #selector(ButtonView.press(_:)),
@@ -72,7 +71,6 @@ public class ButtonView : UIView
       self.addGestureRecognizer(deep)
     }
     else {
-      print("3d Touch No!")
       
       let hold = UILongPressGestureRecognizer(target: self, action: #selector(ButtonView.press(_:)))
       self.addGestureRecognizer(hold)
@@ -85,7 +83,6 @@ public class ButtonView : UIView
   {
     if value.state == UIGestureRecognizerState.began
     {
-      print("deep press begin")
       deepPressRecognized = true
     }
   }
@@ -104,10 +101,8 @@ public class ButtonView : UIView
   var callBack : ( UIGestureRecognizer ) -> ()  = { _ in }
   @objc func press( _ gesture:UIGestureRecognizer )
   {
-    print("There")
     //guard deepPressRecognized else { return }
     
-    print("Not")
     callBack(gesture)
     _ = gesture.location(in: gesture.view!.superview!).x
     switch gesture.state

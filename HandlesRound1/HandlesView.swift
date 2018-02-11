@@ -166,7 +166,7 @@ class HandleViewRound1: UIView {
     b1.layer.borderColor = UIColor.gray.cgColor
     
     // Make Layouts for outlines
-    outlines += [AnyLayout(LayoutLogger(child: b1))]
+    outlines += [AnyLayout(b1)]
     hideables = [b1]
     for var o in outlines { o.layout(in: rectangle)}
     //for var h in hideables { h.isHidden = true }
@@ -303,11 +303,10 @@ class HandleViewRound1: UIView {
     case 2:
       me = outerBoundaryRect.bottomRight + frozenBounds.topLeft
     case 3:
-      print("lightGreeen ", frozenBounds)
-      print("outer ", outerBoundaryRect )
-      print(outerBoundaryRect.bottomLeft, frozenBounds.topRight )
+      
+
       me = outerBoundaryRect.bottomLeft + frozenBounds.topRight
-      print("lightBlue/bounds ", me)
+
     default:
       fatalError()
     }
