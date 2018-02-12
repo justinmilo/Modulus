@@ -43,16 +43,12 @@ let remove3rdDimPlan : (CGSize3) -> CGSize = {
 func bindSize( master: CGRect, scaffSize: CGSize, positions: (VerticalPosition, HorizontalPosition)) -> (CGRect)
 {
   // Find Orirgin
-  let aligned = master.withInsetRect( ofSize: scaffSize, hugging:  (positions.0.oposite, positions.1.oposite))
-  
-  return (aligned)
+  return master.withInsetRect( ofSize: scaffSize, hugging:  (positions.0.oposite, positions.1.oposite))
 }
 
 let findOrigin : (CGPoint, CGFloat) -> (CGPoint) = {
   aligned, adapterHeight in
-  
-  let offsetFromScrewJack = aligned + unitY * adapterHeight
-  return offsetFromScrewJack
+  return aligned + unitY * adapterHeight // offsetFromScrewJack
 }
 
 
@@ -73,15 +69,14 @@ let originFromGridScaff : (ScaffGraph, CGRect, CGFloat) -> CGPoint =
   // Find Orirgin
   
   var origin = (newRect, boundsHeight) |> originSwap
-  origin = ((origin, graph.boundsOfGrid.1) |>  findOrigin)
-  return origin
+ return ((origin, graph.boundsOfGrid.1) |>  findOrigin)
 }
 let originFromFullScaff : (ScaffGraph, CGRect, CGFloat) -> CGPoint =
 { (graph, newRect, boundsHeight) in
   // Find Orirgin
   
-  var origin = (newRect, boundsHeight) |> originSwap
-  return origin
+  return (newRect, boundsHeight) |> originSwap
+
 }
 
 

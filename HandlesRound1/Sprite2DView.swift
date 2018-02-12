@@ -23,19 +23,11 @@ class Sprite2DView : SKView {
   
   override init(frame: CGRect)
   {
-    
     super.init(frame: frame)
     
     // Specialtiy SpriteKitScene
     let aScene = SKScene(size: frame.size)
     self.presentScene(aScene)
-    
-    
-    self.showsFPS = true
-    
-    self.showsDrawCount = true
-    
-    self.showsNodeCount = true
     self.ignoresSiblingOrder = true
   }
   

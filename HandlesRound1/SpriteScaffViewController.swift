@@ -59,17 +59,47 @@ class SpriteScaffViewController : UIViewController {
   required init?(coder aDecoder: NSCoder) { fatalError("init(coder:) has not been implemented") }
   
   
-  
-  
-  
-  
-  override func viewWillAppear(_ animated: Bool) {
-    
-    
+
+  override func viewDidAppear(_ animated: Bool) {
     // Set view upon initial loading
     let size = self.graph |> self.f_graph2DSize
     let newRect = self.view.bounds.withInsetRect(ofSize: size, hugging: (.center, .center))
     self.handleView.set(master: newRect)
+    self.draw(in: newRect)
+  }
+  
+  
+  override func loadView() {
+    view = UIView()
+    view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(SpriteScaffViewController.swapControl)))
+    
+    for v in [twoDView, handleView]{ self.view.addSubview(v) }
+    
+    self.handleView.handler =    {
+      master, positions in
+       // Create New Model &  // Find Orirgin
+      (self.graph.grid, self.graph.edges) = (master.size |> self.create)
+      let size = self.graph |> self.f_graph2DSize
+      let newRect = (master, size, positions) |> bindSize
+      
+      self.draw(in: newRect)
+    }
+    
+    self.handleView.completed = {
+      master, positions in
+      // Create New Model
+      (self.graph.grid, self.graph.edges) = (master.size |> self.create)
+      let size = self.graph |> self.f_graph2DSize
+      let  newRect = (master, size, positions) |> bindSize
+      
+      self.handleView.set(master: newRect )
+    }
+    
+  }
+  
+  
+  
+  func draw(in newRect: CGRect) {
     // Create New Model &  // Find Orirgin
     let origin = (self.graph, newRect, self.twoDView.bounds.height) |> self.mangleOrigin
     
@@ -82,57 +112,19 @@ class SpriteScaffViewController : UIViewController {
     self.twoDView.redraw( self.twoDView.index )
   }
   
-  
-  override func loadView() {
-    
-    view = UIView()
-    view.addGestureRecognizer(UITapGestureRecognizer(target: twoDView, action: #selector(Sprite2DView.tapped)))
-    
-    let button = UIButton(type: .system)
-    button.setTitle("Swap", for: .normal)
-    button.addTarget(self, action: #selector(SpriteScaffViewController.swapControl), for: UIControlEvents.touchUpInside)
-    button.frame = CGRect(20,20, 100,50)
-   
-    
-    
-    for v in [twoDView, handleView, button]{ self.view.addSubview(v) }
-    
-    self.handleView.handler =    {
-      master, positions in
-       // Create New Model &  // Find Orirgin
-      (self.graph.grid, self.graph.edges) = (master.size |> self.create)
-      let size = self.graph |> self.f_graph2DSize
-      let newRect = (master, size, positions) |> bindSize
-      let origin = (self.graph, newRect, self.twoDView.bounds.height) |> self.mangleOrigin
-      
-      // Create Geometry
-      let g = (self.graph |> self.f_flattenGraph, origin) |> modelToLinework
-      let b = (self.graph |> self.f_flattenGraph, origin) |> self.f_edgesToTexture
-      
-      // Set & Redraw Geometry
-      self.twoDView.geometries = [[b], [g]]
-      self.twoDView.redraw( self.twoDView.index )
-    }
-    
-    self.handleView.completed = {
-      master, positions in
-      // Create New Model
-      (self.graph.grid, self.graph.edges) = (master.size |> self.create)
-      let size = self.graph |> self.f_graph2DSize
-      let  newRect = (master, size, positions) |> bindSize
-      self.handleView.set(master: newRect )
-    }
-    
+  struct ModalView {
+    let modelToGeometry : ([C2Edge], CGPoint) -> [Geometry]
+    let build: (CGSize) -> (GraphPositions, [Edge])
+    let flattenSize : (ScaffGraph) -> CGSize
+    let mangleOrigin : (ScaffGraph, CGRect, CGFloat) -> CGPoint
   }
   
-  
-  
-  
-  
-  
+
   private var bool = true
   @objc func swapControl()
   {
+    self.twoDView.tapped()
+    
     if (!bool) {
       self.create = fullScaff
       self.f_graph2DSize = sizeFromFullScaff
