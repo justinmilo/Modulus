@@ -26,11 +26,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
       let graph = ScaffGraph(grid: postis.0, edges: postis.1)
       
       let sizePlan : (CGSize) -> CGSize3 = { CGSize3(width: $0.width, depth: $0.height, elev: graph.bounds.elev) }
+      let sizePlanRotated : (CGSize) -> CGSize3 = { CGSize3(width: $0.height, depth: $0.width, elev: graph.bounds.elev) }
       let sizeFront : (CGSize) -> CGSize3 = { CGSize3(width: $0.width, depth: graph.bounds.depth, elev: $0.height) }
-      let sizeSide : (CGSize) -> CGSize3 = { CGSize3(width: graph.bounds.depth, depth:$0.width, elev: $0.height) }
+      let sizeSide : (CGSize) -> CGSize3 = { CGSize3(width: graph.bounds.width, depth:$0.width, elev: $0.height) }
       
-
+      let planMap = GraphMapping(f_flattenGraph: { $0.planEdgesNoZeros },
+                                 f_edgesToTexture: planEdgeToGeometry,
+                                 f_graphToSize: sizeFromPlanScaff,
+                                 f_sizeToGraph: sizePlan >>> createScaffolding)
       
+      let planMapRotated = GraphMapping(f_flattenGraph: { $0.planEdgesNoZeros |> rotateGroup },
+                                 f_edgesToTexture: planEdgeToGeometry,
+                                 f_graphToSize: sizeFromRotatedPlanScaff,
+                                 f_sizeToGraph: sizePlanRotated >>> createScaffolding)
       let frontMap = GraphMapping(f_flattenGraph: { $0.frontEdgesNoZeros },
                                       f_edgesToTexture: modelToTexturesElev,
                                       f_graphToSize: sizeFromFullScaff,
@@ -39,13 +47,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                       f_edgesToTexture: modelToTexturesElev,
                                       f_graphToSize: sizeFromFullScaffSide,
                                       f_sizeToGraph: sizeSide >>> createScaffolding)
-      let planMap = GraphMapping(f_flattenGraph: { $0.planEdgesNoZeros },
-                                 f_edgesToTexture: planEdgeToGeometry,
-                                 f_graphToSize: sizeFromPlanScaff,
-                                 f_sizeToGraph: sizePlan >>> createScaffolding)
+      
       
       let uL = SpriteScaffViewController(graph: graph, mapping: planMap)
-      let uR = SpriteScaffViewController(graph: graph, mapping: planMap)
+      let uR = SpriteScaffViewController(graph: graph, mapping: planMapRotated)
       let ll = SpriteScaffViewController(graph: graph, mapping: frontMap)
       let lr = SpriteScaffViewController(graph: graph, mapping: sideMap)
       self.window?.rootViewController = VerticalController(upperLeft: uL, upperRight: uR, lowerLeft: ll, lowerRight: lr)

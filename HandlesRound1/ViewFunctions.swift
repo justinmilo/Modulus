@@ -55,12 +55,15 @@ let findOrigin : (CGPoint, CGFloat) -> (CGPoint) = {
   return offsetFromScrewJack
 }
 
+
+
 //
 let planScaff : (CGSize) -> (GraphPositions, [Edge]) = addElevDim >>> createScaffolding
 let fullScaff : (CGSize) -> (GraphPositions, [Edge]) = add3rdDim >>> createScaffolding
 let gridScaff : (CGSize) -> (GraphPositions, [Edge]) = add3rdDim >>> createGrid
 
 let sizeFromPlanScaff : (ScaffGraph) -> CGSize = { $0.bounds } >>> remove3rdDimPlan
+let sizeFromRotatedPlanScaff : (ScaffGraph) -> CGSize = { $0.bounds } >>> remove3rdDimPlan >>> flip
 let sizeFromGridScaff : (ScaffGraph) -> CGSize = { $0.boundsOfGrid.0 } >>> remove3rdDim
 let sizeFromFullScaff : (ScaffGraph) -> CGSize = { $0.bounds } >>> remove3rdDim
 let sizeFromFullScaffSide : (ScaffGraph) -> CGSize = { $0.bounds } >>> remove3rdDimSide
@@ -80,3 +83,22 @@ let originFromFullScaff : (ScaffGraph, CGRect, CGFloat) -> CGPoint =
   var origin = (newRect, boundsHeight) |> originSwap
   return origin
 }
+
+
+let rotateGroup : ([C2Edge]) -> [C2Edge] = { $0.map(rotate) }
+func rotate( edge: C2Edge) -> C2Edge {
+  return C2Edge(content: edge.content, p1: edge.p1 |> flip, p2: edge.p2 |> flip )
+}
+func flip( point: CGPoint) -> CGPoint
+{
+  return CGPoint(point.y, point.x)
+}
+func flip( size: CGSize) -> CGSize
+{
+  return CGSize(size.height, size.width)
+}
+
+
+
+let full = (fullScaff, sizeFromFullScaff, originFromFullScaff)
+let grid =  (gridScaff, sizeFromGridScaff, originFromGridScaff)

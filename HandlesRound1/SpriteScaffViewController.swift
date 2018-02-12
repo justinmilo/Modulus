@@ -38,9 +38,6 @@ class SpriteScaffViewController : UIViewController {
   var create : (CGSize) -> (GraphPositions, [Edge])
   var f_graph2DSize : (ScaffGraph) -> CGSize
   var mangleOrigin : (ScaffGraph, CGRect, CGFloat) -> CGPoint
- 
-  let full = (fullScaff, sizeFromFullScaff, originFromFullScaff)
-  let grid =  (gridScaff, sizeFromGridScaff, originFromGridScaff)
   
   
   init(graph: ScaffGraph, mapping: GraphMapping )

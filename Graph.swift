@@ -482,9 +482,5 @@ func createGrid(with bounding: CGSize3) -> (GraphPositions, [Edge])
   return (s.grid, s.edges)
 }
 
-//
-//let size = CGSize3(width: 150, depth: 150, elev: 0.0)
-//let graph = createSegments(with: size)
-//
 
 
