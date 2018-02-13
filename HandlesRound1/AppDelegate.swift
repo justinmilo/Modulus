@@ -44,6 +44,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
       self.window?.makeKeyAndVisible()
       
+      
+      
       let postis = CGSize3(width: 100, depth: 100, elev: 350) |> createGrid
       let graph = ScaffGraph(grid: postis.0, edges: postis.1)
       
@@ -54,31 +56,28 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
       
       let planMap = [GraphEditingView( build: sizePlan >>> createScaffolding,
                      size: sizeFromPlanScaff,
-                     compose: { sg in return {point in return (sg.planEdgesNoZeros, point) |> planEdgeToGeometry }},
+                     compose: { $0.planEdgesNoZeros } >>> curry(planEdgeToGeometry),
                       origin: originFromFullScaff)]
       
       let planMapRotated = [GraphEditingView( build: sizePlanRotated >>> createScaffolding,
                            size: sizeFromRotatedPlanScaff,
-                           compose: { sg in return {point in return ( sg.planEdgesNoZeros |> rotateGroup, point) |> planEdgeToGeometry }},
+                           compose: { $0.planEdgesNoZeros |> rotateGroup } >>> curry(planEdgeToGeometry),
                            origin: originFromFullScaff)]
       
       let frontMap = [GraphEditingView( build: sizeFront >>> createScaffolding,
                                         size: sizeFromFullScaff,
-                                        compose: { sg in
-                                          return {point in return ( sg.frontEdgesNoZeros, point) |> modelToTexturesElev }},
+                                        compose: { $0.frontEdgesNoZeros } >>> curry(modelToTexturesElev),
                                         origin: originFromFullScaff),
                       
                       GraphEditingView( build: sizeFront >>> createGrid,
                                         size: sizeFromGridScaff,
-                                        compose: { sg in
-                                          return {point in return ( sg.frontEdgesNoZeros, point) |> modelToTexturesElev }},
+                                        compose: { $0.frontEdgesNoZeros } >>> curry(modelToTexturesElev),
                                         origin: originFromGridScaff)]
         
 
       let sideMap = [GraphEditingView( build: sizeSide >>> createScaffolding,
                                        size: sizeFromFullScaffSide,
-                                       compose: { sg in
-                                        return {point in return ( sg.sideEdgesNoZeros, point) |> modelToTexturesElev }},
+                                       compose: { $0.sideEdgesNoZeros} >>> curry(modelToTexturesElev),
                                        origin: originFromFullScaff)]
       
       
