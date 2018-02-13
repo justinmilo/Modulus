@@ -30,29 +30,17 @@ class SpriteScaffViewController : UIViewController {
   let graph : ScaffGraph
   
   // Drawing pure function
-  var f_flattenGraph: (ScaffGraph) -> [C2Edge]
-  var f_edgesToTexture: ([C2Edge], CGPoint) -> [Geometry]
+  var editingView : GraphEditingView
+  var loadedViews : [GraphEditingView]
   
-
-  // HandleView Pure Handle Sizing Functios
-  var create : (CGSize) -> (GraphPositions, [Edge])
-  var f_graph2DSize : (ScaffGraph) -> CGSize
-  var mangleOrigin : (ScaffGraph, CGRect, CGFloat) -> CGPoint
-  
-  
-  init(graph: ScaffGraph, mapping: GraphMapping )
+  init(graph: ScaffGraph, mapping: [GraphEditingView] )
   {
-    
     self.graph = graph
     self.twoDView = Sprite2DView(frame: UIScreen.main.bounds)
     self.handleView = HandleViewRound1(frame: UIScreen.main.bounds, state: .edge)
     
-    self.f_edgesToTexture = mapping.f_edgesToTexture
-    self.f_flattenGraph = mapping.f_flattenGraph
-    
-    self.create = mapping.f_sizeToGraph
-    self.f_graph2DSize = mapping.f_graphToSize
-    self.mangleOrigin = originFromFullScaff
+    self.editingView = mapping[0]
+    self.loadedViews = mapping
     
     super.init(nibName: nil, bundle: nil)
   }
@@ -62,12 +50,16 @@ class SpriteScaffViewController : UIViewController {
 
   override func viewDidAppear(_ animated: Bool) {
     // Set view upon initial loading
-    let size = self.graph |> self.f_graph2DSize
+    buildFromScratch()
+  }
+  
+  func buildFromScratch()
+  {
+    let size = self.graph |> self.editingView.size
     let newRect = self.view.bounds.withInsetRect(ofSize: size, hugging: (.center, .center))
     self.handleView.set(master: newRect)
     self.draw(in: newRect)
   }
-  
   
   override func loadView() {
     view = UIView()
@@ -78,8 +70,8 @@ class SpriteScaffViewController : UIViewController {
     self.handleView.handler =    {
       master, positions in
        // Create New Model &  // Find Orirgin
-      (self.graph.grid, self.graph.edges) = (master.size |> self.create)
-      let size = self.graph |> self.f_graph2DSize
+      (self.graph.grid, self.graph.edges) = (master.size |> self.editingView.build)
+      let size = self.graph |> self.editingView.size
       let newRect = (master, size, positions) |> bindSize
       
       self.draw(in: newRect)
@@ -88,8 +80,8 @@ class SpriteScaffViewController : UIViewController {
     self.handleView.completed = {
       master, positions in
       // Create New Model
-      (self.graph.grid, self.graph.edges) = (master.size |> self.create)
-      let size = self.graph |> self.f_graph2DSize
+      (self.graph.grid, self.graph.edges) = (master.size |> self.editingView.build)
+      let size = self.graph |> self.editingView.size
       let  newRect = (master, size, positions) |> bindSize
       
       self.handleView.set(master: newRect )
@@ -101,47 +93,25 @@ class SpriteScaffViewController : UIViewController {
   
   func draw(in newRect: CGRect) {
     // Create New Model &  // Find Orirgin
-    let origin = (self.graph, newRect, self.twoDView.bounds.height) |> self.mangleOrigin
+    let origin = (self.graph, newRect, self.twoDView.bounds.height) |> self.editingView.origin
     
     // Create Geometry
-    let b = (self.graph |> self.f_flattenGraph, origin) |> self.f_edgesToTexture
-    let g = (self.graph |> self.f_flattenGraph, origin) |> modelToLinework
+    let b = origin |> (self.graph |> self.editingView.compose)
     
     // Set & Redraw Geometry
-    self.twoDView.geometries = [[b],[g]]
-    self.twoDView.redraw( self.twoDView.index )
+    self.twoDView.redraw( b )
   }
   
-  struct ModalView {
-    let modelToGeometry : ([C2Edge], CGPoint) -> [Geometry]
-    let build: (CGSize) -> (GraphPositions, [Edge])
-    let flattenSize : (ScaffGraph) -> CGSize
-    let mangleOrigin : (ScaffGraph, CGRect, CGFloat) -> CGPoint
-  }
+  
   
 
-  private var bool = true
+  private var swapIndex = 0
   @objc func swapControl()
   {
-    self.twoDView.tapped()
+    swapIndex = swapIndex+1 >= loadedViews.count ? 0 : swapIndex+1
+    self.editingView = loadedViews[swapIndex]
     
-    if (!bool) {
-      self.create = fullScaff
-      self.f_graph2DSize = sizeFromFullScaff
-      self.mangleOrigin = originFromFullScaff
-    }
-    else {
-      self.create = gridScaff
-      self.f_graph2DSize = sizeFromGridScaff
-      self.mangleOrigin = originFromGridScaff
-    }
-    bool = !bool
-    
-    
-    let size = self.graph |> self.f_graph2DSize
-    
-    let newRect = CGRect(origin: self.handleView.lastMaster.origin, size:size)
-    self.handleView.set(master: newRect )
+    buildFromScratch()
   }
   
 }

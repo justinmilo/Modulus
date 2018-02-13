@@ -10,18 +10,6 @@ import CoreGraphics
 
 
 
-struct GraphMapping {
-  var f_flattenGraph: (ScaffGraph) -> [C2Edge]
-  var f_edgesToTexture: ([C2Edge], CGPoint) -> [Geometry]
-  var f_graphToSize: (ScaffGraph) -> CGSize
-  var f_sizeToGraph: (CGSize) -> (GraphPositions, [Edge])
-}
-
-
-func originSwap(origin: CGRect, height: CGFloat) -> CGPoint
-{
-  return CGPoint(origin.x, height - origin.y - origin.height)
-}
 
 let addElevDim : (CGSize) -> CGSize3 = {
   return CGSize3(width: $0.width, depth: $0.height, elev : 300)
@@ -64,12 +52,16 @@ let sizeFromGridScaff : (ScaffGraph) -> CGSize = { $0.boundsOfGrid.0 } >>> remov
 let sizeFromFullScaff : (ScaffGraph) -> CGSize = { $0.bounds } >>> remove3rdDim
 let sizeFromFullScaffSide : (ScaffGraph) -> CGSize = { $0.bounds } >>> remove3rdDimSide
 
+func originSwap(origin: CGRect, height: CGFloat) -> CGPoint
+{
+  return CGPoint(origin.x, height - origin.y - origin.height)
+}
+
 let originFromGridScaff : (ScaffGraph, CGRect, CGFloat) -> CGPoint =
-{ (graph, newRect, boundsHeight) in
+{ (scaff, newRect, boundsHeight) in
   // Find Orirgin
-  
   var origin = (newRect, boundsHeight) |> originSwap
- return ((origin, graph.boundsOfGrid.1) |>  findOrigin)
+ return ((origin, scaff.boundsOfGrid.1) |>  findOrigin)
 }
 let originFromFullScaff : (ScaffGraph, CGRect, CGFloat) -> CGPoint =
 { (graph, newRect, boundsHeight) in

@@ -9,6 +9,28 @@
 import UIKit
 
 
+public func curry<A, B, C>(_ f : @escaping (A, B) -> C) -> (A) -> (B) -> C {
+  
+  return { (a : A) -> (B) -> C in
+    { (b : B) -> C in
+      
+      f(a, b)
+    }
+  }
+  
+}
+
+
+
+struct GraphEditingView {
+  let build: (CGSize) -> (GraphPositions, [Edge])
+  let size : (ScaffGraph) -> CGSize
+  let compose : (ScaffGraph) -> (CGPoint) -> [Geometry]
+  let origin : (ScaffGraph, CGRect, CGFloat) -> CGPoint
+}
+
+
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -30,23 +52,35 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
       let sizeFront : (CGSize) -> CGSize3 = { CGSize3(width: $0.width, depth: graph.bounds.depth, elev: $0.height) }
       let sizeSide : (CGSize) -> CGSize3 = { CGSize3(width: graph.bounds.width, depth:$0.width, elev: $0.height) }
       
-      let planMap = GraphMapping(f_flattenGraph: { $0.planEdgesNoZeros },
-                                 f_edgesToTexture: planEdgeToGeometry,
-                                 f_graphToSize: sizeFromPlanScaff,
-                                 f_sizeToGraph: sizePlan >>> createScaffolding)
+      let planMap = [GraphEditingView( build: sizePlan >>> createScaffolding,
+                     size: sizeFromPlanScaff,
+                     compose: { sg in return {point in return (sg.planEdgesNoZeros, point) |> planEdgeToGeometry }},
+                      origin: originFromFullScaff)]
       
-      let planMapRotated = GraphMapping(f_flattenGraph: { $0.planEdgesNoZeros |> rotateGroup },
-                                 f_edgesToTexture: planEdgeToGeometry,
-                                 f_graphToSize: sizeFromRotatedPlanScaff,
-                                 f_sizeToGraph: sizePlanRotated >>> createScaffolding)
-      let frontMap = GraphMapping(f_flattenGraph: { $0.frontEdgesNoZeros },
-                                      f_edgesToTexture: modelToTexturesElev,
-                                      f_graphToSize: sizeFromFullScaff,
-                                      f_sizeToGraph: sizeFront >>> createScaffolding)
-      let sideMap = GraphMapping(f_flattenGraph: { $0.sideEdgesNoZeros },
-                                      f_edgesToTexture: modelToTexturesElev,
-                                      f_graphToSize: sizeFromFullScaffSide,
-                                      f_sizeToGraph: sizeSide >>> createScaffolding)
+      let planMapRotated = [GraphEditingView( build: sizePlanRotated >>> createScaffolding,
+                           size: sizeFromRotatedPlanScaff,
+                           compose: { sg in return {point in return ( sg.planEdgesNoZeros |> rotateGroup, point) |> planEdgeToGeometry }},
+                           origin: originFromFullScaff)]
+      
+      let frontMap = [GraphEditingView( build: sizeFront >>> createScaffolding,
+                                        size: sizeFromFullScaff,
+                                        compose: { sg in
+                                          return {point in return ( sg.frontEdgesNoZeros, point) |> modelToTexturesElev }},
+                                        origin: originFromFullScaff),
+                      
+                      GraphEditingView( build: sizeFront >>> createGrid,
+                                        size: sizeFromGridScaff,
+                                        compose: { sg in
+                                          return {point in return ( sg.frontEdgesNoZeros, point) |> modelToTexturesElev }},
+                                        origin: originFromGridScaff)]
+        
+
+      let sideMap = [GraphEditingView( build: sizeSide >>> createScaffolding,
+                                       size: sizeFromFullScaffSide,
+                                       compose: { sg in
+                                        return {point in return ( sg.sideEdgesNoZeros, point) |> modelToTexturesElev }},
+                                       origin: originFromFullScaff)]
+      
       
       
       let uL = SpriteScaffViewController(graph: graph, mapping: planMap)

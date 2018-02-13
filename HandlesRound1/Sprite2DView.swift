@@ -17,8 +17,6 @@ import GameplayKit
 
 class Sprite2DView : SKView {
   
-  var geometries : [[[Geometry]]] = []
-  var index: Int = 0
   var scale : CGFloat = 1.0
   
   override init(frame: CGRect)
@@ -35,22 +33,13 @@ class Sprite2DView : SKView {
     fatalError()
   }
   
-  @objc func tapped()
-  {
-    index = (index + 1) < geometries.count ? index + 1 : 0
-    redraw(index)
-  }
-  
-  func redraw(_ i:Int) {
-    guard i < geometries.count else { return }
+  func redraw(_ g:[Geometry]) {
     
     self.scene!.removeAllChildren()
     
-    for list in geometries[i]
+    for item in g
     {
-      for item in list {
-        self.addChildR(item)
-      }
+      self.addChildR(item)
     }
   }
   
