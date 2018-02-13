@@ -96,7 +96,7 @@ class SpriteScaffViewController : UIViewController {
     let origin = (self.graph, newRect, self.twoDView.bounds.height) |> self.editingView.origin
     
     // Create Geometry
-    let b = origin |> (self.graph |> self.editingView.compose)
+    let b = origin |> (self.graph |> self.editingView.composite)
     
     // Set & Redraw Geometry
     self.twoDView.redraw( b )
