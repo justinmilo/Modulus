@@ -9,6 +9,19 @@
 import CoreGraphics
 
 
+
+
+func segments<T>(array:[CGPoint], transform: (CGPoint, CGPoint) -> T) -> [T]
+{
+  return zip(array, array.dropFirst()).map
+    {
+      return transform($0.0, $0.1)
+  }
+}
+
+let lineCreate = { segments(array: $0, transform: Line.init) }
+let texturedLinesCreate = { segments(array: $0, transform: TextureLine.init) }
+
 extension Array where Element == CGPoint
 {
   var texturedLines : [TextureLine]

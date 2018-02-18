@@ -27,6 +27,7 @@ extension Array: Monoid {
 }
 
 
+
 struct View<D, N: Monoid> {
   let view: (D) -> N
   

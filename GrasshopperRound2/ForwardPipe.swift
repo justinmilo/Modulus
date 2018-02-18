@@ -10,10 +10,70 @@ import Foundation
 
 import Foundation
 
+
+precedencegroup EffectfulComposition {
+  associativity: left
+  higherThan: ForwardApplication
+}
+
+infix operator >=>: EffectfulComposition
+infix operator <->: EffectfulComposition
+infix operator <=>: EffectfulComposition
+
+
+//func >=> <A, B, C> (_ f: @escaping (A) -> (B, [String]),
+//                    _ g: @escaping (B) -> (C, [String])) -> (A) -> (C, [String])
+//{
+//  return { a in
+//    let (b, logs) = f(a)
+//    let (c, moreLogs) = g(b)
+//    return (c, logs + moreLogs)
+//  }
+//}
+
+func <=> <A, B, R> (_ f: @escaping (A) -> ([R]),
+                 _ g: @escaping (B) -> ([R])) -> (A,B) -> ([R])
+{
+  return { (a,b) in
+    return f(a) + g(b)
+  }
+}
+
+func <-> <A, B> (_ f: @escaping (A) -> ([B]),
+                    _ g: @escaping (A) -> ([B])) -> (A) -> ([B])
+{
+  return { a in
+    return f(a) + g(a)
+  }
+}
+
+func >=> <A, B, C> (_ f: @escaping (A) -> ([B]),
+                    _ g: @escaping (B) -> ([C])) -> (A) -> ([C])
+{
+  return { a in
+    let b = f(a)
+    let c = b.flatMap(g)
+    return c
+  }
+}
+
+precedencegroup SingleTypeComposition {
+  associativity: left
+  higherThan: ForwardApplication
+}
+
+infix operator <>: SingleTypeComposition
+
+func <> <A>(f: @escaping (A) -> A,
+            g: @escaping (A) -> A) -> (A) -> A {
+  return f >>> g
+}
+
+
+
 precedencegroup ForwardApplication {
   associativity: left
 }
-
 
 infix operator |> : ForwardApplication // Forward pipe operator
 infix operator |>> : ForwardApplication // Pipe into second argument

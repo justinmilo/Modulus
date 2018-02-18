@@ -12,6 +12,7 @@ import GameplayKit
 
 
 
+
 class CElevation {
   func createELevation( _skCordinateModel: NonuniformModel2D) -> [[Geometry]]
   {
@@ -57,9 +58,25 @@ class CElevation {
   }
 }
 
-struct CEverything {
-  
-  func geometries (model: NonuniformModel2D, scale: CGFloat, bounds: CGRect) -> [[Geometry]]
+
+
+let linesF : ([CGPoint]) -> [Line] = lineCreate
+let lines2D : ([[CGPoint]]) -> [[Line]] = { $0.map(lineCreate) }
+let rectangles = linesF <=> linesF
+let rectangles2D = lines2D <=> lines2D
+let rectangles2DFlat = rectangles2D >>> {$0.flatMap{$0}}
+
+let corOv : (PointCollection) -> [Oval] = {
+  (points) in
+  // Corner Ovals
+  let top = points.top, bottom = points.bottom
+  let corners : [CGPoint] = [top.first!, top.last!, bottom.last!, bottom.first!]
+  let corOv : [Oval] = corners.map(redCirc)
+  return corOv
+}
+
+
+  func originSwap (model: NonuniformModel2D, scale: CGFloat, bounds: CGRect) -> NonuniformModel2D
   {
     //_skCordinateModel = model
     // IMPORTANT: Scale the orgin by opposite of scale! for some reason
@@ -67,87 +84,120 @@ struct CEverything {
     let origin = CGPoint(model.origin.x / scale, bounds.size.height / scale - model.origin.y / scale)
     let _skCordinateModel = NonuniformModel2D(origin: origin, rowSizes: Grid(model.rowSizes.map{ -$0}), colSizes: model.colSizes)
     // transform Cordinate Space
-    
-    
-    // offset distance
-    let d : CGFloat = 40.0
-    
-    // First Geometry Set...
-    // Grid
-    let grid = _skCordinateModel.edgesAndPoints
-    
-    let points = grid.points.all.map {
-      return LabeledPoint(position: $0, label: "Std")
-    }
-    
-    let horizontals : [[TextureLine]] = _skCordinateModel.orderedPointsLeftToRight.map{ $0.texturedLines }
-    let verticals : [[TextureLine]] = _skCordinateModel.orderedPointsUpToDown.map{ $0.texturedLines }
-    
-    let rectangles : [Geometry] = (horizontals + verticals).flatMap { $0 }
-    
-    // Handle Points
-    let gridHandlePoints = getHandlePoints(points: grid.points, offset: d)
-    let handleLines = zip(grid.points.boundaries, gridHandlePoints.flatMap{$0}).map(Line.init)
-    
-    // Mid Points
-    let mids = dimPoints(points: gridHandlePoints, offset: 40)
-    
-    // put in on screen when gameScene loads into View
-    let gridItems : [[Geometry]] = [rectangles, handleLines, gridHandlePoints.flatMap { $0 }, mids]
-    
-    
-    
-    // Corner Ovals
-    let top = grid.points.top, bottom = grid.points.bottom
-    let corners : [CGPoint] = [top.first!, top.last!, bottom.last!, bottom.first!]
-    let corOv : [Oval] = corners.map(redCirc)
-    
-    let topC = [top.first!, top.last!],
-    rightC = [top.last!, bottom.last!],
-    bottomC = [bottom.first!, bottom.last!],
-    leftC = [top.first!, bottom.first!]
-    
-    let on : CGFloat = 1/3
-    let oTop = centers(between: topC ).map(moveByVector).map{ $0(unitY * (on * d)) }.map(pointToLabel)
-    let oRight = centers(between: rightC).map(moveByVector).map{ $0(unitX * (on * d)) }.map(pointToLabel).map(swapRotation) // Fixme repeats above
-    let oBottom = centers(between: bottomC).map(moveByVector).map{ $0(unitY * -(on * d)) }.map(pointToLabel)
-    let oLeft = centers(between: leftC).map(moveByVector).map{ $0(unitX * -(on * d)) }.map(pointToLabel).map(swapRotation)
-    let overallDimes : [Label] = zip(oTop, distance(between: topC)).map(helperJoin) +
-      zip(oRight, distance(between: rightC)).map(helperJoin) +
-      zip(oBottom, distance(between: bottomC)).map(helperJoin) +
-      zip(oLeft, distance(between: leftC)).map(helperJoin)
-    
-    
-    // put in on screen when gameScene loads into View
-    let boundingItems : [[Geometry]] = [
-      rectangles, corOv, overallDimes]
-    
-    var selectedItems : [[Geometry]]
-    if grid.points.top.count > 1, grid.points.bottom.count > 1
-    {
-      // top left to right
-      let first = grid.points.top[0...1]
-      // bottom right to left
-      let second = grid.points.bottom[0...1].reversed()
-      // and back to the top
-      let final = grid.points.top[0]
-      let firstBay =  Array(first + second ) + [final]
-      let circles = centers(between: firstBay).map(redCirc)
-      selectedItems = [rectangles, circles]
-    }
-    else {
-      selectedItems = []
-    }
-    
-    
-    
-    
-    let elevations = CElevation().createELevation(_skCordinateModel: _skCordinateModel)
-    
-    return [rectangles, mids, points] + elevations +
-    gridItems + boundingItems + selectedItems
-    
+    return _skCordinateModel
   }
+  
+  
+  
+  func gridItemed(points: PointCollection, offset: CGFloat)-> [[Geometry]] {
+    
+    let ghp = getHandlePoints(points: points, offset: offset)
+    let flattendGHP = ghp.flatMap{$0}
+    let handleLines = zip(points.boundaries, flattendGHP).map(Line.init)
+    let mids = (points, offset) |> midsed
+    // put in on screen when gameScene loads into View
+    let gridItems : [[Geometry]] = [handleLines, flattendGHP, mids]
+    
+    return gridItems
+  }
+  
+func midsed(points: PointCollection, offset: CGFloat)-> [Label] {
+  
+  let ghp = getHandlePoints(points: points, offset: offset)
+  let mids = dimPoints(points: ghp, offset: 40)
+  return mids
+}
+
+let dimensioning: (PointCollection, CGFloat ) -> [Label] =
+{ (points,d) in
+  let top = points.top, bottom = points.bottom
+
+  let topC = [top.first!, top.last!],
+  rightC = [top.last!, bottom.last!],
+  bottomC = [bottom.first!, bottom.last!],
+  leftC = [top.first!, bottom.first!]
+  
+  let on : CGFloat = 1/3
+  
+  let oTop = centers(between: topC ).map(moveByVector).map{ $0(unitY * (on * d)) }.map(pointToLabel)
+  let oRight = centers(between: rightC).map(moveByVector).map{ $0(unitX * (on * d)) }.map(pointToLabel).map(swapRotation) // Fixme repeats above
+  let oBottom = centers(between: bottomC).map(moveByVector).map{ $0(unitY * -(on * d)) }.map(pointToLabel)
+  let oLeft = centers(between: leftC).map(moveByVector).map{ $0(unitX * -(on * d)) }.map(pointToLabel).map(swapRotation)
+
+  
+  let overallDimes : [Label] = zip(oTop, distance(between: topC)).map(helperJoin) +
+    zip(oRight, distance(between: rightC)).map(helperJoin) +
+    zip(oBottom, distance(between: bottomC)).map(helperJoin) +
+    zip(oLeft, distance(between: leftC)).map(helperJoin)
+  
+  return overallDimes
+  
+}
+
+func circlesSelectedItems(points: PointCollection) -> [Oval] {
+  if points.top.count > 1, points.bottom.count > 1
+  {
+    // top left to right
+    let first = points.top[0...1]
+    // bottom right to left
+    let second = points.bottom[0...1].reversed()
+    // and back to the top
+    let final = points.top[0]
+    let firstBay =  Array(first + second ) + [final]
+    let circles = centers(between: firstBay).map(redCirc)
+    return circles
+  }
+  return []
+}
+
+
+func baySelected(points: PointCollection) -> [Oval] {
+  var selectedItems : [Oval]
+  if points.top.count > 1, points.bottom.count > 1
+  {
+    // top left to right
+    let first = points.top[0...1]
+    // bottom right to left
+    let second = points.bottom[0...1].reversed()
+    // and back to the top
+    let final = points.top[0]
+    let firstBay =  Array(first + second ) + [final]
+    let circles = centers(between: firstBay).map(redCirc)
+    selectedItems = circles
+  }
+  else {
+    selectedItems = []
+  }
+  return selectedItems
+}
+
+let pointLabeled : (PointCollection)-> [LabeledPoint] = {
+  $0.all.map { return LabeledPoint(position: $0, label: "Std") }
+}
+
+func basic(m: NonuniformModel2D) -> [Geometry]{
+  let rectangles = (m.orderedPointsLeftToRight, m.orderedPointsUpToDown) |> rectangles2DFlat
+  let mids = (m |> points, 40) |> midsed
+  let pnts = m |> points |> pointLabeled
+  let rtrn : [Geometry] = rectangles as [Geometry] + mids as [Geometry] + pnts as [Geometry]
+  return rtrn
+}
+
+
+func formerReturn(m: NonuniformModel2D) -> [[Geometry]]{
+  let rectangles = (m.orderedPointsLeftToRight, m.orderedPointsUpToDown) |> rectangles2DFlat
+  let cornerOvals = m |> points |> corOv
+  let overallDimes = (m |> points, 40) |> dimensioning
+  let boundingItems : [[Geometry]] = [ rectangles, cornerOvals, overallDimes]
+  
+  let mids = (m |> points, 40) |> midsed
+  let pnts = m |> points |> pointLabeled
+  let gItems = (m |> points, 40) |> gridItemed
+  let selectedItems1 = m |> points |> baySelected
+  let selectedItems : [[Geometry]] = [selectedItems1, rectangles]
+  let rtrn : [[Geometry]] = [rectangles, mids, pnts] +
+    gItems + boundingItems + selectedItems
+  return rtrn
 }
 
 func modelToTexturesElev ( edges: [C2Edge], origin: CGPoint) -> [Geometry]

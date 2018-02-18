@@ -20,6 +20,13 @@ public func curry<A, B, C>(_ f : @escaping (A, B) -> C) -> (A) -> (B) -> C {
   
 }
 
+public func uncurry<A, B, C>(_ f : @escaping (A) -> (B) -> C) -> (A, B) -> C {
+  
+  return { (a : A, b: B) -> C in
+     return f(a)(b)
+  }
+  
+}
 
 
 struct GraphEditingView {
@@ -57,7 +64,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
       let planMap = [GraphEditingView( build: sizePlan >>> createScaffolding,
                      size: sizeFromPlanScaff,
                      composite: { $0.planEdgesNoZeros } >>> curry(planEdgeToGeometry),
-                      origin: originFromFullScaff)]
+                      origin: originFromFullScaff),
+                     
+                     GraphEditingView( build: sizePlan >>> createScaffolding,
+                                       size: sizeFromPlanScaff,
+                                       composite: planGridsToDimensions,
+                                       origin: originFromFullScaff)
+                     ]
       
       let planMapRotated = [GraphEditingView( build: sizePlanRotated >>> createScaffolding,
                            size: sizeFromRotatedPlanScaff,
@@ -72,6 +85,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                       GraphEditingView( build: sizeFront >>> createGrid,
                                         size: sizeFromGridScaff,
                                         composite: { $0.frontEdgesNoZeros } >>> curry(modelToTexturesElev),
+                                        origin: originFromGridScaff),
+                      
+                      GraphEditingView( build: sizeFront >>> createScaffolding,
+                                        size: sizeFromFullScaff,
+                                        composite: { $0.frontEdgesNoZeros } >>> curry(modelToLinework),
+                                        origin: originFromFullScaff),
+                      
+                      GraphEditingView( build: sizeFront >>> createGrid,
+                                        size: sizeFromGridScaff,
+                                        composite: { $0.frontEdgesNoZeros } >>> curry(modelToLinework),
                                         origin: originFromGridScaff)]
         
 

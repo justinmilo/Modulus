@@ -34,7 +34,7 @@ class Sprite2DView : SKView {
   }
   
   func redraw(_ g:[Geometry]) {
-    
+    print(g)
     self.scene!.removeAllChildren()
     
     for item in g
@@ -54,29 +54,21 @@ class Sprite2DView : SKView {
     
     if let oval = node as? Oval
     {
-      let node = SKShapeNode(ellipseOf: oval.ellipseOf)
-      node.position = oval.position  * scale
-      node.fillColor = oval.fillColor
-      node.lineWidth = 0.0
-      scene!.addChild(node)
+      createOval(oval) |> scene!.addChild
     }
     else if let label = node as? Label
     {
-      let node = SKLabelNode(text: label.text)
-      node.fontName = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.medium).fontName
-      node.fontSize = 14// * scale
-      node.position = label.position * scale
-      node.zRotation = label.rotation == .h ? 0.0 : 0.5 * CGFloat.pi
-      node.verticalAlignmentMode = .center
-      scene!.addChild(node)
+      let n = createLableNode(label)
+      //n |> scalePosition(scale)
+      n |> scene!.addChild
     }
+
     else if let line = node as? Line
     {
-      let path = CGMutablePath()
-      path.move(to: line.start  * scale)
-      path.addLine(to: line.end  * scale)
-      let node = SKShapeNode(path: path)
-      scene!.addChild(node)
+      let node = createLineShapeNode(line)
+      
+      node |> scaleAll(scale)
+      node |> scene!.addChild
     }
     else if let line = node as? StrokedLine
     {
@@ -224,24 +216,16 @@ class Sprite2DView : SKView {
       node.name = name
     }
     
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
     else if let line = node as? Scaff2D
     {
       
       let newNode = convert(item: line)
       if let n = newNode { scene!.addChild(n) }
       
+    }
+    else if let line = node as? TextureLine
+    {
+      print(line)
     }
     else { fatalError()}
     
@@ -340,4 +324,65 @@ let descriptionDrawing : (Scaff2D.DrawingType) -> String =
 
 let nameHash : ( CGFloat, Scaff2D.ScaffType, Scaff2D.DrawingType)  -> String = { (float, type,view) in return "\(float),-" + ((type |> descriptionScaff) +  (view |> descriptionDrawing)) }
 
+func createOval(_ oval: Oval) -> SKShapeNode
+{
+  let node = SKShapeNode(ellipseOf: oval.ellipseOf)
+  node.fillColor = oval.fillColor
+  node.lineWidth = 0.0
+  return node
+}
 
+
+
+func createLableNode(_ label: Label) -> SKLabelNode {
+  let node = SKLabelNode(text: label.text)
+  node.fontName = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.medium).fontName
+  node.fontSize = 14// * scale
+  node.zRotation = label.rotation == .h ? 0.0 : 0.5 * CGFloat.pi
+  node.verticalAlignmentMode = .center
+  return node
+}
+
+func createLineShapeNode(_ line: Line) -> SKShapeNode {
+let path = CGMutablePath()
+path.move(to: line.start)
+path.addLine(to: line.end)
+let node = SKShapeNode(path: path)
+  return node
+}
+
+func scaleTransform( _ scale: CGFloat) -> (SKNode)-> Void
+{
+  return {skNode in
+    skNode.setScale(scale)
+  }
+}
+
+func scalePosition( _ scale: CGFloat) -> (SKNode)-> Void
+{
+  return {skNode in
+    skNode.position = skNode.position * scale
+  }
+}
+
+precedencegroup Semigroup { associativity: left }
+infix operator <>: Semigroup
+
+func <><A, B: SKNode>(f:@escaping (A)->(B)->Void, g: @escaping (A)->(B)->Void) -> (A)->(B)->Void
+{
+  return { a in
+    return f(a) <> g(a)
+  }
+}
+
+func <><B: SKNode>(f:@escaping (B)->Void, g: @escaping (B)->Void) -> (B)->Void
+{
+  return { b in
+     f(b); g(b)
+  }
+}
+
+
+
+
+let scaleAll : (CGFloat) -> (SKNode)-> Void = scaleTransform <> scalePosition
