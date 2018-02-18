@@ -71,6 +71,10 @@ func <> <A>(f: @escaping (A) -> A,
 
 
 
+
+
+
+
 precedencegroup ForwardApplication {
   associativity: left
 }
@@ -166,3 +170,5 @@ public func |< <A,B,C,D,E,Z>(lhs: E, rhs: (((A, B, C, D, E) -> Z), A, B, C, D)) 
 public func |< <A,B,C,D,E,F,Z>(lhs: F, rhs: (((A, B, C, D, E, F) -> Z), A, B, C, D, E)) -> Z {
   return rhs.0(rhs.1, rhs.2, rhs.3, rhs.4, rhs.5, lhs)
 }
+
+

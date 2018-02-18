@@ -60,7 +60,6 @@ struct Line : Geometry {
 
 struct StrokedLine : Geometry {
   var line : Line
-  let strokeWidth : CGFloat
   var position: CGPoint { get { return line.position } set { line.position = newValue }}
 }
 

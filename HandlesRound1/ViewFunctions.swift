@@ -57,7 +57,7 @@ func planGrids(gp: GraphPositions) -> (CGPoint) -> NonuniformModel2D
 {
   return { point in NonuniformModel2D(origin: point, rowSizes: Grid(gp.pY |> posToSeg), colSizes: Grid(gp.pX |> posToSeg)) }
 }
-let plguncur = uncurry(planGrids)
+
 
 func log(m: NonuniformModel2D) -> NonuniformModel2D
 {
@@ -65,6 +65,7 @@ func log(m: NonuniformModel2D) -> NonuniformModel2D
   return m
 }
 
+let plguncur = uncurry(planGrids)
 let planUncurryed = plguncur >>> log >>> basic
 let curryasd = curry(detuple(planUncurryed))
 
