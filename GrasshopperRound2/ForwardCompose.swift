@@ -21,3 +21,15 @@ precedencegroup ForwardComposition {
   associativity: left
   higherThan: ForwardApplication
 }
+
+// (A -> B, C ) (B, C) -> D
+
+infix operator >>-> : ForwardOneParamaterComposition
+
+precedencegroup ForwardOneParamaterComposition {
+  associativity: left
+  higherThan: ForwardComposition
+}
+func >>-><A, B, C, D>(lhs: ((A)->B, C), rhs: @escaping (B, C) -> D) -> (A)->D {
+  return { a in rhs(lhs.0(a), lhs.1)}
+}

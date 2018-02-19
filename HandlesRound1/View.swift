@@ -8,23 +8,6 @@
 
 import Foundation
 
-precedencegroup Semigroup { associativity: left }
-infix operator <>: Semigroup
-
-protocol Semigroup {
-  static func <>(lhs: Self, rhs: Self) -> Self
-}
-
-protocol Monoid: Semigroup {
-  static var e: Self { get }
-}
-
-extension Array: Monoid {
-  static var e: Array { return  [] }
-  static func <>(lhs: Array, rhs: Array) -> Array {
-    return lhs + rhs
-  }
-}
 
 
 

@@ -13,51 +13,6 @@ import GameplayKit
 
 
 
-class CElevation {
-  func createELevation( _skCordinateModel: NonuniformModel2D) -> [[Geometry]]
-  {
-    let horizontals = _skCordinateModel.orderedPointsUpToDown.map
-    { $0.segments(connectedBy:
-      { (a, b) -> TextureLine in
-        return TextureLine(label: "ledger elev", start: a, end: b)
-    })
-    }
-    let verticals = _skCordinateModel.edgesAndPoints.edges.verticals.map
-    {
-      line  -> [TextureLine] in
-      
-      let distance = line.start.y - line.end.y
-      let stds = maximumRepeated(availableInventory: [50, 100], targetMaximum: distance)
-      let g = Grid(stds)
-      
-      return zip(g.positions, g.positions.dropFirst()).map
-        {
-          arg -> TextureLine in
-          
-          return TextureLine(label: "std elev",
-                             start: CGPoint( line.start.x, line.start.y - arg.0) ,
-                             end: CGPoint( line.end.x, line.start.y - arg.1))
-      }
-      
-    }
-    let base = _skCordinateModel.edgesAndPoints.points.top.map {
-      return [
-        TextureLine(label: "base",
-                    start: $0 ,
-                    end: $0),
-        
-        
-        TextureLine(label: "sj",
-                    start: $0 ,
-                    end: $0)
-      ]
-    }
-    
-    
-    return horizontals + verticals + base
-  }
-}
-
 
 
 let linesF : ([CGPoint]) -> [Line] = lineCreate
@@ -76,32 +31,32 @@ let corOv : (PointCollection) -> [Oval] = {
 }
 
 
-  func originSwap (model: NonuniformModel2D, scale: CGFloat, bounds: CGRect) -> NonuniformModel2D
-  {
-    //_skCordinateModel = model
-    // IMPORTANT: Scale the orgin by opposite of scale! for some reason
-    // rest of scaling in addChildR
-    let origin = CGPoint(model.origin.x / scale, bounds.size.height / scale - model.origin.y / scale)
-    let _skCordinateModel = NonuniformModel2D(origin: origin, rowSizes: Grid(model.rowSizes.map{ -$0}), colSizes: model.colSizes)
-    // transform Cordinate Space
-    return _skCordinateModel
-  }
+func originSwap (model: NonuniformModel2D, scale: CGFloat, bounds: CGRect) -> NonuniformModel2D
+{
+  //_skCordinateModel = model
+  // IMPORTANT: Scale the orgin by opposite of scale! for some reason
+  // rest of scaling in addChildR
+  let origin = CGPoint(model.origin.x / scale, bounds.size.height / scale - model.origin.y / scale)
+  let _skCordinateModel = NonuniformModel2D(origin: origin, rowSizes: Grid(model.rowSizes.map{ -$0}), colSizes: model.colSizes)
+  // transform Cordinate Space
+  return _skCordinateModel
+}
+
+
+
+func gridItemed(points: PointCollection, offset: CGFloat)-> [[Geometry]] {
   
+  let ghp = getHandlePoints(points: points, offset: offset)
+  let flattendGHP = ghp.flatMap{$0}
+  let handleLines = zip(points.boundaries, flattendGHP).map(Line.init)
+  let mids = (points, offset) |> pointCollectionToDimLabel
+  // put in on screen when gameScene loads into View
+  let gridItems : [[Geometry]] = [handleLines, flattendGHP, mids]
   
-  
-  func gridItemed(points: PointCollection, offset: CGFloat)-> [[Geometry]] {
-    
-    let ghp = getHandlePoints(points: points, offset: offset)
-    let flattendGHP = ghp.flatMap{$0}
-    let handleLines = zip(points.boundaries, flattendGHP).map(Line.init)
-    let mids = (points, offset) |> midsed
-    // put in on screen when gameScene loads into View
-    let gridItems : [[Geometry]] = [handleLines, flattendGHP, mids]
-    
-    return gridItems
-  }
-  
-func midsed(points: PointCollection, offset: CGFloat)-> [Label] {
+  return gridItems
+}
+
+func pointCollectionToDimLabel(points: PointCollection, offset: CGFloat)-> [Label] {
   
   let ghp = getHandlePoints(points: points, offset: offset)
   let mids = dimPoints(points: ghp, offset: 40)
@@ -111,7 +66,7 @@ func midsed(points: PointCollection, offset: CGFloat)-> [Label] {
 let dimensioning: (PointCollection, CGFloat ) -> [Label] =
 { (points,d) in
   let top = points.top, bottom = points.bottom
-
+  
   let topC = [top.first!, top.last!],
   rightC = [top.last!, bottom.last!],
   bottomC = [bottom.first!, bottom.last!],
@@ -123,7 +78,7 @@ let dimensioning: (PointCollection, CGFloat ) -> [Label] =
   let oRight = centers(between: rightC).map(moveByVector).map{ $0(unitX * (on * d)) }.map(pointToLabel).map(swapRotation) // Fixme repeats above
   let oBottom = centers(between: bottomC).map(moveByVector).map{ $0(unitY * -(on * d)) }.map(pointToLabel)
   let oLeft = centers(between: leftC).map(moveByVector).map{ $0(unitX * -(on * d)) }.map(pointToLabel).map(swapRotation)
-
+  
   
   let overallDimes : [Label] = zip(oTop, distance(between: topC)).map(helperJoin) +
     zip(oRight, distance(between: rightC)).map(helperJoin) +
@@ -134,22 +89,34 @@ let dimensioning: (PointCollection, CGFloat ) -> [Label] =
   
 }
 
-func circlesSelectedItems(points: PointCollection) -> [Oval] {
-  if points.top.count > 1, points.bottom.count > 1
-  {
-    // top left to right
-    let first = points.top[0...1]
-    // bottom right to left
-    let second = points.bottom[0...1].reversed()
-    // and back to the top
-    let final = points.top[0]
-    let firstBay =  Array(first + second ) + [final]
-    let circles = centers(between: firstBay).map(redCirc)
-    return circles
-  }
-  return []
+
+
+let pointLabeled : (PointCollection)-> [LabeledPoint] = {
+  $0.all.map { return LabeledPoint(position: $0, label: "Std") }
 }
 
+
+let lineToSegment : (Line) -> (CGSegment) = { return CGSegment(p1: $0.start, p2: $0.end) }
+let segmentToOriginVector : (CGSegment) -> (CGPoint, CGVector) = { return ($0.p1, $0.vector) }
+let segmentToString : (CGSegment) -> (String) = {
+  let tuple = $0 |>  segmentToOriginVector
+  let vectorStr = (tuple.1 |> vectorToOrthogonal).map(orthToString) ?? "Unknown"
+  return "\(tuple.0),  \(vectorStr)  "
+}
+let vectorToOrthogonal : (CGVector) -> Orthogonal? = { return $0.dx == 0.0 ? .vertical : $0.dy == 0.0 ? .horizontal : nil}
+let orthToString : (Orthogonal) -> String = { return $0 == .horizontal ? "horizontal" : "vertical" }
+let lineStr = lineToSegment >>> segmentToString
+
+func basic(m: NonuniformModel2D) -> [Geometry]{
+  let rectangles = (m.orderedPointsLeftToRight, m.orderedPointsUpToDown) |> rectangles2DFlat
+  print(m.orderedPointsUpToDown)
+  print(rectangles.map(lineStr))
+  
+  let mids = (m |> nonuniformToPoints, 40) |> pointCollectionToDimLabel
+  let pnts = m |> nonuniformToPoints |> pointLabeled
+  let rtrn : [Geometry] = rectangles as [Geometry] + mids as [Geometry] + pnts as [Geometry]
+  return rtrn
+}
 
 func baySelected(points: PointCollection) -> [Oval] {
   var selectedItems : [Oval]
@@ -171,29 +138,34 @@ func baySelected(points: PointCollection) -> [Oval] {
   return selectedItems
 }
 
-let pointLabeled : (PointCollection)-> [LabeledPoint] = {
-  $0.all.map { return LabeledPoint(position: $0, label: "Std") }
+func circlesSelectedItems(points: PointCollection) -> [Oval] {
+  if points.top.count > 1, points.bottom.count > 1
+  {
+    // top left to right
+    let first = points.top[0...1]
+    // bottom right to left
+    let second = points.bottom[0...1].reversed()
+    // and back to the top
+    let final = points.top[0]
+    let firstBay =  Array(first + second ) + [final]
+    let circles = centers(between: firstBay).map(redCirc)
+    return circles
+  }
+  return []
 }
 
-func basic(m: NonuniformModel2D) -> [Geometry]{
-  let rectangles = (m.orderedPointsLeftToRight, m.orderedPointsUpToDown) |> rectangles2DFlat
-  let mids = (m |> points, 40) |> midsed
-  let pnts = m |> points |> pointLabeled
-  let rtrn : [Geometry] = rectangles as [Geometry] + mids as [Geometry] + pnts as [Geometry]
-  return rtrn
-}
 
 
 func formerReturn(m: NonuniformModel2D) -> [[Geometry]]{
   let rectangles = (m.orderedPointsLeftToRight, m.orderedPointsUpToDown) |> rectangles2DFlat
-  let cornerOvals = m |> points |> corOv
-  let overallDimes = (m |> points, 40) |> dimensioning
+  let cornerOvals = m |> nonuniformToPoints |> corOv
+  let overallDimes = (m |> nonuniformToPoints, 40) |> dimensioning
   let boundingItems : [[Geometry]] = [ rectangles, cornerOvals, overallDimes]
   
-  let mids = (m |> points, 40) |> midsed
-  let pnts = m |> points |> pointLabeled
-  let gItems = (m |> points, 40) |> gridItemed
-  let selectedItems1 = m |> points |> baySelected
+  let mids = (m |> nonuniformToPoints, 40) |> pointCollectionToDimLabel
+  let pnts = m |> nonuniformToPoints |> pointLabeled
+  let gItems = (m |> nonuniformToPoints, 40) |> gridItemed
+  let selectedItems1 = m |> nonuniformToPoints |> baySelected
   let selectedItems : [[Geometry]] = [selectedItems1, rectangles]
   let rtrn : [[Geometry]] = [rectangles, mids, pnts] +
     gItems + boundingItems + selectedItems
@@ -207,35 +179,30 @@ func modelToTexturesElev ( edges: [C2Edge], origin: CGPoint) -> [Geometry]
     ledge in
     return (ledge.p1, ledge.p2) |>
       {
-        (a, b) -> TextureLine in
-        return TextureLine(label: "ledger elev", start: a, end: b)
+        (a, b) -> Scaff2D in
+        return Scaff2D(start: a, end: b, part: .ledger, view: .longitudinal)
     }
   }
   
   let verticals = edges.filter{ $0.content == "Standard"}.map
   {
-    line  -> TextureLine in
-
-        return TextureLine(label: "std elev",
-                           start: CGPoint( line.p1.x, line.p1.y) ,
-                           end: CGPoint( line.p2.x, line.p2.y))
+    line  -> Scaff2D in
+    return Scaff2D(start: CGPoint( line.p1.x, line.p1.y), end: CGPoint( line.p2.x, line.p2.y), part: .standard, view: .longitudinal)
     
-
+    
+    
   }
   let base = edges.filter{ $0.content == "BC"}.map
   {
-    return
-      TextureLine(label: "base",
-                  start: $0.p1 ,
-                  end: $0.p2 )
+    
+    return Scaff2D(start: $0.p1 ,
+                   end: $0.p2, part: .basecollar, view: .longitudinal)
     
   }
   let jack = edges.filter{ $0.content == "Jack"}.map
   {
-    
-    TextureLine(label: "sj",
-                start: $0.p1 ,
-                end: $0.p2 )
+    return Scaff2D(start: $0.p1 ,
+                   end: $0.p2, part: .jack, view: .longitudinal)
   }
   
   let combined = horizontals + verticals + base + jack
@@ -286,7 +253,7 @@ extension Scaff2D : CustomStringConvertible {
 
 // Used to be view controller
 
-  
+
 
 
 let planEdgeToGeometry : ([C2Edge], CGPoint) -> [Geometry] = { edges, origin in
@@ -316,19 +283,7 @@ func modelToPlanGeometry ( edges: [C2Edge]) -> [Scaff2D]
   }
   
 }
-func move(item:Geometry, vector: CGVector)->Geometry
-{
-  var item = item
-  item.position = item.position + vector
-  return item
-}
 
-
-func moveGroup(items:[Geometry], vector: CGVector)-> [Geometry]
-{
-  let a = items.map{ ($0, vector) |> move}
-  return a
-}
 
 
 func modelToLinework ( edges: [C2Edge], origin: CGPoint) -> [Geometry]
@@ -377,12 +332,12 @@ func modelToLinework ( edges: [C2Edge], origin: CGPoint) -> [Geometry]
 }
 
 
- 
-  
-  // ...SceneKit Handlering
-  
-  
-  
-  // Viewcontroller Functions
-  
+
+
+// ...SceneKit Handlering
+
+
+
+// Viewcontroller Functions
+
 

@@ -9,99 +9,6 @@
 import CoreGraphics
 import SpriteKit
 
-func createCachedSpriteKitNode(line:TextureLine, cache: [SKSpriteNode]) -> (SKSpriteNode, [SKSpriteNode])
-{
-  let node : SKSpriteNode
-  // list of assets
-  let ledgers : [CGFloat : (String, UIImage)] = [
-    50 : ("0.5m Ledger", UIImage(named: "0.5m")!),
-    200 : ("2.0m Ledger", UIImage(named: "2m")!),
-    100 : ("1.0m Ledger", UIImage(named: "1m")!),
-    150 : ("1.5m Ledger", UIImage(named: "1.5m")!)
-  ]
-  let stds : [CGFloat : (String, UIImage)] = [
-    100 : ("1.0m stds", UIImage(named: "2.0m Std")!),
-    50 : ("0.5m stds", UIImage(named: "0.5m Std")!),
-    ]
-  
-  let pts : [String : UIImage] = [
-    "base" : UIImage(named: "Base Collar")!,
-    "sj" : UIImage(named: "Screw Jack")!
-  ]
-  
-  
-  let options : [CGFloat : (String, UIImage)]
-  
-  var adjujstmentV = CGVector.zero
-  if ( line.label == "ledger elev" )
-  {
-    
-    adjujstmentV = CGVector(0, -1.44)
-    // match asset to length of line
-    options = ledgers.filter
-      {
-        (tup) -> Bool in
-        if tup.key == CGSegment(p1: line.line.start, p2: line.line.end).length
-        {
-          return true
-        }
-        return false
-    }
-  }
-  else if ( line.label ==  "std elev")
-  {
-    adjujstmentV = CGVector(0, 8.64)
-    
-    
-    options = stds.filter
-      {
-        (tup) -> Bool in
-        if tup.key == CGSegment(p1: line.line.start, p2: line.line.end).length
-        {
-          return true
-        }
-        return false
-    }
-  }
-  else if ( line.label ==  "base")
-  {
-    let foo = pts[line.label]
-    adjujstmentV = CGVector(0, 4.74)
-    options = [ 0.0 : (line.label, foo!)]
-  }
-  else if ( line.label ==  "sj")
-  {
-    let foo = pts[line.label]
-    adjujstmentV = CGVector(0, 12.48)
-    options = [ 0.0 : (line.label, foo!)]
-  }
-  else
-  {
-    let foo = pts[line.label]
-    options = [ 0.0 : (line.label, foo!)]
-  }
-  
-  var tmpCache = cache
-  let second = (options.first)
-  let name = second?.value.0 ?? "NA"
-  let image = second?.value.1 ?? #imageLiteral(resourceName: "Screw Jack.png")
-  
-  let optNode = cache.first {
-    $0.name == name
-  }
-  if let real = optNode {
-    node = real.copy() as! SKSpriteNode
-  }
-  else {
-    node = SKSpriteNode(texture: SKTexture(image:image))
-    tmpCache.append(node)
-  }
-  
-  node.setScale( 2.00/1.6476)
-  node.position = node.position + ( adjujstmentV *  2.00/1.6476)
-  node.name = name
-  return (node, tmpCache)
-}
 
 let descriptionScaff : (Scaff2D.ScaffType) -> String =
 { type in
@@ -132,6 +39,14 @@ let image : ( CGFloat, Scaff2D.ScaffType, Scaff2D.DrawingType) -> String? = {
   case (150, .ledger, .plan): return "1.5m Plan"
   case (200, .ledger, .plan): return "2.0m plan"
   case (0, .standard, .plan): return "Std Plan"
+  case (50, .ledger, .longitudinal): return "0.5m"
+  case (100, .ledger, .longitudinal): return "1m"
+  case (150, .ledger, .longitudinal): return "1.5m"
+  case (200, .ledger, .longitudinal): return "2m"
+  case (100, .standard, .longitudinal): return "2.0m Std"
+  case (50, .standard, .longitudinal): return "0.5m Std"
+  case (_, .basecollar, .longitudinal): return "Base Collar"
+  case (_, .jack, .longitudinal): return "Screw Jack"
   default:  return nil
   }
 }

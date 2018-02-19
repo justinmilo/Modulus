@@ -15,7 +15,7 @@ struct NonuniformModel2D {
   var colSizes: Grid
 }
 
-func points(numodel: NonuniformModel2D) -> PointCollection{
+func nonuniformToPoints(numodel: NonuniformModel2D) -> PointCollection{
   let ltr = numodel.orderedPointsLeftToRight
   let utd = numodel.orderedPointsUpToDown
   
@@ -28,11 +28,11 @@ func points(numodel: NonuniformModel2D) -> PointCollection{
   )
 }
 
-func pointsCombining(e1s:[CGFloat], e2s:[CGFloat]) -> [[CGPoint]]
+func pointsCombining<A,B,C>(e1s:[A], e2s:[B], combining:(A, B)->C) -> [[C]]
 {
   return e1s.map { e1 in
     e2s.map { e2 in
-      return CGPoint(e1,e2)
+      return combining(e1,e2)
     }
   }
 }
@@ -50,16 +50,19 @@ extension NonuniformModel2D {
   var edgesAndPoints : (edges: EdgeCollection, points: PointCollection)
   {
     get {
-      return ( self |> edges, self |> points)
+      return ( self |> edges, self |> nonuniformToPoints)
     }
   }
   
   var xOrigins : [CGFloat] { return self.colSizes.positions.map { $0 + self.origin.x } }
   var yOrigins : [CGFloat] { return self.rowSizes.positions.map { $0 + self.origin.y } }
   
-  var orderedPointsLeftToRight : [[CGPoint]] { return (xOrigins, yOrigins) |> pointsCombining }
-  var orderedPointsUpToDown : [[CGPoint]] { return (yOrigins, xOrigins) |> pointsCombining }
-  
+  var orderedPointsLeftToRight : [[CGPoint]] {
+    return pointsCombining(e1s: xOrigins, e2s: yOrigins, combining: { CGPoint(x: $0, y: $1) })
+  }
+  var orderedPointsUpToDown : [[CGPoint]] {
+    return pointsCombining(e1s: yOrigins, e2s: xOrigins, combining: { CGPoint(x: $1, y: $0) })
+  }
   
   
 }

@@ -10,13 +10,6 @@ import CoreGraphics
 
 
 
-
-let addElevDim : (CGSize) -> CGSize3 = {
-  return CGSize3(width: $0.width, depth: $0.height, elev : 300)
-}
-let add3rdDim : (CGSize) -> CGSize3 = {
-  return CGSize3(width: $0.width, depth: 400, elev : $0.height)
-}
 let remove3rdDim : (CGSize3) -> CGSize = {
   return CGSize(width: $0.width, height:  $0.elev)
 }
@@ -42,9 +35,6 @@ let findOrigin : (CGPoint, CGFloat) -> (CGPoint) = {
 
 
 //
-let planScaff : (CGSize) -> (GraphPositions, [Edge]) = addElevDim >>> createScaffolding
-let fullScaff : (CGSize) -> (GraphPositions, [Edge]) = add3rdDim >>> createScaffolding
-let gridScaff : (CGSize) -> (GraphPositions, [Edge]) = add3rdDim >>> createGrid
 
 let sizeFromPlanScaff : (ScaffGraph) -> CGSize = { $0.bounds } >>> remove3rdDimPlan
 let sizeFromRotatedPlanScaff : (ScaffGraph) -> CGSize = { $0.bounds } >>> remove3rdDimPlan >>> flip
@@ -66,7 +56,7 @@ func log(m: NonuniformModel2D) -> NonuniformModel2D
 }
 
 let plguncur = uncurry(planGrids)
-let planUncurryed = plguncur >>> log >>> basic
+let planUncurryed = plguncur >>> basic
 let curryasd = curry(detuple(planUncurryed))
 
 func detuple<A,B,C>(_ t: @escaping ((A,B))->C)->(A,B)->C
@@ -114,6 +104,3 @@ func flip( size: CGSize) -> CGSize
 }
 
 
-
-let full = (fullScaff, sizeFromFullScaff, originFromFullScaff)
-let grid =  (gridScaff, sizeFromGridScaff, originFromGridScaff)

@@ -34,7 +34,6 @@ class Sprite2DView : SKView {
   }
   
   func redraw(_ g:[Geometry]) {
-    print(g)
     self.scene!.removeAllChildren()
     
     for item in g
@@ -97,13 +96,6 @@ class Sprite2DView : SKView {
     {
       print(line)
     }
-    else if let line = node as? TextureLine, line.label != ""
-    {
-      let (spriteNode, newCache) = createCachedSpriteKitNode(line: line, cache: cache)
-      self.cache = newCache
-      spriteNode |> scene!.addChild
-      spriteNode |> scalePosition(scale)
-    }
     
     
     else { fatalError()}
@@ -137,13 +129,56 @@ class Sprite2DView : SKView {
     return ledgerNode
   }
   
+  func convertNOROTGeneral ( item: Scaff2D) -> SKSpriteNode {
+    let length = CGSegment(p1:item.start, p2:item.end).length
+    let name = (length, item.part, item.view) |> nameHash
+    let path = (length, item.part, item.view) |> image
+    let (ledgerNode, newCache) = (name, path!, self.cache) |> grabFromCacheOrCreate
+    cache = newCache
+    
+    let twometer : CGFloat = 2.00/1.6476
+    ledgerNode.setScale( twometer)
+    ledgerNode.position = (item.start + item.end).center
+    return ledgerNode
+  }
+  
   func createScaff2DNode (item: Scaff2D) -> SKSpriteNode?
   {
-    switch item.part {
-    case .ledger: return convertGeneral(item: item)
-    case .standard: return convertGeneral(item: item)
-    case .jack: return nil
-    case .basecollar: return nil
+    switch (item.part,  item.view) {
+    case (.ledger, .plan): return convertGeneral(item: item)
+    case (.standard,  .plan): return convertGeneral(item: item)
+    case (.jack,  .plan): return nil
+    case (.basecollar, .plan): return nil
+      
+    case (.ledger, .longitudinal),
+         (.ledger, .cross):
+      let node = convertNOROTGeneral(item: item)
+      let adjujstmentV = CGVector(0, -1.44) * (2.00/1.6476)
+      node.position = node.position + adjujstmentV
+      return node
+      
+    case (.standard,  .longitudinal),
+         (.standard,  .cross):
+      
+      let node = convertNOROTGeneral(item: item)
+      let adjujstmentV = CGVector(0, 8.64) * (2.00/1.6476)
+      node.position = node.position + adjujstmentV
+      return node
+      
+    case (.jack,  .longitudinal),
+         (.jack,  .cross):
+      let node = convertNOROTGeneral(item: item)
+      let     adjujstmentV = CGVector(0, 12.48) * (2.00/1.6476)
+      node.position = node.position + adjujstmentV
+      return node
+      
+    case (.basecollar, .longitudinal),
+         (.basecollar, .cross):
+      let node = convertNOROTGeneral(item: item)
+      let     adjujstmentV = CGVector(0, 4.74) * (2.00/1.6476)
+      node.position = node.position + adjujstmentV
+      return node
+      
     }
   }
   
