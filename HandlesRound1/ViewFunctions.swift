@@ -8,6 +8,12 @@
 
 import CoreGraphics
 
+func log<A>(m: A) -> A
+{
+  print(m)
+  return m
+}
+
 
 
 let remove3rdDim : (CGSize3) -> CGSize = {
@@ -42,29 +48,20 @@ let sizeFromGridScaff : (ScaffGraph) -> CGSize = { $0.boundsOfGrid.0 } >>> remov
 let sizeFromFullScaff : (ScaffGraph) -> CGSize = { $0.bounds } >>> remove3rdDim
 let sizeFromFullScaffSide : (ScaffGraph) -> CGSize = { $0.bounds } >>> remove3rdDimSide
 
+
+
+
+
 // 2D Dim Plan grid stuff ...
 func planGrids(gp: GraphPositions) -> (CGPoint) -> NonuniformModel2D
 {
   return { point in NonuniformModel2D(origin: point, rowSizes: Grid(gp.pY |> posToSeg), colSizes: Grid(gp.pX |> posToSeg)) }
 }
-
-
-func log(m: NonuniformModel2D) -> NonuniformModel2D
-{
-  print(m)
-  return m
-}
-
 let plguncur = uncurry(planGrids)
 let planUncurryed = plguncur >>> basic
 let curryasd = curry(detuple(planUncurryed))
 
-func detuple<A,B,C>(_ t: @escaping ((A,B))->C)->(A,B)->C
-{
-  return { a,b in
-    return t((a,b))
-  }
-}
+
 
 let planGridsToDimensions : (ScaffGraph) -> (CGPoint) -> [Geometry] = { $0.grid } >>> curryasd
 // ... End 2d dim plan gridd stuf

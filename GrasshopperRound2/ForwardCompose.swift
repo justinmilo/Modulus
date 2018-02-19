@@ -33,3 +33,49 @@ precedencegroup ForwardOneParamaterComposition {
 func >>-><A, B, C, D>(lhs: ((A)->B, C), rhs: @escaping (B, C) -> D) -> (A)->D {
   return { a in rhs(lhs.0(a), lhs.1)}
 }
+
+
+precedencegroup Semigroup { associativity: left }
+infix operator <>: Semigroup
+
+protocol Semigroup {
+  static func <>(lhs: Self, rhs: Self) -> Self
+}
+
+protocol Monoid: Semigroup {
+  static var e: Self { get }
+}
+
+extension Array: Monoid {
+  static var e: Array { return  [] }
+  static func <>(lhs: Array, rhs: Array) -> Array {
+    return lhs + rhs
+  }
+}
+
+
+public func curry<A, B, C>(_ f : @escaping (A, B) -> C) -> (A) -> (B) -> C {
+  
+  return { (a : A) -> (B) -> C in
+    { (b : B) -> C in
+      
+      f(a, b)
+    }
+  }
+  
+}
+
+public func uncurry<A, B, C>(_ f : @escaping (A) -> (B) -> C) -> (A, B) -> C {
+  
+  return { (a : A, b: B) -> C in
+    return f(a)(b)
+  }
+  
+}
+
+func detuple<A,B,C>(_ t: @escaping ((A,B))->C)->(A,B)->C
+{
+  return { a,b in
+    return t((a,b))
+  }
+}

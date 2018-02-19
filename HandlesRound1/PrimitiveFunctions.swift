@@ -114,3 +114,21 @@ func distance<T:Geometry>(between positions: [T]) -> [CGFloat]
     return res + [ sum + fl ]
   }
 }
+
+// Grid
+func grid(p: CGPoint, dx: CGFloat, dy: CGFloat, ex: Int, ey: Int)
+  -> (edges: [Line], points: [CGPoint], topPoints: [CGPoint],
+  rightPoints: [CGPoint],
+  bottomPoints: [CGPoint],
+  leftPoints: [CGPoint])
+{
+  let options = gridWithOptions(p: p, dx: dx, dy: dy, ex: ex, ey: ey)
+  return (edges: options.edges.horizontals + options.edges.verticals ,
+          points: options.points.all ,
+          topPoints: options.points.top ,
+          leftPoints: options.points.left ,
+          bottomPoints: options.points.bottom ,
+          rightPoints: options.points.right)
+  
+}
+

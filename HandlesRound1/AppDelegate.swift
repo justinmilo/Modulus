@@ -8,43 +8,7 @@
 
 import UIKit
 
-precedencegroup Semigroup { associativity: left }
-infix operator <>: Semigroup
 
-protocol Semigroup {
-  static func <>(lhs: Self, rhs: Self) -> Self
-}
-
-protocol Monoid: Semigroup {
-  static var e: Self { get }
-}
-
-extension Array: Monoid {
-  static var e: Array { return  [] }
-  static func <>(lhs: Array, rhs: Array) -> Array {
-    return lhs + rhs
-  }
-}
-
-
-public func curry<A, B, C>(_ f : @escaping (A, B) -> C) -> (A) -> (B) -> C {
-  
-  return { (a : A) -> (B) -> C in
-    { (b : B) -> C in
-      
-      f(a, b)
-    }
-  }
-  
-}
-
-public func uncurry<A, B, C>(_ f : @escaping (A) -> (B) -> C) -> (A, B) -> C {
-  
-  return { (a : A, b: B) -> C in
-     return f(a)(b)
-  }
-  
-}
 
 
 
@@ -55,17 +19,7 @@ struct GraphEditingView {
   let origin : (ScaffGraph, CGRect, CGFloat) -> CGPoint
 }
 
-let graphToTextures :  (ScaffGraph) -> (CGPoint) -> [Geometry] = { $0.planEdgesNoZeros } >>> curry(planEdgeToGeometry)
-let graphToNonuniform : (ScaffGraph) -> (CGPoint) -> NonuniformModel2D = { $0.grid } >>> planGrids
-let nonuniformToDimensions : (NonuniformModel2D) -> [Geometry] = (nonuniformToPoints, 40) >>-> pointCollectionToDimLabel
-// (A -> B, C ) (B, C) -> D
-let graphToDimensions = graphToNonuniform >>> { f in return {p in f(p) |> nonuniformToDimensions }  }
-let finalDimComp : (ScaffGraph) -> (CGPoint) -> [Geometry] = {
-  g in
-  return {
-    p in
-    return (g |> graphToTextures)(p) + (g |> graphToDimensions)(p)
-  }}
+
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
