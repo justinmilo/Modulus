@@ -115,6 +115,34 @@ func distance<T:Geometry>(between positions: [T]) -> [CGFloat]
   }
 }
 
+
+func gridWithOptions(p: CGPoint, dx: CGFloat, dy: CGFloat, ex: Int, ey: Int) -> (edges: EdgeCollection, points: PointCollection)
+{
+  let points = (0...ex).map{ x in
+    (0...ey).map { y in
+      return CGPoint(x: p.x + CGFloat(x) * dx, y: p.y + CGFloat(y) * dy)
+    }
+  }
+  
+  let pointsOtherWay = (0...ey).map{ y in
+    (0...ex).map { x in
+      return CGPoint(x: p.x + CGFloat(x) * dx, y: p.y + CGFloat(y) * dy)
+    }
+  }
+  
+  let linesUp = points.map{ Line(start: $0.first!, end: $0.last!) }
+  let linesAcross = pointsOtherWay.map{ Line(start: $0.first!, end: $0.last!) }
+  
+  return (edges: EdgeCollection(verticals:linesUp, horizontals:linesAcross), points: PointCollection(
+    all: points.flatMap{ $0 },
+    top: pointsOtherWay.last!,
+    right: points[0],
+    bottom: pointsOtherWay[0],
+    left: points.last!
+  ))
+}
+
+
 // Grid
 func grid(p: CGPoint, dx: CGFloat, dy: CGFloat, ex: Int, ey: Int)
   -> (edges: [Line], points: [CGPoint], topPoints: [CGPoint],
@@ -131,4 +159,6 @@ func grid(p: CGPoint, dx: CGFloat, dy: CGFloat, ex: Int, ey: Int)
           rightPoints: options.points.right)
   
 }
+
+
 

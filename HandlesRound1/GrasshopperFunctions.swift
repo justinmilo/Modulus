@@ -131,31 +131,6 @@ struct PointCollection{
 }
 
 
-func gridWithOptions(p: CGPoint, dx: CGFloat, dy: CGFloat, ex: Int, ey: Int) -> (edges: EdgeCollection, points: PointCollection)
-{
-  let points = (0...ex).map{ x in
-    (0...ey).map { y in
-      return CGPoint(x: p.x + CGFloat(x) * dx, y: p.y + CGFloat(y) * dy)
-    }
-  }
-  
-  let pointsOtherWay = (0...ey).map{ y in
-    (0...ex).map { x in
-      return CGPoint(x: p.x + CGFloat(x) * dx, y: p.y + CGFloat(y) * dy)
-    }
-  }
-  
-  let linesUp = points.map{ Line(start: $0.first!, end: $0.last!) }
-  let linesAcross = pointsOtherWay.map{ Line(start: $0.first!, end: $0.last!) }
-  
-  return (edges: EdgeCollection(verticals:linesUp, horizontals:linesAcross), points: PointCollection(
-    all: points.flatMap{ $0 },
-    top: pointsOtherWay.last!,
-    right: points[0],
-    bottom: pointsOtherWay[0],
-    left: points.last!
-  ))
-}
 
 
 
@@ -282,68 +257,4 @@ func dimPoints<T: Geometry>(points:[[T]], offset d: CGFloat) -> [Label]
 
 
 
-// SPRITE KIT>>>
 
-
-
-// _spriteKit
-
-/// CALayer
-import CoreGraphics
-
-protocol Renderer {
-  func r_move(to point: CGPoint)
-  func r_addLine(to point: CGPoint)
-}
-protocol Drawable {
-  func render(in context: Renderer)
-}
-struct Diagram : Drawable {
-  var drawables: [Drawable]
-  func render(in context: Renderer) {
-    for d in drawables
-    {
-      d.render(in: context)
-    }
-  }
-}
-extension Drawable {
-  var cgPath : CGPath {
-    let cg = CGMutablePath()
-    self.render(in: cg)
-    return cg
-  }
-}
-
-
-extension Oval : Drawable {
-  func render(in context: Renderer)
-  {
-    context.r_move(to: self.position)
-    context.r_addLine(to: moveByVector( initialNode: self.position, vector: unitY * (ellipseOf.height/2) ))
-    context.r_move(to: self.position)
-    context.r_addLine(to: moveByVector( initialNode: self.position, vector: unitY * (-ellipseOf.height/2) ))
-    context.r_move(to: self.position)
-    context.r_addLine(to: moveByVector( initialNode: self.position, vector: unitX * (-ellipseOf.width/2) ))
-    context.r_move(to: self.position)
-    context.r_addLine(to: moveByVector( initialNode: self.position, vector: unitX * (ellipseOf.width/2) ))
-  }
-}
-extension Line : Drawable {
-  func render(in context: Renderer)
-  {
-    context.r_move(to: start)
-    context.r_addLine(to: end)
-  }
-}
-
-extension CGMutablePath : Renderer {
-  func r_move(to point: CGPoint)
-  {
-    self.move(to: point)
-  }
-  func r_addLine(to point: CGPoint)
-  {
-    self.addLine(to: point)
-  }
-}
