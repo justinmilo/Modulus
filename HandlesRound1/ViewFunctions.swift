@@ -100,4 +100,14 @@ func flip( size: CGSize) -> CGSize
   return CGSize(size.height, size.width)
 }
 
-
+let graphToTextures :  (ScaffGraph) -> (CGPoint) -> [Geometry] = { $0.planEdgesNoZeros } >>> curry(planEdgeToGeometry)
+let graphToNonuniform : (ScaffGraph) -> (CGPoint) -> NonuniformModel2D = { $0.grid } >>> planGrids
+let nonuniformToDimensions : (NonuniformModel2D) -> [Geometry] = (nonuniformToPoints, 40) >>-> pointCollectionToDimLabel
+// (A -> B, C ) (B, C) -> D
+let graphToDimensions = graphToNonuniform >>> { f in return {p in f(p) |> nonuniformToDimensions }  }
+let finalDimComp : (ScaffGraph) -> (CGPoint) -> [Geometry] = {
+  g in
+  return {
+    p in
+    return (g |> graphToTextures)(p) + (g |> graphToDimensions)(p)
+  }}
