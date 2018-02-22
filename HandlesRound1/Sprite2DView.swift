@@ -244,18 +244,6 @@ func highlightStrokeShapeNode(node:SKShapeNode)-> Void
   node.strokeColor = #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)
 }
 
-precedencegroup Semigroup { associativity: left }
-infix operator <>: Semigroup
-
-func <><A, B: SKNode>(
-  f:@escaping (A)->(B)->Void,
-  g: @escaping (A)->(B)->Void) -> (A)->(B)->Void
-{ return { a in return f(a) <> g(a) } }
-
-func <><B: SKNode>(f:@escaping (B)->Void, g: @escaping (B)->Void) -> (B)->Void
-{ return { b in f(b); g(b) } }
-
-
 
 
 let scaleAll : (CGFloat) -> (SKNode)-> Void = scaleTransform <> scalePosition

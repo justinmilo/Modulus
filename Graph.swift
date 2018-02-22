@@ -37,6 +37,7 @@ func segToPos ( seg: GraphSegments) -> GraphPositions
 
 func posToSeg ( pos: [CGFloat] ) -> [CGFloat]
 {
+  let pos = pos.sorted()
   // Without Origin we assume zero. first position is either origin or zero
   let zp = zip( pos , pos.dropFirst() ).map
   {

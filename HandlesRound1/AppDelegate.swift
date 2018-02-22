@@ -19,7 +19,9 @@ struct GraphEditingView {
   let origin : (ScaffGraph, CGRect, CGFloat) -> CGPoint
 }
 
-
+let front1 : (ScaffGraph) -> (CGPoint) -> [Geometry] = { $0.frontEdgesNoZeros } >>> curry(modelToTexturesElev)
+let front2 : (ScaffGraph) -> (CGPoint) -> [Geometry] = { $0.grid } >>> graphToNonuniformFront >>> basic
+let frontFinal = front1 <> front2
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -57,12 +59,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
       
       let planMapRotated = [GraphEditingView( build: sizePlanRotated >>> createScaffolding,
                            size: sizeFromRotatedPlanScaff,
-                           composite: { $0.planEdgesNoZeros |> rotateGroup } >>> curry(planEdgeToGeometry),
+                           composite: rotatedFinalDimComp,
                            origin: originFromFullScaff)]
       
       let frontMap = [GraphEditingView( build: sizeFront >>> createScaffolding,
                                         size: sizeFromFullScaff,
-                                        composite: { $0.frontEdgesNoZeros } >>> curry(modelToTexturesElev),
+                                        composite: frontFinal,
                                         origin: originFromFullScaff),
                       
                       GraphEditingView( build: sizeFront >>> createGrid,

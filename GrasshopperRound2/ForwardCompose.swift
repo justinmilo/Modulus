@@ -35,8 +35,6 @@ func >>-><A, B, C, D>(lhs: ((A)->B, C), rhs: @escaping (B, C) -> D) -> (A)->D {
 }
 
 
-precedencegroup Semigroup { associativity: left }
-infix operator <>: Semigroup
 
 protocol Semigroup {
   static func <>(lhs: Self, rhs: Self) -> Self
@@ -46,10 +44,37 @@ protocol Monoid: Semigroup {
   static var e: Self { get }
 }
 
-extension Array: Monoid {
-  static var e: Array { return  [] }
+extension Array: Semigroup {
   static func <>(lhs: Array, rhs: Array) -> Array {
     return lhs + rhs
+  }
+}
+
+extension Array: Monoid {
+  static var e: Array { return  [] }
+}
+
+
+func <><A,B,C : Semigroup>(f:@escaping (A)->(B)->C, g:@escaping (A)->(B)->C) -> (A)->(B)->C
+{
+  return {
+    a in
+    return {
+      b in
+      return  f(a)(b) <> g(a)(b)
+    }
+  }
+}
+
+
+func operatorSemigroup<A,B,C : Semigroup>(f:@escaping (A)->(B)->C, g:@escaping (A)->(B)->C) -> (A)->(B)->C
+{
+  return {
+    a in
+    return {
+      b in
+      return  f(a)(b) <> g(a)(b)
+    }
   }
 }
 
@@ -79,3 +104,24 @@ func detuple<A,B,C>(_ t: @escaping ((A,B))->C)->(A,B)->C
     return t((a,b))
   }
 }
+
+func tuple<A,B,C>(_ t: @escaping (A,B)->C)->((A,B))->C
+{
+  return { tup in
+    return t(tup.0,tup.1)
+  }
+}
+
+
+
+import SpriteKit
+
+func <><A, B: SKNode>(
+  f:@escaping (A)->(B)->Void,
+  g: @escaping (A)->(B)->Void) -> (A)->(B)->Void
+{ return { a in return f(a) <> g(a) } }
+
+func <><B: SKNode>(f:@escaping (B)->Void, g: @escaping (B)->Void) -> (B)->Void
+{ return { b in f(b); g(b) } }
+
+

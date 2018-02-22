@@ -109,8 +109,6 @@ let lineStr = lineToSegment >>> segmentToString
 
 func basic(m: NonuniformModel2D) -> [Geometry]{
   let rectangles = (m.orderedPointsLeftToRight, m.orderedPointsUpToDown) |> rectangles2DFlat
-  print(m.orderedPointsUpToDown)
-  print(rectangles.map(lineStr))
   
   let mids = (m |> nonuniformToPoints, 40) |> pointCollectionToDimLabel
   let pnts = m |> nonuniformToPoints |> pointLabeled
