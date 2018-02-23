@@ -14,6 +14,12 @@ func log<A>(m: A) -> A
   return m
 }
 
+func logDescription<A>(m: A, description: (A)->String) -> A
+{
+  print(description(m))
+  return m
+}
+
 
 
 let remove3rdDim : (CGSize3) -> CGSize = {
@@ -103,6 +109,39 @@ func >>><A,B,C,D> (
   let plguncur = uncurry(a)
   let planUncurryed = tuple(plguncur) >>> b
   return curry(detuple(planUncurryed))
+}
+
+func edgesToPoints(edges: [C2Edge]) -> [CGPoint]
+{
+  
+  let cgPoints = edges.flatMap {
+    c2Edge -> [CGPoint] in
+    return [c2Edge.p1, c2Edge.p2]
+  }
+  return cgPoints
+}
+
+func leftToRightDict(points: [CGPoint]) -> [CGFloat : [CGFloat]]
+{
+  let yOrientedDict : [CGFloat : [CGFloat] ] = [ :]
+  let pointDict = points.reduce(yOrientedDict) {
+    (res, next) in
+    var newRes = res
+    let arr = newRes[next.y] ?? []
+    newRes[next.y] =  arr +  [next.x]
+    return newRes
+  }
+  return pointDict
+}
+
+func pointDictToArray( dict: [CGFloat : [CGFloat]] ) -> [[CGPoint]]
+{
+  return zip(dict.keys, dict.values).map{
+    tup in
+    tup.1.map {
+      return CGPoint(tup.0, $0)
+    }
+  }
 }
 
 func graphToNonuniformFront(gp: GraphPositions) -> (CGPoint) -> NonuniformModel2D

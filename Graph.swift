@@ -212,7 +212,10 @@ func cedge(graph: GraphPositions, edge: Edge) -> (CEdge)
                p2: (graph, edge.p2) |> value |> Point3.init)
 }
 
-
+func cedges(graph: GraphPositions, edges: [Edge]) -> ([CEdge])
+{
+  return edges.map( curry(cedge)(graph) )
+}
 
 
 
@@ -350,9 +353,7 @@ struct C2Edge : Equatable{
     return lhs.content == rhs.content && pointsEqual
   }
 }
-extension C2Edge : CustomStringConvertible {
-  var description : String { return "\(content) \(p1), -> \t\t\t \(p2)\n"}
-}
+
 func plan(_ p3: Point3) -> CGPoint { return CGPoint(x: p3.x, y: p3.y) }
 func front(_ p3: Point3) -> CGPoint { return CGPoint(x: p3.x, y: p3.z) }
 func side(_ p3: Point3) -> CGPoint { return CGPoint(x: p3.y, y: p3.z) }
@@ -483,5 +484,34 @@ func createGrid(with bounding: CGSize3) -> (GraphPositions, [Edge])
   return (s.grid, s.edges)
 }
 
+typealias SGraph = (GraphPositions, [Edge])
+struct Parse<A>
+{
+  let parse: (SGraph) -> (A)
+}
 
+// Front edge has the same 0 y index
+func frontEdge(edge:Edge)-> Bool
+{
+  switch(edge.p1, edge.p2)
+  {
+  // Front edge has the same 0 y index
+  //    (x,y,z)
+  case ((_,0,_), (_,0,_)):
+    return true
+  default:
+    return false
+}
+}
 
+func frontSection() -> Parse<[C2Edge]>
+{
+  return Parse { (graphC) -> [C2Edge] in
+    let items = graphC.1.filter(frontEdge)
+    return (graphC.0, items) |> cedges >>> front
+  }
+}
+
+extension C2Edge : CustomStringConvertible {
+    var description : String { return "\(content) \(p1), -> \t\t\t \(p2)\n"}
+}

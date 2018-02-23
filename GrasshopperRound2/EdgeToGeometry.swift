@@ -63,6 +63,52 @@ func pointCollectionToDimLabel(points: PointCollection, offset: CGFloat)-> [Labe
   return mids
 }
 
+protocol BorderPoints{
+  var top: [CGPoint] { get }
+  var left: [CGPoint] { get }
+  var right: [CGPoint] { get }
+  var bottom: [CGPoint] { get }
+}
+
+struct BorderPointsImp : BorderPoints
+{
+  var top: [CGPoint]
+  var left: [CGPoint]
+  var right: [CGPoint]
+  var bottom: [CGPoint]
+}
+
+func secondOffsetLabel(ps:[[CGPoint]]) -> [Label]
+{
+  return pointsToDimLabel(leftToRight: ps, offset: 80)
+}
+
+//
+//func secondOffsetLabelLeft(ps:[[CGPoint]]) -> [Label]
+//{
+//  return ( (ps |> leftToRightToBorders).left, unitX * -80) |> offsetPoints
+//}
+
+
+
+func pointsToDimLabel(leftToRight: [[CGPoint]], offset: CGFloat)-> [Label] {
+  
+  let points = leftToRight |> leftToRightToBorders
+  
+  let ghp = getHandlePoints(points: points, offset: offset)
+  let mids = dimPoints(points: ghp, offset: 40)
+  return mids
+}
+
+func leftToRightToBorders (ltR: [[CGPoint]]) -> BorderPointsImp
+{
+  return BorderPointsImp(top: ltR.map{ $0.first! } ,
+                  left: ltR.first!,
+                  right:  ltR.last!,
+                  bottom: ltR.map{ $0.last! })
+}
+
+
 let dimensioning: (PointCollection, CGFloat ) -> [Label] =
 { (points,d) in
   let top = points.top, bottom = points.bottom
@@ -106,6 +152,12 @@ let segmentToString : (CGSegment) -> (String) = {
 let vectorToOrthogonal : (CGVector) -> Orthogonal? = { return $0.dx == 0.0 ? .vertical : $0.dy == 0.0 ? .horizontal : nil}
 let orthToString : (Orthogonal) -> String = { return $0 == .horizontal ? "horizontal" : "vertical" }
 let lineStr = lineToSegment >>> segmentToString
+
+func dimensons(m: NonuniformModel2D) -> [Geometry] {
+  let mids = (m |> nonuniformToPoints, 40) |> pointCollectionToDimLabel
+  return mids
+}
+
 
 func basic(m: NonuniformModel2D) -> [Geometry]{
   let rectangles = (m.orderedPointsLeftToRight, m.orderedPointsUpToDown) |> rectangles2DFlat

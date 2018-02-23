@@ -120,7 +120,7 @@ struct EdgeCollection{
   let horizontals : [Line]
 }
 
-struct PointCollection{
+struct PointCollection : BorderPoints{
   let all : [CGPoint]
   var boundaries : [CGPoint] { get { return top + right + bottom + left} }
   // sections
@@ -203,7 +203,7 @@ let blueCirc = { pointToCircle2($0, #colorLiteral(red: 0.2196078449, green: 0.00
 // Canvas
 func helperJoin(_ l: Label, _ s: CGFloat) -> Label {
   var l = l
-  l.text = String(describing: s)
+  l.text = String(format: "%.1f", s)
   return l
 }
 
@@ -215,12 +215,17 @@ func swapRotation(_ label: Label) -> Label {
 
 
 
+enum BorderCase { case top, left, right, bottom}
+
+func offsetPoints( points: [CGPoint], offset d: CGVector) -> [Geometry]
+{
+  let a =  LongestList(points, [d] ).map(move)
+  return a
+}
 
 
 
-
-
-func getHandlePoints(points: PointCollection, offset d: CGFloat)->[[Oval]]
+func getHandlePoints(points: BorderPoints, offset d: CGFloat)->[[Oval]]
 {
   // convert outside points to handle points
   let t = LongestList(points.top, [unitY * d]).map(moveByVector).map(redCirc)

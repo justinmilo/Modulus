@@ -20,8 +20,23 @@ struct GraphEditingView {
 }
 
 let front1 : (ScaffGraph) -> (CGPoint) -> [Geometry] = { $0.frontEdgesNoZeros } >>> curry(modelToTexturesElev)
-let front2 : (ScaffGraph) -> (CGPoint) -> [Geometry] = { $0.grid } >>> graphToNonuniformFront >>> basic
-let frontFinal = front1 <> front2
+let outerInterim : (ScaffGraph) -> [C2Edge] = { ($0.grid, $0.edges) |> frontSection().parse }
+let last : ([Label]) -> (CGPoint) -> [Geometry] = {
+  labels in
+  return {
+    point in
+    let geo : [Geometry] = labels.map {
+      label -> Geometry in
+      let item = move(item: label, vector: point.asVector())
+      return label
+    }
+    return geo
+  }
+}
+let outerDimensions : (ScaffGraph) -> (CGPoint) -> [Geometry] =
+  outerInterim >>> edgesToPoints >>> leftToRightDict >>> pointDictToArray >>> secondOffsetLabel >>> log >>> last
+let front2 : (ScaffGraph) -> (CGPoint) -> [Geometry] = { $0.grid } >>> graphToNonuniformFront >>> dimensons
+let frontFinal = front1 <> front2 <> outerDimensions
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
