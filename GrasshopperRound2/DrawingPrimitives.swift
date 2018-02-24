@@ -282,6 +282,58 @@ func dimPoints2<T: Geometry>(points: [[T]], offset d: CGFloat) -> [Label]
   
 }
 
+func dimPoints( points: (CGPoint, CGPoint), direction: CGVector, transform: ((Label)-> Label)? )-> Label
+{
+  let d = points |> distanceBetween
+  let c = points |> center
+  let o = (c, direction) |> move
+  let l = o.position |> pointToLabel
+  let l2 = (l, d) |> helperJoin
+  let r = l2 |> (transform ?? { return $0})
+  return r
+}
+
+func dimTop(_ d: CGFloat) -> ([CGPoint]) -> [Label]
+{
+  let dimStyle = { ($0, (unitY * d), nil ) |> dimPoints }
+  return { return pairs(between: $0).map(dimStyle) }
+}
+func dimRight(_ d: CGFloat) -> ([CGPoint]) -> [Label]
+{
+  let dimStyle = { ($0, (unitX * d), swapRotation ) |> dimPoints }
+  return { return pairs(between: $0).map(dimStyle) }
+}
+
+func dimBottom(_ d: CGFloat) -> ([CGPoint]) -> [Label]
+{
+  let dimStyle = { ($0, (unitY * -d), nil ) |> dimPoints }
+  return { return pairs(between: $0).map(dimStyle) }
+}
+func dimLeft(_ d: CGFloat) -> ([CGPoint]) -> [Label]
+{
+  let dimStyle = { ($0, (unitX * -d), swapRotation ) |> dimPoints }
+  return { return pairs(between: $0).map(dimStyle) }
+}
+
+
+func dimPoints3(points: BorderPoints, offset d: CGFloat) -> [Label]
+{
+  // convert handle points to dim points
+  // convert handle points to dim points
+  
+  
+  let mids : [Label] =
+  points.top |> dimTop(d) +
+  points.right |> dimRight(d) +
+  points.bottom |> dimBottom(d) +
+  points.left |> dimLeft(d)
+  
+  
+  return mids
+  
+}
+
+
 
 
 

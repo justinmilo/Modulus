@@ -83,6 +83,14 @@ func listPoint (i:Int, c:Geometry)-> Geometry
 }
 
 // Centers
+func center(between points: (CGPoint, CGPoint)) -> CGPoint
+{
+  return divideLine(line: Line(start: points.0, end: points.1), segments: 2).first!
+}
+func pairs(between array: [CGPoint]) -> [(CGPoint, CGPoint)]
+{
+  return Array( zip(array, array.dropFirst()) )
+}
 func centers<T:Geometry>(between array: [T]) -> [CGPoint]
 {
   let zipe = zip(array, array.dropFirst())
@@ -92,18 +100,27 @@ func centerBetweenTwoPoints<T: Geometry>(_ first: T, _ second: T) -> CGPoint
 {
   return divideLine(line: Line(start: first, end: second), segments: 2).first!
 }
+let  distanceBetween : (CGPoint,CGPoint) -> CGFloat =
+{
+  p1, p2 in
+  // pythag theorim
+  let dif = sqrt( powf(Float(p1.x - p2.x), 2) + powf(Float(p1.y - p2.y), 2))
+  
+  return CGFloat(dif)
+}
 
+let  distance : (Geometry,Geometry) -> CGFloat =
+{
+  p1, p2 in
+  // pythag theorim
+  let dif = (p1.position, p2.position) |> distanceBetween
+  
+  return CGFloat(dif)
+}
 
 func widths<T:Geometry>(between positions: [T]) -> [CGFloat]
 {
-  let zipe = zip(positions, positions.dropFirst())
-  return zipe.map
-    { points in
-      // pythag theorim
-      let dif = sqrt( powf(Float(points.0.position.x - points.1.position.x), 2) + powf(Float(points.0.position.y - points.1.position.y), 2))
-      
-      return CGFloat(dif)
-  }
+   return zip(positions, positions.dropFirst()).map(distance)
 }
 func distance<T:Geometry>(between positions: [T]) -> [CGFloat]
 {

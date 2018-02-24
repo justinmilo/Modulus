@@ -73,9 +73,9 @@ protocol BorderPoints{
 struct BorderPointsImp : BorderPoints
 {
   var top: [CGPoint]
-  var left: [CGPoint]
   var right: [CGPoint]
   var bottom: [CGPoint]
+  var left: [CGPoint]
 }
 
 
@@ -103,10 +103,10 @@ func pointsToDimLabel(leftToRight: [[CGPoint]], offset: CGFloat)-> [Label] {
 
 func leftToRightToBorders (ltR: [[CGPoint]]) -> BorderPointsImp
 {
-  return BorderPointsImp(top: ltR.map{ $0.first! } ,
-                  left: ltR.first!,
-                  right:  ltR.last!,
-                  bottom: ltR.map{ $0.last! })
+  return BorderPointsImp(top: ltR.last! ,
+                  right: ltR.map{ $0.last! },
+                  bottom:  ltR.first!,
+                  left: ltR.map{ $0.first! })
 }
 
 func leftToRightToBordersArray (ltR: [[CGPoint]]) -> [[CGPoint]]

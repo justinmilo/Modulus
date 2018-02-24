@@ -14,6 +14,7 @@ import Foundation
 precedencegroup EffectfulComposition {
   associativity: left
   higherThan: ForwardApplication
+
 }
 
 infix operator >=>: EffectfulComposition
@@ -77,6 +78,7 @@ func <> <A>(f: @escaping (A) -> A,
 
 precedencegroup ForwardApplication {
   associativity: left
+  higherThan: AdditionPrecedence
 }
 
 infix operator |> : ForwardApplication // Forward pipe operator

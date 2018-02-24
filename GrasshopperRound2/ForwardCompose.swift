@@ -17,6 +17,17 @@ func >>> <A, B, C>(f: @escaping (A) -> B, g: @escaping (B) -> C) -> (A) -> C {
   }
 }
 
+func >>><A,B,C,D> (
+  a: @escaping (A) -> (B) -> C,
+  b: @escaping (C) -> D )
+  -> (A) -> (B) -> (D)
+{
+  let plguncur = uncurry(a)
+  let planUncurryed = tuple(plguncur) >>> b
+  return curry(detuple(planUncurryed))
+}
+
+
 precedencegroup ForwardComposition {
   associativity: left
   higherThan: ForwardApplication

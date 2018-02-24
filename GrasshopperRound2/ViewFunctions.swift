@@ -101,15 +101,6 @@ func graphToNonuniformPlan(gp: GraphPositions) -> (CGPoint) -> NonuniformModel2D
 }
 let graphToPlanDimGeometry = graphToNonuniformPlan >>> basic
 
-func >>><A,B,C,D> (
-  a: @escaping (A) -> (B) -> C,
-  b: @escaping (C) -> D )
-  -> (A) -> (B) -> (D)
-{
-  let plguncur = uncurry(a)
-  let planUncurryed = tuple(plguncur) >>> b
-  return curry(detuple(planUncurryed))
-}
 
 func edgesToPoints(edges: [C2Edge]) -> [CGPoint]
 {

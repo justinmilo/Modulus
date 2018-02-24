@@ -23,18 +23,20 @@ func fLedger(e:C2Edge)-> Bool { return e.content == "Ledger" }
 func fStandard(e:C2Edge)-> Bool { return e.content == "Standard" }
 func opposite(b: Bool) -> Bool { return !b }
 
-let ccccc = 20.0 |>> (dimPoints2, [[CGPoint(0,0)]] )
+let movedGeometry : ([Geometry]) -> (CGPoint) -> [Geometry] = { g in return {p in return g.map { ($0, p.asVector()) |> move } } }
+
 let front1 : (ScaffGraph) -> (CGPoint) -> [Geometry] = { $0.frontEdgesNoZeros } >>> curry(modelToTexturesElev)
 let front2 : (ScaffGraph) -> (CGPoint) -> [Geometry] = { $0.grid } >>> graphToNonuniformFront >>> dimensons
-let outerInterim : (ScaffGraph) -> [C2Edge] =
-{ ($0.grid, $0.edges) |> frontSection().parse } >>> { $0.filter(fStandard >>> opposite) }
+let outerInterim : (ScaffGraph) -> [C2Edge] = { ($0.grid, $0.edges) |> frontSection().parse } >>> { $0.filter(fStandard >>> opposite) }
 let outerDimensions =
-  edgesToPoints >>> removeDup >>> log
-    >>> leftToRightDict >>> log
-    >>> pointDictToArray >>> log
-    >>> {($0, 40)} >>> dimPoints2
+  edgesToPoints
+    >>> removeDup
+    >>> leftToRightDict
+    >>> pointDictToArray
+    >>> leftToRightToBorders
+    >>> { return ($0.left |> dimLeft(30.0)) + ($0.right |> dimRight(30.0)) }
 let outerDimPlus : (ScaffGraph) -> (CGPoint) -> [Geometry] =
-  outerInterim >>> outerDimensions >>> { g in return {p in return g.map { ($0, p.asVector()) |> move } } }
+  outerInterim >>> outerDimensions >>> movedGeometry
 
 let frontFinal = front1 <> front2 <> outerDimPlus
 
