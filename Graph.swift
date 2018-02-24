@@ -187,6 +187,8 @@ extension CEdge : CustomStringConvertible {
   var description : String { return "\(content) \(p1), -> \t\t\t \(p2)\n"}
 }
 
+func fLedger(e:C2Edge)-> Bool { return e.content == "Ledger" }
+func fStandard(e:C2Edge)-> Bool { return e.content == "Standard" }
 
 func add(graph: GraphPositions, cedge: CEdge) ->  (GraphPositions, Edge)
 {
