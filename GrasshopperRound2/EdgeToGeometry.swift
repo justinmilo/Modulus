@@ -78,9 +78,10 @@ struct BorderPointsImp : BorderPoints
   var bottom: [CGPoint]
 }
 
-func secondOffsetLabel(ps:[[CGPoint]]) -> [Label]
+
+func addOffset<A>(a:A) -> (A, CGFloat)
 {
-  return pointsToDimLabel(leftToRight: ps, offset: 80)
+  return (a, 80)
 }
 
 //
@@ -108,11 +109,20 @@ func leftToRightToBorders (ltR: [[CGPoint]]) -> BorderPointsImp
                   bottom: ltR.map{ $0.last! })
 }
 
+func leftToRightToBordersArray (ltR: [[CGPoint]]) -> [[CGPoint]]
+{
+  return [
+    ltR.last!,
+  ltR.map{ $0.last! },
+    ltR.first!,
+    ltR.map{ $0.first! }
+  ]
+}
+
 
 let dimensioning: (PointCollection, CGFloat ) -> [Label] =
 { (points,d) in
   let top = points.top, bottom = points.bottom
-  
   let topC = [top.first!, top.last!],
   rightC = [top.last!, bottom.last!],
   bottomC = [bottom.first!, bottom.last!],

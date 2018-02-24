@@ -262,4 +262,26 @@ func dimPoints<T: Geometry>(points:[[T]], offset d: CGFloat) -> [Label]
 
 
 
+func dimPoints2<T: Geometry>(points: [[T]], offset d: CGFloat) -> [Label]
+{
+  // convert handle points to dim points
+  // convert handle points to dim points
+  let topM = centers(between: points[0]).map(moveByVector).map{ $0(unitY * d) }.map(pointToLabel) // Fixme repeats below
+  let rightM = centers(between: points[1]).map(moveByVector).map{ $0(unitX * d) }.map(pointToLabel).map(swapRotation)
+  let bottomM = centers(between: points[2]).map(moveByVector).map{ $0(unitY * -d) }.map(pointToLabel)
+  let leftM = centers(between: points[3]).map(moveByVector).map{ $0(unitX * -d) }.map(pointToLabel).map(swapRotation)
+
+  
+  let mids : [Label] =
+    zip(topM, widths(between: points[0])).map(helperJoin) +
+      zip(rightM, widths(between: points[1])).map(helperJoin) +
+      zip(bottomM, widths(between: points[2])).map(helperJoin) +
+      zip(leftM, widths(between:points[3])).map(helperJoin)
+  
+  return mids
+  
+}
+
+
+
 

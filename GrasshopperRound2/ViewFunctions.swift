@@ -121,6 +121,16 @@ func edgesToPoints(edges: [C2Edge]) -> [CGPoint]
   return cgPoints
 }
 
+func removeDup<A : Equatable> (edges: [A]) -> [A]
+{
+  return edges.reduce([])
+  {
+    res, next in
+    guard !res.contains(next) else { return res }
+    return res + [next]
+  }
+}
+
 func leftToRightDict(points: [CGPoint]) -> [CGFloat : [CGFloat]]
 {
   let yOrientedDict : [CGFloat : [CGFloat] ] = [ :]
@@ -136,10 +146,10 @@ func leftToRightDict(points: [CGPoint]) -> [CGFloat : [CGFloat]]
 
 func pointDictToArray( dict: [CGFloat : [CGFloat]] ) -> [[CGPoint]]
 {
-  return zip(dict.keys, dict.values).map{
-    tup in
-    tup.1.map {
-      return CGPoint(tup.0, $0)
+  return dict.keys.sorted().map {
+    key in
+   return  dict[key]!.map { value in
+      return CGPoint(value, key)
     }
   }
 }

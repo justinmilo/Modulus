@@ -19,12 +19,38 @@ struct GraphEditingView {
   let origin : (ScaffGraph, CGRect, CGFloat) -> CGPoint
 }
 
+let ccccc = 20.0 |>> (dimPoints2, [[CGPoint(0,0)]] )
 let front1 : (ScaffGraph) -> (CGPoint) -> [Geometry] = { $0.frontEdgesNoZeros } >>> curry(modelToTexturesElev)
-let outerInterim : (ScaffGraph) -> [C2Edge] = { ($0.grid, $0.edges) |> frontSection().parse }
-let outerDimensions : (ScaffGraph) -> [Geometry] =
-  outerInterim >>> edgesToPoints >>> leftToRightDict >>> pointDictToArray >>> secondOffsetLabel
 let front2 : (ScaffGraph) -> (CGPoint) -> [Geometry] = { $0.grid } >>> graphToNonuniformFront >>> dimensons
-let frontFinal = front1 <> front2
+let outerInterim : (ScaffGraph) -> [C2Edge] = { ($0.grid, $0.edges) |> frontSection().parse }
+let outerDimensions =
+  edgesToPoints >>> removeDup >>> log >>>
+    leftToRightDict >>> log >>>
+    pointDictToArray >>> log
+let outer4 =
+  leftToRightToBordersArray >>> log >>>
+    {($0, 20)} >>>
+    dimPoints2 >>> log
+let outerDimPlus : (ScaffGraph) -> (CGPoint) -> [Geometry] =
+  outerInterim >>> outerDimensions >>> outer4 >>> { g in return {p in return g.map { ($0, p.asVector()) |> move } } }
+
+let frontFinal = front1 <> outerDimPlus
+
+func graphViewList(
+  build: @escaping (CGSize) -> (GraphPositions, [Edge]),
+  size : @escaping (ScaffGraph) -> CGSize,
+  composite : [(ScaffGraph) -> (CGPoint) -> [Geometry]],
+  origin : @escaping (ScaffGraph, CGRect, CGFloat) -> CGPoint
+  )-> [GraphEditingView]
+{
+  return composite.map {
+    GraphEditingView( build: build,
+                      size: size,
+                      composite: $0,
+                      origin: origin)
+  }
+}
+
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -41,63 +67,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
       
       
       
-      let postis = CGSize3(width: 100, depth: 100, elev: 350) |> createGrid
+      let postis = CGSize3(width: 100, depth: 100, elev: 100) |> createGrid
       let graph = ScaffGraph(grid: postis.0, edges: postis.1)
       
       let sizePlan : (CGSize) -> CGSize3 = { CGSize3(width: $0.width, depth: $0.height, elev: graph.bounds.elev) }
-      let sizePlanRotated : (CGSize) -> CGSize3 = { CGSize3(width: $0.height, depth: $0.width, elev: graph.bounds.elev) }
-      let sizeFront : (CGSize) -> CGSize3 = { CGSize3(width: $0.width, depth: graph.bounds.depth, elev: $0.height) }
-      let sizeSide : (CGSize) -> CGSize3 = { CGSize3(width: graph.bounds.width, depth:$0.width, elev: $0.height) }
       
-      let planMap = [GraphEditingView( build: sizePlan >>> createScaffolding,
+      let planMap = graphViewList( build: sizePlan >>> createScaffolding,
                      size: sizeFromPlanScaff,
-                     composite: finalDimComp,
-                      origin: originFromFullScaff),
-                     
-                     GraphEditingView( build: sizePlan >>> createScaffolding,
-                                       size: sizeFromPlanScaff,
-                                       composite: planGridsToDimensions,
-                                       origin: originFromFullScaff)
-                     ]
+                     composite: [finalDimComp, planGridsToDimensions, frontFinal],
+                      origin: originFromFullScaff)
       
-      let planMapRotated = [GraphEditingView( build: sizePlanRotated >>> createScaffolding,
-                           size: sizeFromRotatedPlanScaff,
-                           composite: rotatedFinalDimComp,
-                           origin: originFromFullScaff)]
-      
-      let frontMap = [GraphEditingView( build: sizeFront >>> createScaffolding,
-                                        size: sizeFromFullScaff,
-                                        composite: frontFinal,
-                                        origin: originFromFullScaff),
-                      
-                      GraphEditingView( build: sizeFront >>> createGrid,
-                                        size: sizeFromGridScaff,
-                                        composite: { $0.frontEdgesNoZeros } >>> curry(modelToTexturesElev),
-                                        origin: originFromGridScaff),
-                      
-                      GraphEditingView( build: sizeFront >>> createScaffolding,
-                                        size: sizeFromFullScaff,
-                                        composite: { $0.frontEdgesNoZeros } >>> curry(modelToLinework),
-                                        origin: originFromFullScaff),
-                      
-                      GraphEditingView( build: sizeFront >>> createGrid,
-                                        size: sizeFromGridScaff,
-                                        composite: { $0.frontEdgesNoZeros } >>> curry(modelToLinework),
-                                        origin: originFromGridScaff)]
-        
-
-      let sideMap = [GraphEditingView( build: sizeSide >>> createScaffolding,
-                                       size: sizeFromFullScaffSide,
-                                       composite: { $0.sideEdgesNoZeros} >>> curry(modelToTexturesElev),
-                                       origin: originFromFullScaff)]
-      
-      
-      
-      let uL = SpriteScaffViewController(graph: graph, mapping: planMap)
-      let uR = SpriteScaffViewController(graph: graph, mapping: planMapRotated)
-      let ll = SpriteScaffViewController(graph: graph, mapping: frontMap)
-      let lr = SpriteScaffViewController(graph: graph, mapping: sideMap)
-      self.window?.rootViewController = VerticalController(upperLeft: uL, upperRight: uR, lowerLeft: ll, lowerRight: lr)
+      self.window?.rootViewController = SpriteScaffViewController(graph: graph, mapping: planMap)
       
       
         return true
