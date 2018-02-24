@@ -41,7 +41,7 @@ let outerDimPlus : (ScaffGraph) -> (CGPoint) -> [Geometry] =
 
 let frontFinal = front1 <> front2 <> outerDimPlus
 
-func graphViewList(
+func graphViewGenerator(
   build: @escaping (CGSize) -> (GraphPositions, [Edge]),
   size : @escaping (ScaffGraph) -> CGSize,
   composite : [(ScaffGraph) -> (CGPoint) -> [Geometry]],
@@ -79,7 +79,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
       let sizeFront : (CGSize) -> CGSize3 = { CGSize3(width: $0.width, depth: graph.bounds.depth, elev: $0.height) }
       let sizeSide : (CGSize) -> CGSize3 = { CGSize3(width: graph.bounds.width, depth:$0.width, elev: $0.height) }
       
-      let planMap = graphViewList(
+      let planMap = graphViewGenerator(
         build: sizePlan >>> createScaffolding,
         size: sizeFromPlanScaff,
         composite: [finalDimComp,
@@ -87,13 +87,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     frontFinal],
         origin: originFromFullScaff)
       
-      let planMapRotated = graphViewList(
+      let planMapRotated = graphViewGenerator(
         build: sizePlanRotated >>> createScaffolding,
         size: sizeFromRotatedPlanScaff,
         composite: [rotatedFinalDimComp],
         origin: originFromFullScaff)
       
-      let frontMap = graphViewList(
+      let frontMap = graphViewGenerator(
         build: sizeFront >>> createScaffolding,
         size: sizeFromFullScaff,
         composite: [front1,
@@ -101,14 +101,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     { $0.frontEdgesNoZeros } >>> curry(modelToLinework)],
         origin: originFromFullScaff)
         +
-        graphViewList(
+        graphViewGenerator(
           build: sizeFront >>> createGrid,
           size: sizeFromGridScaff,
           composite: [{ $0.frontEdgesNoZeros } >>> curry(modelToTexturesElev),
                       { $0.frontEdgesNoZeros } >>> curry(modelToLinework),],
           origin: originFromGridScaff)
       
-      let sideMap = graphViewList(
+      let sideMap = graphViewGenerator(
         build: sizeSide >>> createScaffolding,
         size: sizeFromFullScaffSide,
         composite: [{ $0.sideEdgesNoZeros} >>> curry(modelToTexturesElev)],
