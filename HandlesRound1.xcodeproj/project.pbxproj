@@ -71,6 +71,7 @@
 		D0AEF4602013D507005F761B /* TensionedPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0AEF45F2013D507005F761B /* TensionedPoint.swift */; };
 		D0B218D0201F6491004684FC /* Vertical+HorizontalController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B218CF201F6491004684FC /* Vertical+HorizontalController.swift */; };
 		D0B218D220215E90004684FC /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D0B218D120215E8F004684FC /* Media.xcassets */; };
+		D0B69D262043632D00AEA01B /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = D0B69D252043632D00AEA01B /* GameScene.sks */; };
 		D0B86C65202FC09200CCB3F7 /* ViewFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B86C64202FC09200CCB3F7 /* ViewFunctions.swift */; };
 		D0BAD735204228F700406E70 /* ViewComposite.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BAD734204228F700406E70 /* ViewComposite.swift */; };
 		D0BCAFBB201CDC4300C4EAA5 /* SpriteScaffViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BCAFBA201CDC4300C4EAA5 /* SpriteScaffViewController.swift */; };
@@ -167,6 +168,7 @@
 		D0AEF45F2013D507005F761B /* TensionedPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TensionedPoint.swift; path = GrasshopperRound2/TensionedPoint.swift; sourceTree = SOURCE_ROOT; };
 		D0B218CF201F6491004684FC /* Vertical+HorizontalController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Vertical+HorizontalController.swift"; sourceTree = "<group>"; };
 		D0B218D120215E8F004684FC /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
+		D0B69D252043632D00AEA01B /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
 		D0B86C64202FC09200CCB3F7 /* ViewFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewFunctions.swift; sourceTree = "<group>"; };
 		D0BAD734204228F700406E70 /* ViewComposite.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewComposite.swift; sourceTree = "<group>"; };
 		D0BCAFBA201CDC4300C4EAA5 /* SpriteScaffViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpriteScaffViewController.swift; sourceTree = "<group>"; };
@@ -230,6 +232,7 @@
 				D00069D3200BD08300E8D5F3 /* AppDelegate.swift */,
 				D0B218D120215E8F004684FC /* Media.xcassets */,
 				D0BCAFBA201CDC4300C4EAA5 /* SpriteScaffViewController.swift */,
+				D0B69D252043632D00AEA01B /* GameScene.sks */,
 				D0B69D2420435F3900AEA01B /* SpriteKit */,
 				D04153C3202B9FB400BD7B72 /* View.swift */,
 				D0F09A55201CCD3C00720FD5 /* HandlesView.swift */,
@@ -517,6 +520,7 @@
 				D00069DE200BD08300E8D5F3 /* LaunchScreen.storyboard in Resources */,
 				D00069DB200BD08300E8D5F3 /* Assets.xcassets in Resources */,
 				D0B218D220215E90004684FC /* Media.xcassets in Resources */,
+				D0B69D262043632D00AEA01B /* GameScene.sks in Resources */,
 				D03E040620125DF8002D47F3 /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

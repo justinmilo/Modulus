@@ -15,7 +15,7 @@ import UIKit
 
 
 
-
+import SpriteKit
 
 
 
@@ -63,7 +63,7 @@ class SpriteScaffViewController : UIViewController {
   
   override func loadView() {
     view = UIView()
-    view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(SpriteScaffViewController.swapControl)))
+    view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(SpriteScaffViewController.tap)))
     
     for v in [twoDView, handleView]{ self.view.addSubview(v) }
     
@@ -105,12 +105,43 @@ class SpriteScaffViewController : UIViewController {
   
   
 
+  
+  @objc func tap(g: UIGestureRecognizer)
+  {
+    if self.handleView.lastMaster.contains( (g.location(ofTouch: 0, in: self.view) )  ) {
+      let rect = self.handleView.lastMaster
+      let orign = CGPoint(50, 50)
+      let size = CGSize(rect.width, -rect.height )
+      let globalLabel : SKShapeNode = SKShapeNode(rect: CGRect(origin: orign, size: size))
+      globalLabel.fillColor = .white
+      self.twoDView.scene?.addChild(globalLabel)
+      globalLabel.alpha = 0.0
+      let fadeInOut = SKAction.sequence([
+        .fadeAlpha(to: 0.3, duration: 0.2),
+        .fadeAlpha(to: 0.0,duration: 0.4)])
+      
+      globalLabel.run(fadeInOut, completion: {
+        print("HHHHH")
+      })
+      
+//      let box = UIView(frame: self.handleView.lastMaster)
+//      box.backgroundColor = .white
+//      box.alpha = 3.0
+//      self.view.addSubview(box)
+//
+      
+    }
+    else {
+      
+      changeCompositeStyle()
+    }
+  }
+  
   private var swapIndex = 0
-  @objc func swapControl()
+  func changeCompositeStyle ()
   {
     swapIndex = swapIndex+1 >= loadedViews.count ? 0 : swapIndex+1
     self.editingView = loadedViews[swapIndex]
-    
     buildFromScratch()
   }
   

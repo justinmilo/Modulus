@@ -125,7 +125,7 @@ class HandleViewRound1: UIView {
   var outlines: [AnyLayout<UIView>] = []
   var hideables: [Hideable] = []
   var outerBoundaryView : UIView!
-  var lastMaster : CGRect
+  public var lastMaster : CGRect
 
   
   convenience init(frame: CGRect, state: StateFactory.State, handler: @escaping (CGRect,
