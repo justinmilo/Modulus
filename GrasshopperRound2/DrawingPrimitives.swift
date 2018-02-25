@@ -315,6 +315,22 @@ func dimLeft(_ d: CGFloat) -> ([CGPoint]) -> [Label]
   return { return pairs(between: $0).map(dimStyle) }
 }
 
+func dimension(_ d: CGFloat) -> (BorderPointsImp) -> [Label]
+{
+  // convert handle points to dim points
+  // convert handle points to dim points
+  
+  return { points in
+  let mids : [Label] =
+    points.top |> dimTop(d) +
+      points.right |> dimRight(d) +
+      points.bottom |> dimBottom(d) +
+      points.left |> dimLeft(d)
+  return mids
+  }
+  
+  
+}
 
 func dimPoints3(points: BorderPoints, offset d: CGFloat) -> [Label]
 {

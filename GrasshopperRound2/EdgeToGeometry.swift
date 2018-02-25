@@ -109,6 +109,34 @@ func leftToRightToBorders (ltR: [[CGPoint]]) -> BorderPointsImp
                   left: ltR.map{ $0.first! })
 }
 
+func reduceLargest(a: CGFloat, b: CGFloat) -> CGFloat
+{
+  return a > b ? a : b
+}
+
+func reduceSmallest(a: CGFloat, b: CGFloat) -> CGFloat
+{
+  return a < b ? a : b
+}
+
+typealias Corners = (top: CGFloat, right: CGFloat, bottom:  CGFloat, left: CGFloat)
+
+func borders(from corners: Corners) -> BorderPointsImp
+{
+  let (top, right, bottom, left) = corners
+  return BorderPointsImp(top: [CGPoint(left, top ),
+                               CGPoint(right, top)],
+                         right: [CGPoint(right, bottom ),
+                               CGPoint(right, top)],
+                         bottom: [CGPoint( left, bottom  ),
+                               CGPoint( right, bottom)],
+                         left: [CGPoint(left, bottom ),
+                               CGPoint( left, top)]
+  )
+}
+
+
+
 func leftToRightToBordersArray (ltR: [[CGPoint]]) -> [[CGPoint]]
 {
   return [

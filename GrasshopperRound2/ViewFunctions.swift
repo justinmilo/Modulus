@@ -39,12 +39,6 @@ func bindSize( master: CGRect, size: CGSize, positions: (VerticalPosition, Horiz
   return master.withInsetRect( ofSize: size, hugging:  (positions.0.oposite, positions.1.oposite))
 }
 
-let findOrigin : (CGPoint, CGFloat) -> (CGPoint) = {
-  aligned, adapterHeight in
-  return aligned + unitY * adapterHeight // offsetFromScrewJack
-}
-
-
 
 //
 
@@ -69,7 +63,7 @@ let originFromGridScaff : (ScaffGraph, CGRect, CGFloat) -> CGPoint =
 { (scaff, newRect, boundsHeight) in
   // Find Orirgin
   var origin = (newRect, boundsHeight) |> originSwap
- return ((origin, scaff.boundsOfGrid.1) |>  findOrigin)
+ return ((origin, unitY * -scaff.boundsOfGrid.1) |>  moveByVector)
 }
 let originFromFullScaff : (ScaffGraph, CGRect, CGFloat) -> CGPoint =
 { (graph, newRect, boundsHeight) in
@@ -154,6 +148,24 @@ func graphToNonuniformFront(gp: GraphPositions) -> (CGPoint) -> NonuniformModel2
 func graphToNonuniformSide(gp: GraphPositions) -> (CGPoint) -> NonuniformModel2D
 {
   return { point in NonuniformModel2D(origin: point, rowSizes: Grid(gp.pZ |> posToSeg), colSizes: Grid(gp.pY |> posToSeg)) }
+}
+struct GraphPositionsOrdered2D
+{
+  let x: [CGFloat]
+  let y: [CGFloat]
+  init (x: [CGFloat], y: [CGFloat]) {
+    self.x = x.sorted()
+    self.y = y.sorted()
+  }
+}
+
+func graphToFrontGraph2D(gp: GraphPositions) -> (GraphPositionsOrdered2D)
+{
+  return GraphPositionsOrdered2D(x: gp.pX, y: gp.pZ)
+}
+func graphToCorners(gp: GraphPositionsOrdered2D) -> Corners
+{
+  return (top: gp.y.last!, right: gp.x.last!, bottom: gp.y.first!, left: gp.x.first!)
 }
 
 

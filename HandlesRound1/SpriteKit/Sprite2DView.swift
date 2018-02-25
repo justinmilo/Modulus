@@ -168,7 +168,7 @@ class Sprite2DView : SKView {
     case (.jack,  .longitudinal),
          (.jack,  .cross):
       let node = convertNOROTGeneral(item: item)
-      let     adjujstmentV = CGVector(0, 12.48) * (2.00/1.6476)
+      let     adjujstmentV = CGVector(0, 0) * (2.00/1.6476)
       node.position = node.position + adjujstmentV
       return node
       

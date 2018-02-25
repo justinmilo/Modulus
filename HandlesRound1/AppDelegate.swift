@@ -18,29 +18,6 @@ struct GraphEditingView {
   let composite : (ScaffGraph) -> (CGPoint) -> [Geometry]
   let origin : (ScaffGraph, CGRect, CGFloat) -> CGPoint
 }
-
-
-func opposite(b: Bool) -> Bool { return !b }
-
-
-let front1 : (ScaffGraph) -> (CGPoint) -> [Geometry] = { $0.frontEdgesNoZeros } >>> curry(modelToTexturesElev)
-let front2 : (ScaffGraph) -> (CGPoint) -> [Geometry] = { $0.grid } >>> graphToNonuniformFront >>> dimensons
-let outerInterim : (ScaffGraph) -> [C2Edge] =
-  { ($0.grid, $0.edges) |> frontSection().parse }
-    >>> { $0.filter(fStandard >>> opposite) }
-let outerDimensions =
-  edgesToPoints
-    >>> removeDup
-    >>> leftToRightDict
-    >>> pointDictToArray
-    >>> leftToRightToBorders
-    >>> { return ($0.left |> dimLeft(30.0)) + ($0.right |> dimRight(30.0)) }
-let movedGeometry : ([Geometry]) -> (CGPoint) -> [Geometry] = { g in return {p in return g.map { ($0, p.asVector()) |> move } } }
-let outerDimPlus : (ScaffGraph) -> (CGPoint) -> [Geometry] =
-  outerInterim >>> outerDimensions >>> movedGeometry
-
-let frontFinal = front1 <> front2 <> outerDimPlus
-
 func graphViewGenerator(
   build: @escaping (CGSize) -> (GraphPositions, [Edge]),
   size : @escaping (ScaffGraph) -> CGSize,
@@ -57,6 +34,13 @@ func graphViewGenerator(
 }
 
 
+
+
+func opposite(b: Bool) -> Bool { return !b }
+
+
+
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -70,10 +54,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
       self.window?.makeKeyAndVisible()
       
-      
-      
-      let postis = CGSize3(width: 100, depth: 100, elev: 100) |> createGrid
-      let graph = ScaffGraph(grid: postis.0, edges: postis.1)
+      let initial = CGSize3(width: 100, depth: 100, elev: 100) |> createGrid
+      let graph = ScaffGraph(grid: initial.0, edges: initial.1)
+      // graph is passed passed by reference here ...
       let sizePlan : (CGSize) -> CGSize3 = { CGSize3(width: $0.width, depth: $0.height, elev: graph.bounds.elev) }
       let sizePlanRotated : (CGSize) -> CGSize3 = { CGSize3(width: $0.height, depth: $0.width, elev: graph.bounds.elev) }
       let sizeFront : (CGSize) -> CGSize3 = { CGSize3(width: $0.width, depth: graph.bounds.depth, elev: $0.height) }
@@ -83,8 +66,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         build: sizePlan >>> createScaffolding,
         size: sizeFromPlanScaff,
         composite: [finalDimComp,
-                    planGridsToDimensions,
-                    frontFinal],
+                    planGridsToDimensions],
         origin: originFromFullScaff)
       
       let planMapRotated = graphViewGenerator(
@@ -97,21 +79,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         build: sizeFront >>> createScaffolding,
         size: sizeFromFullScaff,
         composite: [front1,
-                    frontFinal,
+                    front1 <> frontDim,
+                    front1 <> frontDim <> frontOuterDimPlus,
+                    front1 <> frontDim <> frontOuterDimPlus <> frontOverall,
                     { $0.frontEdgesNoZeros } >>> curry(modelToLinework)],
         origin: originFromFullScaff)
         +
         graphViewGenerator(
           build: sizeFront >>> createGrid,
           size: sizeFromGridScaff,
-          composite: [{ $0.frontEdgesNoZeros } >>> curry(modelToTexturesElev),
+          composite: [front1,
                       { $0.frontEdgesNoZeros } >>> curry(modelToLinework),],
           origin: originFromGridScaff)
       
       let sideMap = graphViewGenerator(
         build: sizeSide >>> createScaffolding,
         size: sizeFromFullScaffSide,
-        composite: [{ $0.sideEdgesNoZeros} >>> curry(modelToTexturesElev)],
+        composite: [side1,
+                    side1 <> sideDim,
+                    side1 <> sideDim <> sideDoubleDim],
         origin: originFromFullScaff)
       
       let uL = SpriteScaffViewController(graph: graph, mapping: planMap)

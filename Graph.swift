@@ -506,6 +506,20 @@ func frontEdge(edge:Edge)-> Bool
 }
 }
 
+// Front edge has the same 0 y index
+func sideEdge(edge:Edge)-> Bool
+{
+  switch(edge.p1, edge.p2)
+  {
+    // Same edge has the same 0 y index
+  //    (x,y,z)
+  case ((0,_,_), (0,_,_)):
+    return true
+  default:
+    return false
+  }
+}
+
 func frontSection() -> Parse<[C2Edge]>
 {
   return Parse { (graphC) -> [C2Edge] in
@@ -513,6 +527,15 @@ func frontSection() -> Parse<[C2Edge]>
     return (graphC.0, items) |> cedges >>> front
   }
 }
+
+func sideSection() -> Parse<[C2Edge]>
+{
+  return Parse { (graphC) -> [C2Edge] in
+    let items = graphC.1.filter(sideEdge)
+    return (graphC.0, items) |> cedges >>> side
+  }
+}
+
 
 extension C2Edge : CustomStringConvertible {
     var description : String { return "\(content) \(p1), -> \t\t\t \(p2)\n"}
