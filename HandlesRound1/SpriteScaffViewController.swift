@@ -108,11 +108,17 @@ class SpriteScaffViewController : UIViewController {
   
   @objc func tap(g: UIGestureRecognizer)
   {
+    func swapForSprite(b: CGRect, height: CGFloat) -> CGRect
+    {
+      return CGRect(x:b.x , y: height - b.y, width: b.width, height: b.height)
+    }
+    
     if self.handleView.lastMaster.contains( (g.location(ofTouch: 0, in: self.view) )  ) {
       let rect = self.handleView.lastMaster
+      
       let orign = CGPoint(50, 50)
       let size = CGSize(rect.width, -rect.height )
-      let globalLabel : SKShapeNode = SKShapeNode(rect: CGRect(origin: orign, size: size))
+      let globalLabel : SKShapeNode = SKShapeNode(rect:swapForSprite(b: rect, height: self.view.bounds.height))
       globalLabel.fillColor = .white
       self.twoDView.scene?.addChild(globalLabel)
       globalLabel.alpha = 0.0
@@ -124,11 +130,29 @@ class SpriteScaffViewController : UIViewController {
         print("HHHHH")
       })
       
-//      let box = UIView(frame: self.handleView.lastMaster)
-//      box.backgroundColor = .white
-//      box.alpha = 3.0
-//      self.view.addSubview(box)
-//
+     let box = UIView(frame: self.handleView.lastMaster)
+     box.backgroundColor = .white
+     box.alpha = 0.0
+      self.view.addSubview(box)
+      UIView.animate(withDuration: 0.3, animations:
+        {
+          box.alpha = 0.3
+      }, completion:
+        { (completed) in
+          UIView.animate(withDuration: 0.3, delay: 0, options: [], animations:
+            {
+              box.alpha = 0.0
+              
+              box.removeFromSuperview()
+              
+          }, completion:
+            { (completed) in
+              
+          }
+          )
+      }
+      )
+
       
     }
     else {
