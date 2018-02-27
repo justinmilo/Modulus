@@ -16,6 +16,34 @@ struct GraphPositions
   var pZ : [CGFloat]
 }
 
+struct GraphPositionsSorted
+{
+  let pX : [CGFloat]
+  let pY : [CGFloat]
+  let pZ : [CGFloat]
+  
+  init(pX : [CGFloat],
+       pY : [CGFloat],
+       pZ : [CGFloat]
+    ) {
+    self.pX = pX.sorted()
+    self.pY = pY.sorted()
+    self.pZ = pZ.sorted()
+  }
+}
+struct GraphPositions2DSorted
+{
+  let pX : [CGFloat]
+  let pY : [CGFloat]
+  
+  init(pX : [CGFloat],
+       pY : [CGFloat]
+    ) {
+    self.pX = pX.sorted()
+    self.pY = pY.sorted()
+  }
+}
+
 func segToPos ( seg: [CGFloat] ) -> [CGFloat]
 {
   // Without Origin we assume zero. first position is either origin or zero

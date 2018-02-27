@@ -13,6 +13,7 @@ let front1 : ViewComposite = { $0.frontEdgesNoZeros } >>> curry(modelToTexturesE
 let frontDim : ViewComposite = { $0.grid } >>> graphToNonuniformFront >>> dimensons
 let frontEdges : (ScaffGraph) -> [C2Edge] = { ($0.grid, $0.edges) |> frontSection().parse }
 let removedStandards : ([C2Edge]) -> [C2Edge] = { $0.filter(fStandard >>> opposite) }
+let frontPointsWOutStandards = frontEdges >>> removedStandards >>> edgesToPoints
 let outerDimensions =
   edgesToPoints
     >>> removeDup
