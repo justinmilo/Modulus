@@ -111,6 +111,18 @@ extension CGPoint : Geometry{
   }
 }
 
+extension CGRect : Geometry {
+  var position : CGPoint {
+    get {
+      return origin
+    }
+    set {
+      self.origin = newValue
+    }
+  }
+}
+
+
 
 // Grid
 struct EdgeCollection{

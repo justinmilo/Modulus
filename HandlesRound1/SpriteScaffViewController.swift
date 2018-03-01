@@ -127,91 +127,35 @@ class SpriteScaffViewController : UIViewController {
     buildFromScratch()
   }
   
+  
   func highlightCell (touch: CGPoint) {
-    func spriteRect(b: CGRect, height: CGFloat) -> CGRect
-    {
-      let r = CGRect(x:b.x ,
-                     y: height - b.y,
-                     width: b.width,
-                     height: -b.height).standardized
-      return r
-    }
-    func spriteY(y: CGFloat, height: CGFloat) -> CGFloat
-    {
-      return height - y
-    }
-    func spritePoint(point: CGPoint, height: CGFloat) -> CGPoint {
-      return CGPoint(x: point.x, y: height - point.y )
-    }
     
-    func mirrorVertically(point: CGPoint, along y: CGFloat) -> CGPoint {
-      let delta = y - point.y
-      let newOriginY = y + delta
-      return CGPoint(x: point.x, y: newOriginY)
-    }
-    func mirrorVertically(rect: CGRect, along y: CGFloat) -> CGRect {
-      let delta = y - rect.origin.y
-      let newOriginY = y + delta
-      print(delta)
-      print(newOriginY)
-      let newRect = CGRect(x: rect.x, y: newOriginY, width: rect.width, height: -rect.height)
-      print(newRect)
-      print(newRect.standardized)
-      return newRect.standardized
-    }
+    // bind values to these functions
+    let rectToSprite = self.twoDView.bounds.height |> curry(uiToSprite(height:rect:))
+    let pointToSprite = self.twoDView.bounds.height |> curry(uiToSprite(height:point:))
+    let yToSprite = self.twoDView.bounds.height |> curry(uiToSprite(height:y:))
     
-    
-    let pointToCell : (CGPoint) -> CGRect
-    let viewToModel : (CGPoint, CGRect) -> (CGPoint) = {
-      return CGPoint( $0.x - $1.origin.x, $0.y - $1.origin.y)
-    }
-    let gridTap : (CGPoint, GraphPositions2DSorted) -> (Int?, Int?) =
-    {
-      func middle( check: CGFloat, values: [CGFloat] ) -> Int?
-      {
-        return Array(zip(values, values.dropFirst())).index{ (a1, a2) -> Bool in
-          print(a1, check, a2 )
-          return a1 < check && check < a2
 
-        }
-      }
-      
-      return ( ($0.x, $1.pX) |> middle,
-               ($0.y, $1.pY) |> middle)
-    }
-    let cellRect : ((Int, Int), GraphPositions2DSorted) -> (CGRect) = {
-      i, pos in
-      return CGPoint(pos.pX[i.0], pos.pY[i.1]) + CGPoint(pos.pX[i.0 + 1], pos.pY[i.1 + 1])
-    }
-    func handleTupleOptionOrFail<A>(a:(Optional<A>, Optional<A>)) -> (A,A) {
-      if let v1 = a.0, let v2 = a.1 {
-        return (v1, v2)
-      }
-      else {
-        fatalError()
-      }
-    }
-    let frontGraphSorted : (GraphPositions) -> GraphPositions2DSorted = {
-      return GraphPositions2DSorted.init(pX: $0.pX, pY: $0.pZ)
-    }
+    // Properly Controllers concern
+    let tS = touch |> pointToSprite
+    let rectS = self.handleView.lastMaster |> rectToSprite
+    let p = (tS, rectS) |> viewSpaceToModelSpace
     
-    pointToCell = { p1 in
-      print("-")
-      let y = (p1, self.twoDView.bounds.height) |> spritePoint
-      let rect = ( self.handleView.lastMaster, self.twoDView.bounds.height) |> spriteRect
-      let p = viewToModel( y, rect)
-      let c = (p, self.graph.grid |> frontGraphSorted) |> gridTap >>> handleTupleOptionOrFail
-      let x = (c, self.graph.grid |> frontGraphSorted) |> cellRect
-      let z = (x, self.handleView.lastMaster.origin.asVector()) |> moveByVector
-      return z
-    }
+    // Properly models concern
+    let editBoundaries = self.graph |> frontPositionsOhneStandards /// editingView.parseGrid
+    let toGridIndices = editBoundaries |> curry(pointToGridIndices) >>>  handleTupleOptionOrFail
     
-    let cellRectValue = (pointToCell(touch), self.twoDView.bounds.height) |> spriteRect
-    let y = (self.handleView.lastMaster.midY, self.twoDView.bounds.height) |> spriteY
-    let line = Line(start: CGPoint(0, y), end: CGPoint(400, y))
-    let point = Line(start: (cellRectValue.origin, unitX * 10) |> moveByVector,
-                    end:  (cellRectValue.origin, unitX * -10) |> moveByVector)
-    twoDView.addChildR(line);  twoDView.addChildR(point);
+    let c = (p |> toGridIndices)
+    // c is something lik (0, 1)
+    // or (1, 2)
+    let x = (c, editBoundaries) |> modelRect
+    // x is something like (0.0, 30.0, 100.0, 100.0)
+    // (0.0, 0.0, 100.0, 30.0)
+    print(c)
+    
+    let z = (x, self.handleView.lastMaster.origin.asVector()) |> moveByVector
+    let cellRectValue = z |> rectToSprite
+    let y = self.handleView.lastMaster.midY |> yToSprite
     let flippedRect = (cellRectValue, y ) |> mirrorVertically
     
     func addTempRect( rect: CGRect, color: UIColor) {
@@ -223,23 +167,14 @@ class SpriteScaffViewController : UIViewController {
         .fadeAlpha(to: 0.3, duration: 0.2),
         .fadeAlpha(to: 0.0,duration: 0.4)])
       globalLabel.run(fadeInOut, completion: {
-        print("HHHHH")
+        print("End and Fade Out")
       })
     }
     
-    // t raddTempRect(rect: cellRectValue, color: .white)
-    addTempRect(rect: flippedRect, color: .yellow)
+    addTempRect(rect: flippedRect, color: .white)
     
   }
   
 }
-extension CGRect : Geometry {
-  var position : CGPoint {
-    get {
-      return origin
-    }
-    set {
-      self.origin = newValue
-    }
-  }
-}
+
+

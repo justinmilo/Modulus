@@ -11,9 +11,20 @@ typealias ViewComposite = (ScaffGraph) -> (CGPoint) -> [Geometry]
 
 let front1 : ViewComposite = { $0.frontEdgesNoZeros } >>> curry(modelToTexturesElev)
 let frontDim : ViewComposite = { $0.grid } >>> graphToNonuniformFront >>> dimensons
+
 let frontEdges : (ScaffGraph) -> [C2Edge] = { ($0.grid, $0.edges) |> frontSection().parse }
 let removedStandards : ([C2Edge]) -> [C2Edge] = { $0.filter(fStandard >>> opposite) }
 let frontPointsWOutStandards = frontEdges >>> removedStandards >>> edgesToPoints
+
+
+func positionsIn(edges: [C2Edge]) -> GraphPositions2DSorted {
+  return GraphPositions2DSorted(
+    pX: edges.flatMap{ [$0.p1.x] + [$0.p2.x] } |> removeDup,
+    pY: edges.flatMap{ [$0.p1.y] + [$0.p2.y] } |> removeDup
+)
+}
+let frontPositionsOhneStandards = frontEdges >>> removedStandards >>> positionsIn
+
 let outerDimensions =
   edgesToPoints
     >>> removeDup
