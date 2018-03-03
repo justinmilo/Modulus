@@ -104,7 +104,7 @@ struct Parse<A>
 }
 
 extension Edge : CustomStringConvertible {
-  var description : String { return "\(p1.xI),\(p1.yI),\(p1.zI), -> \(p2.xI),\(p2.yI),\(p2.zI)\n"}
+  var description : String { return "\(p1.xI),\(p1.yI),\(p1.zI), -> \(p2.xI),\(p2.yI),\(p2.zI)    : \(content) \(p2.zI - p1.zI) \n"}
 }
 
 extension Point3 : CustomStringConvertible {
