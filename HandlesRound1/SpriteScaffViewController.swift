@@ -70,7 +70,7 @@ class SpriteScaffViewController : UIViewController {
     self.handleView.handler =    {
       master, positions in
        // Create New Model &  // Find Orirgin
-      (self.graph.grid, self.graph.edges) = (master.size |> self.editingView.build)
+      (self.graph.grid, self.graph.edges) = (master.size, self.graph.edges) |> self.editingView.build
       let size = self.graph |> self.editingView.size
       let newRect = (master, size, positions) |> bindSize
       
@@ -80,7 +80,7 @@ class SpriteScaffViewController : UIViewController {
     self.handleView.completed = {
       master, positions in
       // Create New Model
-      (self.graph.grid, self.graph.edges) = (master.size |> self.editingView.build)
+      (self.graph.grid, self.graph.edges) = (master.size, self.graph.edges) |> self.editingView.build
       let size = self.graph |> self.editingView.size
       let  newRect = (master, size, positions) |> bindSize
       

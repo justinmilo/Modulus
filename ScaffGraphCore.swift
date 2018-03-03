@@ -9,14 +9,23 @@
 import CoreGraphics
 
 
-func createScaffolding(with bounding: CGSize3) -> (GraphPositions, [Edge])
-{
-  let graphSegments = GraphSegments(
+//  - 50 -
+//  |
+//  50
+//  |
+
+func generateSegments(for bounding: CGSize3) -> GraphSegments {
+  return GraphSegments(
     sX: ([50, 100, 150, 200], bounding.width) |> maximumRepeated,
     sY: ([50, 100, 150, 200], bounding.depth) |> maximumRepeated,
     // sZ is the ledger bays not the standards
     sZ: ([50, 100, 150, 200], bounding.elev) |> maximumRepeatedWithR |> { [$0.1] + $0.0 }
   )
+}
+
+func createScaffolding(with bounding: CGSize3) -> (GraphPositions, [Edge])
+{
+  let graphSegments = bounding |> generateSegments
   let s = ScaffGraph( grid : graphSegments |> segToPos, edges : [] )
   s.addScaff()
   return (s.grid, s.edges)
@@ -35,6 +44,21 @@ func createGrid(with bounding: CGSize3) -> (GraphPositions, [Edge])
   s.addScaff()
   return (s.grid, s.edges)
 }
+
+func createGrid(with bounding: CGSize3, existing edges: [Edge]) -> (GraphPositions, [Edge])
+{
+  let screwJack : [CGFloat] = [30]
+  let graphSegments = GraphSegments(
+    sX: ([50, 100, 150, 200], bounding.width) |> maximumRepeated,
+    sY: ([50, 100, 150, 200], bounding.depth) |> maximumRepeated,
+    // sZ is the ledger bays not the standards
+    sZ: ([50, 100, 150, 200], bounding.elev) |> maximumRepeated |> { screwJack + $0  }
+  )
+  let s = ScaffGraph( grid : graphSegments |> segToPos, edges : [] )
+  s.addScaff()
+  return (s.grid, s.edges)
+}
+
 
 
 extension ScaffGraph

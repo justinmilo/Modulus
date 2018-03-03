@@ -188,6 +188,14 @@ func posToSeg ( pos: GraphPositions ) -> GraphSegments
     sZ: pos.pZ |> posToSeg)
 }
 
+func maxEdges ( pos: GraphPositions) -> PointIndex
+{
+  return (pos.pX.count, pos.pY.count, pos.pZ.count)
+}
+
+
+
+
 func segToPos ( seg: [CGFloat] ) -> [CGFloat]
 {
   // Without Origin we assume zero. first position is either origin or zero
@@ -251,5 +259,29 @@ func dropBottomZBay( position: GraphPositions ) -> GraphPositions
 }
 
 
+func filterBelow (max: PointIndex, point:PointIndex) -> Bool
+{
+  // max a count semantic so
+  // [1,1] = count 2, 2 is greater than
+  if point.xI >= max.xI {
+    return false
+  }
+  if point.yI >= max.yI {
+    return false
+  }
+  if point.zI >= max.zI {
+    return false
+  }
+  return true
+}
+func filterEdgeBelow (max:@escaping (PointIndex) -> Bool) -> (Edge) -> Bool
+{
+  return { edge in
+    return edge.p2 |> max && edge.p1 |> max
+  }
+}
 
-
+func filter<A>(_ t: (A)->Bool, _ array: [A]) -> [A]
+{
+  return array.filter(t)
+}
