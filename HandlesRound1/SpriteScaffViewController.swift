@@ -179,32 +179,28 @@ class SpriteScaffViewController : UIViewController {
    
     let cHey = curry(indicesToPositions)
     let boundPositions = editBoundaries |> cHey
-    let finalT = boundPositions >>> CGPoint.init(x:y:) >>> boundOrigin >>> boundMirror
+//    let finalT = boundPositions >>> CGPoint.init(x:y:) >>> boundOrigin >>> boundMirror
     
     let (p1, p2) = lowToHigh(gIndex: c)
-    let line = (p1 |> finalT, p2 |> finalT) |> Line.init
     let (p1x, p2x) = highToLow(gIndex: c)
-    let line2 = (p1x |> finalT, p2x |> finalT) |> Line.init
     
     
-    let boundContains = self.graph.edges |> curry(contains(edges:new:))
-    let boundAdd = self.graph.edges |> curry(add(edges:new:))
+//    let boundContains = self.graph.edges |> curry(contains(edges:new:))
+//    let boundAdd = self.graph.edges |> curry(add(edges:new:))
     
     
     let frontPoint2Dto3D : (PointIndex2D, Int) -> [PointIndex] = { (p,max) in
-      return  (0..<max).map{ (p.x, p.y, $0)}
+      return  (0..<max).map{ (p.x, $0, p.y)}
     }
     let boundFront = graph.grid.pY.count |> flip(curry(frontPoint2Dto3D))
     
-    let items = zip(p1 |> boundFront, p2 |> boundFront).map{
+    let items = zip(p1x |> boundFront, p2x |> boundFront).map{
       return Edge(content: "Diag", p1: $0.0, p2: $0.1)
     }
     self.graph.edges = self.graph.edges + items
     
-
+    buildFromScratch()
     addTempRect(rect: flippedRect, color: .white)
-    self.twoDView.addChildR(line)
-    
   }
   
 }

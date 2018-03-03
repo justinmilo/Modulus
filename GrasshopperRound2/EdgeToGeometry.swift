@@ -292,8 +292,13 @@ func modelToTexturesElev ( edges: [C2Edge], origin: CGPoint) -> [Geometry]
     return Scaff2D(start: $0.p1 ,
                    end: $0.p2, part: .jack, view: .longitudinal)
   }
+  let diag = edges.filter{ $0.content == "Diag"}.map
+  {
+    return Scaff2D(start: $0.p1 ,
+                   end: $0.p2, part: .diag, view: .longitudinal)
+  }
   
-  let combined = horizontals + verticals + base + jack
+  let combined = horizontals + verticals + base + jack + diag
   
   let thirdPass : [Geometry] = (combined, origin.asVector()) |> moveGroup
   
@@ -307,6 +312,7 @@ struct Scaff2D {
     case ledger
     case basecollar
     case jack
+    case diag
     case standard
   }
   enum DrawingType

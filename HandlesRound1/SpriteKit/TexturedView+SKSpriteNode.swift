@@ -17,6 +17,8 @@ let descriptionScaff : (Scaff2D.ScaffType) -> String =
   case .jack: return "Jack"
   case .standard: return "Standard"
   case .basecollar: return "Basecollar"
+  case .diag:
+    return "Diag"
   }
 }
 let descriptionDrawing : (Scaff2D.DrawingType) -> String =

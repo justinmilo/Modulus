@@ -142,19 +142,28 @@ class Sprite2DView : SKView {
     return ledgerNode
   }
   
-  func createScaff2DNode (item: Scaff2D) -> SKSpriteNode?
+  func createScaff2DNode (item: Scaff2D) -> SKNode?
   {
     switch (item.part,  item.view) {
     case (.ledger, .plan): return convertGeneral(item: item)
     case (.standard,  .plan): return convertGeneral(item: item)
     case (.jack,  .plan): return nil
     case (.basecollar, .plan): return nil
+    case (.diag, .plan): return convertGeneral(item: item)
       
     case (.ledger, .longitudinal),
          (.ledger, .cross):
       let node = convertNOROTGeneral(item: item)
       let adjujstmentV = CGVector(0, -1.44) * (2.00/1.6476)
       node.position = node.position + adjujstmentV
+      return node
+      
+    case (.diag, .longitudinal),
+         (.diag, .cross):
+      let cgPath = CGMutablePath()
+      cgPath.move(to: item.start)
+      cgPath.addLine(to: item.end)
+      let node = SKShapeNode(path: cgPath)
       return node
       
     case (.standard,  .longitudinal),
