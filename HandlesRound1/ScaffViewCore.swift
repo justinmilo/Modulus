@@ -8,6 +8,31 @@
 
 import CoreGraphics
 
+func lowToHigh(gIndex: (x: Int,y:Int))->
+  ( p1:(x:Int, y: Int),
+  p2:( x:Int, y:Int))
+{
+  let xBoundaries = gIndex.x |> boundaries
+  let yBoundaries = gIndex.y |> boundaries
+  return (p1: (x: xBoundaries.0, y: yBoundaries.0),
+          p2: (x: xBoundaries.1, y: yBoundaries.1))
+}
+func highToLow(gIndex: (x: Int,y:Int))->
+  ( p1:(x:Int, y: Int),
+  p2:( x:Int, y:Int))
+{
+  let xBoundaries = gIndex.x |> boundaries
+  let yBoundaries = gIndex.y |> boundaries
+  return (p1: (x: xBoundaries.0, y: yBoundaries.1),
+          p2: (x: xBoundaries.1, y: yBoundaries.0))
+}
+func boundaries(index: Int)->(Int, Int)
+{
+  return (index, index+1)
+}
+
+
+
 
 func uiToSprite(height: CGFloat, rect: CGRect) -> CGRect
 {
@@ -62,6 +87,14 @@ func handleTupleOptionOrFail<A>(a:(Optional<A>, Optional<A>)) -> (A,A) {
   }
   else {
     fatalError()
+  }
+}
+func handleTupleOptionWith(a:(Optional<Int>, Optional<Int>)) -> (Int,Int) {
+  if let v1 = a.0, let v2 = a.1 {
+    return (v1, v2)
+  }
+  else {
+    return (0,0)
   }
 }
 let frontGraphSorted : (GraphPositions) -> GraphPositions2DSorted = {

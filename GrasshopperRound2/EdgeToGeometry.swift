@@ -158,10 +158,10 @@ let dimensioning: (PointCollection, CGFloat ) -> [Label] =
   
   let on : CGFloat = 1/3
   
-  let oTop = centers(between: topC ).map(moveByVector).map{ $0(unitY * (on * d)) }.map(pointToLabel)
-  let oRight = centers(between: rightC).map(moveByVector).map{ $0(unitX * (on * d)) }.map(pointToLabel).map(swapRotation) // Fixme repeats above
-  let oBottom = centers(between: bottomC).map(moveByVector).map{ $0(unitY * -(on * d)) }.map(pointToLabel)
-  let oLeft = centers(between: leftC).map(moveByVector).map{ $0(unitX * -(on * d)) }.map(pointToLabel).map(swapRotation)
+  let oTop = centers(between: topC ).map(moveByVectorCurried).map{ $0(unitY * (on * d)) }.map(pointToLabel)
+  let oRight = centers(between: rightC).map(moveByVectorCurried).map{ $0(unitX * (on * d)) }.map(pointToLabel).map(swapRotation) // Fixme repeats above
+  let oBottom = centers(between: bottomC).map(moveByVectorCurried).map{ $0(unitY * -(on * d)) }.map(pointToLabel)
+  let oLeft = centers(between: leftC).map(moveByVectorCurried).map{ $0(unitX * -(on * d)) }.map(pointToLabel).map(swapRotation)
   
   
   let overallDimes : [Label] = zip(oTop, distance(between: topC)).map(helperJoin) +

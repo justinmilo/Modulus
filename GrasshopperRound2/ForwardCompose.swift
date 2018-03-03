@@ -123,7 +123,15 @@ func tuple<A,B,C>(_ t: @escaping (A,B)->C)->((A,B))->C
   }
 }
 
+func flip<A,B,C>(_ t: @escaping (A) -> (B) -> C) -> (B)->(A)->(C)
+{
+    return { b in return { a in return t(a)(b) }}
+}
 
+
+func map<A, B>(_ t: @escaping (A) -> B, _ items: [A]) -> [B] {
+  return items.map(t)
+}
 
 import SpriteKit
 

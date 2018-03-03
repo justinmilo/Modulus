@@ -127,8 +127,10 @@ class SpriteScaffViewController : UIViewController {
     buildFromScratch()
   }
   
-  
+  private var swapIndex2 = 0
   func highlightCell (touch: CGPoint) {
+    
+    
     
     // bind values to these functions
     let rectToSprite = self.twoDView.bounds.height |> curry(uiToSprite(height:rect:))
@@ -142,8 +144,8 @@ class SpriteScaffViewController : UIViewController {
     let p = (tS, rectS) |> viewSpaceToModelSpace
     
     // Properly models concern
-    let editBoundaries = self.graph |> frontPositionsOhneStandards /// editingView.parseGrid
-    let toGridIndices = editBoundaries |> curry(pointToGridIndices) >>>  handleTupleOptionOrFail
+    let editBoundaries = self.graph |> editingView.parseEditBoundaries ///
+    let toGridIndices = editBoundaries |> curry(pointToGridIndices) >>>  handleTupleOptionWith
     
     let c = (p |> toGridIndices)
     // c is something lik (0, 1)
@@ -152,11 +154,12 @@ class SpriteScaffViewController : UIViewController {
     // x is something like (0.0, 30.0, 100.0, 100.0)
     // (0.0, 0.0, 100.0, 30.0)
     print(c)
+    print(x)
     
     let z = (x, self.handleView.lastMaster.origin.asVector()) |> moveByVector
     let cellRectValue = z |> rectToSprite
     let y = self.handleView.lastMaster.midY |> yToSprite
-    let flippedRect = (cellRectValue, y ) |> mirrorVertically
+    let flippedRect = (cellRectValue, y )  |> mirrorVertically
     
     func addTempRect( rect: CGRect, color: UIColor) {
       let globalLabel = SKShapeNode(rect: rect )
@@ -171,10 +174,40 @@ class SpriteScaffViewController : UIViewController {
       })
     }
     
+    let boundOrigin = self.handleView.lastMaster.origin.asVector() |> flip(moveByVectorCurried) >>> pointToSprite
+    let boundMirror = y |> flip(curry(mirrorVertically(point:along:)))
+   
+    let cHey = curry(indicesToPositions)
+    let boundPositions = editBoundaries |> cHey
+    let finalT = boundPositions >>> CGPoint.init(x:y:) >>> boundOrigin >>> boundMirror
+    
+    let (p1, p2) = lowToHigh(gIndex: c)
+    let line = (p1 |> finalT, p2 |> finalT) |> Line.init
+    let (p1x, p2x) = highToLow(gIndex: c)
+    let line2 = (p1x |> finalT, p2x |> finalT) |> Line.init
+    
+    
+    let boundContains = self.graph.edges |> curry(contains(edges:new:))
+    let boundAdd = self.graph.edges |> curry(add(edges:new:))
+    
+    
+    let frontPoint2Dto3D : (PointIndex2D, Int) -> [PointIndex] = { (p,max) in
+      return  (0..<max).map{ (p.x, p.y, $0)}
+    }
+    let boundFront = graph.grid.pY.count |> flip(curry(frontPoint2Dto3D))
+    
+    let items = zip(p1 |> boundFront, p2 |> boundFront).map{
+      return Edge(content: "Diag", p1: $0.0, p2: $0.1)
+    }
+    self.graph.edges = self.graph.edges + items
+    
+
     addTempRect(rect: flippedRect, color: .white)
+    self.twoDView.addChildR(line)
     
   }
   
 }
 
+typealias PointIndex2D = (x:Int, y:Int)
 

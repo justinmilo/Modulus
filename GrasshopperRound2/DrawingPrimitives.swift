@@ -62,6 +62,19 @@ struct Line : Geometry {
   }
   init(start: Geometry, end:Geometry) { self.start = start.position; self.end = end.position}
 }
+extension Line {
+  init( p1:(CGFloat,CGFloat),
+        p2:(CGFloat,CGFloat)) {
+    start = p1 |> CGPoint.init(x:y:);
+  end = p2 |> CGPoint.init(x:y:)}
+  
+  init( p1:CGPoint,
+        p2:CGPoint) {
+    start = p1
+    end = p2
+  }
+}
+
 
 struct StrokedLine : Geometry {
   var line : Line
@@ -256,10 +269,10 @@ func dimPoints<T: Geometry>(points:[[T]], offset d: CGFloat) -> [Label]
   // convert handle points to dim points
   // convert handle points to dim points
   let off : CGFloat = 2/3
-  let topM = centers(between: points[0]).map(moveByVector).map{ $0(unitY * (-off * d)) }.map(pointToLabel) // Fixme repeats below
-  let leftM = centers(between: points[1]).map(moveByVector).map{ $0(unitX * (-d * off)) }.map(pointToLabel).map(swapRotation)
-  let bottomM = centers(between: points[2]).map(moveByVector).map{ $0(unitY * (d*off)) }.map(pointToLabel)
-  let rightM = centers(between: points[3]).map(moveByVector).map{ $0(unitX * (d*off)) }.map(pointToLabel).map(swapRotation)
+  let topM = centers(between: points[0]).map(moveByVectorCurried).map{ $0(unitY * (-off * d)) }.map(pointToLabel) // Fixme repeats below
+  let leftM = centers(between: points[1]).map(moveByVectorCurried).map{ $0(unitX * (-d * off)) }.map(pointToLabel).map(swapRotation)
+  let bottomM = centers(between: points[2]).map(moveByVectorCurried).map{ $0(unitY * (d*off)) }.map(pointToLabel)
+  let rightM = centers(between: points[3]).map(moveByVectorCurried).map{ $0(unitX * (d*off)) }.map(pointToLabel).map(swapRotation)
   
   let mids : [Label] =
     zip(topM, widths(between: points[0])).map(helperJoin) +
@@ -278,10 +291,10 @@ func dimPoints2<T: Geometry>(points: [[T]], offset d: CGFloat) -> [Label]
 {
   // convert handle points to dim points
   // convert handle points to dim points
-  let topM = centers(between: points[0]).map(moveByVector).map{ $0(unitY * d) }.map(pointToLabel) // Fixme repeats below
-  let rightM = centers(between: points[1]).map(moveByVector).map{ $0(unitX * d) }.map(pointToLabel).map(swapRotation)
-  let bottomM = centers(between: points[2]).map(moveByVector).map{ $0(unitY * -d) }.map(pointToLabel)
-  let leftM = centers(between: points[3]).map(moveByVector).map{ $0(unitX * -d) }.map(pointToLabel).map(swapRotation)
+  let topM = centers(between: points[0]).map(moveByVectorCurried).map{ $0(unitY * d) }.map(pointToLabel) // Fixme repeats below
+  let rightM = centers(between: points[1]).map(moveByVectorCurried).map{ $0(unitX * d) }.map(pointToLabel).map(swapRotation)
+  let bottomM = centers(between: points[2]).map(moveByVectorCurried).map{ $0(unitY * -d) }.map(pointToLabel)
+  let leftM = centers(between: points[3]).map(moveByVectorCurried).map{ $0(unitX * -d) }.map(pointToLabel).map(swapRotation)
 
   
   let mids : [Label] =

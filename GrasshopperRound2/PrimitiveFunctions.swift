@@ -69,7 +69,7 @@ func moveByVector2<T : Geometry >(_ initialNode: T, _ vector:CGVector) -> (T, CG
 func moveByVector<T: Geometry> (initialNode: T, vector: CGVector) -> T
 { return moveByVector2(initialNode, vector).0 }
 
-func moveByVector<T: Geometry> (initialNode: T) -> (CGVector) -> T
+func moveByVectorCurried<T: Geometry> (initialNode: T) -> (CGVector) -> T
 {
   return { moveByVector(initialNode: initialNode, vector: $0) }
 }

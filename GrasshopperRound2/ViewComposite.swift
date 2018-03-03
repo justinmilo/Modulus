@@ -13,9 +13,12 @@ let front1 : ViewComposite = { $0.frontEdgesNoZeros } >>> curry(modelToTexturesE
 let frontDim : ViewComposite = { $0.grid } >>> graphToNonuniformFront >>> dimensons
 
 let frontEdges : (ScaffGraph) -> [C2Edge] = { ($0.grid, $0.edges) |> frontSection().parse }
+let sideEdges : (ScaffGraph) -> [C2Edge] = { ($0.grid, $0.edges) |> sideSection().parse }
+let planEdges : (ScaffGraph) -> [C2Edge] = { ($0.grid, $0.edges) |> planSection().parse }
 let removedStandards : ([C2Edge]) -> [C2Edge] = { $0.filter(fStandard >>> opposite) }
 let frontPointsWOutStandards = frontEdges >>> removedStandards >>> edgesToPoints
-
+let sidePointsWOutStandards = sideEdges >>> removedStandards >>> edgesToPoints
+let planPoint = planEdges >>> edgesToPoints
 
 func positionsIn(edges: [C2Edge]) -> GraphPositions2DSorted {
   return GraphPositions2DSorted(
@@ -24,6 +27,9 @@ func positionsIn(edges: [C2Edge]) -> GraphPositions2DSorted {
 )
 }
 let frontPositionsOhneStandards = frontEdges >>> removedStandards >>> positionsIn
+let sidePositionsOhneStandards = sideEdges >>> removedStandards >>> positionsIn
+let planPositions = sideEdges >>> removedStandards >>> positionsIn
+
 
 let outerDimensions =
   edgesToPoints
@@ -35,8 +41,6 @@ let outerDimensions =
 let movedGeometry : ([Geometry]) -> (CGPoint) -> [Geometry] = { g in return {p in return g.map { ($0, p.asVector()) |> move } } }
 let frontOuterDimPlus : ViewComposite =
   frontEdges >>> removedStandards >>> outerDimensions >>> movedGeometry
-
-let sideEdges : (ScaffGraph) -> [C2Edge] = { ($0.grid, $0.edges) |> sideSection().parse }
 let side1 : ViewComposite = { $0.sideEdgesNoZeros} >>> curry(modelToTexturesElev)
 let sideDim : ViewComposite = { $0.grid } >>> graphToNonuniformSide >>> dimensons
 let sideDoubleDim : ViewComposite = sideEdges >>> removedStandards >>> outerDimensions >>> movedGeometry

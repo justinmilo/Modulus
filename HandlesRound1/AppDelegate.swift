@@ -17,19 +17,22 @@ struct GraphEditingView {
   let size : (ScaffGraph) -> CGSize
   let composite : (ScaffGraph) -> (CGPoint) -> [Geometry]
   let origin : (ScaffGraph, CGRect, CGFloat) -> CGPoint
+  let parseEditBoundaries : (ScaffGraph) -> GraphPositions2DSorted
 }
 func graphViewGenerator(
   build: @escaping (CGSize) -> (GraphPositions, [Edge]),
   size : @escaping (ScaffGraph) -> CGSize,
   composite : [(ScaffGraph) -> (CGPoint) -> [Geometry]],
-  origin : @escaping (ScaffGraph, CGRect, CGFloat) -> CGPoint
+  origin : @escaping (ScaffGraph, CGRect, CGFloat) -> CGPoint,
+  parseEditBoundaries : @escaping (ScaffGraph) -> GraphPositions2DSorted
   )-> [GraphEditingView]
 {
   return composite.map {
     GraphEditingView( build: build,
                       size: size,
                       composite: $0,
-                      origin: origin)
+                      origin: origin,
+                      parseEditBoundaries: parseEditBoundaries)
   }
 }
 
@@ -67,13 +70,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         size: sizeFromPlanScaff,
         composite: [finalDimComp,
                     planGridsToDimensions],
-        origin: originFromFullScaff)
+        origin: originFromFullScaff,
+        parseEditBoundaries: planPositions)
       
       let planMapRotated = graphViewGenerator(
         build: sizePlanRotated >>> createScaffolding,
         size: sizeFromRotatedPlanScaff,
         composite: [rotatedFinalDimComp],
-        origin: originFromFullScaff)
+        origin: originFromFullScaff,
+        parseEditBoundaries: planPositions)
       
       let frontMap = graphViewGenerator(
         build: sizeFront >>> createScaffolding,
@@ -83,14 +88,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     front1 <> frontDim <> frontOuterDimPlus,
                     front1 <> frontDim <> frontOuterDimPlus <> frontOverall,
                     { $0.frontEdgesNoZeros } >>> curry(modelToLinework)],
-        origin: originFromFullScaff)
+        origin: originFromFullScaff,
+        parseEditBoundaries: frontPositionsOhneStandards)
         +
         graphViewGenerator(
           build: sizeFront >>> createGrid,
           size: sizeFromGridScaff,
           composite: [front1,
                       { $0.frontEdgesNoZeros } >>> curry(modelToLinework),],
-          origin: originFromGridScaff)
+          origin: originFromGridScaff,
+      
+          parseEditBoundaries: frontPositionsOhneStandards)
       
       let sideMap = graphViewGenerator(
         build: sizeSide >>> createScaffolding,
@@ -98,7 +106,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         composite: [side1,
                     side1 <> sideDim,
                     side1 <> sideDim <> sideDoubleDim],
-        origin: originFromFullScaff)
+        origin: originFromFullScaff,
+        parseEditBoundaries: sidePositionsOhneStandards)
       
       let uL = SpriteScaffViewController(graph: graph, mapping: planMap)
       let uR = SpriteScaffViewController(graph: graph, mapping: planMapRotated)
