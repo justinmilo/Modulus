@@ -334,6 +334,8 @@ func checkAnyStradle (_ bounds: PointIndex, _ check: Edge) -> Bool{
   
 }
 
+
+
 func halfStraddlesFromBelow (_ bounds: PointIndex, _ check: Edge) -> Bool
 {
   
@@ -348,15 +350,103 @@ func halfStraddlesFromBelow (_ bounds: PointIndex, _ check: Edge) -> Bool
   
 }
 
+
+
   // 0 < 3 <= 3 is ok (0,Max)
   // 3 < 3 <= 4 is not ok (Max,4)
 func isHalfStradlingFromBelow (lower: Int, middle: Int, upper:Int) -> Bool
 {
-  return (lower < middle) && (middle <= upper) ||
-    (lower >= middle) && (middle > upper)
-  }
+  return (lower <= middle) && (middle < upper) ||
+    (lower > middle) && (middle >= upper)
+}
+
 func isStradling (lower: Int, middle: Int, upper:Int) -> Bool
 {
   return (lower < middle) && (middle < upper) ||
     (lower > middle) && (middle > upper)
 }
+
+
+
+struct FunctionM<A, M: Monoid> {
+  let call: (A) -> M
+}
+extension FunctionM: Monoid {
+  static func <>(lhs: FunctionM, rhs: FunctionM) -> FunctionM {
+    return FunctionM { x in
+      return lhs.call(x) <> rhs.call(x)
+    }
+  }
+  
+  static var e: FunctionM {
+    return FunctionM { _ in M.e }
+  }
+}
+
+typealias Predicate<A> = FunctionM<A, Bool>
+
+let isSpanning = Predicate{ $0 - $1 > 1 }
+
+let isLessThanOrEqual : Predicate<(Int,Int)> = Predicate{ $0 <= $1 }
+
+let isHalfStradlingItem : (Int) -> Predicate<(Int,Int)> = {
+  middle in
+  return Predicate{
+    return ($0 <= middle) && (middle < $1) ||
+      ($0 > middle) && (middle >= $1)
+  }
+}
+
+typealias Asdf = (Int, Int) -> Bool
+
+
+let bothLessThan : (Int) -> Predicate<(Int,Int)> = {
+  (middle:Int) -> Predicate<(Int,Int)> in
+  return Predicate<(Int,Int)>{
+    (l,u) in
+    return (l < middle) && (u < middle)
+  }
+}
+
+let oneLessThan : (Int) -> Predicate<(Int,Int)> = {
+  (middle:Int) -> Predicate<(Int,Int)> in
+  return Predicate<(Int,Int)>{
+    (l,u) in
+    return (l < middle) || (u < middle)
+  }
+}
+
+let bothPredicate: (Int, @escaping Asdf) -> Predicate<(Int,Int)> = {
+  (middle:Int, comp:@escaping Asdf) -> Predicate<(Int,Int)> in
+  return Predicate<(Int,Int)>{
+    (tup) in
+    return comp(tup.0, middle) && comp(tup.1, middle)
+  }
+  }
+
+let eitherPredicate: (Int, @escaping Asdf) -> Predicate<(Int,Int)> = {
+  (middle:Int, comp:@escaping Asdf) -> Predicate<(Int,Int)> in
+  return Predicate<(Int,Int)>{
+    (l,u) in
+    return comp(l, middle) || comp(u, middle)
+  }
+}
+
+
+let isHalfStradlingItem2 : Predicate<(Int, (Int,Int))> =  Predicate{
+  (middle, d) in
+    return (d.0 <= middle) && (middle < d.1) ||
+      (d.0 > middle) && (middle >= d.1)
+}
+
+
+
+let spansAndIsHalfStradling = isSpanning <> isHalfStradlingItem(3)
+
+let zComparison : (Edge) -> (Int, Int) = { ($0.p1.zI, $0.p2.zI) }
+
+let edgeIsSpanning = zComparison >>> isSpanning.call
+
+let b = zComparison >>> bothLessThan(3).call
+
+

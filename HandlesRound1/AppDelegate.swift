@@ -60,12 +60,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
       let initial = CGSize3(width: 300, depth: 0, elev: 400) |> createGrid
       let graph = ScaffGraph(grid: initial.0, edges: initial.1)
       // graph is passed passed by reference here ...
-      let sizePlan : (CGSize) -> CGSize3 = { CGSize3(width: $0.width, depth: $0.height, elev: graph.bounds.elev) }
-      let sizePlanRotated : (CGSize) -> CGSize3 = { CGSize3(width: $0.height, depth: $0.width, elev: graph.bounds.elev) }
+
       let sizeFront : (CGSize) -> CGSize3 = { CGSize3(width: $0.width, depth: graph.bounds.depth, elev: $0.height) }
-      let sizeSide : (CGSize) -> CGSize3 = { CGSize3(width: graph.bounds.width, depth:$0.width, elev: $0.height) }
-      
-      let template : (CGSize3, [Edge]) -> (GraphPositions, [Edge])
       
       let overall : (CGSize, [Edge]) -> (GraphPositions, [Edge]) = { size, edges in
 
@@ -76,12 +72,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let bound_isStradling = max |> curry(halfStraddlesFromBelow)
         let bound_edgeBelow = max |> filterEdgeBelow
         
-        let edgeStradles = ( bound_isStradling, edges) |> filter
-        let edgesBelow = ( bound_edgeBelow, edges) |> filter
-
+        let bound_certain = bothLessThan(max.zI).call
+        
+        
+        let bound_eitherLessOrEqual = zComparison >>> eitherPredicate(max.zI, <=).call
+        let bound_bothLessOrEqual = zComparison >>> bothPredicate(max.zI, <=).call
+        
+        
+        
+        let edgesBelow = ( bound_bothLessOrEqual, edges) |> filter
+        let edgeStradles = ( bound_eitherLessOrEqual, edges) |> filter
+        let edgeStradlesWithASpan = (edgeIsSpanning, edgeStradles) |> filter
+        
         let edgeAbove = edges.filter { !edgeStradles.contains($0) }.filter{ !edgesBelow.contains($0) }
         
-        let edgeStradlesFixed = edgeStradles.map {
+        let edgeStradlesFixed = edgeStradlesWithASpan.map {
           return Edge(content: $0.content, p1: clip(p1: add(max,-1), p2: $0.p1), p2: clip(p1: add(max,-1), p2: $0.p2))
         }
         

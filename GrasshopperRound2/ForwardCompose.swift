@@ -66,6 +66,32 @@ extension Array: Monoid {
 }
 
 
+func concat <M: Monoid> (_ xs: [M]) -> M {
+  return xs.reduce(M.e, <>)
+}
+
+extension Bool: Monoid {
+  static func <>(lhs: Bool, rhs: Bool) -> Bool {
+    return lhs && rhs
+  }
+  static let e = true
+}
+
+extension Int: Monoid {
+  static func <>(lhs: Int, rhs: Int) -> Int {
+    return lhs + rhs
+  }
+  static let e = 0
+}
+
+extension String: Monoid {
+  static func <>(lhs: String, rhs: String) -> String {
+    return lhs + rhs
+  }
+  static let e = ""
+}
+
+
 func <><A,B,C : Semigroup>(f:@escaping (A)->(B)->C, g:@escaping (A)->(B)->C) -> (A)->(B)->C
 {
   return {
