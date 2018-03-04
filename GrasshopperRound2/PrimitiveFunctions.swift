@@ -47,9 +47,9 @@ func pointToLabel(_ point: CGPoint)->Label
 
 func move(item:Geometry, vector: CGVector)->Geometry
 {
-  var itemq = item
-  itemq.position = item.position + vector
-  return itemq
+  var items = item
+  items.position = item.position + vector
+  return items
 }
 
 
