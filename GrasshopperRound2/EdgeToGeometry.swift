@@ -272,13 +272,19 @@ func modelToTexturesElev ( edges: [C2Edge], origin: CGPoint) -> [Geometry]
     }
   }
   
-  let verticals = edges.filter{ $0.content == "Standard"}.map
+  let verticals = edges.filter{ $0.content == "StandardGroup"}.flatMap
   {
-    line  -> Scaff2D in
-    return Scaff2D(start: CGPoint( line.p1.x, line.p1.y), end: CGPoint( line.p2.x, line.p2.y), part: .standard, view: .longitudinal)
+    line  -> [Scaff2D] in
     
-    
-    
+    let lengths = maximumStandards(in: abs( (line.p1 + line.p2).diagonalExtent ) )
+    let pos = lengths |> curry(segToPosOrigin)(line.p1.y)
+    let s : [Scaff2D] = zip(pos, pos.dropFirst()).map {
+      let s =       Scaff2D(start: CGPoint( line.p1.x, $0.0), end: CGPoint( line.p2.x, $0.1), part: .standard, view: .longitudinal)
+
+      
+      return s
+    }
+    return s
   }
   let base = edges.filter{ $0.content == "BC"}.map
   {

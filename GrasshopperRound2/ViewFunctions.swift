@@ -142,7 +142,6 @@ func pointDictToArray( dict: [CGFloat : [CGFloat]] ) -> [[CGPoint]]
 func graphToNonuniformFront(gp: GraphPositions) -> (CGPoint) -> NonuniformModel2D
 {
   return { point in
-    print(gp.pZ)
     return NonuniformModel2D(origin: point, rowSizes: Grid(gp.pZ |> posToSeg), colSizes: Grid(gp.pX |> posToSeg)) }
 }
 func graphToNonuniformSide(gp: GraphPositions) -> (CGPoint) -> NonuniformModel2D

@@ -57,7 +57,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
       self.window?.makeKeyAndVisible()
       
-      let initial = CGSize3(width: 100, depth: 100, elev: 100) |> createGrid
+      let initial = CGSize3(width: 300, depth: 0, elev: 400) |> createGrid
       let graph = ScaffGraph(grid: initial.0, edges: initial.1)
       // graph is passed passed by reference here ...
       let sizePlan : (CGSize) -> CGSize3 = { CGSize3(width: $0.width, depth: $0.height, elev: graph.bounds.elev) }
@@ -68,15 +68,28 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
       let template : (CGSize3, [Edge]) -> (GraphPositions, [Edge])
       
       let overall : (CGSize, [Edge]) -> (GraphPositions, [Edge]) = { size, edges in
-        let zz = sizeFront >>> generateSegments >>> segToPos
-        let aaa = maxEdges >>> curry(filterBelow)
+
         
-        let pos = size |> zz
-        let filterer = pos |> aaa
-        let edgeF = filterer |> filterEdgeBelow
-        let redges = filter(edgeF, edges)
+        let pos = size |> sizeFront >>> generateSegments >>> segToPos
+        let max = pos |> maxEdges
         
-        return (pos,redges)
+        let bound_isStradling = max |> curry(halfStraddlesFromBelow)
+        let bound_edgeBelow = max |> filterEdgeBelow
+        
+        let edgeStradles = ( bound_isStradling, edges) |> filter
+        let edgesBelow = ( bound_edgeBelow, edges) |> filter
+
+        let edgeAbove = edges.filter { !edgeStradles.contains($0) }.filter{ !edgesBelow.contains($0) }
+        
+        let edgeStradlesFixed = edgeStradles.map {
+          return Edge(content: $0.content, p1: clip(p1: add(max,-1), p2: $0.p1), p2: clip(p1: add(max,-1), p2: $0.p2))
+        }
+        
+        print(pos |> maxEdges)
+        print("above \(edgeAbove)")
+        print("stradles \(edgeStradles)")
+//        print("fixed \(edgeStradlesFixed)")
+        return (pos, edgesBelow + edgeStradlesFixed)
       }
       
       

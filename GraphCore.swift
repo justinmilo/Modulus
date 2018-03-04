@@ -206,6 +206,16 @@ func segToPos ( seg: [CGFloat] ) -> [CGFloat]
   }
 }
 
+func segToPosOrigin ( origin: CGFloat, seg: [CGFloat] ) -> [CGFloat]
+{
+  // Without Origin we assume zero. first position is either origin or zero
+  return seg.reduce([origin])
+  {
+    (res, current) -> [CGFloat] in
+    return res + [res.last! + current]
+  }
+}
+
 func posToSeg ( pos: [CGFloat] ) -> [CGFloat]
 {
   let pos = pos.sorted()
@@ -258,9 +268,9 @@ func dropBottomZBay( position: GraphPositions ) -> GraphPositions
   return GraphPositions(pX: position.pX, pY: position.pY, pZ: Array(position.pZ.dropFirst()) )
 }
 
-
 func filterBelow (max: PointIndex, point:PointIndex) -> Bool
 {
+  
   // max a count semantic so
   // [1,1] = count 2, 2 is greater than
   if point.xI >= max.xI {
@@ -270,18 +280,83 @@ func filterBelow (max: PointIndex, point:PointIndex) -> Bool
     return false
   }
   if point.zI >= max.zI {
+
     return false
   }
+
   return true
 }
-func filterEdgeBelow (max:@escaping (PointIndex) -> Bool) -> (Edge) -> Bool
+
+// edge must be below one in one point
+func filterEdgeStradles (max: PointIndex) -> (Edge) -> Bool
 {
+  let isBelow = curry(filterBelow)(max)
   return { edge in
-    return edge.p2 |> max && edge.p1 |> max
+    return edge.p2 |> isBelow || edge.p1 |> isBelow
   }
 }
+// edge must be completly below
+func filterEdgeBelow(max: PointIndex) -> (Edge) -> Bool
+{
+  let isBelow = curry(filterBelow)(max)
+  return { edge in
+    return edge.p2 |> isBelow  && edge.p1 |> isBelow
+  }
+}
+
 
 func filter<A>(_ t: (A)->Bool, _ array: [A]) -> [A]
 {
   return array.filter(t)
+}
+
+// cips index to the min in each index
+func clip(p1: PointIndex, p2: PointIndex  ) -> PointIndex
+{
+  return ( min(p1.xI, p2.xI),
+   min(p1.yI, p2.yI),
+   min(p1.zI, p2.zI))
+}
+
+func add(_ p1: PointIndex, _ int: Int) -> PointIndex
+{
+  return (p1.xI + int, p1.yI + int, p1.zI + int)
+}
+
+func checkAnyStradle (_ bounds: PointIndex, _ check: Edge) -> Bool{
+  
+  print("straddle \(check.p1.zI) ... \(bounds.zI) ... \(check.p2.zI) \(check.content) \( (check.p1.zI, bounds.zI, check.p2.zI) |> isStradling)")
+
+  
+  
+  return (check.p1.xI, bounds.xI, check.p2.xI) |> isStradling || (check.p1.yI, bounds.yI, check.p2.yI) |> isStradling || (check.p1.zI, bounds.zI, check.p2.zI) |> isStradling
+  
+  
+}
+
+func halfStraddlesFromBelow (_ bounds: PointIndex, _ check: Edge) -> Bool
+{
+  
+  
+  let result = (check.p1.xI, bounds.xI, check.p2.xI) |> isHalfStradlingFromBelow || (check.p1.yI, bounds.yI, check.p2.yI) |> isHalfStradlingFromBelow || (check.p1.zI, bounds.zI, check.p2.zI) |> isHalfStradlingFromBelow
+  
+  if check.content == "Diag" {
+    print("diag   \(check.p1.zI) \(check.p2.zI)   | \(bounds.zI) =>  \(result)")
+  }
+  
+  return result
+  
+}
+
+  // 0 < 3 <= 3 is ok (0,Max)
+  // 3 < 3 <= 4 is not ok (Max,4)
+func isHalfStradlingFromBelow (lower: Int, middle: Int, upper:Int) -> Bool
+{
+  return (lower < middle) && (middle <= upper) ||
+    (lower >= middle) && (middle > upper)
+  }
+func isStradling (lower: Int, middle: Int, upper:Int) -> Bool
+{
+  return (lower < middle) && (middle < upper) ||
+    (lower > middle) && (middle > upper)
 }

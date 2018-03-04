@@ -153,9 +153,7 @@ class SpriteScaffViewController : UIViewController {
     let x = (c, editBoundaries) |> modelRect
     // x is something like (0.0, 30.0, 100.0, 100.0)
     // (0.0, 0.0, 100.0, 30.0)
-    print(c)
-    print(x)
-    
+
     let z = (x, self.handleView.lastMaster.origin.asVector()) |> moveByVector
     let cellRectValue = z |> rectToSprite
     let y = self.handleView.lastMaster.midY |> yToSprite
