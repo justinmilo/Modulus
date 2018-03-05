@@ -172,19 +172,9 @@ class SpriteScaffViewController : UIViewController {
       })
     }
     
-    let boundOrigin = self.handleView.lastMaster.origin.asVector() |> flip(moveByVectorCurried) >>> pointToSprite
-    let boundMirror = y |> flip(curry(mirrorVertically(point:along:)))
    
-    let cHey = curry(indicesToPositions)
-    let boundPositions = editBoundaries |> cHey
-//    let finalT = boundPositions >>> CGPoint.init(x:y:) >>> boundOrigin >>> boundMirror
     
-    let (p1, p2) = lowToHigh(gIndex: c)
     let (p1x, p2x) = highToLow(gIndex: c)
-    
-    
-//    let boundContains = self.graph.edges |> curry(contains(edges:new:))
-//    let boundAdd = self.graph.edges |> curry(add(edges:new:))
     
     
     let frontPoint2Dto3D : (PointIndex2D, Int) -> [PointIndex] = { (p,max) in
