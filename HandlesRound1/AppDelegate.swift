@@ -61,57 +61,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
       let graph = ScaffGraph(grid: initial.0, edges: initial.1)
       // graph is passed passed by reference here ...
 
-      let sizeFront : (CGSize) -> CGSize3 = { CGSize3(width: $0.width, depth: graph.bounds.depth, elev: $0.height) }
       
-      let overall : (CGSize, [Edge]) -> (GraphPositions, [Edge]) = { size, edges in
-
-        
-        let pos = size |> sizeFront >>> generateSegments >>> segToPos
-        let max = pos |> maxEdges
-        
-        //let edges = maxClip(max: max, edges: edges)
-        let edge1 = clipOne(max: max, t: lensZ, edges:edges)
-        let edge2 = clipOne(max: max, t: lensX, edges:edge1)
-        let edge3 = clipOne(max: max, t: lensY, edges:edge2)
-        
-        
-        let s = ScaffGraph( grid : pos, edges : [])
-        s.addScaff()
-        
-        let combined  =  edge3 + s.edges.filter { !edge3.contains($0) }
-        
-        let combinedRemovedStandard : [Edge] = combined.reduce([]) {
-          res,next in
-          
-          let i = res.index(where: { (edge) -> Bool in
-            return edge.content == "StandardGroup" &&
-            (edge.p1 == next.p1 ||
-            edge.p2 == next.p2)
-            
-          })
-          if let i = i {
-            let existing = res[i]
-            
-            if abs(existing.p1.zI - existing.p2.zI) > abs(next.p1.zI - next.p2.zI)
-            {
-               return res
-            }
-            else {
-              var mutating = res
-              mutating.remove(at: i)
-              return mutating + [next]
-            }
-          }
-          
-          return res + [next]
-        }
-        
-        return (pos, combinedRemovedStandard)
-      }
       
       
       let frontMap = graphViewGenerator(
-        build: overall, //>>> createScaffolding,
+        build: sizeFront(graph) |> overall, //>>> createScaffolding,
         size: sizeFromFullScaff,
         composite: [front1,
                     front1 <> frontDim,
