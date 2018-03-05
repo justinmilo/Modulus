@@ -147,41 +147,35 @@ class SpriteScaffViewController : UIViewController {
     let editBoundaries = self.graph |> editingView.parseEditBoundaries ///
     let toGridIndices = editBoundaries |> curry(pointToGridIndices) >>>  handleTupleOptionWith
     
-    let c = (p |> toGridIndices)
+    // Get Model Indices
+    let indices = (p |> toGridIndices)
     // c is something lik (0, 1)
     // or (1, 2)
-    let x = (c, editBoundaries) |> modelRect
+    
+    
+    // Get Model Rect
+    let x = (indices, editBoundaries) |> modelRect
     // x is something like (0.0, 30.0, 100.0, 100.0)
     // (0.0, 0.0, 100.0, 30.0)
 
+    // bring model rect into the real world!
     let z = (x, self.handleView.lastMaster.origin.asVector()) |> moveByVector
     let cellRectValue = z |> rectToSprite
     let y = self.handleView.lastMaster.midY |> yToSprite
     let flippedRect = (cellRectValue, y )  |> mirrorVertically
-    
-    func addTempRect( rect: CGRect, color: UIColor) {
-      let globalLabel = SKShapeNode(rect: rect )
-      globalLabel.fillColor = color
-      self.twoDView.scene?.addChild(globalLabel)
-      globalLabel.alpha = 0.0
-      let fadeInOut = SKAction.sequence([
-        .fadeAlpha(to: 0.3, duration: 0.2),
-        .fadeAlpha(to: 0.0,duration: 0.4)])
-      globalLabel.run(fadeInOut, completion: {
-        print("End and Fade Out")
-      })
-    }
-    
-   
-    
-    let (p1x, p2x) = highToLow(gIndex: c)
+    // flipped rect is situated in sprite kit space
     
     
-    let frontPoint2Dto3D : (PointIndex2D, Int) -> [PointIndex] = { (p,max) in
+    
+    let mapFrontIndicesToY : (PointIndex2D, Int) -> [PointIndex] = { (p,max) in
       return  (0..<max).map{ (p.x, $0, p.y)}
     }
-    let boundFront = graph.grid.pY.count |> flip(curry(frontPoint2Dto3D))
+    let boundFront = graph.grid.pY.count |> flip(curry(mapFrontIndicesToY))
     
+  
+    
+    
+    let (p1x, p2x) = highToLow(gIndex: indices)
     let items = zip(p1x |> boundFront, p2x |> boundFront).map{
       return Edge(content: "Diag", p1: $0.0, p2: $0.1)
     }
@@ -191,6 +185,19 @@ class SpriteScaffViewController : UIViewController {
     addTempRect(rect: flippedRect, color: .white)
   }
   
+  
+  func addTempRect( rect: CGRect, color: UIColor) {
+    let globalLabel = SKShapeNode(rect: rect )
+    globalLabel.fillColor = color
+    self.twoDView.scene?.addChild(globalLabel)
+    globalLabel.alpha = 0.0
+    let fadeInOut = SKAction.sequence([
+      .fadeAlpha(to: 0.3, duration: 0.2),
+      .fadeAlpha(to: 0.0,duration: 0.4)])
+    globalLabel.run(fadeInOut, completion: {
+      print("End and Fade Out")
+    })
+  }
 }
 
 typealias PointIndex2D = (x:Int, y:Int)

@@ -56,7 +56,8 @@ struct Edge
 
 extension Edge : Equatable {
   static func == (lhs: Edge, rhs: Edge) -> Bool {
-    return (lhs.p1 == rhs.p1 && lhs.p2 == rhs.p2) || (lhs.p1 == rhs.p2 && lhs.p2 == rhs.p1)
+    return (lhs.p1 == rhs.p1 && lhs.p2 == rhs.p2) ||
+      (lhs.p1 == rhs.p2 && lhs.p2 == rhs.p1)
   }
 }
 

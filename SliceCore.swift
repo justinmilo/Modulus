@@ -143,3 +143,61 @@ let overall : (@escaping DimGenerating) -> (CGSize, [Edge]) ->  (GraphPositions,
   }
   
 }
+
+typealias BayIndex = (x: Int, y: Int)
+typealias BayIndex3 = (x: Int, y: Int, z:Int)
+
+func addY(y: Int, pi: PointIndex2D) -> PointIndex
+{
+  return (xI: pi.x, yI: y, zI: pi.y)
+}
+
+let diagLeft: (BayIndex) -> Predicate<Edge> =
+{
+  let (p1x, p2x) = highToLow(gIndex: $0)
+  return Predicate {
+    edge in
+    
+    let p1_3 = p1x |> (curry(addY)(edge.p1.yI))
+    let p2_3 = p2x |> curry(addY)(edge.p2.yI)
+    
+    let testEdge = Edge(content: "_test", p1:p1_3, p2: p2_3)
+  return edge == testEdge
+  }
+}
+let diagRight: (BayIndex) -> Predicate<Edge> =
+{
+  let (p1x, p2x) = lowToHigh(gIndex: $0)
+  return Predicate {
+    edge in
+    
+    let p1_3 = p1x |> (curry(addY)(edge.p1.yI))
+    let p2_3 = p2x |> curry(addY)(edge.p2.yI)
+    
+    let testEdge = Edge(content: "_test", p1:p1_3, p2: p2_3)
+    return edge == testEdge
+  }
+}
+
+let inBayIndex: (BayIndex) -> Predicate<Edge> =
+{
+  let (p1x, p2x) = lowToHigh(gIndex: $0)
+  return Predicate {
+    edge in
+    
+    let p1_3 = p1x |> (curry(addY)(edge.p1.yI))
+    let p2_3 = p2x |> curry(addY)(edge.p2.yI)
+    
+    let testEdge = Edge(content: "_test", p1:p1_3, p2: p2_3)
+    return edge == testEdge
+  }
+}
+
+let checkExisting : ([Edge], (BayIndex, Int)) =
+{
+  edge, index in
+  edge.p1 ==
+}
+
+let basicBayTransform : ([Edge], BayIndex3) -> (added:[Edge], removed:[Edge])
+
