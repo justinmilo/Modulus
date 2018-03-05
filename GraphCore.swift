@@ -188,9 +188,10 @@ func posToSeg ( pos: GraphPositions ) -> GraphSegments
     sZ: pos.pZ |> posToSeg)
 }
 
+// Returns the maximum index! Not the count
 func maxEdges ( pos: GraphPositions) -> PointIndex
 {
-  return (pos.pX.count, pos.pY.count, pos.pZ.count)
+  return (pos.pX.count - 1, pos.pY.count - 1, pos.pZ.count - 1)
 }
 
 
@@ -416,7 +417,7 @@ let oneLessThan : (Int) -> Predicate<(Int,Int)> = {
   }
 }
 
-let bothPredicate: (Int, @escaping Asdf) -> Predicate<(Int,Int)> = {
+let bothPredicate = {
   (middle:Int, comp:@escaping Asdf) -> Predicate<(Int,Int)> in
   return Predicate<(Int,Int)>{
     (tup) in
@@ -424,7 +425,25 @@ let bothPredicate: (Int, @escaping Asdf) -> Predicate<(Int,Int)> = {
   }
   }
 
-let eitherPredicate: (Int, @escaping Asdf) -> Predicate<(Int,Int)> = {
+let both = {
+  (middle:Int, comp:@escaping Asdf) -> (Int,Int)->Bool in
+  return {
+    (l,u) in
+    return comp(l, middle) && comp(u, middle)
+  }
+}
+
+let either = {
+  (middle:Int, comp:@escaping Asdf) -> (Int,Int)->Bool in
+  return {
+    (l,u) in
+    return comp(l, middle) || comp(u, middle)
+  }
+}
+
+
+
+let eitherPredicate = {
   (middle:Int, comp:@escaping Asdf) -> Predicate<(Int,Int)> in
   return Predicate<(Int,Int)>{
     (l,u) in
@@ -443,10 +462,76 @@ let isHalfStradlingItem2 : Predicate<(Int, (Int,Int))> =  Predicate{
 
 let spansAndIsHalfStradling = isSpanning <> isHalfStradlingItem(3)
 
+let lensZ : (PointIndex) -> (Int) = { ($0.zI) }
+let lensX : (PointIndex) -> (Int) = { ($0.xI) }
+let lensY : (PointIndex) -> (Int) = { ($0.yI) }
+
 let zComparison : (Edge) -> (Int, Int) = { ($0.p1.zI, $0.p2.zI) }
+let xComparison : (Edge) -> (Int, Int) = { ($0.p1.xI, $0.p2.xI) }
+let yComparison : (Edge) -> (Int, Int) = { ($0.p1.yI, $0.p2.yI) }
+
 
 let edgeIsSpanning = zComparison >>> isSpanning.call
 
 let b = zComparison >>> bothLessThan(3).call
 
+func maxClip(max: PointIndex, edges:[Edge]) -> [Edge]
+{
+  
+  let bound_oneLessThan = zComparison >>> either(max.zI, <)
+  let bound_oneGreaterThan = zComparison >>> either(max.zI, >)
+  let bound_bothLessOrEqual = zComparison >>> both(max.zI, <=)
+  
+  let edgesBelow = ( bound_bothLessOrEqual, edges) |> filter
+  let edgeStradlesFP = ( bound_oneGreaterThan, edges) |> filter
+  let edgeStradles = ( bound_oneLessThan, edgeStradlesFP ) |> filter
+  
+  let edgeAbove = edges.filter { !edgeStradles.contains($0) }.filter{ !edgesBelow.contains($0) }
+  
+  let edgeStradlesFixed = edgeStradles.map {
+    return Edge(content: $0.content,
+                p1: clip(p1: max, p2: $0.p1),
+                p2: clip(p1: max, p2: $0.p2))
+  }
+  
+  print(max.zI)
+  print("below \(edgesBelow)")
+  print("stradles \(edgeStradles)")
+  print("fixed \(edgeStradlesFixed)")
+  print("removed \(edgeAbove)")
+  return edgesBelow + edgeStradlesFixed
+}
+
+
+let anyComaprison : ((PointIndex) -> Int, Edge) -> (Int, Int) = {
+  return ( $0($1.p1), $0($1.p2) )
+}
+let anyComparisonCurried = curry(anyComaprison)
+
+func clipOne(max: PointIndex, t: (PointIndex) -> Int, edges:[Edge]) -> [Edge]
+{
+  
+  let bound_oneLessThan = anyComparisonCurried(t) >>> either(t(max), <)
+  let bound_oneGreaterThan = anyComparisonCurried(t) >>> either(t(max), >)
+  let bound_bothLessOrEqual = anyComparisonCurried(t) >>> both(t(max), <=)
+  
+  let edgesBelow = ( bound_bothLessOrEqual, edges) |> filter
+  let edgeStradlesFP = ( bound_oneGreaterThan, edges) |> filter
+  let edgeStradles = ( bound_oneLessThan, edgeStradlesFP ) |> filter
+  
+  let edgeAbove = edges.filter { !edgeStradles.contains($0) }.filter{ !edgesBelow.contains($0) }
+  
+  let edgeStradlesFixed = edgeStradles.map {
+    return Edge(content: $0.content,
+                p1: clip(p1: max, p2: $0.p1),
+                p2: clip(p1: max, p2: $0.p2))
+  }
+  
+  print(max.zI)
+  print("below \(edgesBelow)")
+  print("stradles \(edgeStradles)")
+  print("fixed \(edgeStradlesFixed)")
+  print("removed \(edgeAbove)")
+  return edgesBelow + edgeStradlesFixed
+}
 

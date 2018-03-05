@@ -48,8 +48,12 @@ let sizeFromGridScaff : (ScaffGraph) -> CGSize = { $0.boundsOfGrid.0 } >>> remov
 let sizeFromFullScaff : (ScaffGraph) -> CGSize = { $0.bounds } >>> remove3rdDim
 let sizeFromFullScaffSide : (ScaffGraph) -> CGSize = { $0.bounds } >>> remove3rdDimSide
 
-
-
+let schematicSize : (ScaffGraph) -> CGSize3 = {
+  CGSize3(width: CGFloat($0.grid.pX.count * 100),
+          depth: CGFloat($0.grid.pY.count * 100),
+          elev: CGFloat($0.grid.pZ.count * 100))
+}
+let sizeSchematicFront : (ScaffGraph) -> CGSize = schematicSize >>> remove3rdDim
 
 
 

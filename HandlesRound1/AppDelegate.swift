@@ -69,32 +69,44 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let pos = size |> sizeFront >>> generateSegments >>> segToPos
         let max = pos |> maxEdges
         
-        let bound_isStradling = max |> curry(halfStraddlesFromBelow)
-        let bound_edgeBelow = max |> filterEdgeBelow
-        
-        let bound_certain = bothLessThan(max.zI).call
-        
-        
-        let bound_eitherLessOrEqual = zComparison >>> eitherPredicate(max.zI, <=).call
-        let bound_bothLessOrEqual = zComparison >>> bothPredicate(max.zI, <=).call
+        //let edges = maxClip(max: max, edges: edges)
+        let edge1 = clipOne(max: max, t: lensZ, edges:edges)
+        let edge2 = clipOne(max: max, t: lensX, edges:edge1)
+        let edge3 = clipOne(max: max, t: lensY, edges:edge2)
         
         
+        let s = ScaffGraph( grid : pos, edges : [])
+        s.addScaff()
         
-        let edgesBelow = ( bound_bothLessOrEqual, edges) |> filter
-        let edgeStradles = ( bound_eitherLessOrEqual, edges) |> filter
-        let edgeStradlesWithASpan = (edgeIsSpanning, edgeStradles) |> filter
+        let combined  =  edge3 + s.edges.filter { !edge3.contains($0) }
         
-        let edgeAbove = edges.filter { !edgeStradles.contains($0) }.filter{ !edgesBelow.contains($0) }
-        
-        let edgeStradlesFixed = edgeStradlesWithASpan.map {
-          return Edge(content: $0.content, p1: clip(p1: add(max,-1), p2: $0.p1), p2: clip(p1: add(max,-1), p2: $0.p2))
+        let combinedRemovedStandard : [Edge] = combined.reduce([]) {
+          res,next in
+          
+          let i = res.index(where: { (edge) -> Bool in
+            return edge.content == "StandardGroup" &&
+            (edge.p1 == next.p1 ||
+            edge.p2 == next.p2)
+            
+          })
+          if let i = i {
+            let existing = res[i]
+            
+            if abs(existing.p1.zI - existing.p2.zI) > abs(next.p1.zI - next.p2.zI)
+            {
+               return res
+            }
+            else {
+              var mutating = res
+              mutating.remove(at: i)
+              return mutating + [next]
+            }
+          }
+          
+          return res + [next]
         }
         
-        print(pos |> maxEdges)
-        print("above \(edgeAbove)")
-        print("stradles \(edgeStradles)")
-//        print("fixed \(edgeStradlesFixed)")
-        return (pos, edgesBelow + edgeStradlesFixed)
+        return (pos, combinedRemovedStandard)
       }
       
       
@@ -109,7 +121,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         origin: originFromFullScaff,
         parseEditBoundaries: frontPositionsOhneStandards)
       
+//      let frontMap2 = graphViewGenerator(
+//        build: overall, //>>> createScaffolding,
+//        size: sizeSchematicFront,
+//        composite: [front1,
+//                    front1 <> frontDim,
+//                    front1 <> frontDim <> frontOuterDimPlus,
+//                    front1 <> frontDim <> frontOuterDimPlus <> frontOverall,
+//                    { $0.frontEdgesNoZeros } >>> curry(modelToLinework)],
+//        origin: originFromFullScaff,
+//        parseEditBoundaries: frontPositionsOhneStandards)
+      
       let uR = SpriteScaffViewController(graph: graph, mapping: frontMap)
+      
+//      let uR2 = SpriteScaffViewController(graph: graph, mapping: frontMap2)
       self.window?.rootViewController = uR
       
         return true
