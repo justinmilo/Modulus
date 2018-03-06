@@ -59,6 +59,7 @@
 		D064BE1D200D94C60032C153 /* CGAffineTransform+Utility+Nonstandard.swift in Sources */ = {isa = PBXBuildFile; fileRef = D064BDFC200D94C60032C153 /* CGAffineTransform+Utility+Nonstandard.swift */; };
 		D064BE1E200D94C60032C153 /* CGAngle+Utility+Nonstandard.swift in Sources */ = {isa = PBXBuildFile; fileRef = D064BDFD200D94C60032C153 /* CGAngle+Utility+Nonstandard.swift */; };
 		D07229A2203C5D79007C37AE /* ForwardCompose.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E0D0672026015600EF986D /* ForwardCompose.swift */; };
+		D0731D07204DF662004C8FF7 /* SemiRing.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0731D06204DF662004C8FF7 /* SemiRing.swift */; };
 		D079B6BC201D193E0070EB40 /* CGRect+Inset.swift in Sources */ = {isa = PBXBuildFile; fileRef = D079B6BB201D193E0070EB40 /* CGRect+Inset.swift */; };
 		D079B6BE201D19600070EB40 /* EdgeAlignments.swift in Sources */ = {isa = PBXBuildFile; fileRef = D079B6BD201D19600070EB40 /* EdgeAlignments.swift */; };
 		D08A6F93202AA58E00EF9E68 /* EdgeToGeometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = D08A6F92202AA58E00EF9E68 /* EdgeToGeometry.swift */; };
@@ -161,6 +162,7 @@
 		D064BDFB200D94C60032C153 /* CGSize+Utility+Nonstandard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CGSize+Utility+Nonstandard.swift"; sourceTree = "<group>"; };
 		D064BDFC200D94C60032C153 /* CGAffineTransform+Utility+Nonstandard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CGAffineTransform+Utility+Nonstandard.swift"; sourceTree = "<group>"; };
 		D064BDFD200D94C60032C153 /* CGAngle+Utility+Nonstandard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CGAngle+Utility+Nonstandard.swift"; sourceTree = "<group>"; };
+		D0731D06204DF662004C8FF7 /* SemiRing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemiRing.swift; sourceTree = "<group>"; };
 		D079B6BB201D193E0070EB40 /* CGRect+Inset.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "CGRect+Inset.swift"; path = "../../Deploy/Deploy/Drawing/CG and UIKit/CGRect+Inset.swift"; sourceTree = "<group>"; };
 		D079B6BD201D19600070EB40 /* EdgeAlignments.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EdgeAlignments.swift; path = ../../Control/Control/Sources/EdgeAlignments.swift; sourceTree = "<group>"; };
 		D08A6F92202AA58E00EF9E68 /* EdgeToGeometry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EdgeToGeometry.swift; sourceTree = "<group>"; };
@@ -255,6 +257,7 @@
 				D04153C5202BB18C00BD7B72 /* Model */,
 				D0931FD520113DCA007BFCC3 /* Layouts */,
 				D064BDD9200D94C50032C153 /* SwiftGeometry */,
+				D0731D08204DF674004C8FF7 /* Functional */,
 				D03E03F520125DF8002D47F3 /* GrasshopperRound2 */,
 				D0AEF45D2013A6FC005F761B /* Other Stuff */,
 			);
@@ -288,8 +291,6 @@
 				D0DA9BBA203A666A0019F6EE /* PrimitiveFunctions.swift */,
 				D08A6F92202AA58E00EF9E68 /* EdgeToGeometry.swift */,
 				D04153C1202B7CA300BD7B72 /* Array+CGPoint+Utility.swift */,
-				D056A39A2015815000C3B3B1 /* ForwardPipe.swift */,
-				D0E0D0672026015600EF986D /* ForwardCompose.swift */,
 				D0AEF45F2013D507005F761B /* TensionedPoint.swift */,
 				D056A3A020177F1000C3B3B1 /* Grids */,
 			);
@@ -378,6 +379,17 @@
 			);
 			path = Nonstandard;
 			sourceTree = "<group>";
+		};
+		D0731D08204DF674004C8FF7 /* Functional */ = {
+			isa = PBXGroup;
+			children = (
+				D0731D06204DF662004C8FF7 /* SemiRing.swift */,
+				D056A39A2015815000C3B3B1 /* ForwardPipe.swift */,
+				D0E0D0672026015600EF986D /* ForwardCompose.swift */,
+			);
+			name = Functional;
+			path = HandlesRound1/Functional;
+			sourceTree = SOURCE_ROOT;
 		};
 		D0931FD520113DCA007BFCC3 /* Layouts */ = {
 			isa = PBXGroup;
@@ -624,6 +636,7 @@
 				D03E03DA20124DB8002D47F3 /* Testing.swift in Sources */,
 				D0FC06252049DEE500175F06 /* ScaffGraph.swift in Sources */,
 				D093215120113DCB007BFCC3 /* Layout.swift in Sources */,
+				D0731D07204DF662004C8FF7 /* SemiRing.swift in Sources */,
 				D093209A20113DCB007BFCC3 /* MultipleLayouts.swift in Sources */,
 				D064BE11200D94C60032C153 /* CGVector+Math.swift in Sources */,
 				D0BAD735204228F700406E70 /* ViewComposite.swift in Sources */,

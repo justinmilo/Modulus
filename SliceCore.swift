@@ -152,6 +152,85 @@ func addY(y: Int, pi: PointIndex2D) -> PointIndex
   return (xI: pi.x, yI: y, zI: pi.y)
 }
 
+
+
+struct IndexVector{ var (x, y, z) : (Int, Int, Int) }
+extension IndexVector { init(_ xI: Int, _ yI: Int, _ zI: Int) { (x, y, z) = (xI, yI, zI) } }
+
+func vectorIndexFrom(i1 : PointIndex, i2: PointIndex) -> IndexVector
+{
+  return IndexVector(x: i1.xI - i2.xI, y: i1.yI - i2.yI, z: i1.zI - i2.zI)
+}
+
+
+
+func points( edge: Edge ) -> (PointIndex, PointIndex)
+{
+  return (edge.p1, edge.p2)
+}
+
+let edgeVector : (Edge)->IndexVector = points >>> vectorIndexFrom
+let xDiagUp = IndexVector  ( 1, 0,  1)
+let xDiagDown = IndexVector( 1, 0, -1)
+let yDiagUp = IndexVector  ( 0, 1,  1)
+let yDiagDown = IndexVector( 0, 1, -1)
+
+let edgeXDiagUp = Predicate<Edge>{ xDiagUp == $0 |>  edgeVector }
+let edgeXDiagDown = Predicate<Edge>{ xDiagDown == $0 |>  edgeVector }
+
+let bayToPosition : ( Int ) -> (Int, Int) = { return ($0, $0 + 1)}
+
+let xPos : (Int) -> Predicate<Edge> = {
+  i in
+  return Predicate<Edge>{ (e : Edge) -> Bool in
+    return (e.p1.xI == i || e.p2.xI == i)
+  }
+}
+
+let yPos : (Int) -> Predicate<Edge> = {
+  i in
+  return Predicate<Edge>{ (e : Edge) -> Bool in
+    return (e.p1.yI == i || e.p2.yI == i)
+  }
+}
+
+let zPos : (Int) -> Predicate<Edge> = {
+  i in return Predicate{ ($0.p1.zI == i || $0.p2.zI == i) }
+}
+
+let xBay : (Int) -> Predicate<Edge> =  {
+  i in
+  let pI = i |> bayToPosition
+  return  xPos(pI.0) && xPos(pI.1)
+}
+
+let yBay : (Int) -> Predicate<Edge> =  {
+  i in
+  let pI = i |> bayToPosition
+  return  yPos(pI.0) && yPos(pI.1)
+}
+
+let zBay : (Int) -> Predicate<Edge> =  {
+  i in
+  let pI = i |> bayToPosition
+  return  zPos(pI.0) && zPos(pI.1)
+}
+
+func anyDiagTest(edges: [Edge], bayIndex:BayIndex )->[Edge] {
+  print(
+"""
+    index: \(bayIndex)
+    x: \(edges.filtered(by: xBay(bayIndex.x )))
+    y: \(edges.filtered(by: zBay(bayIndex.y)))
+    x&y: \(edges.filtered(by:  (xBay(bayIndex.x) && zBay(bayIndex.y))))
+    diags: \(edges.filtered(by:  (edgeXDiagUp || edgeXDiagDown)))
+    all: \(edges.filtered(by:  (xBay(bayIndex.x) && zBay(bayIndex.y)) && (edgeXDiagUp || edgeXDiagDown)))
+""")
+  
+  
+  return edges.filtered(by: (xBay(bayIndex.x) && zBay(bayIndex.y)) && (edgeXDiagUp || edgeXDiagDown))
+}
+
 let diagLeft: (BayIndex) -> Predicate<Edge> =
 {
   let (p1x, p2x) = highToLow(gIndex: $0)
@@ -168,7 +247,7 @@ let diagLeft: (BayIndex) -> Predicate<Edge> =
 let diagRight: (BayIndex) -> Predicate<Edge> =
 {
   let (p1x, p2x) = lowToHigh(gIndex: $0)
-  return Predicate {
+  return Predicate<Edge> {
     edge in
     
     let p1_3 = p1x |> (curry(addY)(edge.p1.yI))
@@ -178,6 +257,8 @@ let diagRight: (BayIndex) -> Predicate<Edge> =
     return edge == testEdge
   }
 }
+
+
 
 let inBayIndex: (BayIndex) -> Predicate<Edge> =
 {
@@ -193,11 +274,27 @@ let inBayIndex: (BayIndex) -> Predicate<Edge> =
   }
 }
 
-let checkExisting : ([Edge], (BayIndex, Int)) =
+
+
+func iv2tup ( iv : IndexVector) -> (x: Int, y:Int, z:Int)
 {
-  edge, index in
-  edge.p1 ==
+  return (x: iv.x,
+          y: iv.y,
+          z: iv.z)
 }
 
-let basicBayTransform : ([Edge], BayIndex3) -> (added:[Edge], removed:[Edge])
+
+
+func oppossiteIndexVector(iv:IndexVector) -> IndexVector {
+  return IndexVector(x: -iv.x, y: -iv.y, z: -iv.z)
+}
+
+func ==(lhs:IndexVector, rhs:IndexVector) -> Bool {
+  return  lhs.x == rhs.x && lhs.y == rhs.y && lhs.z == rhs.z ||
+    lhs.x == -rhs.x && lhs.y == -rhs.y  && lhs.z == -rhs.z
+}
+
+
+
+//var basicBayTransform : ([Edge], BayIndex3) -> (added:[Edge], removed:[Edge])
 

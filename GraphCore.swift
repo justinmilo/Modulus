@@ -384,7 +384,6 @@ extension FunctionM: Monoid {
   }
 }
 
-typealias Predicate<A> = FunctionM<A, Bool>
 
 let isSpanning = Predicate{ $0 - $1 > 1 }
 
@@ -460,7 +459,6 @@ let isHalfStradlingItem2 : Predicate<(Int, (Int,Int))> =  Predicate{
 
 
 
-let spansAndIsHalfStradling = isSpanning <> isHalfStradlingItem(3)
 
 let lensZ : (PointIndex) -> (Int) = { ($0.zI) }
 let lensX : (PointIndex) -> (Int) = { ($0.xI) }

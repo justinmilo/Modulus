@@ -173,13 +173,33 @@ class SpriteScaffViewController : UIViewController {
     let boundFront = graph.grid.pY.count |> flip(curry(mapFrontIndicesToY))
     
   
+    let diagsAtTouch = anyDiagTest(edges: self.graph.edges, bayIndex: indices)
     
-    
-    let (p1x, p2x) = highToLow(gIndex: indices)
-    let items = zip(p1x |> boundFront, p2x |> boundFront).map{
-      return Edge(content: "Diag", p1: $0.0, p2: $0.1)
+    if diagsAtTouch.count == 0
+    {
+      let reducedEdges = self.graph.edges.filter { !diagsAtTouch.contains($0) }
+      let (p1x, p2x) = lowToHigh(gIndex: indices)
+      let items = zip(p1x |> boundFront, p2x |> boundFront).map{
+        return Edge(content: "Diag", p1: $0.0, p2: $0.1)
+      }
+      self.graph.edges = reducedEdges + items
     }
-    self.graph.edges = self.graph.edges + items
+    else if let sampleDiag = diagsAtTouch.first, edgeXDiagUp.call(sampleDiag)
+    {
+      let reducedEdges = self.graph.edges.filter { !diagsAtTouch.contains($0) }
+      let (p1x, p2x) = highToLow(gIndex: indices)
+      let items = zip(p1x |> boundFront, p2x |> boundFront).map{
+        return Edge(content: "Diag", p1: $0.0, p2: $0.1)
+      }
+      self.graph.edges = reducedEdges + items
+    }
+    else if let sampleDiag = diagsAtTouch.first, edgeXDiagDown.call(sampleDiag)
+    {
+      let reducedEdges = self.graph.edges.filter { !diagsAtTouch.contains($0) }
+      
+      self.graph.edges = reducedEdges
+    }
+    
     
     buildFromScratch()
     addTempRect(rect: flippedRect, color: .white)
