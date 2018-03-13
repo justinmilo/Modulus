@@ -70,6 +70,11 @@
 		D093215320113DCB007BFCC3 /* BackgroundLayoutSimple.swift in Sources */ = {isa = PBXBuildFile; fileRef = D093209620113DCB007BFCC3 /* BackgroundLayoutSimple.swift */; };
 		D093215420113DCB007BFCC3 /* MarginIntrinsicSizeLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D093209820113DCB007BFCC3 /* MarginIntrinsicSizeLayout.swift */; };
 		D093215820114134007BFCC3 /* AnyLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D093215720114134007BFCC3 /* AnyLayout.swift */; };
+		D0A6EC5A2055DD8A00C90EA3 /* GrabBag.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A6EC592055DD8A00C90EA3 /* GrabBag.swift */; };
+		D0A6EC5C2055DE8D00C90EA3 /* SingleTypeComposition.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A6EC5B2055DE8D00C90EA3 /* SingleTypeComposition.swift */; };
+		D0A6EC5E2055E09900C90EA3 /* SemiGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A6EC5D2055E09900C90EA3 /* SemiGroup.swift */; };
+		D0A6EC602055E14B00C90EA3 /* Curry.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A6EC5F2055E14B00C90EA3 /* Curry.swift */; };
+		D0ACE36020588E50007AB54D /* EffectfulCompose.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0ACE35F20588E50007AB54D /* EffectfulCompose.swift */; };
 		D0AEF4602013D507005F761B /* TensionedPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0AEF45F2013D507005F761B /* TensionedPoint.swift */; };
 		D0B218D0201F6491004684FC /* Vertical+HorizontalController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B218CF201F6491004684FC /* Vertical+HorizontalController.swift */; };
 		D0B218D220215E90004684FC /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D0B218D120215E8F004684FC /* Media.xcassets */; };
@@ -173,6 +178,11 @@
 		D093209620113DCB007BFCC3 /* BackgroundLayoutSimple.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BackgroundLayoutSimple.swift; sourceTree = "<group>"; };
 		D093209820113DCB007BFCC3 /* MarginIntrinsicSizeLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MarginIntrinsicSizeLayout.swift; sourceTree = "<group>"; };
 		D093215720114134007BFCC3 /* AnyLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnyLayout.swift; sourceTree = "<group>"; };
+		D0A6EC592055DD8A00C90EA3 /* GrabBag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GrabBag.swift; sourceTree = "<group>"; };
+		D0A6EC5B2055DE8D00C90EA3 /* SingleTypeComposition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleTypeComposition.swift; sourceTree = "<group>"; };
+		D0A6EC5D2055E09900C90EA3 /* SemiGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemiGroup.swift; sourceTree = "<group>"; };
+		D0A6EC5F2055E14B00C90EA3 /* Curry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Curry.swift; sourceTree = "<group>"; };
+		D0ACE35F20588E50007AB54D /* EffectfulCompose.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EffectfulCompose.swift; sourceTree = "<group>"; };
 		D0AEF45F2013D507005F761B /* TensionedPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TensionedPoint.swift; path = GrasshopperRound2/TensionedPoint.swift; sourceTree = SOURCE_ROOT; };
 		D0B218CF201F6491004684FC /* Vertical+HorizontalController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Vertical+HorizontalController.swift"; sourceTree = "<group>"; };
 		D0B218D120215E8F004684FC /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
@@ -385,7 +395,12 @@
 			children = (
 				D0731D06204DF662004C8FF7 /* SemiRing.swift */,
 				D056A39A2015815000C3B3B1 /* ForwardPipe.swift */,
+				D0A6EC5B2055DE8D00C90EA3 /* SingleTypeComposition.swift */,
 				D0E0D0672026015600EF986D /* ForwardCompose.swift */,
+				D0ACE35F20588E50007AB54D /* EffectfulCompose.swift */,
+				D0A6EC5F2055E14B00C90EA3 /* Curry.swift */,
+				D0A6EC5D2055E09900C90EA3 /* SemiGroup.swift */,
+				D0A6EC592055DD8A00C90EA3 /* GrabBag.swift */,
 			);
 			name = Functional;
 			path = HandlesRound1/Functional;
@@ -579,6 +594,7 @@
 				D064BE0D200D94C60032C153 /* CGSegment+Math.swift in Sources */,
 				D064BE1B200D94C60032C153 /* CGPoint+Utility+Nonstandard.swift in Sources */,
 				D064BE18200D94C60032C153 /* CGRect+Utility+Nonstandard.swift in Sources */,
+				D0A6EC5A2055DD8A00C90EA3 /* GrabBag.swift in Sources */,
 				D079B6BE201D19600070EB40 /* EdgeAlignments.swift in Sources */,
 				D064BE16200D94C60032C153 /* CGDouble+Utility.swift in Sources */,
 				D064BE0E200D94C60032C153 /* CGRay.swift in Sources */,
@@ -588,12 +604,14 @@
 				D064BE15200D94C60032C153 /* CGAffineTransform+Math.swift in Sources */,
 				D0AEF4602013D507005F761B /* TensionedPoint.swift in Sources */,
 				D093215820114134007BFCC3 /* AnyLayout.swift in Sources */,
+				D0A6EC5E2055E09900C90EA3 /* SemiGroup.swift in Sources */,
 				D03E03D82011653B002D47F3 /* DeepPressGestureRecognizer.swift in Sources */,
 				D00069D4200BD08300E8D5F3 /* AppDelegate.swift in Sources */,
 				D064BE1D200D94C60032C153 /* CGAffineTransform+Utility+Nonstandard.swift in Sources */,
 				D064BE07200D94C60032C153 /* CGAffineTransform+Utility.swift in Sources */,
 				D093215320113DCB007BFCC3 /* BackgroundLayoutSimple.swift in Sources */,
 				D064BE17200D94C60032C153 /* CGSegment+Utility.swift in Sources */,
+				D0A6EC5C2055DE8D00C90EA3 /* SingleTypeComposition.swift in Sources */,
 				D0FC06232049DE6200175F06 /* ScaffGraphCore.swift in Sources */,
 				D0BCAFBB201CDC4300C4EAA5 /* SpriteScaffViewController.swift in Sources */,
 				D0B5EC1C2048E8BD00EAC94F /* SliceCore.swift in Sources */,
@@ -636,6 +654,7 @@
 				D03E03DA20124DB8002D47F3 /* Testing.swift in Sources */,
 				D0FC06252049DEE500175F06 /* ScaffGraph.swift in Sources */,
 				D093215120113DCB007BFCC3 /* Layout.swift in Sources */,
+				D0ACE36020588E50007AB54D /* EffectfulCompose.swift in Sources */,
 				D0731D07204DF662004C8FF7 /* SemiRing.swift in Sources */,
 				D093209A20113DCB007BFCC3 /* MultipleLayouts.swift in Sources */,
 				D064BE11200D94C60032C153 /* CGVector+Math.swift in Sources */,
@@ -643,6 +662,7 @@
 				D064BE03200D94C60032C153 /* CGSegment.swift in Sources */,
 				D093209D20113DCB007BFCC3 /* Layout-Logging.swift in Sources */,
 				D056A39B2015815000C3B3B1 /* ForwardPipe.swift in Sources */,
+				D0A6EC602055E14B00C90EA3 /* Curry.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

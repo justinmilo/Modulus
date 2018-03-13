@@ -98,7 +98,7 @@ let overall : (@escaping DimGenerating) -> (CGSize, [Edge]) ->  (GraphPositions,
 
   return { size, edges in
   
-  
+  let bo = addDim >>> generateSegments >>> segToPos
   let pos = size |> addDim >>> generateSegments >>> segToPos
   let max = pos |> maxEdges
   
