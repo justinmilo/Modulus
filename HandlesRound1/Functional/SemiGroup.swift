@@ -74,6 +74,22 @@ func operatorSemigroup<A,B,C : Semigroup>(f:@escaping (A)->(B)->C, g:@escaping (
   }
 }
 
+
+struct FunctionM<A, M: Monoid> {
+  let call: (A) -> M
+}
+extension FunctionM: Monoid {
+  static func <>(lhs: FunctionM, rhs: FunctionM) -> FunctionM {
+    return FunctionM { x in
+      return lhs.call(x) <> rhs.call(x)
+    }
+  }
+  
+  static var e: FunctionM {
+    return FunctionM { _ in M.e }
+  }
+}
+
 import SpriteKit
 
 //extension SKNode : Semigroup

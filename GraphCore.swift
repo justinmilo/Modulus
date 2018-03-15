@@ -326,7 +326,6 @@ func add(_ p1: PointIndex, _ int: Int) -> PointIndex
 
 func checkAnyStradle (_ bounds: PointIndex, _ check: Edge) -> Bool{
   
-  print("straddle \(check.p1.zI) ... \(bounds.zI) ... \(check.p2.zI) \(check.content) \( (check.p1.zI, bounds.zI, check.p2.zI) |> isStradling)")
 
   
   
@@ -343,9 +342,6 @@ func halfStraddlesFromBelow (_ bounds: PointIndex, _ check: Edge) -> Bool
   
   let result = (check.p1.xI, bounds.xI, check.p2.xI) |> isHalfStradlingFromBelow || (check.p1.yI, bounds.yI, check.p2.yI) |> isHalfStradlingFromBelow || (check.p1.zI, bounds.zI, check.p2.zI) |> isHalfStradlingFromBelow
   
-  if check.content == "Diag" {
-    print("diag   \(check.p1.zI) \(check.p2.zI)   | \(bounds.zI) =>  \(result)")
-  }
   
   return result
   
@@ -369,20 +365,6 @@ func isStradling (lower: Int, middle: Int, upper:Int) -> Bool
 
 
 
-struct FunctionM<A, M: Monoid> {
-  let call: (A) -> M
-}
-extension FunctionM: Monoid {
-  static func <>(lhs: FunctionM, rhs: FunctionM) -> FunctionM {
-    return FunctionM { x in
-      return lhs.call(x) <> rhs.call(x)
-    }
-  }
-  
-  static var e: FunctionM {
-    return FunctionM { _ in M.e }
-  }
-}
 
 
 let isSpanning = Predicate{ $0 - $1 > 1 }
@@ -397,14 +379,34 @@ let isHalfStradlingItem : (Int) -> Predicate<(Int,Int)> = {
   }
 }
 
-typealias Asdf = (Int, Int) -> Bool
+typealias DoubleIntToBool = (Int, Int) -> Bool
 
 
 let bothLessThan : (Int) -> Predicate<(Int,Int)> = {
   (middle:Int) -> Predicate<(Int,Int)> in
   return Predicate<(Int,Int)>{
     (l,u) in
+    print(
+      """
+      (l < middle) && (u < middle)
+       \(l) < \(middle), \(u) < \(middle)
+      \(l < middle), \(u < middle)
+      """)
     return (l < middle) && (u < middle)
+  }
+}
+
+let bothLessThanEquall : (Int) -> Predicate<(Int,Int)> = {
+  (middle:Int) -> Predicate<(Int,Int)> in
+  return Predicate<(Int,Int)>{
+    (l,u) in
+    print(
+      """
+      (l < middle) && (u < middle)
+      \(l) < \(middle), \(u) < \(middle)
+      \(l < middle), \(u < middle)
+      """)
+    return (l <= middle) && (u <= middle)
   }
 }
 
@@ -416,16 +418,39 @@ let oneLessThan : (Int) -> Predicate<(Int,Int)> = {
   }
 }
 
+
+// func (A -> Predicate<B>,
+//       B -> Predicate<C>) -> A -> Predicate<C>
+
+typealias IndexCheck = (Edge) -> DoubleIntToBool
+
+let bothZ : (Int) -> (@escaping DoubleIntToBool) -> Predicate<Edge> =
+{ i in
+  { (comp) in
+    let b = zComparison >>> bothPredicate(i, comp).call
+    return Predicate<Edge>(call: b)
+  }
+}
+
 let bothPredicate = {
-  (middle:Int, comp:@escaping Asdf) -> Predicate<(Int,Int)> in
+  (middle:Int, comp:@escaping DoubleIntToBool) -> Predicate<(Int,Int)> in
   return Predicate<(Int,Int)>{
     (tup) in
+    print(
+      """
+      -
+      (l < middle) && (u < middle)
+      \(tup.0) == \(middle), \(tup.1) == \(middle)
+      \(comp(tup.0, middle)), \(comp(tup.1, middle))
+      """)
     return comp(tup.0, middle) && comp(tup.1, middle)
   }
   }
 
+let bothInts = flip(curry(bothPredicate))
+
 let both = {
-  (middle:Int, comp:@escaping Asdf) -> (Int,Int)->Bool in
+  (middle:Int, comp:@escaping DoubleIntToBool) -> (Int,Int)->Bool in
   return {
     (l,u) in
     return comp(l, middle) && comp(u, middle)
@@ -433,7 +458,7 @@ let both = {
 }
 
 let either = {
-  (middle:Int, comp:@escaping Asdf) -> (Int,Int)->Bool in
+  (middle:Int, comp:@escaping DoubleIntToBool) -> (Int,Int)->Bool in
   return {
     (l,u) in
     return comp(l, middle) || comp(u, middle)
@@ -443,7 +468,7 @@ let either = {
 
 
 let eitherPredicate = {
-  (middle:Int, comp:@escaping Asdf) -> Predicate<(Int,Int)> in
+  (middle:Int, comp:@escaping DoubleIntToBool) -> Predicate<(Int,Int)> in
   return Predicate<(Int,Int)>{
     (l,u) in
     return comp(l, middle) || comp(u, middle)
@@ -492,11 +517,6 @@ func maxClip(max: PointIndex, edges:[Edge]) -> [Edge]
                 p2: clip(p1: max, p2: $0.p2))
   }
   
-  print(max.zI)
-  print("below \(edgesBelow)")
-  print("stradles \(edgeStradles)")
-  print("fixed \(edgeStradlesFixed)")
-  print("removed \(edgeAbove)")
   return edgesBelow + edgeStradlesFixed
 }
 
@@ -525,11 +545,6 @@ func clipOne(max: PointIndex, t: (PointIndex) -> Int, edges:[Edge]) -> [Edge]
                 p2: clip(p1: max, p2: $0.p2))
   }
   
-  print(max.zI)
-  print("below \(edgesBelow)")
-  print("stradles \(edgeStradles)")
-  print("fixed \(edgeStradlesFixed)")
-  print("removed \(edgeAbove)")
   return edgesBelow + edgeStradlesFixed
 }
 

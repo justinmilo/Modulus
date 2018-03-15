@@ -68,9 +68,13 @@ extension FunctionS: Semiring {
   static var one: FunctionS {
     return FunctionS { _ in S.one }
   }
+  
+  
+  
+
 }
 
-typealias Predicate<A> = FunctionS<A, Bool>
+
 
 extension Sequence {
   func filtered(by p: Predicate<Element>) -> [Element] {
@@ -88,5 +92,21 @@ func && <A> (lhs: Predicate<A>, rhs: Predicate<A>) -> Predicate<A> {
 
 prefix func ! <A> (p: Predicate<A>) -> Predicate<A> {
   return .init { !p.call($0) }
+}
+
+typealias Predicate<A> = FunctionS<A, Bool>
+
+func contramap<A,B>(
+  _ t: @escaping (A) -> B
+  )  -> (Predicate<B>)
+  -> Predicate<A>
+{
+  return {
+    items in
+    return  Predicate {
+      a in
+      return items.call(t(a))
+    }
+  }
 }
 

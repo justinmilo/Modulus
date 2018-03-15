@@ -393,13 +393,13 @@
 		D0731D08204DF674004C8FF7 /* Functional */ = {
 			isa = PBXGroup;
 			children = (
-				D0731D06204DF662004C8FF7 /* SemiRing.swift */,
 				D056A39A2015815000C3B3B1 /* ForwardPipe.swift */,
 				D0A6EC5B2055DE8D00C90EA3 /* SingleTypeComposition.swift */,
 				D0E0D0672026015600EF986D /* ForwardCompose.swift */,
 				D0ACE35F20588E50007AB54D /* EffectfulCompose.swift */,
 				D0A6EC5F2055E14B00C90EA3 /* Curry.swift */,
 				D0A6EC5D2055E09900C90EA3 /* SemiGroup.swift */,
+				D0731D06204DF662004C8FF7 /* SemiRing.swift */,
 				D0A6EC592055DD8A00C90EA3 /* GrabBag.swift */,
 			);
 			name = Functional;

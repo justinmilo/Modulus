@@ -27,3 +27,41 @@ func >=> <A, B, C> (_ f: @escaping (A) -> ([B]),
     return c
   }
 }
+
+func >=> <A, B, C>(
+  _ f: @escaping (A) -> (B, [String]),
+  _ g: @escaping (B) -> (C, [String])
+  ) -> (A) -> (C, [String]) {
+  
+  return { a in
+    let (b, logs) = f(a)
+    let (c, moreLogs) = g(b)
+    return (c, logs + moreLogs)
+  }
+}
+
+func >=> <A, B, C>(
+  _ f: @escaping (A) -> B?,
+  _ g: @escaping (B) -> C?
+  ) -> ((A) -> C?) {
+  
+  return { a in
+    let b = f(a)
+    switch b
+    {
+    case .some(let v): return g(v)
+    case .none: return nil
+    }
+  }
+}
+
+
+//func >=> <A, B, C> (_ f: @escaping (A) -> Predicate<B>,
+//                    _ g: @escaping (B) -> Predicate<C>) -> (A) -> Predicate<C>
+//{
+//  return { a in
+//    let b = f(a)
+//    let
+//    return c
+//  }
+//}

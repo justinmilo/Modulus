@@ -92,54 +92,81 @@ func fromSide(width:CGFloat) -> (CGSize) -> CGSize3    { return {   CGSize3(widt
 
 let sizeFront : (ScaffGraph) -> (CGSize) -> CGSize3 = {graph in { CGSize3(width: $0.width, depth: graph.bounds.depth, elev: $0.height) } }
 
-typealias DimGenerating = (CGSize) -> CGSize3
 
-let overall : (@escaping DimGenerating) -> (CGSize, [Edge]) ->  (GraphPositions, [Edge]) = { addDim in
-
+let overall : (@escaping (CGSize) -> CGSize3)
+  -> (CGSize, [Edge])
+  ->  (GraphPositions, [Edge]) =
+{
+  addDim in
   return { size, edges in
-  
-  let bo = addDim >>> generateSegments >>> segToPos
-  let pos = size |> addDim >>> generateSegments >>> segToPos
-  let max = pos |> maxEdges
-  
-  //let edges = maxClip(max: max, edges: edges)
-  let edge1 = clipOne(max: max, t: lensZ, edges:edges)
-  let edge2 = clipOne(max: max, t: lensX, edges:edge1)
-  let edge3 = clipOne(max: max, t: lensY, edges:edge2)
-  
-  
-  let s = ScaffGraph( grid : pos, edges : [])
-  s.addScaff()
-  
-  let combined  =  edge3 + s.edges.filter { !edge3.contains($0) }
-  
-  let combinedRemovedStandard : [Edge] = combined.reduce([]) {
-    res,next in
     
-    let i = res.index(where: { (edge) -> Bool in
-      return edge.content == "StandardGroup" &&
-        (edge.p1 == next.p1 ||
-          edge.p2 == next.p2)
+    let toPosition = addDim >>> generateSegments >>> segToPos
+    let pos = size |> toPosition
+    let max = pos |> maxEdges
+    
+    let bothless = bothInts(<=)
+    let pEz = bothless(max.zI) |> contramap(zComparison)
+    let pEx = bothless(max.xI) |> contramap(xComparison)
+    let pEy = bothless(max.yI) |> contramap(yComparison)
+    let edgeB1 = (pEz && pEy && pEx) |> edges.filtered
+    
+    
+    let s = ScaffGraph( grid : pos, edges : [])
+    s.addScaff()
+    
+   
+    
+    let combined  =  edgeB1 + s.edges.filter { !edgeB1.contains($0) }
+    
+    let combinedRemovedStandard : [Edge] = combined.reduce([]) {
+      results,next in
       
-    })
-    if let i = i {
-      let existing = res[i]
+      guard isStandardGroup.call(next) else { return results + [next]}
       
-      if abs(existing.p1.zI - existing.p2.zI) > abs(next.p1.zI - next.p2.zI)
+      let pred = isStandardGroup && eitherEqual(next)
+      // see if match exists in results
+      print("next item is \(next) and previous index exists? \(results.index(where: pred.call) )")
+      guard let i = results.index(where: pred.call) else {
+        print("adding \(next)")
+        return results + [next]
+      }
+      
+      print("\(results[i])")
+      let match = results[i]
+      if abs(match.p1.zI - match.p2.zI) > abs(next.p1.zI - next.p2.zI)
       {
-        return res
+        print("not adding \(next)")
+        return results
       }
       else {
-        var mutating = res
+        
+        var mutating = results
+        print(" removing \(mutating)")
+          
+          print(" adding \(next)")
         mutating.remove(at: i)
         return mutating + [next]
       }
+      
+      
+      
     }
     
-    return res + [next]
-  }
-  
-  return (pos, combinedRemovedStandard)
+    print("--edges")
+    print(edges.filtered(by:isDiag))
+    print("--b1")
+    print(edgeB1)
+    print("--graph")
+
+    print(s.edges.filtered(by:isDiag))
+    print("--comb")
+
+    print(combined.filtered(by:isDiag))
+    print("--combinedRemovedStandard")
+
+    print( isDiag |> combinedRemovedStandard.filtered )
+    
+    return (pos, combinedRemovedStandard)
   }
   
 }
@@ -217,15 +244,7 @@ let zBay : (Int) -> Predicate<Edge> =  {
 }
 
 func anyDiagTest(edges: [Edge], bayIndex:BayIndex )->[Edge] {
-  print(
-"""
-    index: \(bayIndex)
-    x: \(edges.filtered(by: xBay(bayIndex.x )))
-    y: \(edges.filtered(by: zBay(bayIndex.y)))
-    x&y: \(edges.filtered(by:  (xBay(bayIndex.x) && zBay(bayIndex.y))))
-    diags: \(edges.filtered(by:  (edgeXDiagUp || edgeXDiagDown)))
-    all: \(edges.filtered(by:  (xBay(bayIndex.x) && zBay(bayIndex.y)) && (edgeXDiagUp || edgeXDiagDown)))
-""")
+ 
   
   
   return edges.filtered(by: (xBay(bayIndex.x) && zBay(bayIndex.y)) && (edgeXDiagUp || edgeXDiagDown))
@@ -241,7 +260,7 @@ let diagLeft: (BayIndex) -> Predicate<Edge> =
     let p2_3 = p2x |> curry(addY)(edge.p2.yI)
     
     let testEdge = Edge(content: "_test", p1:p1_3, p2: p2_3)
-  return edge == testEdge
+    return edge == testEdge
   }
 }
 let diagRight: (BayIndex) -> Predicate<Edge> =
@@ -258,6 +277,10 @@ let diagRight: (BayIndex) -> Predicate<Edge> =
   }
 }
 
+var isDiag = Predicate<Edge>{ $0.content == "Diag" }
+var isStandardGroup = Predicate<Edge>{ $0.content == "StandardGroup" }
+
+var eitherEqual : (Edge) -> Predicate<Edge> = { e in return Predicate<Edge>{ ($0.p1 == e.p1) || ($0.p2 == e.p2) } }
 
 
 let inBayIndex: (BayIndex) -> Predicate<Edge> =
