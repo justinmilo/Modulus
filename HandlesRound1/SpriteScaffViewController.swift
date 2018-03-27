@@ -154,12 +154,12 @@ class SpriteScaffViewController : UIViewController {
     
     
     // Get Model Rect
-    let x = (indices, editBoundaries) |> modelRect
+    let mRect = (indices, editBoundaries) |> modelRect
     // x is something like (0.0, 30.0, 100.0, 100.0)
     // (0.0, 0.0, 100.0, 30.0)
 
     // bring model rect into the real world!
-    let z = (x, self.handleView.lastMaster.origin.asVector()) |> moveByVector
+    let z = (mRect, self.handleView.lastMaster.origin.asVector()) |> moveByVector
     let cellRectValue = z |> rectToSprite
     let y = self.handleView.lastMaster.midY |> yToSprite
     let flippedRect = (cellRectValue, y )  |> mirrorVertically
