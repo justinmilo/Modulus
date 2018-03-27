@@ -15,14 +15,14 @@ import UIKit
 struct GraphEditingView {
   let build: (CGSize, [Edge]) -> (GraphPositions, [Edge])
   let size : (ScaffGraph) -> CGSize
-  let composite : (ScaffGraph) -> (CGPoint) -> [Geometry]
+  let composite : (ScaffGraph) -> [Geometry]
   let origin : (ScaffGraph, CGRect, CGFloat) -> CGPoint
   let parseEditBoundaries : (ScaffGraph) -> GraphPositions2DSorted
 }
 func graphViewGenerator(
   build: @escaping (CGSize, [Edge]) -> (GraphPositions, [Edge]),
   size : @escaping (ScaffGraph) -> CGSize,
-  composite : [(ScaffGraph) -> (CGPoint) -> [Geometry]],
+  composite : [(ScaffGraph) -> [Geometry]],
   origin : @escaping (ScaffGraph, CGRect, CGFloat) -> CGPoint,
   parseEditBoundaries : @escaping (ScaffGraph) -> GraphPositions2DSorted
   )-> [GraphEditingView]

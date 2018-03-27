@@ -143,14 +143,13 @@ func pointDictToArray( dict: [CGFloat : [CGFloat]] ) -> [[CGPoint]]
   }
 }
 
-func graphToNonuniformFront(gp: GraphPositions) -> (CGPoint) -> NonuniformModel2D
+func graphToNonuniformFront(gp: GraphPositions) -> NonuniformModel2D
 {
-  return { point in
-    return NonuniformModel2D(origin: point, rowSizes: Grid(gp.pZ |> posToSeg), colSizes: Grid(gp.pX |> posToSeg)) }
+    return NonuniformModel2D(origin: CGPoint.zero, rowSizes: Grid(gp.pZ |> posToSeg), colSizes: Grid(gp.pX |> posToSeg))
 }
-func graphToNonuniformSide(gp: GraphPositions) -> (CGPoint) -> NonuniformModel2D
+func graphToNonuniformSide(gp: GraphPositions) -> NonuniformModel2D
 {
-  return { point in NonuniformModel2D(origin: point, rowSizes: Grid(gp.pZ |> posToSeg), colSizes: Grid(gp.pY |> posToSeg)) }
+  return NonuniformModel2D(origin: CGPoint.zero, rowSizes: Grid(gp.pZ |> posToSeg), colSizes: Grid(gp.pY |> posToSeg))
 }
 struct GraphPositionsOrdered2D
 {

@@ -7,7 +7,7 @@
 //
 import CoreGraphics
 
-typealias ViewComposite = (ScaffGraph) -> (CGPoint) -> [Geometry]
+typealias ViewComposite = (ScaffGraph) -> [Geometry]
 
 let front1 : ViewComposite = { $0.frontEdgesNoZeros } >>> curry(modelToTexturesElev)
 let frontDim : ViewComposite = { $0.grid } >>> graphToNonuniformFront >>> dimensons

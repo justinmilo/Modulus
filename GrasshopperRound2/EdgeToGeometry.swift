@@ -304,11 +304,8 @@ func modelToTexturesElev ( edges: [C2Edge], origin: CGPoint) -> [Geometry]
                    end: $0.p2, part: .diag, view: .longitudinal)
   }
   
-  let combined = horizontals + verticals + base + jack + diag
-  
-  let thirdPass : [Geometry] = (combined, origin.asVector()) |> moveGroup
-  
-  return thirdPass
+  return horizontals + verticals + base + jack + diag
+
 }
 
 

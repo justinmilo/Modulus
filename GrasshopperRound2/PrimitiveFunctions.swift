@@ -74,6 +74,15 @@ func moveByVectorCurried<T: Geometry> (initialNode: T) -> (CGVector) -> T
   return { moveByVector(initialNode: initialNode, vector: $0) }
 }
 
+func move<T: Geometry> (by vector: CGVector) -> (T) -> T
+{
+  return { moveByVector(initialNode: $0, vector: vector) }
+}
+func move(by vectorP: CGVector) -> (Geometry) -> Geometry
+{
+  return { move(item: $0, vector: vectorP) }
+}
+
 // POINT_LIST
 func listPoint (i:Int, c:Geometry)-> Geometry
 {
