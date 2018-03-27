@@ -243,10 +243,9 @@ let zBay : (Int) -> Predicate<Edge> =  {
   return  zPos(pI.0) && zPos(pI.1)
 }
 
-func anyDiagTest(edges: [Edge], bayIndex:BayIndex )->[Edge] {
- 
-  
-  
+
+func filterDiagsWithBayIndex(edges: [Edge], bayIndex:BayIndex )->[Edge]
+{
   return edges.filtered(by: (xBay(bayIndex.x) && zBay(bayIndex.y)) && (edgeXDiagUp || edgeXDiagDown))
 }
 

@@ -166,15 +166,17 @@ class SpriteScaffViewController : UIViewController {
     // flipped rect is situated in sprite kit space
     
     
-    
-    let mapFrontIndicesToY : (PointIndex2D, Int) -> [PointIndex] = { (p,max) in
+    // Handle the 2D to 3D conversion
+    let mapFrontIndicesToY : (PointIndex2D, Int) -> [PointIndex] =
+    { (p,max) in
       return  (0..<max).map{ (p.x, $0, p.y)}
     }
+    // bind for all pY.Count
     let boundFront = graph.grid.pY.count |> flip(curry(mapFrontIndicesToY))
+    // get all diags at touch
+    let diagsAtTouch = filterDiagsWithBayIndex(edges: self.graph.edges, bayIndex: indices)
     
-  
-    let diagsAtTouch = anyDiagTest(edges: self.graph.edges, bayIndex: indices)
-    
+    // start the switch around what the previoous diag value was
     if diagsAtTouch.count == 0
     {
       let reducedEdges = self.graph.edges.filter { !diagsAtTouch.contains($0) }
