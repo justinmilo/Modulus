@@ -101,7 +101,7 @@ func fLedger(e:C2Edge)-> Bool { return e.content == "Ledger" }
 func fStandard(e:C2Edge)-> Bool { return e.content == "Standard" }
 
 
-func filterLedgers(edge : C2Edge) -> Bool
+func filterOrthoLedgers(edge : C2Edge) -> Bool
 {
   return !(edge.content == "Ledger" && edge.p1 == edge.p2)
 }

@@ -246,7 +246,7 @@ func reduceDup (_ array: [C2Edge] ) -> [C2Edge] {
 func mapEdges( ed: [Edge], ceMak: (Edge) -> (CEdge)) -> [CEdge] { return ed.map( ceMak) }
 
 func reduceZeros(_ array: [C2Edge] ) -> [C2Edge] {
-  return array.filter(filterLedgers)
+  return array.filter(filterOrthoLedgers)
 }
 
 func positionSorted(p: GraphPositions) -> GraphPositions
