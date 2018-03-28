@@ -70,6 +70,7 @@
 		D093215320113DCB007BFCC3 /* BackgroundLayoutSimple.swift in Sources */ = {isa = PBXBuildFile; fileRef = D093209620113DCB007BFCC3 /* BackgroundLayoutSimple.swift */; };
 		D093215420113DCB007BFCC3 /* MarginIntrinsicSizeLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D093209820113DCB007BFCC3 /* MarginIntrinsicSizeLayout.swift */; };
 		D093215820114134007BFCC3 /* AnyLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D093215720114134007BFCC3 /* AnyLayout.swift */; };
+		D09C3C43206B32370053EE2A /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = D09C3C42206B32370053EE2A /* App.swift */; };
 		D0A6EC5A2055DD8A00C90EA3 /* GrabBag.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A6EC592055DD8A00C90EA3 /* GrabBag.swift */; };
 		D0A6EC5C2055DE8D00C90EA3 /* SingleTypeComposition.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A6EC5B2055DE8D00C90EA3 /* SingleTypeComposition.swift */; };
 		D0A6EC5E2055E09900C90EA3 /* SemiGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A6EC5D2055E09900C90EA3 /* SemiGroup.swift */; };
@@ -178,6 +179,7 @@
 		D093209620113DCB007BFCC3 /* BackgroundLayoutSimple.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BackgroundLayoutSimple.swift; sourceTree = "<group>"; };
 		D093209820113DCB007BFCC3 /* MarginIntrinsicSizeLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MarginIntrinsicSizeLayout.swift; sourceTree = "<group>"; };
 		D093215720114134007BFCC3 /* AnyLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnyLayout.swift; sourceTree = "<group>"; };
+		D09C3C42206B32370053EE2A /* App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
 		D0A6EC592055DD8A00C90EA3 /* GrabBag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GrabBag.swift; sourceTree = "<group>"; };
 		D0A6EC5B2055DE8D00C90EA3 /* SingleTypeComposition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleTypeComposition.swift; sourceTree = "<group>"; };
 		D0A6EC5D2055E09900C90EA3 /* SemiGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemiGroup.swift; sourceTree = "<group>"; };
@@ -254,6 +256,7 @@
 			isa = PBXGroup;
 			children = (
 				D00069D3200BD08300E8D5F3 /* AppDelegate.swift */,
+				D09C3C42206B32370053EE2A /* App.swift */,
 				D0BCAFBA201CDC4300C4EAA5 /* SpriteScaffViewController.swift */,
 				D04F8DC420475F2000929849 /* ScaffViewCore.swift */,
 				D0B69D2420435F3900AEA01B /* SpriteKit */,
@@ -637,6 +640,7 @@
 				D064BE08200D94C60032C153 /* CGAngle+Math.swift in Sources */,
 				D04153C4202B9FB400BD7B72 /* View.swift in Sources */,
 				D064BE0B200D94C60032C153 /* CGAngle.swift in Sources */,
+				D09C3C43206B32370053EE2A /* App.swift in Sources */,
 				D03E040320125DF8002D47F3 /* DrawingPrimitives.swift in Sources */,
 				D079B6BC201D193E0070EB40 /* CGRect+Inset.swift in Sources */,
 				D064BE09200D94C60032C153 /* CGSize+Utility.swift in Sources */,
