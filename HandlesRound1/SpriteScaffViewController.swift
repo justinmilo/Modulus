@@ -93,10 +93,12 @@ class SpriteScaffViewController : UIViewController {
   
   func draw(in newRect: CGRect) {
     // Create New Model &  // Find Orirgin
-    let origin = (self.graph, newRect, self.twoDView.bounds.height) |> self.editingView.origin
+    //let origin = (self.graph, newRect, self.twoDView.bounds.height) |> self.editingView.origin
+    let pointToSprite = self.twoDView.bounds.height |> curry(uiToSprite(height:point:))
+    let origin = newRect.bottomLeft |> pointToSprite
     
     // Create Geometry
-    let moop : ([Geometry]) -> [Geometry] = move(by:origin.asVector()) |> curry(map)
+    let moop : ([Geometry]) -> [Geometry] = origin.asVector() |> move(by:) |> curry(map)
     let b = self.graph |> self.editingView.composite >>> moop
     
     // Set & Redraw Geometry

@@ -16,14 +16,12 @@ struct GraphEditingView {
   let build: (CGSize, [Edge]) -> (GraphPositions, [Edge])
   let size : (ScaffGraph) -> CGSize
   let composite : (ScaffGraph) -> [Geometry]
-  let origin : (ScaffGraph, CGRect, CGFloat) -> CGPoint
   let parseEditBoundaries : (ScaffGraph) -> GraphPositions2DSorted
 }
 func graphViewGenerator(
   build: @escaping (CGSize, [Edge]) -> (GraphPositions, [Edge]),
   size : @escaping (ScaffGraph) -> CGSize,
   composite : [(ScaffGraph) -> [Geometry]],
-  origin : @escaping (ScaffGraph, CGRect, CGFloat) -> CGPoint,
   parseEditBoundaries : @escaping (ScaffGraph) -> GraphPositions2DSorted
   )-> [GraphEditingView]
 {
@@ -31,7 +29,6 @@ func graphViewGenerator(
     GraphEditingView( build: build,
                       size: size,
                       composite: $0,
-                      origin: origin,
                       parseEditBoundaries: parseEditBoundaries)
   }
 }
@@ -59,7 +56,6 @@ func app() -> UIViewController
     composite: [front1,
                 front1 <> frontDim <> frontOuterDimPlus <> frontOverall,
                 { $0.frontEdgesNoZeros } >>> modelToLinework],
-    origin: originFromFullScaff,
     parseEditBoundaries: frontPositionsOhneStandards)
   
   //      let frontMap2 = graphViewGenerator(
@@ -74,4 +70,5 @@ func app() -> UIViewController
   //        parseEditBoundaries: frontPositionsOhneStandards)
   
   let uR = SpriteScaffViewController(graph: graph, mapping: frontMap)
+  return uR
 }
