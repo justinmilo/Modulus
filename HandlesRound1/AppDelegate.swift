@@ -68,10 +68,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         build: sizeFront(graph) |> overall, //>>> createScaffolding,
         size: sizeFromFullScaff,
         composite: [front1,
-                    front1 <> frontDim,
-                    front1 <> frontDim <> frontOuterDimPlus,
                     front1 <> frontDim <> frontOuterDimPlus <> frontOverall,
-                    { $0.frontEdgesNoZeros } >>> curry(modelToLinework)],
+                    { $0.frontEdgesNoZeros } >>> modelToLinework],
         origin: originFromFullScaff,
         parseEditBoundaries: frontPositionsOhneStandards)
       

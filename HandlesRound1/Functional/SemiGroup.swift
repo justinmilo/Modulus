@@ -62,6 +62,14 @@ func <><A,B,C : Semigroup>(f:@escaping (A)->(B)->C, g:@escaping (A)->(B)->C) -> 
   }
 }
 
+func <><A,B : Semigroup>(f:@escaping (A)->B, g:@escaping (A)->B) -> (A)->B
+{
+  return {
+    a in
+      return  f(a) <> g(a)
+  }
+}
+
 
 func operatorSemigroup<A,B,C : Semigroup>(f:@escaping (A)->(B)->C, g:@escaping (A)->(B)->C) -> (A)->(B)->C
 {

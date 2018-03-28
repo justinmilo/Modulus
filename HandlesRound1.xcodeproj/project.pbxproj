@@ -229,12 +229,10 @@
 		D00069C7200BD08300E8D5F3 = {
 			isa = PBXGroup;
 			children = (
-				D0FB935E20277CCB00265740 /* Graph.swift */,
-				D0B5EC192048E79500EAC94F /* GraphCore.swift */,
-				D0FC06242049DEE500175F06 /* ScaffGraph.swift */,
-				D0FC06222049DE6200175F06 /* ScaffGraphCore.swift */,
-				D0B5EC1B2048E8BD00EAC94F /* SliceCore.swift */,
+				D09C3C41206B2C7B0053EE2A /* Graph */,
 				D00069D2200BD08300E8D5F3 /* HandlesRound1 */,
+				D0B69D252043632D00AEA01B /* GameScene.sks */,
+				D0B218D120215E8F004684FC /* Media.xcassets */,
 				D00069E7200BD08300E8D5F3 /* HandlesRound1Tests */,
 				D00069F2200BD08300E8D5F3 /* HandlesRound1UITests */,
 				D00069D1200BD08300E8D5F3 /* Products */,
@@ -256,10 +254,8 @@
 			isa = PBXGroup;
 			children = (
 				D00069D3200BD08300E8D5F3 /* AppDelegate.swift */,
-				D0B218D120215E8F004684FC /* Media.xcassets */,
 				D0BCAFBA201CDC4300C4EAA5 /* SpriteScaffViewController.swift */,
 				D04F8DC420475F2000929849 /* ScaffViewCore.swift */,
-				D0B69D252043632D00AEA01B /* GameScene.sks */,
 				D0B69D2420435F3900AEA01B /* SpriteKit */,
 				D04153C3202B9FB400BD7B72 /* View.swift */,
 				D0F09A55201CCD3C00720FD5 /* HandlesView.swift */,
@@ -426,6 +422,18 @@
 			children = (
 			);
 			path = "Layout - VirtualSize - Intrinsic";
+			sourceTree = "<group>";
+		};
+		D09C3C41206B2C7B0053EE2A /* Graph */ = {
+			isa = PBXGroup;
+			children = (
+				D0FB935E20277CCB00265740 /* Graph.swift */,
+				D0B5EC192048E79500EAC94F /* GraphCore.swift */,
+				D0FC06242049DEE500175F06 /* ScaffGraph.swift */,
+				D0FC06222049DE6200175F06 /* ScaffGraphCore.swift */,
+				D0B5EC1B2048E8BD00EAC94F /* SliceCore.swift */,
+			);
+			path = Graph;
 			sourceTree = "<group>";
 		};
 		D0AEF45D2013A6FC005F761B /* Other Stuff */ = {

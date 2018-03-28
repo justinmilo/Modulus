@@ -9,7 +9,7 @@ import CoreGraphics
 
 typealias ViewComposite = (ScaffGraph) -> [Geometry]
 
-let front1 : ViewComposite = { $0.frontEdgesNoZeros } >>> curry(modelToTexturesElev)
+let front1 : ViewComposite = { $0.frontEdgesNoZeros } >>> modelToTexturesElev
 let frontDim : ViewComposite = { $0.grid } >>> graphToNonuniformFront >>> dimensons
 
 let frontEdges : (ScaffGraph) -> [C2Edge] = { ($0.grid, $0.edges) |> frontSection().parse }
@@ -38,14 +38,13 @@ let outerDimensions =
     >>> pointDictToArray
     >>> leftToRightToBorders
     >>> { return ($0.left |> dimLeft(30.0)) + ($0.right |> dimRight(30.0)) }
-let movedGeometry : ([Geometry]) -> (CGPoint) -> [Geometry] = { g in return {p in return g.map { ($0, p.asVector()) |> move } } }
 let frontOuterDimPlus : ViewComposite =
-  frontEdges >>> removedStandards >>> outerDimensions >>> movedGeometry
-let side1 : ViewComposite = { $0.sideEdgesNoZeros} >>> curry(modelToTexturesElev)
+  frontEdges >>> removedStandards >>> outerDimensions
+let side1 : ViewComposite = { $0.sideEdgesNoZeros} >>> modelToTexturesElev
 let sideDim : ViewComposite = { $0.grid } >>> graphToNonuniformSide >>> dimensons
-let sideDoubleDim : ViewComposite = sideEdges >>> removedStandards >>> outerDimensions >>> movedGeometry
+let sideDoubleDim : ViewComposite = sideEdges >>> removedStandards >>> outerDimensions
 let frontGraph : (ScaffGraph) -> GraphPositionsOrdered2D =  { $0.grid } >>> graphToFrontGraph2D
 let overallDimensions = graphToCorners >>> borders >>> dimension(40)
 
 let frontFinal = front1 <> frontDim <> frontOuterDimPlus
-let frontOverall = frontGraph >>> overallDimensions >>> movedGeometry
+let frontOverall = frontGraph >>> overallDimensions

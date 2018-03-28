@@ -260,7 +260,7 @@ func formerReturn(m: NonuniformModel2D) -> [[Geometry]]{
   return rtrn
 }
 
-func modelToTexturesElev ( edges: [C2Edge], origin: CGPoint) -> [Geometry]
+func modelToTexturesElev ( edges: [C2Edge] ) -> [Geometry]
 {
   let horizontals = edges.filter{ $0.content == "Ledger"}.map
   {
@@ -383,7 +383,7 @@ func modelToPlanGeometry ( edges: [C2Edge]) -> [Scaff2D]
 
 
 
-func modelToLinework ( edges: [C2Edge], origin: CGPoint) -> [Geometry]
+func modelToLinework ( edges: [C2Edge] ) -> [Geometry]
 {
   let lines : [Geometry] = edges.map { edge in
     return Line(start: edge.p1, end: edge.p2)
@@ -417,15 +417,9 @@ func modelToLinework ( edges: [C2Edge], origin: CGPoint) -> [Geometry]
   
   /// Move to orign
   
-  let thirdPass : [Geometry] = (lines + labelsSecondPass).map{
-    var new = $0
-    new.position = $0.position + origin.asVector()
-    return new
-  }
   
   
-  
-  return thirdPass
+  return (lines + labelsSecondPass)
 }
 
 
