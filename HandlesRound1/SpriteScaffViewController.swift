@@ -147,7 +147,7 @@ class SpriteScaffViewController : UIViewController {
     let p = (tS, rectS) |> viewSpaceToModelSpace
     
     // Properly models concern
-    let editBoundaries = self.graph |> editingView.parseEditBoundaries ///
+    let editBoundaries = self.graph |> editingView.grid2D ///
     let toGridIndices = editBoundaries |> curry(pointToGridIndices) >>>  handleTupleOptionWith
     
     // Get Model Indices
