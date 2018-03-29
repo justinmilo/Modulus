@@ -255,7 +255,6 @@
 		D00069D2200BD08300E8D5F3 /* HandlesRound1 */ = {
 			isa = PBXGroup;
 			children = (
-				D00069D3200BD08300E8D5F3 /* AppDelegate.swift */,
 				D09C3C42206B32370053EE2A /* App.swift */,
 				D0BCAFBA201CDC4300C4EAA5 /* SpriteScaffViewController.swift */,
 				D04F8DC420475F2000929849 /* ScaffViewCore.swift */,
@@ -442,6 +441,7 @@
 		D0AEF45D2013A6FC005F761B /* Other Stuff */ = {
 			isa = PBXGroup;
 			children = (
+				D00069D3200BD08300E8D5F3 /* AppDelegate.swift */,
 				D03E03FE20125DF8002D47F3 /* Info.plist */,
 				D0B218CF201F6491004684FC /* Vertical+HorizontalController.swift */,
 				D00069DF200BD08300E8D5F3 /* Info.plist */,
