@@ -24,7 +24,7 @@ infix operator |< : ForwardApplication // Pipe into last argument
 public func |> <A,Z>(lhs: A, rhs: (A) -> Z) -> Z {
   return rhs(lhs)
 }
-
+/*
 public func |> <A,B,Z>(lhs: A, rhs: ((A, B) -> Z, B)) -> Z {
   return rhs.0(lhs, rhs.1)
 }
@@ -44,7 +44,7 @@ public func |> <A,B,C,D,E,Z>(lhs: A, rhs: (((A, B, C, D, E) -> Z), B, C, D, E)) 
 public func |> <A,B,C,D,E,F,Z>(lhs: A, rhs: (((A, B, C, D, E, F) -> Z), B, C, D, E, F)) -> Z {
   return rhs.0(lhs, rhs.1, rhs.2, rhs.3, rhs.4, rhs.5)
 }
-
+*/
 // MARK: Second argument
 public func |>> <A,B,Z>(lhs: B, rhs: ((A, B) -> Z, A)) -> Z {
   return rhs.0(rhs.1, lhs)

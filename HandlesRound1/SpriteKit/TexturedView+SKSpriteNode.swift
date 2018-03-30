@@ -34,7 +34,7 @@ let descriptionDrawing : (Scaff2D.DrawingType) -> String =
 let nameHash : ( CGFloat, Scaff2D.ScaffType, Scaff2D.DrawingType)  -> String = { (float, type,view) in return "\(float),-" + ((type |> descriptionScaff) +  (view |> descriptionDrawing)) }
 
 let image : ( CGFloat, Scaff2D.ScaffType, Scaff2D.DrawingType) -> String? = {
-  switch ($0, $1, $2)
+  switch ($0.rounded(places:0), $1, $2)
   {
   case (50, .ledger, .plan): return "0.5m Plan"
   case (100, .ledger, .plan): return "1m plan"
@@ -49,7 +49,10 @@ let image : ( CGFloat, Scaff2D.ScaffType, Scaff2D.DrawingType) -> String? = {
   case (50, .standard, .longitudinal): return "0.5m Std"
   case (_, .basecollar, .longitudinal): return "Base Collar"
   case (_, .jack, .longitudinal): return "Screw Jack"
-  default:  return nil
+  default:
+    print( $0, $1, $2 )
+    print( "AND NOTHING COMING UP!!")
+    return nil
   }
 }
 

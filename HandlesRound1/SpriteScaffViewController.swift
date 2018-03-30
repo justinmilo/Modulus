@@ -18,6 +18,15 @@ import UIKit
 import SpriteKit
 
 
+func zurry<B>(_ g: ()->B ) -> B
+{
+  return g()
+}
+func flip<A, C>(_ f: @escaping (A) -> () -> C) -> () -> (A) -> C {
+  return { { a in f(a)() } }
+}
+
+let negatedVector = zurry(flip(CGPoint.asVector)) >>> zurry(flip(CGVector.negated))
 
 
 
@@ -90,19 +99,31 @@ class SpriteScaffViewController : UIViewController {
   }
   
   
-  
+  // newRect a product of the Bounding Box + a generated size + a position
   func draw(in newRect: CGRect) {
+    // overriding whatever the position is
+    let newRect = self.view.bounds.withInsetRect(ofSize: newRect.size, hugging: (.center, .center))
+    
+    
     // Create New Model &  // Find Orirgin
     //let origin = (self.graph, newRect, self.twoDView.bounds.height) |> self.editingView.origin
     let pointToSprite = self.twoDView.bounds.height |> curry(uiToSprite(height:point:))
-    let origin = newRect.bottomLeft |> pointToSprite
+    let origin = (newRect.bottomLeft) |> pointToSprite
+    let o2 =
+      (origin,
+       self.graph |> editingView.origin >>> negatedVector)
+      |> moveByVector
     
     // Create Geometry
-    let moop : ([Geometry]) -> [Geometry] = origin.asVector() |> move(by:) |> curry(map)
+    let moop = o2.asVector() |> move(by:) |> curry(map)
     let b = self.graph |> self.editingView.composite >>> moop
     
     // Set & Redraw Geometry
     self.twoDView.redraw( b )
+    
+    
+    /// OVERRIDING THE MASTER
+    self.handleView.set(master: newRect)
   }
   
   
@@ -144,6 +165,8 @@ class SpriteScaffViewController : UIViewController {
     // Properly Controllers concern
     let tS = touch |> pointToSprite
     let rectS = self.handleView.lastMaster |> rectToSprite
+    //let nede = ( tS, self.graph |> editingView.origin >>> negatedVector)
+    //  |> moveByVector
     let p = (tS, rectS) |> viewSpaceToModelSpace
     
     // Properly models concern
