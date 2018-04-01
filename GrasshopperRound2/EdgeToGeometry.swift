@@ -262,7 +262,7 @@ func formerReturn(m: NonuniformModel2D) -> [[Geometry]]{
 
 func modelToTexturesElev ( edges: [C2Edge] ) -> [Geometry]
 {
-  let horizontals = edges.filter{ $0.content == "Ledger"}.map
+  let horizontals = edges.filter{ $0.content == .ledger}.map
   {
     ledge in
     return (ledge.p1, ledge.p2) |>
@@ -272,7 +272,7 @@ func modelToTexturesElev ( edges: [C2Edge] ) -> [Geometry]
     }
   }
   
-  let verticals = edges.filter{ $0.content == "StandardGroup"}.flatMap
+  let verticals = edges.filter{ $0.content == .standardGroup}.flatMap
   {
     line  -> [Scaff2D] in
     
@@ -286,19 +286,19 @@ func modelToTexturesElev ( edges: [C2Edge] ) -> [Geometry]
     }
     return s
   }
-  let base = edges.filter{ $0.content == "BC"}.map
+  let base = edges.filter{ $0.content == .bc}.map
   {
     
     return Scaff2D(start: $0.p1 ,
                    end: $0.p2, part: .basecollar, view: .longitudinal)
     
   }
-  let jack = edges.filter{ $0.content == "Jack"}.map
+  let jack = edges.filter{ $0.content == .jack}.map
   {
     return Scaff2D(start: $0.p1 ,
                    end: $0.p2, part: .jack, view: .longitudinal)
   }
-  let diag = edges.filter{ $0.content == "Diag"}.map
+  let diag = edges.filter{ $0.content == .diag}.map
   {
     return Scaff2D(start: $0.p1 ,
                    end: $0.p2, part: .diag, view: .longitudinal)
@@ -353,32 +353,26 @@ extension Scaff2D : CustomStringConvertible {
 
 
 
-let planEdgeToGeometry : ([C2Edge], CGPoint) -> [Geometry] = { edges, origin in
-  let geo1 = edges |> modelToPlanGeometry
-  let geo2 :  [Geometry] = (geo1, origin.asVector() ) |> moveGroup
-  return geo2
-}
-
-
-
-func modelToPlanGeometry ( edges: [C2Edge]) -> [Scaff2D]
-{
-  
+let planEdgeToGeometry : ([C2Edge]) -> [Scaff2D] = { edges in
   return edges.map { edge in
-    
+    print (edge.content)
     switch edge.content
     {
-    case "Standard": return Scaff2D(start: edge.p1, end: edge.p2, part: .standard, view: .plan)
-    case "Jack" : return Scaff2D(start: edge.p1, end: edge.p2, part: .jack, view: .plan)
-    case "Ledger" : return Scaff2D(start: edge.p1, end: edge.p2, part: .ledger, view: .plan)
-    case "BC" : return Scaff2D(start: edge.p1, end: edge.p2, part: .basecollar, view: .plan)
+    case .standardGroup : return Scaff2D(start: edge.p1, end: edge.p2, part: .standard, view: .plan)
+    case .jack : return Scaff2D(start: edge.p1, end: edge.p2, part: .jack, view: .plan)
+    case .ledger : return Scaff2D(start: edge.p1, end: edge.p2, part: .ledger, view: .plan)
+    case .bc : return Scaff2D(start: edge.p1, end: edge.p2, part: .basecollar, view: .plan)
       
     default :
       fatalError("Some other type showed up")
     }
     
   }
-  
+}
+
+func toGeometry<A:Geometry>(_ a: A ) -> Geometry
+{
+  return a as Geometry
 }
 
 
@@ -390,9 +384,9 @@ func modelToLinework ( edges: [C2Edge] ) -> [Geometry]
   }
   
   let labels = edges.map { edge -> Label in
-    let direction : Label.Rotation = edge.content == "Ledger" || edge.content == "Diag" ? .h : .v
+    let direction : Label.Rotation = edge.content == .ledger || edge.content == .diag ? .h : .v
     let vector = direction == .h ? unitY * 10 : unitX * 10
-    return Label(text: edge.content, position: (edge.p1 + edge.p2).center + vector, rotation: direction)
+    return Label(text: edge.content.rawValue, position: (edge.p1 + edge.p2).center + vector, rotation: direction)
   }
   
   let labelsSecondPass : [Geometry] = labels.reduce([])

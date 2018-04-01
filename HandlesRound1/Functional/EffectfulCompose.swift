@@ -11,7 +11,7 @@ import Foundation
 
 precedencegroup EffectfulComposition {
   associativity: left
-  higherThan: ForwardApplication
+  higherThan: SingleTypeComposition
   
 }
 

@@ -38,6 +38,7 @@ let outerDimensions =
     >>> pointDictToArray
     >>> leftToRightToBorders
     >>> { return ($0.left |> dimLeft(30.0)) + ($0.right |> dimRight(30.0)) }
+    >>> { $0.map{ $0 as Geometry} }
 let frontOuterDimPlus : ViewComposite =
   frontEdges >>> removedStandards >>> outerDimensions
 let side1 : ViewComposite = { $0.sideEdgesNoZeros} >>> modelToTexturesElev

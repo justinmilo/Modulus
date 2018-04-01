@@ -46,7 +46,7 @@ class SpriteScaffViewController : UIViewController {
   {
     self.graph = graph
     self.twoDView = Sprite2DView(frame: UIScreen.main.bounds)
-    self.handleView = HandleViewRound1(frame: UIScreen.main.bounds, state: .edge)
+    self.handleView = HandleViewRound1(frame: UIScreen.main.bounds, state: .centeredEdge)
     
     self.editingView = mapping[0]
     self.loadedViews = mapping
@@ -64,24 +64,30 @@ class SpriteScaffViewController : UIViewController {
   
   func buildFromScratch()
   {
+    //let size = self.graph |> self.editingView.size
+    //let newRect = self.view.bounds.withInsetRect(ofSize: size, hugging: (.center, .center))
+    //self.handleView.set(master: newRect)
+    
     let size = self.graph |> self.editingView.size
-    let newRect = self.view.bounds.withInsetRect(ofSize: size, hugging: (.center, .center))
+    let newRect = self.handleView.bounds.withInsetRect(ofSize: size, hugging: (.center, .center))
     self.handleView.set(master: newRect)
-    self.draw(in: newRect)
+    self.draw(in: newRect) 
   }
   
   override func loadView() {
     view = UIView()
     view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(SpriteScaffViewController.tap)))
     
-    for v in [twoDView, handleView]{ self.view.addSubview(v) }
+    for v in [twoDView, handleView] as [UIView]{ self.view.addSubview(v) }
+    
+    
     
     self.handleView.handler =    {
       master, positions in
        // Create New Model &  // Find Orirgin
       (self.graph.grid, self.graph.edges) = (master.size, self.graph.edges) |> self.editingView.build
       let size = self.graph |> self.editingView.size
-      let newRect = (master, size, positions) |> bindSize
+      let newRect = (master, size, positions) |> centeredRect
       
       self.draw(in: newRect)
     }
@@ -91,7 +97,7 @@ class SpriteScaffViewController : UIViewController {
       // Create New Model
       (self.graph.grid, self.graph.edges) = (master.size, self.graph.edges) |> self.editingView.build
       let size = self.graph |> self.editingView.size
-      let  newRect = (master, size, positions) |> bindSize
+      let  newRect = (master, size, positions) |> centeredRect
       
       self.handleView.set(master: newRect )
     }
@@ -102,7 +108,7 @@ class SpriteScaffViewController : UIViewController {
   // newRect a product of the Bounding Box + a generated size + a position
   func draw(in newRect: CGRect) {
     // overriding whatever the position is
-    let newRect = self.view.bounds.withInsetRect(ofSize: newRect.size, hugging: (.center, .center))
+    //let newRect = self.view.bounds.withInsetRect(ofSize: newRect.size, hugging: (.center, .center))
     
     
     // Create New Model &  // Find Orirgin
@@ -123,7 +129,7 @@ class SpriteScaffViewController : UIViewController {
     
     
     /// OVERRIDING THE MASTER
-    self.handleView.set(master: newRect)
+    //self.handleView.set(master: newRect)
   }
   
   
@@ -208,7 +214,7 @@ class SpriteScaffViewController : UIViewController {
       let reducedEdges = self.graph.edges.filter { !diagsAtTouch.contains($0) }
       let (p1x, p2x) = lowToHigh(gIndex: indices)
       let items = zip(p1x |> boundFront, p2x |> boundFront).map{
-        return Edge(content: "Diag", p1: $0.0, p2: $0.1)
+        return Edge(content: .diag, p1: $0.0, p2: $0.1)
       }
       self.graph.edges = reducedEdges + items
     }
@@ -217,7 +223,7 @@ class SpriteScaffViewController : UIViewController {
       let reducedEdges = self.graph.edges.filter { !diagsAtTouch.contains($0) }
       let (p1x, p2x) = highToLow(gIndex: indices)
       let items = zip(p1x |> boundFront, p2x |> boundFront).map{
-        return Edge(content: "Diag", p1: $0.0, p2: $0.1)
+        return Edge(content: .diag, p1: $0.0, p2: $0.1)
       }
       self.graph.edges = reducedEdges + items
     }

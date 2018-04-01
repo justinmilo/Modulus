@@ -67,5 +67,8 @@ func >>-><A, B, C, D>(lhs: ((A)->B, C), rhs: @escaping (B, C) -> D) -> (A)->D {
 func map<A, B>(_ t: @escaping (A) -> B, _ items: [A]) -> [B] {
   return items.map(t)
 }
+func map<A, B>(_ t: @escaping (A) -> B) -> ([A]) -> [B] {
+  return {items in items.map(t) }
+}
 
 

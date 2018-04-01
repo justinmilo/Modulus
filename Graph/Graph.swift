@@ -49,13 +49,26 @@ typealias PointIndex = (xI: Int, yI: Int, zI: Int)
 
 struct Edge
 {
-  var content : String
+  var content : EdgeType
+  var p1 : PointIndex
+  var p2 : PointIndex
+}
+
+struct EdgeEmpty // Without Content
+{
   var p1 : PointIndex
   var p2 : PointIndex
 }
 
 extension Edge : Equatable {
   static func == (lhs: Edge, rhs: Edge) -> Bool {
+    return lhs.empty == rhs.empty
+  }
+  var empty : EdgeEmpty { get { return EdgeEmpty(p1: self.p1, p2: self.p2)} }
+}
+
+extension EdgeEmpty : Equatable {
+  static func == (lhs: EdgeEmpty, rhs: EdgeEmpty) -> Bool {
     return (lhs.p1 == rhs.p1 && lhs.p2 == rhs.p2) ||
       (lhs.p1 == rhs.p2 && lhs.p2 == rhs.p1)
   }
@@ -71,15 +84,22 @@ struct Segment3 {
 
 struct CEdge
 {
-  var content : String
+  var content : EdgeType
   var p1 : Point3
   var p2 : Point3
 }
 
+enum EdgeType : String {
+  case ledger = "Ledger"
+  case diag = "Diag"
+  case bc = "BC"
+  case standardGroup = "StandardGroup"
+  case jack = "Jack"
+}
 
 
 struct C2Edge : Equatable{
-  var content : String
+  var content : EdgeType
   var (p1,p2) : (CGPoint, CGPoint)
   
   static func ==(lhs: C2Edge, rhs: C2Edge) -> Bool

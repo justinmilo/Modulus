@@ -39,6 +39,13 @@ func bindSize( master: CGRect, size: CGSize, positions: (VerticalPosition, Horiz
   return master.withInsetRect( ofSize: size, hugging:  (positions.0.oposite, positions.1.oposite))
 }
 
+func centeredRect( master: CGRect, size: CGSize, positions: (VerticalPosition, HorizontalPosition)) -> (CGRect)
+{
+  // Find Orirgin
+  return master.withInsetRect( ofSize: size, hugging:  (.center, .center))
+}
+
+
 
 //
 
@@ -93,9 +100,9 @@ func flip( size: CGSize) -> CGSize
 
 
 // 2D Dim Plan grid stuff ...
-func graphToNonuniformPlan(gp: GraphPositions) -> (CGPoint) -> NonuniformModel2D
+func graphToNonuniformPlan(gp: GraphPositions) -> NonuniformModel2D
 {
-  return { point in NonuniformModel2D(origin: point, rowSizes: Grid(gp.pY |> posToSeg), colSizes: Grid(gp.pX |> posToSeg)) }
+  return NonuniformModel2D(origin: CGPoint.zero, rowSizes: Grid(gp.pY |> posToSeg), colSizes: Grid(gp.pX |> posToSeg))
 }
 let graphToPlanDimGeometry = graphToNonuniformPlan >>> basic
 
@@ -174,13 +181,13 @@ func graphToCorners(gp: GraphPositionsOrdered2D) -> Corners
 
 let graphToDefPlanEdges : (ScaffGraph)->[C2Edge] = { $0.planEdgesNoZeros }
 
-let planGridsToDimensions : (ScaffGraph) -> (CGPoint) -> [Geometry] = { $0.grid } >>> graphToNonuniformPlan >>> basic
+let planGridsToDimensions : (ScaffGraph) -> [Geometry] = { $0.grid } >>> graphToNonuniformPlan >>> basic
 // ... End 2d dim plan gridd stuf
-let graphToTextures :  (ScaffGraph) -> (CGPoint) -> [Geometry] = { $0.planEdgesNoZeros } >>> curry(planEdgeToGeometry)
-let graphToNonuniform : (ScaffGraph) -> (CGPoint) -> NonuniformModel2D = { $0.grid } >>> graphToNonuniformPlan
+let graphToTextures :  (ScaffGraph) -> [Geometry] = { $0.planEdgesNoZeros } >>> planEdgeToGeometry >>> map(toGeometry)
+let graphToNonuniform : (ScaffGraph) -> NonuniformModel2D = { $0.grid } >>> graphToNonuniformPlan
 
 // (A -> B, C ) (B, C) -> D
-let nonuniformToDimensions : (NonuniformModel2D) -> [Geometry] = (nonuniformToPoints, 40) >>-> pointCollectionToDimLabel
+let nonuniformToDimensions : (NonuniformModel2D) -> [Geometry] = (nonuniformToPoints, 40) >>-> pointCollectionToDimLabel >>> map(toGeometry)
 // (A -> B -> C) (C -> D)
 // (T -> C) (C -> D)
 //func >>><A, B, C, D>(f: (A)->(B)->C, g:(C)->D ) -> (A)->(B)->(D)
@@ -188,21 +195,16 @@ let nonuniformToDimensions : (NonuniformModel2D) -> [Geometry] = (nonuniformToPo
 //  { f in return {p in f(p) |> nonuniformToDimensions }
 //}
 //let graphToDimensions = graphToNonuniform >>> { f in return {p in f(p) |> nonuniformToDimensions }  }
-let graphToDimensions : (ScaffGraph) -> (CGPoint) -> [Geometry] = graphToNonuniform >>>  nonuniformToDimensions
+let graphToDimensions : (ScaffGraph) -> [Geometry] = graphToNonuniform >>> nonuniformToDimensions
 
-let finalDimComp : (ScaffGraph) -> (CGPoint) -> [Geometry] = graphToTextures <> graphToDimensions
-let rotatedPlanGrid : (ScaffGraph) -> (CGPoint) -> [Geometry] = graphToDefPlanEdges >>> rotateGroup >>> curry(planEdgeToGeometry)
+let finalDimComp : (ScaffGraph) -> [Geometry] = graphToTextures <> graphToDimensions
+let rotatedPlanGrid : (ScaffGraph) -> [Geometry] = graphToDefPlanEdges >>> rotateGroup >>> planEdgeToGeometry >>> map(toGeometry)
 
 func rotateUniform(nu: NonuniformModel2D)-> NonuniformModel2D
   {
     return NonuniformModel2D(origin: nu.origin, rowSizes: nu.colSizes, colSizes: nu.rowSizes)
 }
-
-
-let _rotatedPlanDim : (ScaffGraph, CGPoint) -> [Geometry] = detuple(uncurry(graphToNonuniform) >>> rotateUniform >>> nonuniformToDimensions)
-let rotatedPlanDim : (ScaffGraph) -> (CGPoint) -> [Geometry] = curry(detuple(_rotatedPlanDim))
-
-
-let rotatedFinalDimComp : (ScaffGraph) -> (CGPoint) -> [Geometry] = rotatedPlanGrid <> rotatedPlanDim
+let rotatedPlanDim : (ScaffGraph) -> [Geometry] = graphToNonuniform >>> rotateUniform >>> nonuniformToDimensions
+let rotatedFinalDimComp : (ScaffGraph) -> [Geometry] = rotatedPlanGrid <> rotatedPlanDim
 
 

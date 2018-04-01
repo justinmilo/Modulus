@@ -53,6 +53,24 @@ func centerDefinedRect(from index: Int, in points:[CGPoint]) -> CGRect {
   return centerDefinedRect(from: points)
 }
 
+// Create rect from a "last changed" index assuming counter clockwise set of edge points // ADAPATER for interface
+func mirrorDefinedRect(mirroredAt position: CGPoint, from index: Int, in points:[CGPoint]) -> CGRect {
+  var points = points
+  // mirror the current index around mirror position and store as opposite
+  points[index |> opposite] = points[index] |> mirrorOrtho(from: position)
+  
+  let zeroRects = points.map{$0.asRect()}
+  let remaining = zeroRects.dropFirst()
+  return remaining.reduce(zeroRects.first!) { return $0.union( $1 ) }
+}
+
+func opposite(i : Int )-> Int
+{
+  let sides = 4
+  return i + 2 < sides ?
+    i + 2 : i - 2
+}
+
 func centerDefinedRect(from points:[CGPoint]) -> CGRect {
   let points = points.map{$0.asRect()}
   let remaining = points.dropFirst()
@@ -70,53 +88,62 @@ extension UIView : Hideable { }
 import UIKit
 
 
+struct BoundingBoxState {
+  var centers: (CGRect) -> [CGPoint]
+  let redefine : (Int, [CGPoint]) -> CGRect
+  let positions: (Int) -> (VerticalPosition,HorizontalPosition)
+}
+
+
+let cornerState = BoundingBoxState(
+  centers: corners(in:),
+  redefine: masterRect(from:in:),
+  positions: {
+    switch $0 {
+    case 0: return (.top, .left)
+    case 1: return (.top, .right)
+    case 2: return (.bottom, .right)
+    case 3: return (.bottom, .left)
+    default: fatalError()
+    }
+}
+)
+    
+let edgeState = BoundingBoxState(
+  centers: edges(in:),
+  redefine: centerDefinedRect(from:in:),
+  positions: edgePositions)
+
+func edgePositions( i: Int) -> (VerticalPosition, HorizontalPosition)
+{
+  switch i {
+  case 0: return (.top, .center)
+  case 1: return (.center, .right)
+  case 2: return (.bottom, .center)
+  case 3: return (.center, .left)
+  default: fatalError()
+  }
+}
+
+let centeredEdge : (CGPoint) -> BoundingBoxState = {point in return BoundingBoxState(
+  centers: edges(in:),
+  redefine: point |> curry(mirrorDefinedRect),
+  positions: edgePositions)
+}
+
+
 // HANDLEVIEW
 // A rect input machine
 class HandleViewRound1: UIView {
   // Collection of functions
-  struct StateFactory{
     enum State {
       case corner
       case edge
+      case centeredEdge
     }
-    // Set immutable functions based on state enum
-    init (state: State)
-    {
-      switch state {
-      case .corner:
-        self.centers = corners(in:)
-        self.redefine = masterRect(from:in:)
-        self.positions = {
-          switch $0 {
-          case 0: return (.top, .left)
-          case 1: return (.top, .right)
-          case 2: return (.bottom, .right)
-          case 3: return (.bottom, .left)
-          default: fatalError()
-          }
-        }
-      case .edge:
-        self.centers = edges(in:)
-        self.redefine = centerDefinedRect(from:in:)
-        self.positions = {
-          switch $0 {
-          case 0: return (.top, .center)
-          case 1: return (.center, .right)
-          case 2: return (.bottom, .center)
-          case 3: return (.center, .left)
-          default: fatalError()
-          }
-        }
-      }
-    }
-    // State based functions : Assignment Based
-    let centers : (CGRect) -> [CGPoint]
-    let redefine : (Int, [CGPoint]) -> CGRect
-    let positions: (Int) -> (VerticalPosition,HorizontalPosition)
-  }
   
   // whole class properties
-  var stateMachine : StateFactory!
+  var stateMachine : BoundingBoxState!
   var handles : [UIView] = [] // Clockwise from topLeft
   var point : TensionedPoint!
   let buttonSize = CGSize(44, 44)
@@ -128,7 +155,7 @@ class HandleViewRound1: UIView {
   public var lastMaster : CGRect
 
   
-  convenience init(frame: CGRect, state: StateFactory.State, handler: @escaping (CGRect,
+  convenience init(frame: CGRect, state: State, handler: @escaping (CGRect,
     (VerticalPosition,HorizontalPosition))->() )
   {
     self.init(frame: frame, state: state)
@@ -136,11 +163,21 @@ class HandleViewRound1: UIView {
   }
   
   // Main init
-    init(frame: CGRect, state: StateFactory.State )
+    init(frame: CGRect, state: State )
   {
     let rectangle = CGRect(x: 120, y: 140, width: 200, height: 200)
     self.lastMaster = rectangle
-    stateMachine = StateFactory(state: state)
+    
+    switch state {
+    case .corner:
+      stateMachine = cornerState
+    case .edge:
+      stateMachine = edgeState
+    case .centeredEdge:
+      //self.safeAreaLayoutGuide.centerXAnchor
+      stateMachine = centeredEdge(frame.center)
+    }
+    
     super.init(frame: frame)
     
     outerBounds = self.bounds.insetBy(dx: 20, dy: 20)
@@ -149,7 +186,7 @@ class HandleViewRound1: UIView {
     // Handles...
     let buttonCenters : [CGPoint] = stateMachine.centers( rectangle)
     
-    // Set handles with side effects
+    // Set handles
     handles = buttonCenters.map {
       let v = ButtonView(frame:  buttonSize.asRect())
       v.center = $0
@@ -198,8 +235,15 @@ class HandleViewRound1: UIView {
     // set initial offset and frozenB
     case .began:
       
+      // When starting a new handle move first get offset from center of ui handle button
       initialOffset = (gesture.view!.center - loc).asPoint()
-      let m1 = stateMachine.redefine(handles.index(of:gesture.view!)!, handles.map{ $0.center })
+      
+      
+      // Create Master rectangle from newly moved point and other points
+      let indexOfHandle = handles.index(of: gesture.view!)!
+      let m1 = stateMachine.redefine(indexOfHandle, handles.map{$0.center})
+      
+      
       frozenBounds = insetIf( m1)
       
       // Show Border

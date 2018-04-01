@@ -60,6 +60,15 @@ func mirrorVertically(rect: CGRect, along y: CGFloat) -> CGRect {
   let newRect = CGRect(x: rect.x, y: newOriginY, width: rect.width, height: -rect.height)
   return newRect.standardized
 }
+func mirrorOrtho(from mirrorPos: CGPoint) -> (CGPoint) -> CGPoint
+{
+  return {
+    return CGPoint( x: mirrorPos.x - ($0.x - mirrorPos.x),
+                    y: mirrorPos.y - ($0.y - mirrorPos.y)
+    )
+  }
+}
+
 
 func viewSpaceToModelSpace (viewPoint: CGPoint, viewModelFrame: CGRect) -> (CGPoint) {
   return CGPoint( viewPoint.x - viewModelFrame.origin.x, viewPoint.y - viewModelFrame.origin.y)

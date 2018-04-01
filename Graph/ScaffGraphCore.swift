@@ -68,7 +68,7 @@ extension ScaffGraph
     return planedges
   }
   var planEdgesNoZeros : [C2Edge] {
-    let new = self.planEdges.filter { $0.content == "Ledger" || $0.content == "Standard" }
+    let new = self.planEdges.filter { $0.content == .ledger || $0.content == .standardGroup }
     return new
   }
   var frontEdges : [C2Edge] {
@@ -85,6 +85,8 @@ extension ScaffGraph
   var sideEdgesNoZeros : [C2Edge] {
     return self.sideEdges |> reduceZeros
   }
+}
+extension ScaffGraph {
   
   var bounds: CGSize3 {
     return self.grid |> posToSize
@@ -97,13 +99,13 @@ extension ScaffGraph
 }
 
 
-func fLedger(e:C2Edge)-> Bool { return e.content == "Ledger" }
-func fStandard(e:C2Edge)-> Bool { return e.content == "Standard" }
+func fLedger(e:C2Edge)-> Bool { return e.content == .ledger }
+func fStandard(e:C2Edge)-> Bool { return e.content == .standardGroup }
 
 
 func filterOrthoLedgers(edge : C2Edge) -> Bool
 {
-  return !(edge.content == "Ledger" && edge.p1 == edge.p2)
+  return !(edge.content == .ledger && edge.p1 == edge.p2)
 }
 
 

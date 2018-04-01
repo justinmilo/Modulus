@@ -386,12 +386,7 @@ let bothLessThan : (Int) -> Predicate<(Int,Int)> = {
   (middle:Int) -> Predicate<(Int,Int)> in
   return Predicate<(Int,Int)>{
     (l,u) in
-    print(
-      """
-      (l < middle) && (u < middle)
-       \(l) < \(middle), \(u) < \(middle)
-      \(l < middle), \(u < middle)
-      """)
+
     return (l < middle) && (u < middle)
   }
 }
@@ -400,12 +395,7 @@ let bothLessThanEquall : (Int) -> Predicate<(Int,Int)> = {
   (middle:Int) -> Predicate<(Int,Int)> in
   return Predicate<(Int,Int)>{
     (l,u) in
-    print(
-      """
-      (l < middle) && (u < middle)
-      \(l) < \(middle), \(u) < \(middle)
-      \(l < middle), \(u < middle)
-      """)
+   
     return (l <= middle) && (u <= middle)
   }
 }
@@ -436,13 +426,7 @@ let bothPredicate = {
   (middle:Int, comp:@escaping DoubleIntToBool) -> Predicate<(Int,Int)> in
   return Predicate<(Int,Int)>{
     (tup) in
-    print(
-      """
-      -
-      (l < middle) && (u < middle)
-      \(tup.0) == \(middle), \(tup.1) == \(middle)
-      \(comp(tup.0, middle)), \(comp(tup.1, middle))
-      """)
+
     return comp(tup.0, middle) && comp(tup.1, middle)
   }
   }

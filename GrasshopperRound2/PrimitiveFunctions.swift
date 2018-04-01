@@ -52,7 +52,6 @@ func move(item:Geometry, vector: CGVector)->Geometry
   return items
 }
 
-
 func moveGroup(items:[Geometry], vector: CGVector)-> [Geometry]
 {
   let a = items.map{ ($0, vector) |> move}

@@ -31,7 +31,7 @@ func screwJacks(to max:(Int,Int) ) -> [Edge]
   // import part z:0, p2: z:1
   return (0 ..< max.0).flatMap { x in
     (0 ..< max.1).map{ y in
-      return Edge(content: "Jack", p1: (x,y,0), p2: (x,y,1))
+      return Edge(content: .jack, p1: (x,y,0), p2: (x,y,1))
     }
   }
 }
@@ -47,7 +47,7 @@ func everyLedger(xCount:Int, yCount: Int, zCount: Int) -> [Edge]
         // Ledgers start at 1
         (1 ..< zCount).map
           { z in
-            return Edge(content: "Ledger", p1: (tup.0,y,z), p2: (tup.1,y,z))
+            return Edge(content: .ledger, p1: (tup.0,y,z), p2: (tup.1,y,z))
         }
     }
   }
@@ -61,7 +61,7 @@ func everyLedger(xCount:Int, yCount: Int, zCount: Int) -> [Edge]
         // Ledgers start at 1
         (1 ..< zCount).map
           { z in
-            return Edge(content: "Ledger", p1: (x,yVals.0,z), p2: (x,yVals.1,z))
+            return Edge(content: .ledger, p1: (x,yVals.0,z), p2: (x,yVals.1,z))
         }
     }
   }
@@ -79,7 +79,7 @@ func everyStandardGroup(xCount:Int, yCount: Int, zCount: Int) -> [Edge]
     (0 ..< yCount).map
       { y in
         // Standards start at 1 (same base collar)
-            return Edge(content: "StandardGroup", p1: (x,y,1), p2: (x,y,zCount-1))
+            return Edge(content: .standardGroup, p1: (x,y,1), p2: (x,y,zCount-1))
     }
   }
   
@@ -94,7 +94,7 @@ func everyBC(to xCount:Int, yCount:Int ) -> [Edge]
   
   return (0 ..< xCount).flatMap { x in
     (0 ..< yCount).map{ y in
-      return Edge(content: "BC", p1: (x,y,1), p2: (x,y,1))
+      return Edge(content: .bc, p1: (x,y,1), p2: (x,y,1))
     }
   }
 }

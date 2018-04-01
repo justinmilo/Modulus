@@ -46,11 +46,13 @@ func graphViewGenerator(
 }
 
 
-
+let initial = CGSize3(width: 100, depth: 100, elev: 100) |> createGrid
+let graph = ScaffGraph(grid: initial.0, edges: initial.1)
 
 func opposite(b: Bool) -> Bool { return !b }
 
-
+let originZero: (ScaffGraph) -> CGPoint = { _ in return CGPoint(0,0)}
+let originFirstLedger: (ScaffGraph) -> CGPoint = { graph in return CGPoint(0, graph.boundsOfGrid.1)}
 
 func app() -> UIViewController
 {
@@ -64,24 +66,79 @@ func app() -> UIViewController
   
   let frontMap = graphViewGenerator(
     build: sizeFront(graph) |> overall, //>>> createScaffolding,
-    origin: {_ in return CGPoint(0,0) },
+    origin: originZero,
     size: sizeFromFullScaff,
     composite: [front1,
-                front1 <> frontDim <> frontOuterDimPlus <> frontOverall,
+                front1 <> frontDim <> frontOuterDimPlus <> frontOverall >>> map(toGeometry),
                 { $0.frontEdgesNoZeros } >>> modelToLinework],
     grid2D: frontPositionsOhneStandards)
   
-  //      let frontMap2 = graphViewGenerator(
-  //        build: overall, //>>> createScaffolding,
-  //        size: sizeSchematicFront,
-  //        composite: [front1,
-  //                    front1 <> frontDim,
-  //                    front1 <> frontDim <> frontOuterDimPlus,
-  //                    front1 <> frontDim <> frontOuterDimPlus <> frontOverall,
-  //                    { $0.frontEdgesNoZeros } >>> curry(modelToLinework)],
-  //        origin: originFromFullScaff,
-  //        parseEditBoundaries: frontPositionsOhneStandards)
+    let frontMap2 = graphViewGenerator(
+      build: sizeFront(graph) |> overall, //>>> createScaffolding,
+      origin: originFirstLedger,
+      size: sizeSchematicFront,
+      composite: [front1,
+                  front1 <> frontDim,
+                  front1 <> frontDim <> frontOuterDimPlus,
+                  front1 <> frontDim <> frontOuterDimPlus <> frontOverall >>> map(toGeometry),
+                  { $0.frontEdgesNoZeros } >>> modelToLinework],
+
+      grid2D: frontPositionsOhneStandards)
   
-  let uR = SpriteScaffViewController(graph: graph, mapping: frontMap)
-  return uR
+  
+  
+  let planMap = graphViewGenerator(
+    build: sizePlan(graph) |> overall,
+    origin: originZero,
+    size: sizeFromPlanScaff,
+    composite: [finalDimComp,
+                planGridsToDimensions],
+    grid2D: planPositions)
+  
+  let planMapRotated = graphViewGenerator(
+    build: sizePlanRotated(graph) |> overall,
+    origin: originZero,
+    size: sizeFromRotatedPlanScaff,
+    composite: [rotatedFinalDimComp],
+    grid2D: planPositions)
+  
+  
+  
+  let sideMap = graphViewGenerator(
+    build: sizeSide(graph) |> overall,
+    origin: originZero,
+    size: sizeFromFullScaffSide,
+    composite: [side1,
+                side1 <> sideDim,
+                side1 <> sideDim <> sideDoubleDim],
+    grid2D: sidePositionsOhneStandards)
+  
+  func foo(_ vc: UIViewController, _ st: String ) -> UINavigationController
+  {
+    vc.title = st
+    let ulN = UINavigationController(rootViewController: vc)
+    ulN.navigationBar.prefersLargeTitles = true
+    let nav = ulN.navigationBar
+    nav.barStyle = UIBarStyle.blackTranslucent
+    nav.tintColor = .white
+    nav.titleTextAttributes = [NSAttributedStringKey.foregroundColor: UIColor.white]
+    
+    return ulN
+  }
+  
+  let uL = SpriteScaffViewController(graph: graph, mapping: planMap)
+  let uR = SpriteScaffViewController(graph: graph, mapping: planMapRotated)
+  let ll = SpriteScaffViewController(graph: graph, mapping: frontMap)
+  let lr = SpriteScaffViewController(graph: graph, mapping: sideMap)
+  
+  //return foo(lr, "Side View")
+  
+  //return foo(ll, "Front View")
+
+  
+  return VerticalController(upperLeft: foo(uL, "Plan View"),
+                            upperRight: foo(uR, "Rotated Plan View"),
+                            lowerLeft: foo(ll, "Front View"),
+                            lowerRight: foo(lr, "Side View"))
+
 }
