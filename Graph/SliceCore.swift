@@ -19,10 +19,15 @@ func plan(_ edges: [CEdge]) -> [C2Edge] { return edges.map(plan) }
 func front(_ edges: [CEdge]) -> [C2Edge] { return edges.map(front) }
 func side(_ edges: [CEdge]) -> [C2Edge] { return edges.map(side) }
 
+extension PointIndex
+{
+  var asTuple : (Int,Int,Int) { return (xI, yI, zI) }
+}
 // Front edge has the same 0 y index
 func frontEdge(edge:Edge)-> Bool
 {
-  switch(edge.p1, edge.p2)
+  switch (edge.p1.asTuple,
+         edge.p2.asTuple)
   {
     // Front edge has the same 0 y index
   //    (x,y,z)
@@ -36,7 +41,7 @@ func frontEdge(edge:Edge)-> Bool
 // Front edge has the same 0 y index
 func sideEdge(edge:Edge)-> Bool
 {
-  switch(edge.p1, edge.p2)
+  switch(edge.p1.asTuple, edge.p2.asTuple)
   {
     // Same edge has the same 0 y index
   //    (x,y,z)
@@ -50,7 +55,7 @@ func sideEdge(edge:Edge)-> Bool
 // Front edge has the same 0 y index
 func planEdge(edge:Edge)-> Bool
 {
-  switch(edge.p1, edge.p2)
+  switch(edge.p1.asTuple, edge.p2.asTuple)
   {
     // Same edge has the same 0 y index
   //    (x,y,z)
@@ -156,12 +161,12 @@ let overall : (@escaping (CGSize) -> CGSize3)
   
 }
 
-typealias BayIndex = (x: Int, y: Int)
+typealias BayIndex2D = (x: Int, y: Int)
 typealias BayIndex3 = (x: Int, y: Int, z:Int)
 
 func addY(y: Int, pi: PointIndex2D) -> PointIndex
 {
-  return (xI: pi.x, yI: y, zI: pi.y)
+  return PointIndex(xI: pi.x, yI: y, zI: pi.y)
 }
 
 
@@ -236,35 +241,35 @@ let zBay : (Int) -> Predicate<Edge> =  {
   return  zPos(pI.0) && zPos(pI.1)
 }
 
+// getable ways of diving into posisions and bays
 let pos : ( @escaping (PointIndex)->Int, Int) -> Predicate<Edge> =
 {
   (g, i) in return Predicate{ g($0.p1) == i || g($0.p2) == i }
 }
-
+// getable ways of diving into posisions and bays
 let bay : ( @escaping (PointIndex)->Int, Int) -> Predicate<Edge> =
 {
   (g, i) in
   let pI = i |> bayToPosition
   return  pos(g, pI.0) && pos(g, pI.1)
 }
-
+// pointfree getter
 func get<Root, Value>(_ kp: KeyPath<Root, Value>) -> (Root) -> Value {
   return { root in
     root[keyPath: kp]
   }
 }
 
-func filterDiagsWithBayIndex(edges: [Edge], bayIndex:BayIndex )->[Edge]
-{
-  return edges.filtered(by: (xBay(bayIndex.x) && zBay(bayIndex.y)) && (edgeXDiagUp || edgeXDiagDown))
-}
+/// FIXME this was supposed to be a gettable way
+//func filterDiags(edges: [Edge], bayIndex:BayIndex )->[Edge]
+//{
+//  return edges.filtered(by:
+//    get(\PointIndex.xI) |> bay /// get is working, what is bayindex doing
+//    && zBay(bayIndex.y))
+//      && (edgeXDiagUp || edgeXDiagDown))
+//}
 
-func filterDiags(edges: [Edge], bayIndex:BayIndex )->[Edge]
-{
-  return edges.filtered(by: (bay(get(\PointIndex.xI), bayIndex.x) && zBay(bayIndex.y)) && (edgeXDiagUp || edgeXDiagDown))
-}
-
-let diagLeft: (BayIndex) -> Predicate<Edge> =
+let diagLeft: (BayIndex2D) -> Predicate<Edge> =
 {
   let (p1x, p2x) = highToLow(gIndex: $0)
   return Predicate {
@@ -277,7 +282,7 @@ let diagLeft: (BayIndex) -> Predicate<Edge> =
     return edge.empty == testEdge
   }
 }
-let diagRight: (BayIndex) -> Predicate<Edge> =
+let diagRight: (BayIndex2D) -> Predicate<Edge> =
 {
   let (p1x, p2x) = lowToHigh(gIndex: $0)
   return Predicate<Edge> {
@@ -297,7 +302,7 @@ var isStandardGroup = Predicate<Edge>{ $0.content == .standardGroup}
 var eitherEqual : (Edge) -> Predicate<Edge> = { e in return Predicate<Edge>{ ($0.p1 == e.p1) || ($0.p2 == e.p2) } }
 
 
-let inBayIndex: (BayIndex) -> Predicate<Edge> =
+let inBayIndex: (BayIndex2D) -> Predicate<Edge> =
 {
   let (p1x, p2x) = lowToHigh(gIndex: $0)
   return Predicate {

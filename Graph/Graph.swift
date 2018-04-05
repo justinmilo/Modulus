@@ -47,6 +47,7 @@ struct GraphPositions2DSorted
 
 struct PointIndex : Equatable { let xI, yI, zI : Int }
 
+
 struct Edge
 {
   var content : EdgeType
@@ -58,6 +59,16 @@ struct EdgeEmpty // Without Content
 {
   var p1 : PointIndex
   var p2 : PointIndex
+}
+
+extension Edge
+{
+  init( content: EdgeType, p1: (Int, Int, Int), p2: (Int, Int, Int) )
+  {
+    self.content = content
+    self.p1 = p1 |> PointIndex.init
+    self.p2 = p2 |> PointIndex.init
+  }
 }
 
 extension Edge : Equatable {

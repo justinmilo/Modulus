@@ -52,7 +52,6 @@ func graphViewGenerator(
 }
 
 
-let initial = CGSize3(width: 100, depth: 100, elev: 100) |> createGrid
 
 func opposite(b: Bool) -> Bool { return !b }
 

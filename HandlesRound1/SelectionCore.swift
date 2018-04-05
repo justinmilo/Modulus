@@ -17,17 +17,17 @@ typealias SelectionSignature = (PointIndex2D, GraphPositions, [Edge]) -> [Edge]
 let mapFrontIndicesUpTo : (PointIndex2D, Int) -> [PointIndex] =
 {
   (p,max) in
-  return  (0..<max).map{ (p.x, $0, p.y)}
+  return  (0..<max).map{ (p.x, $0, p.y) |> PointIndex.init}
 }
 let mapPlanIndicesUpTo : (PointIndex2D, Int) -> [PointIndex] =
 {
   (p,max) in
-  return  (0..<max).map{ (p.x, p.y, $0)}
+  return  (0..<max).map{ (p.x, p.y, $0) |> PointIndex.init}
 }
 let mapSideIndicesUpTo : (PointIndex2D, Int) -> [PointIndex] =
 {
   (p,max) in
-  return  (0..<max).map{ ($0, p.x, p.y)}
+  return  (0..<max).map{ ($0, p.x, p.y) |> PointIndex.init}
 }
 
 ////
@@ -36,7 +36,6 @@ let mapSideIndicesUpTo : (PointIndex2D, Int) -> [PointIndex] =
 //let newDiags : SelectionArgs -> [Edge] =
 
 
-typealias BayIndex2D = PointIndex2D
 
 func diagFromBayFactory(_ t:@escaping (BayIndex2D)-> (PointIndex2D, PointIndex2D),
                         _ u:@escaping (PointIndex2D) -> [PointIndex]
@@ -56,30 +55,46 @@ let front2DPointToAll3DPoint : (GraphPositions) -> (PointIndex2D) -> ([PointInde
 let side2DPointToAll3DPoint : (GraphPositions) -> (PointIndex2D) -> ([PointIndex]) = { $0.pX.count } >>> flip(curry(mapSideIndicesUpTo))
 let top2DPointToAll3DPoint : (GraphPositions) -> (PointIndex2D) -> ([PointIndex]) = { $0.pZ.count } >>> flip(curry(mapPlanIndicesUpTo))
 
-func bazAll(populate: (GraphPositions) -> (PointIndex2D) -> ([PointIndex]),
+
+func filterFrontDiagsWithBayIndex(edges: [Edge], bayIndex:BayIndex2D )->[Edge]
+{
+  return edges.filtered(by: (xBay(bayIndex.x) && zBay(bayIndex.y)) && (edgeXDiagUp || edgeXDiagDown))
+}
+func sidefilterDiagsWithBayIndex(edges: [Edge], bayIndex:BayIndex2D )->[Edge]
+{
+  return edges.filtered(by: (yBay(bayIndex.x) && zBay(bayIndex.y)) && (edgeYDiagUp || edgeYDiagDown))
+}
+func topfilterDiagsWithBayIndex(edges: [Edge], bayIndex:BayIndex2D )->[Edge]
+{
+  return edges.filtered(by: (xBay(bayIndex.x) && yBay(bayIndex.y)) && (edgePlanDiagUp || edgePlanDiagDown))
+}
+
+
+func bazAll(filterDiags : @escaping ([Edge],BayIndex2D )->[Edge],
+            populate:  @escaping ((GraphPositions) -> (PointIndex2D) -> [PointIndex]),
             test1:  FunctionS<Edge, Bool>,
             test2:  FunctionS<Edge, Bool>) ->
-            (PointIndex2D,
-            GraphPositions,
+  (PointIndex2D,
+  GraphPositions,
   [Edge]) -> [Edge] {
     
     return { index, positions, edges in
       // bind for all pY.Count
-      let populate = front2DPointToAll3DPoint(positions)
+      let view2Dto3D = populate(positions)
       // get all diags at touch
-      let diagsAtTouch = filterDiagsWithBayIndex(edges: edges, bayIndex: index)
+      let diagsAtTouch = (edges, index) |> filterDiags
       
       let reducedEdges = edges.filter { !diagsAtTouch.contains($0) }
       
       // start the switch around what the previoous diag value was
       if diagsAtTouch.count == 0
       {
-        let newEdges = diagFromBayFactory(lowToHigh, populate)(index) //// Take Out
+        let newEdges = diagFromBayFactory(lowToHigh, view2Dto3D)(index) //// Take Out
         return reducedEdges + newEdges
       }
       else if let sampleDiag = diagsAtTouch.first, test1.call(sampleDiag)
       {
-        let newEdges =  diagFromBayFactory(highToLow, populate)(index)
+        let newEdges =  diagFromBayFactory(highToLow, view2Dto3D)(index)
          return reducedEdges + newEdges//// Take Out
       }
       else if let sampleDiag = diagsAtTouch.first, test2.call(sampleDiag)
@@ -90,9 +105,18 @@ func bazAll(populate: (GraphPositions) -> (PointIndex2D) -> ([PointIndex]),
     }
 }
 
-let bazFront = (front2DPointToAll3DPoint, edgeXDiagUp, edgeXDiagDown) |> bazAll
-let bazSide = (side2DPointToAll3DPoint, edgeYDiagUp, edgeYDiagDown) |> bazAll
-let bazTop = (top2DPointToAll3DPoint, edgePlanDiagUp, edgePlanDiagDown) |> bazAll
+let bazFront = bazAll(filterDiags: filterFrontDiagsWithBayIndex,
+                      populate: front2DPointToAll3DPoint,
+                      test1: edgeXDiagUp,
+                      test2: edgeXDiagDown)
+let bazSide = bazAll(filterDiags: sidefilterDiagsWithBayIndex,
+                     populate: side2DPointToAll3DPoint,
+                     test1: edgeYDiagUp,
+                     test2: edgeYDiagDown)
+let bazTop = bazAll(filterDiags: topfilterDiagsWithBayIndex,
+                    populate: top2DPointToAll3DPoint,
+                    test1: edgePlanDiagUp,
+                    test2: edgePlanDiagDown)
 
 
 

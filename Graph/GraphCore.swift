@@ -144,7 +144,7 @@ func addNodeWith(graph: GraphPositions, node: Point3 ) -> (GraphPositions, Point
       pX: pX.0,
       pY: pY.0,
       pZ: pZ.0),
-    (xI: pX.1, yI:pY.1, zI:pZ.1))
+    PointIndex(xI: pX.1, yI:pY.1, zI:pZ.1))
 }
 
 func cedgeMaker(_ grid: GraphPositions) -> (Edge) -> (CEdge)
@@ -191,7 +191,7 @@ func posToSeg ( pos: GraphPositions ) -> GraphSegments
 // Returns the maximum index! Not the count
 func maxEdges ( pos: GraphPositions) -> PointIndex
 {
-  return (pos.pX.count - 1, pos.pY.count - 1, pos.pZ.count - 1)
+  return (pos.pX.count - 1, pos.pY.count - 1, pos.pZ.count - 1) |> PointIndex.init
 }
 
 
@@ -316,12 +316,12 @@ func clip(p1: PointIndex, p2: PointIndex  ) -> PointIndex
 {
   return ( min(p1.xI, p2.xI),
    min(p1.yI, p2.yI),
-   min(p1.zI, p2.zI))
+   min(p1.zI, p2.zI)) |> PointIndex.init
 }
 
 func add(_ p1: PointIndex, _ int: Int) -> PointIndex
 {
-  return (p1.xI + int, p1.yI + int, p1.zI + int)
+  return (p1.xI + int, p1.yI + int, p1.zI + int) |> PointIndex.init
 }
 
 func checkAnyStradle (_ bounds: PointIndex, _ check: Edge) -> Bool{
