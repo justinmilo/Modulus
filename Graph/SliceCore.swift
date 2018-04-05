@@ -186,11 +186,19 @@ let xDiagUp = IndexVector  ( 1, 0,  1)
 let xDiagDown = IndexVector( 1, 0, -1)
 let yDiagUp = IndexVector  ( 0, 1,  1)
 let yDiagDown = IndexVector( 0, 1, -1)
+let planDiagUp = IndexVector  ( 1, 1, 0)
+let planDiagDown = IndexVector( 1, -1, 0)
 
 let edgeXDiagUp = Predicate<Edge>{ xDiagUp == $0 |>  edgeVector }
 let edgeXDiagDown = Predicate<Edge>{ xDiagDown == $0 |>  edgeVector }
+let edgeYDiagUp = Predicate<Edge>{ yDiagUp == $0 |>  edgeVector }
+let edgeYDiagDown = Predicate<Edge>{ yDiagDown == $0 |>  edgeVector }
+
+let edgePlanDiagUp = Predicate<Edge>{ planDiagUp == $0 |>  edgeVector }
+let edgePlanDiagDown = Predicate<Edge>{ planDiagDown == $0 |>  edgeVector }
 
 let bayToPosition : ( Int ) -> (Int, Int) = { return ($0, $0 + 1)}
+
 
 let xPos : (Int) -> Predicate<Edge> = {
   i in
@@ -228,10 +236,32 @@ let zBay : (Int) -> Predicate<Edge> =  {
   return  zPos(pI.0) && zPos(pI.1)
 }
 
+let pos : ( @escaping (PointIndex)->Int, Int) -> Predicate<Edge> =
+{
+  (g, i) in return Predicate{ g($0.p1) == i || g($0.p2) == i }
+}
+
+let bay : ( @escaping (PointIndex)->Int, Int) -> Predicate<Edge> =
+{
+  (g, i) in
+  let pI = i |> bayToPosition
+  return  pos(g, pI.0) && pos(g, pI.1)
+}
+
+func get<Root, Value>(_ kp: KeyPath<Root, Value>) -> (Root) -> Value {
+  return { root in
+    root[keyPath: kp]
+  }
+}
 
 func filterDiagsWithBayIndex(edges: [Edge], bayIndex:BayIndex )->[Edge]
 {
   return edges.filtered(by: (xBay(bayIndex.x) && zBay(bayIndex.y)) && (edgeXDiagUp || edgeXDiagDown))
+}
+
+func filterDiags(edges: [Edge], bayIndex:BayIndex )->[Edge]
+{
+  return edges.filtered(by: (bay(get(\PointIndex.xI), bayIndex.x) && zBay(bayIndex.y)) && (edgeXDiagUp || edgeXDiagDown))
 }
 
 let diagLeft: (BayIndex) -> Predicate<Edge> =

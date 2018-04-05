@@ -45,7 +45,7 @@ struct GraphPositions2DSorted
 }
 
 
-typealias PointIndex = (xI: Int, yI: Int, zI: Int)
+struct PointIndex : Equatable { let xI, yI, zI : Int }
 
 struct Edge
 {

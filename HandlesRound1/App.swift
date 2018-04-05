@@ -27,13 +27,18 @@ struct GraphEditingView {
   
   /// related to the entire composite
   let grid2D : (ScaffGraph) -> GraphPositions2DSorted
+  
+  // if point index in 2D give new 3D edges
+  let selectedCell : (PointIndex2D, GraphPositions, [Edge]) -> ([Edge])
+
 }
 func graphViewGenerator(
   build: @escaping (CGSize, [Edge]) -> (GraphPositions, [Edge]),
   origin : @escaping (ScaffGraph) -> CGPoint,
   size : @escaping (ScaffGraph) -> CGSize,
   composite : [(ScaffGraph) -> [Geometry]],
-  grid2D : @escaping (ScaffGraph) -> GraphPositions2DSorted
+  grid2D : @escaping (ScaffGraph) -> GraphPositions2DSorted,
+  selectedCell :  @escaping (PointIndex2D, GraphPositions, [Edge]) -> ([Edge])
   )-> [GraphEditingView]
 {
   return composite.map {
@@ -41,13 +46,13 @@ func graphViewGenerator(
                       origin: origin,
                       size: size,
                       composite: $0,
-                      grid2D: grid2D)
+                      grid2D: grid2D,
+                      selectedCell: selectedCell)
   }
 }
 
 
 let initial = CGSize3(width: 100, depth: 100, elev: 100) |> createGrid
-let graph = ScaffGraph(grid: initial.0, edges: initial.1)
 
 func opposite(b: Bool) -> Bool { return !b }
 
@@ -71,7 +76,8 @@ func app() -> UIViewController
     composite: [front1,
                 front1 <> frontDim <> frontOuterDimPlus <> frontOverall >>> map(toGeometry),
                 { $0.frontEdgesNoZeros } >>> modelToLinework],
-    grid2D: frontPositionsOhneStandards)
+    grid2D: frontPositionsOhneStandards,
+    selectedCell: bazFront)
   
     let frontMap2 = graphViewGenerator(
       build: sizeFront(graph) |> overall, //>>> createScaffolding,
@@ -83,7 +89,8 @@ func app() -> UIViewController
                   front1 <> frontDim <> frontOuterDimPlus <> frontOverall >>> map(toGeometry),
                   { $0.frontEdgesNoZeros } >>> modelToLinework],
 
-      grid2D: frontPositionsOhneStandards)
+      grid2D: frontPositionsOhneStandards,
+      selectedCell: bazFront)
   
   
   
@@ -93,14 +100,16 @@ func app() -> UIViewController
     size: sizeFromPlanScaff,
     composite: [finalDimComp,
                 planGridsToDimensions],
-    grid2D: planPositions)
+    grid2D: planPositions,
+    selectedCell: bazTop)
   
   let planMapRotated = graphViewGenerator(
     build: sizePlanRotated(graph) |> overall,
     origin: originZero,
     size: sizeFromRotatedPlanScaff,
     composite: [rotatedFinalDimComp],
-    grid2D: planPositions)
+    grid2D: planPositions,
+    selectedCell: bazTop)
   
   
   
@@ -111,7 +120,8 @@ func app() -> UIViewController
     composite: [side1,
                 side1 <> sideDim,
                 side1 <> sideDim <> sideDoubleDim],
-    grid2D: sidePositionsOhneStandards)
+    grid2D: sidePositionsOhneStandards,
+    selectedCell: bazSide)
   
   func foo(_ vc: UIViewController, _ st: String ) -> UINavigationController
   {
@@ -142,3 +152,5 @@ func app() -> UIViewController
                             lowerRight: foo(lr, "Side View"))
 
 }
+
+

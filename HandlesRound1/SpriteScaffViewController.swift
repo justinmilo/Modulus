@@ -175,7 +175,7 @@ class SpriteScaffViewController : UIViewController {
     //  |> moveByVector
     let p = (tS, rectS) |> viewSpaceToModelSpace
     
-    // Properly models concern
+    // Properly models concern  
     let editBoundaries = self.graph |> editingView.grid2D ///
     let toGridIndices = editBoundaries |> curry(pointToGridIndices) >>>  handleTupleOptionWith
     
@@ -197,43 +197,7 @@ class SpriteScaffViewController : UIViewController {
     let flippedRect = (cellRectValue, y )  |> mirrorVertically
     // flipped rect is situated in sprite kit space
     
-    
-    // Handle the 2D to 3D conversion
-    let mapFrontIndicesToY : (PointIndex2D, Int) -> [PointIndex] =
-    { (p,max) in
-      return  (0..<max).map{ (p.x, $0, p.y)}
-    }
-    // bind for all pY.Count
-    let boundFront = graph.grid.pY.count |> flip(curry(mapFrontIndicesToY))
-    // get all diags at touch
-    let diagsAtTouch = filterDiagsWithBayIndex(edges: self.graph.edges, bayIndex: indices)
-    
-    // start the switch around what the previoous diag value was
-    if diagsAtTouch.count == 0
-    {
-      let reducedEdges = self.graph.edges.filter { !diagsAtTouch.contains($0) }
-      let (p1x, p2x) = lowToHigh(gIndex: indices)
-      let items = zip(p1x |> boundFront, p2x |> boundFront).map{
-        return Edge(content: .diag, p1: $0.0, p2: $0.1)
-      }
-      self.graph.edges = reducedEdges + items
-    }
-    else if let sampleDiag = diagsAtTouch.first, edgeXDiagUp.call(sampleDiag)
-    {
-      let reducedEdges = self.graph.edges.filter { !diagsAtTouch.contains($0) }
-      let (p1x, p2x) = highToLow(gIndex: indices)
-      let items = zip(p1x |> boundFront, p2x |> boundFront).map{
-        return Edge(content: .diag, p1: $0.0, p2: $0.1)
-      }
-      self.graph.edges = reducedEdges + items
-    }
-    else if let sampleDiag = diagsAtTouch.first, edgeXDiagDown.call(sampleDiag)
-    {
-      let reducedEdges = self.graph.edges.filter { !diagsAtTouch.contains($0) }
-      
-      self.graph.edges = reducedEdges
-    }
-    
+    self.graph.edges = editingView.selectedCell(indices, self.graph.grid, self.graph.edges)
     
     buildFromScratch()
     addTempRect(rect: flippedRect, color: .white)

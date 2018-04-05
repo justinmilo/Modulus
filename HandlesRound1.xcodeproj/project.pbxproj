@@ -75,6 +75,7 @@
 		D0A6EC5C2055DE8D00C90EA3 /* SingleTypeComposition.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A6EC5B2055DE8D00C90EA3 /* SingleTypeComposition.swift */; };
 		D0A6EC5E2055E09900C90EA3 /* SemiGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A6EC5D2055E09900C90EA3 /* SemiGroup.swift */; };
 		D0A6EC602055E14B00C90EA3 /* Curry.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A6EC5F2055E14B00C90EA3 /* Curry.swift */; };
+		D0A6EDF820745DE600C644F0 /* SelectionCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A6EDF720745DE600C644F0 /* SelectionCore.swift */; };
 		D0ACE36020588E50007AB54D /* EffectfulCompose.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0ACE35F20588E50007AB54D /* EffectfulCompose.swift */; };
 		D0AEF4602013D507005F761B /* TensionedPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0AEF45F2013D507005F761B /* TensionedPoint.swift */; };
 		D0B218D0201F6491004684FC /* Vertical+HorizontalController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B218CF201F6491004684FC /* Vertical+HorizontalController.swift */; };
@@ -184,6 +185,7 @@
 		D0A6EC5B2055DE8D00C90EA3 /* SingleTypeComposition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleTypeComposition.swift; sourceTree = "<group>"; };
 		D0A6EC5D2055E09900C90EA3 /* SemiGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemiGroup.swift; sourceTree = "<group>"; };
 		D0A6EC5F2055E14B00C90EA3 /* Curry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Curry.swift; sourceTree = "<group>"; };
+		D0A6EDF720745DE600C644F0 /* SelectionCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectionCore.swift; sourceTree = "<group>"; };
 		D0ACE35F20588E50007AB54D /* EffectfulCompose.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EffectfulCompose.swift; sourceTree = "<group>"; };
 		D0AEF45F2013D507005F761B /* TensionedPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TensionedPoint.swift; path = GrasshopperRound2/TensionedPoint.swift; sourceTree = SOURCE_ROOT; };
 		D0B218CF201F6491004684FC /* Vertical+HorizontalController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Vertical+HorizontalController.swift"; sourceTree = "<group>"; };
@@ -256,6 +258,7 @@
 			isa = PBXGroup;
 			children = (
 				D09C3C42206B32370053EE2A /* App.swift */,
+				D0A6EDF720745DE600C644F0 /* SelectionCore.swift */,
 				D0BCAFBA201CDC4300C4EAA5 /* SpriteScaffViewController.swift */,
 				D04F8DC420475F2000929849 /* ScaffViewCore.swift */,
 				D0B69D2420435F3900AEA01B /* SpriteKit */,
@@ -608,6 +611,7 @@
 				D0A6EC5A2055DD8A00C90EA3 /* GrabBag.swift in Sources */,
 				D079B6BE201D19600070EB40 /* EdgeAlignments.swift in Sources */,
 				D064BE16200D94C60032C153 /* CGDouble+Utility.swift in Sources */,
+				D0A6EDF820745DE600C644F0 /* SelectionCore.swift in Sources */,
 				D064BE0E200D94C60032C153 /* CGRay.swift in Sources */,
 				D064BE12200D94C60032C153 /* CGSize+Math.swift in Sources */,
 				D07229A2203C5D79007C37AE /* ForwardCompose.swift in Sources */,
