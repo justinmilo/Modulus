@@ -55,15 +55,8 @@ func sideEdge(edge:Edge)-> Bool
 // Front edge has the same 0 y index
 func planEdge(edge:Edge)-> Bool
 {
-  switch(edge.p1.asTuple, edge.p2.asTuple)
-  {
-    // Same edge has the same 0 y index
-  //    (x,y,z)
-  case ((_,_,0), (_,_,0)):
-    return true
-  default:
-    return false
-  }
+  let concerningDimension = get(\PointIndex.zI)
+  return edge.p1 |> concerningDimension == edge.p2 |> concerningDimension
 }
 
 func frontSection() -> Parse<[C2Edge]>
@@ -84,8 +77,8 @@ func sideSection() -> Parse<[C2Edge]>
 func planSection() -> Parse<[C2Edge]>
 {
   return Parse { (graphC) -> [C2Edge] in
-    let items = graphC.1.filter(sideEdge)
-    return (graphC.0, items) |> cedges >>> side
+    let items = graphC.1.filter(planEdge)
+    return (graphC.0, items) |> cedges >>> plan
   }
 }
 
@@ -253,11 +246,26 @@ let bay : ( @escaping (PointIndex)->Int, Int) -> Predicate<Edge> =
   let pI = i |> bayToPosition
   return  pos(g, pI.0) && pos(g, pI.1)
 }
+
 // pointfree getter
 func get<Root, Value>(_ kp: KeyPath<Root, Value>) -> (Root) -> Value {
   return { root in
     root[keyPath: kp]
   }
+}
+// pointfree setter
+func prop<Root, Value>(_ kp: WritableKeyPath<Root, Value>)
+  -> (@escaping (Value) -> Value)
+  -> (Root)
+  -> Root {
+    
+    return { update in
+      { root in
+        var copy = root
+        copy[keyPath: kp] = update(copy[keyPath: kp])
+        return copy
+      }
+    }
 }
 
 /// FIXME this was supposed to be a gettable way

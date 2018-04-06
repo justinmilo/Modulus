@@ -28,8 +28,8 @@ func positionsIn(edges: [C2Edge]) -> GraphPositions2DSorted {
 }
 let frontPositionsOhneStandards = frontEdges >>> removedStandards >>> positionsIn
 let sidePositionsOhneStandards = sideEdges >>> removedStandards >>> positionsIn
-let planPositions = sideEdges >>> removedStandards >>> positionsIn
-
+let planPositions = planEdges >>> log >>> positionsIn
+let rotatedPlanPositions = planEdges >>> rotateGroup >>> positionsIn
 
 let outerDimensions =
   edgesToPoints

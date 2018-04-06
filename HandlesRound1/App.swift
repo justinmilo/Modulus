@@ -107,7 +107,7 @@ func app() -> UIViewController
     origin: originZero,
     size: sizeFromRotatedPlanScaff,
     composite: [rotatedFinalDimComp],
-    grid2D: planPositions,
+    grid2D: rotatedPlanPositions,
     selectedCell: bazTop)
   
   
