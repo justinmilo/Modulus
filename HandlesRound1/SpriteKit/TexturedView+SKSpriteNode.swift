@@ -50,7 +50,6 @@ let image : ( CGFloat, Scaff2D.ScaffType, Scaff2D.DrawingType) -> String? = {
   case (_, .basecollar, .longitudinal): return "Base Collar"
   case (_, .jack, .longitudinal): return "Screw Jack"
   default:
-    print( $0, $1, $2 )
     print( "AND NOTHING COMING UP!!")
     return nil
   }
