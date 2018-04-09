@@ -130,7 +130,6 @@ class HandleViewRound1: UIView {
   
   public var lastMaster : CGRect
   
-  public var frozenBounds : CGRect?
   public var outerBounds : CGRect?
   
   // Main init
@@ -138,15 +137,14 @@ class HandleViewRound1: UIView {
   {
     
     stateMachine = centeredEdge(frame.center)
-    
-    self.lastMaster = frame.center.asRect()
+    lastMaster = frame.center.asRect()
     
     super.init(frame: frame)
     
     // Handles...
     
     // Set handles
-    handles = [0..<4].map {_ in
+    handles = (0..<4).map {_ in
       let v = ButtonView(frame:  buttonSize.asRect())
       v.callBack = self.press(_:)
       return v
@@ -159,12 +157,8 @@ class HandleViewRound1: UIView {
     let b1 = UIView()
     b1.layer.borderWidth = 1.0
     b1.layer.borderColor = UIColor.gray.cgColor
-    
-    // Make Layouts for outlines
-    outlines += [AnyLayout(b1)]
-    hideables = [b1]
-    for var o in outlines { o.layout(in: outerBounds)}
-    //for var h in hideables { h.isHidden = true }
+    outlines += [AnyLayout(b1)] // Make Layouts for outlines, could be
+    hideables = [b1] // collect in hideables array
     // ... End borders
     
 
@@ -181,7 +175,7 @@ class HandleViewRound1: UIView {
   
   private var point : TensionedPoint!
   private var initialOffset = CGPoint.zero // delta between touchDown center and handle center
-  
+  public var frozenBounds : CGRect?
   
   @objc func press( _ gesture:UIGestureRecognizer )
   {
@@ -196,12 +190,10 @@ class HandleViewRound1: UIView {
       initialOffset = (gesture.view!.center - loc).asPoint()
       
       
-      // Create Master rectangle from newly moved point and other points
+      // Create frozenBounds rectangle from newly moved point and other points
       let indexOfHandle = handles.index(of: gesture.view!)!
-      let m1 = stateMachine.redefine(indexOfHandle, handles.map{$0.center})
-      
-      
-      frozenBounds = insetIf( m1)
+      let handleDefinedRect = stateMachine.redefine(indexOfHandle, handles.map{$0.center})
+      frozenBounds = insetIf( handleDefinedRect )
       
       // Show Border
       for var h in hideables { h.isHidden = false }
@@ -213,7 +205,7 @@ class HandleViewRound1: UIView {
       let t = loc + initialOffset.asVector()
       
       // bounds rects
-      let resolvedRect = boundsChecking(handles.index(of:gesture.view!)!, outerBounds, frozenBounds!)
+      let resolvedRect = boundsChecking(handles.index(of:gesture.view!)!, outerBounds!, frozenBounds!)
       
       
       // set point thats being moved
