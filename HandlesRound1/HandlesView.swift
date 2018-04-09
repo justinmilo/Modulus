@@ -153,7 +153,8 @@ class HandleViewRound1: UIView {
   var hideables: [Hideable] = []
   var outerBoundaryView : UIView!
   public var lastMaster : CGRect
-
+  var frozenBounds : CGRect?
+  var outerBounds : CGRect
   
   convenience init(frame: CGRect, state: State, handler: @escaping (CGRect,
     (VerticalPosition,HorizontalPosition))->() )
@@ -178,9 +179,10 @@ class HandleViewRound1: UIView {
       stateMachine = centeredEdge(frame.center)
     }
     
+    outerBounds = frame.insetBy(dx: 40, dy: 40)
+    
     super.init(frame: frame)
     
-    outerBounds = self.bounds.insetBy(dx: 20, dy: 20)
     
     
     // Handles...
@@ -223,8 +225,7 @@ class HandleViewRound1: UIView {
   
 
   var initialOffset = CGPoint.zero // delta between touchDown center and handle center
-  var frozenBounds = CGRect.zero
-  var outerBounds = CGRect.zero
+  
   
   @objc func press( _ gesture:UIGestureRecognizer )
   {
@@ -256,11 +257,11 @@ class HandleViewRound1: UIView {
       let t = loc + initialOffset.asVector()
       
       // bounds rects
-      let me = boundsChecking(handles.index(of:gesture.view!)!, outerBounds, frozenBounds)
+      let resolvedRect = boundsChecking(handles.index(of:gesture.view!)!, outerBounds, frozenBounds!)
       
       
       // set point thats being moved
-      point = t.tensionedPoint(within: me)
+      point = t.tensionedPoint(within: resolvedRect)
       gesture.view?.center = point.projection
       
       // Create Master rectangle from newly moved point and other points

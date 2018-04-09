@@ -8,16 +8,16 @@
 
 import CoreGraphics
 
-func log<A>(m: A) -> A
+func log<A>(_ loggableItem: A) -> A
 {
-  print(m)
-  return m
+  print(loggableItem)
+  return loggableItem
 }
 
-func logDescription<A>(m: A, description: (A)->String) -> A
+func logDescription<A>(_ loggableItem: A, description: (A)->String) -> A
 {
-  print(description(m))
-  return m
+  print(description(loggableItem))
+  return loggableItem
 }
 
 

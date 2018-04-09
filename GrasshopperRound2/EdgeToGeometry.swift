@@ -355,7 +355,6 @@ extension Scaff2D : CustomStringConvertible {
 
 let planEdgeToGeometry : ([C2Edge]) -> [Scaff2D] = { edges in
   return edges.map { edge in
-    print (edge.content)
     switch edge.content
     {
     case .standardGroup : return Scaff2D(start: edge.p1, end: edge.p2, part: .standard, view: .plan)

@@ -60,7 +60,7 @@ let originFirstLedger: (ScaffGraph) -> CGPoint = { graph in return CGPoint(0, gr
 
 func app() -> UIViewController
 {
-  let initial = CGSize3(width: 300, depth: 0, elev: 400) |> createGrid
+  let initial = CGSize3(width: 300, depth: 100, elev: 400) |> createGrid
   let graph = ScaffGraph(grid: initial.0, edges: initial.1)
   // graph is passed passed by reference here ...
   
