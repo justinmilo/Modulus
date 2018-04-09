@@ -94,26 +94,6 @@ struct BoundingBoxState {
   let positions: (Int) -> (VerticalPosition,HorizontalPosition)
 }
 
-
-let cornerState = BoundingBoxState(
-  centers: corners(in:),
-  redefine: masterRect(from:in:),
-  positions: {
-    switch $0 {
-    case 0: return (.top, .left)
-    case 1: return (.top, .right)
-    case 2: return (.bottom, .right)
-    case 3: return (.bottom, .left)
-    default: fatalError()
-    }
-}
-)
-    
-let edgeState = BoundingBoxState(
-  centers: edges(in:),
-  redefine: centerDefinedRect(from:in:),
-  positions: edgePositions)
-
 func edgePositions( i: Int) -> (VerticalPosition, HorizontalPosition)
 {
   switch i {
@@ -136,11 +116,7 @@ let centeredEdge : (CGPoint) -> BoundingBoxState = {point in return BoundingBoxS
 // A rect input machine
 class HandleViewRound1: UIView {
   // Collection of functions
-    enum State {
-      case corner
-      case edge
-      case centeredEdge
-    }
+
   
   // whole class properties
   var stateMachine : BoundingBoxState!
@@ -156,37 +132,19 @@ class HandleViewRound1: UIView {
   var frozenBounds : CGRect?
   var outerBounds : CGRect
   
-  convenience init(frame: CGRect, state: State, handler: @escaping (CGRect,
-    (VerticalPosition,HorizontalPosition))->() )
-  {
-    self.init(frame: frame, state: state)
-    self.handler = handler
-  }
-  
   // Main init
-    init(frame: CGRect, state: State )
+   init(frame: CGRect, outerBounds: CGRect)
   {
-    let rectangle = CGRect(x: 120, y: 140, width: 200, height: 200)
-    self.lastMaster = rectangle
     
-    switch state {
-    case .corner:
-      stateMachine = cornerState
-    case .edge:
-      stateMachine = edgeState
-    case .centeredEdge:
-      //self.safeAreaLayoutGuide.centerXAnchor
-      stateMachine = centeredEdge(frame.center)
-    }
+    stateMachine = centeredEdge(frame.center)
     
-    outerBounds = frame.insetBy(dx: 40, dy: 40)
+    self.outerBounds = outerBounds
+    self.lastMaster = outerBounds
     
     super.init(frame: frame)
     
-    
-    
     // Handles...
-    let buttonCenters : [CGPoint] = stateMachine.centers( rectangle)
+    let buttonCenters : [CGPoint] = stateMachine.centers( outerBounds)
     
     // Set handles
     handles = buttonCenters.map {
@@ -207,7 +165,7 @@ class HandleViewRound1: UIView {
     // Make Layouts for outlines
     outlines += [AnyLayout(b1)]
     hideables = [b1]
-    for var o in outlines { o.layout(in: rectangle)}
+    for var o in outlines { o.layout(in: outerBounds)}
     //for var h in hideables { h.isHidden = true }
     // ... End borders
     
