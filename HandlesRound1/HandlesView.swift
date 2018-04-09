@@ -82,7 +82,6 @@ func centerDefinedRect(from points:[CGPoint]) -> CGRect {
 protocol Hideable {
   var isHidden: Bool { get set }
 }
-
 extension UIView : Hideable { }
 
 import UIKit
@@ -119,37 +118,36 @@ class HandleViewRound1: UIView {
 
   
   // whole class properties
-  var stateMachine : BoundingBoxState!
-  var handles : [UIView] = [] // Clockwise from topLeft
-  var point : TensionedPoint!
-  let buttonSize = CGSize(44, 44)
-  var handler : ( CGRect, (VerticalPosition,HorizontalPosition))->() = { _,_ in }
-  var completed : (CGRect,(VerticalPosition,HorizontalPosition))->() = { _, _ in }
-  var outlines: [AnyLayout<UIView>] = []
-  var hideables: [Hideable] = []
-  var outerBoundaryView : UIView!
+  private var stateMachine : BoundingBoxState!
+  private var handles : [UIView] = [] // Clockwise from topLeft
+  private let buttonSize = CGSize(44, 44)
+  private var outlines: [AnyLayout<UIView>] = []
+  private var hideables: [Hideable] = []
+  private var outerBoundaryView : UIView!
+  
+  public var handler : ( CGRect, (VerticalPosition,HorizontalPosition))->() = { _,_ in }
+  public var completed : (CGRect,(VerticalPosition,HorizontalPosition))->() = { _, _ in }
+  
   public var lastMaster : CGRect
-  var frozenBounds : CGRect?
-  var outerBounds : CGRect
+  
+  public var frozenBounds : CGRect?
+  public var outerBounds : CGRect?
   
   // Main init
-   init(frame: CGRect, outerBounds: CGRect)
+  override init(frame: CGRect)
   {
     
     stateMachine = centeredEdge(frame.center)
     
-    self.outerBounds = outerBounds
-    self.lastMaster = outerBounds
+    self.lastMaster = frame.center.asRect()
     
     super.init(frame: frame)
     
     // Handles...
-    let buttonCenters : [CGPoint] = stateMachine.centers( outerBounds)
     
     // Set handles
-    handles = buttonCenters.map {
+    handles = [0..<4].map {_ in
       let v = ButtonView(frame:  buttonSize.asRect())
-      v.center = $0
       v.callBack = self.press(_:)
       return v
     }
@@ -181,8 +179,8 @@ class HandleViewRound1: UIView {
   }
   
   
-
-  var initialOffset = CGPoint.zero // delta between touchDown center and handle center
+  private var point : TensionedPoint!
+  private var initialOffset = CGPoint.zero // delta between touchDown center and handle center
   
   
   @objc func press( _ gesture:UIGestureRecognizer )
