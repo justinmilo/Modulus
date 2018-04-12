@@ -247,26 +247,7 @@ let bay : ( @escaping (PointIndex)->Int, Int) -> Predicate<Edge> =
   return  pos(g, pI.0) && pos(g, pI.1)
 }
 
-// pointfree getter
-func get<Root, Value>(_ kp: KeyPath<Root, Value>) -> (Root) -> Value {
-  return { root in
-    root[keyPath: kp]
-  }
-}
-// pointfree setter
-func prop<Root, Value>(_ kp: WritableKeyPath<Root, Value>)
-  -> (@escaping (Value) -> Value)
-  -> (Root)
-  -> Root {
-    
-    return { update in
-      { root in
-        var copy = root
-        copy[keyPath: kp] = update(copy[keyPath: kp])
-        return copy
-      }
-    }
-}
+
 
 /// FIXME this was supposed to be a gettable way
 //func filterDiags(edges: [Edge], bayIndex:BayIndex )->[Edge]

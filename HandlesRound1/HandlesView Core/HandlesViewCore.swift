@@ -49,14 +49,10 @@ extension Array where Element == CGPoint {
 
   
 // Create rect from a index that indicates master point of ref (if points dont make a rect naturally) and it's opposite corner given a counter clockwise set of corner points
-func masterRect(from index: RectIndex, in points:[CGPoint]) -> CGRect {
+func masterRect(originPoint: CGPoint, from index: Int, in points:[CGPoint]) -> CGRect {
   
-  let opposingIndex = index.opposite
+  let opposingIndex = RectIndex(index).opposite
   return points[index] + points[opposingIndex]
-}
-// Create rect from a "last changed" index assuming counter clockwise set of edge points // ADAPATER for interface
-func centerDefinedRect(from index: Int, in points:[CGPoint]) -> CGRect {
-  return centerDefinedRect(from: points)
 }
 
 // Create rect from a "last changed" index assuming counter clockwise set of edge points // ADAPATER for interface
@@ -77,6 +73,9 @@ func opposite(i : Int )-> Int
     i + 2 : i - 2
 }
 
+
+// Create rect from a "last changed" index assuming counter clockwise set of edge points // ADAPATER for interface
+
 func centerDefinedRect(from points:[CGPoint]) -> CGRect {
   let points = points.map{$0.asRect()}
   let remaining = points.dropFirst()
@@ -85,11 +84,42 @@ func centerDefinedRect(from points:[CGPoint]) -> CGRect {
   })
 }
 
+let helper : (CGPoint, Int, [CGPoint]) -> [CGPoint] = { _,_,pts in return pts }
+let centerDefinedRect_interfaceAdapter = detuple(helper >>> centerDefinedRect)
+
 
 struct BoundingBoxState {
   var centers: (CGRect) -> [CGPoint]
   let redefine : (CGPoint, Int, [CGPoint]) -> CGRect
   let positions: (Int) -> (VerticalPosition,HorizontalPosition)
+  
+  static let cornerState = BoundingBoxState(
+    centers: corners(in:),
+    redefine: masterRect,
+    positions: cornerPositions)
+  
+  static let centeredEdge = BoundingBoxState(
+    centers: edges(in:),
+    redefine: mirrorDefinedRect,
+    positions: edgePositions)
+  
+  static let edgeState = BoundingBoxState(
+    centers: edges(in:),
+    redefine: centerDefinedRect_interfaceAdapter,
+    positions: edgePositions)
+  
+
+}
+
+func cornerPositions( i: Int) -> (VerticalPosition, HorizontalPosition)
+{
+    switch i {
+    case 0: return (.top, .left)
+    case 1: return (.top, .right)
+    case 2: return (.bottom, .right)
+    case 3: return (.bottom, .left)
+    default: fatalError()
+  }
 }
 
 func edgePositions( i: Int) -> (VerticalPosition, HorizontalPosition)
@@ -103,11 +133,8 @@ func edgePositions( i: Int) -> (VerticalPosition, HorizontalPosition)
   }
 }
 
-let centeredEdge = BoundingBoxState(
-  centers: edges(in:),
-  redefine: mirrorDefinedRect,
-  positions: edgePositions
-)
+
+
 
 // What is this trying to do??
 // Createas a union/composite between two rect boundaries

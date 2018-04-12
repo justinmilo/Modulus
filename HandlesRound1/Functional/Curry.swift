@@ -41,6 +41,13 @@ func detuple<A,B,C>(_ t: @escaping ((A,B))->C)->(A,B)->C
     return t((a,b))
   }
 }
+func detuple<A,B,C,D>(_ t: @escaping ((A,B,C))->D)->(A,B,C)->D
+{
+  return { a,b,c in
+    return t((a,b,c))
+  }
+}
+
 
 func tuple<A,B,C>(_ t: @escaping (A,B)->C)->((A,B))->C
 {

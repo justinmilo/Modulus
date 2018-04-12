@@ -8,7 +8,7 @@
 
 import Foundation
 
-
+// RectIndex holds an index based around a endless list of four (maybe more) corners positions. 
 struct RectIndex : Equatable {
   // Accessors
   var index: Int
@@ -29,14 +29,16 @@ struct RectIndex : Equatable {
 }
 
 let stepRectIndex : (Int, Int, RectIndex) -> RectIndex =
-{
-  if $2.index + $1 < $0 {
-    return RectIndex($2.index + $1)
+{ max, step, r in
+  let nextStep = r.index + step
+  if nextStep < max {
+    return RectIndex(nextStep)
   }
   else {
-    return RectIndex($2.index - $1)
+    return RectIndex(nextStep - max)
   }
 }
+
 let fourBasedIndexStep = 4 |> curry(stepRectIndex) // FIXME: duplicating above
 
 let oppositeStep = 2 |> curry(fourBasedIndexStep)

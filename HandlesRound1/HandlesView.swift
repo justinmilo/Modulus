@@ -39,7 +39,7 @@ class HandleViewRound1: UIView {
   override init(frame: CGRect)
   {
     
-    stateMachine = centeredEdge
+    stateMachine = BoundingBoxState.centeredEdge
     lastMaster = frame.center.asRect()
     
     // Create Background View
