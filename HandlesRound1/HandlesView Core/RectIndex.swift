@@ -10,41 +10,16 @@ import Foundation
 
 
 struct RectIndex : Equatable {
+  // Accessors
   var index: Int
-  fileprivate static let count = 4
-  var oppositeIndex : RectIndex
-  {
-    get {
-      if index + 2 < RectIndex.count {
-        return RectIndex(index + 2)
-      }
-      else {
-        return RectIndex(index - 2)
-      }
-    }
-  }
-  var clockwise : RectIndex
-  {
-    get {
-      if index + 1 < RectIndex.count {
-        return RectIndex(index + 1)
-      }
-      else {
-        return RectIndex(index - 3)
-      }
-    }
-  }
-  var counterClockwise : RectIndex
-  {
-    get {
-      if index - 1 >= 0 {
-        return RectIndex(index - 1)
-      }
-      else {
-        return RectIndex(index + 3)
-      }
-    }
-  }
+  fileprivate static let count = 4 // FIXME: Should be variable and local
+  
+  // Accessors
+  var opposite : RectIndex { return self |> oppositeStep }
+  var clockwise : RectIndex { return self |> clockwiseStep }
+  var counterClockwise : RectIndex { return self |> counterClockwiseStep }
+  
+  // Init
   init (_ intIndex: Int)
   {
     precondition(intIndex < RectIndex.count)
@@ -53,7 +28,7 @@ struct RectIndex : Equatable {
   }
 }
 
-let step : (Int, Int, RectIndex) -> RectIndex =
+let stepRectIndex : (Int, Int, RectIndex) -> RectIndex =
 {
   if $2.index + $1 < $0 {
     return RectIndex($2.index + $1)
@@ -62,8 +37,8 @@ let step : (Int, Int, RectIndex) -> RectIndex =
     return RectIndex($2.index - $1)
   }
 }
+let fourBasedIndexStep = 4 |> curry(stepRectIndex) // FIXME: duplicating above
 
-let fourBasedIndexStep = 4 |> curry(step)
 let oppositeStep = 2 |> curry(fourBasedIndexStep)
 let clockwiseStep = 1 |> curry(fourBasedIndexStep)
 let counterClockwiseStep = (4 - 1) |> curry(fourBasedIndexStep)

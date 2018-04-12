@@ -51,7 +51,7 @@ extension Array where Element == CGPoint {
 // Create rect from a index that indicates master point of ref (if points dont make a rect naturally) and it's opposite corner given a counter clockwise set of corner points
 func masterRect(from index: RectIndex, in points:[CGPoint]) -> CGRect {
   
-  let opposingIndex = index.oppositeIndex
+  let opposingIndex = index.opposite
   return points[index] + points[opposingIndex]
 }
 // Create rect from a "last changed" index assuming counter clockwise set of edge points // ADAPATER for interface
