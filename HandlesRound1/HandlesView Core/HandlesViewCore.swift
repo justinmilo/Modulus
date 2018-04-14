@@ -91,22 +91,32 @@ let centerDefinedRect_interfaceAdapter = detuple(helper >>> centerDefinedRect)
 struct BoundingBoxState {
   var centers: (CGRect) -> [CGPoint]
   let redefine : (CGPoint, Int, [CGPoint]) -> CGRect
-  let positions: (Int) -> (VerticalPosition,HorizontalPosition)
+  // Int, [CGPoint] -> CGRect + intrinsic selection bias
+  // MirrorOrigin, Corner -> CGRect
+  // MirrorOrigin, Extents, NewEdge -> CGRect
+  let positions: (Int) -> Position2D
+  let boundaries: (Int) -> (CGRect, CGRect) -> CGRect
   
   static let cornerState = BoundingBoxState(
     centers: corners(in:),
     redefine: masterRect,
-    positions: cornerPositions)
+    positions: cornerPositions,
+    boundaries: curry(boundsChecking)
+  )
   
   static let centeredEdge = BoundingBoxState(
     centers: edges(in:),
     redefine: mirrorDefinedRect,
-    positions: edgePositions)
+    positions: edgePositions,
+    boundaries: edgePositions >>> edgeBoundsCheck
+)
   
   static let edgeState = BoundingBoxState(
     centers: edges(in:),
     redefine: centerDefinedRect_interfaceAdapter,
-    positions: edgePositions)
+    positions: edgePositions,
+    boundaries: edgePositions >>> edgeBoundsCheck
+)
   
 
 }
@@ -136,6 +146,17 @@ func edgePositions( i: Int) -> (VerticalPosition, HorizontalPosition)
 
 
 
+// FIXME Doesn't do the right thing
+let edgeBoundsCheck : (Position2D) -> (CGRect, CGRect) -> CGRect =
+{
+  position in
+  return { outerRect, innerRect in
+    (position, outerRect) |> positionsToPoint +
+    (position |> opposite, innerRect) |> positionsToPoint
+  }
+}
+
+
 // What is this trying to do??
 // Createas a union/composite between two rect boundaries
 func boundsChecking(_ index: Int, _ outerBoundaryRect: CGRect, _ frozenBounds: CGRect)->CGRect {
@@ -158,11 +179,4 @@ func boundsChecking(_ index: Int, _ outerBoundaryRect: CGRect, _ frozenBounds: C
   return me
 }
 
-// pure3
-
-func insetIf(_ m1: CGRect, buttonSize bs:CGSize)->CGRect {
-  let sizeW : CGFloat = (bs.width*2 <= m1.size.width) ? bs.width : 0.0
-  let sizeH : CGFloat = (bs.height*2 <= m1.size.height) ? bs.height : 0.0
-  return m1.insetBy(dx: sizeW, dy: sizeH)
-}
 

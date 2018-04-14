@@ -32,15 +32,18 @@ class HandleViewRound1: UIView {
   public var handler :   ( (CGRect, Position2D)->() )?
   public var completed : ( (CGRect, Position2D)->() )?
   
-  public var lastMaster : CGRect
-  public var outerBounds : CGRect?
+  public var lastMaster : CGRect // FIXME : Should be read only
+  public var outerBounds : CGRect
   
   // Main init
-  override init(frame: CGRect)
+  init(frame: CGRect, outerBounds: CGRect, master: CGRect)
   {
+    precondition(frame.contains(outerBounds))
+    precondition(outerBounds.contains(master))
     
-    stateMachine = BoundingBoxState.centeredEdge
-    lastMaster = frame.center.asRect()
+    self.outerBounds = outerBounds
+    self.stateMachine = BoundingBoxState.centeredEdge
+    self.lastMaster = master
     
     // Create Background View
     
@@ -48,15 +51,22 @@ class HandleViewRound1: UIView {
     let b1 = UIView()
     b1.layer.borderWidth = 1.0
     b1.layer.borderColor = UIColor.gray.cgColor
+    
+    blueBorder = UIView()
+    blueBorder.layer.borderWidth = 1.0
+    blueBorder.layer.borderColor = UIColor.blue.cgColor
+    
+    greenBorder = UIView()
+    greenBorder.layer.borderWidth = 1.0
+    greenBorder.layer.borderColor = UIColor.green.cgColor
+    
     frozen = UIView()
-    b1.layer.borderWidth = 1.0
-    b1.layer.borderColor = UIColor.gray.cgColor
+    frozen.layer.borderWidth = 1.0
+    frozen.layer.borderColor = UIColor.lightGray.cgColor
+    
     outlines += [AnyLayout(b1)] // Make Layouts for outlines, could be
-    hideables = [b1] // collect in hideables array
+    hideables = [b1, frozen, blueBorder, greenBorder] // collect in hideables array
     // ... End borders
-    
-
-    
     
     super.init(frame: frame)
     
@@ -71,7 +81,7 @@ class HandleViewRound1: UIView {
     
     
     // Order Subviews and add to view
-    for v in [b1,frozen]  + handles { self.addSubview(v) }
+    for v in [b1, blueBorder, greenBorder, frozen] + handles { self.addSubview(v) }
     
 
   }
@@ -82,13 +92,17 @@ class HandleViewRound1: UIView {
   
   
   private var frozen : UIView
+  private var blueBorder : UIView
+  private var greenBorder : UIView
   private var point : TensionedPoint!
   private var initialOffset = CGPoint.zero // delta between touchDown center and handle center
-  private var frozenBounds : CGRect?
+  private var resolvedBoundary : CGRect!
   
   @objc func press( _ gesture:UIGestureRecognizer )
   {
     let loc = gesture.location(in: gesture.view!.superview!)
+    var handleIndex : Int { return self.handles.index(of: gesture.view!)! }
+    var handleCenters : [CGPoint] { return self.handles.map{$0.center} }
     
     switch gesture.state
     {
@@ -100,10 +114,14 @@ class HandleViewRound1: UIView {
       
       
       // Create frozenBounds rectangle from newly moved point and other points
-      let indexOfHandle = handles.index(of: gesture.view!)!
-      let handleDefinedRect = stateMachine.redefine(self.frame.center,  indexOfHandle, handles.map{$0.center})
-      frozenBounds = insetIf( handleDefinedRect, buttonSize: buttonSize)
-      frozen.layout(in: frozenBounds!)
+      let handleDefinedRect = stateMachine.redefine( frame.center,  handleIndex, handleCenters)
+      let frozenBounds = handleDefinedRect.insetBy(dx: buttonSize.width, dy: buttonSize.height) // insetIf( handleDefinedRect, buttonSize: buttonSize)
+      // bounds rects
+      resolvedBoundary = boundsChecking(handleIndex, outerBounds, handleDefinedRect)
+      
+      greenBorder.layout(in: handleDefinedRect)
+      blueBorder.layout(in: outerBounds)
+      frozen.layout(in: resolvedBoundary)
       
       // Show Border
       for var h in hideables { h.isHidden = false }
@@ -114,34 +132,26 @@ class HandleViewRound1: UIView {
       // The target origin
       let t = loc + initialOffset.asVector()
       
-      // bounds rects
-      let resolvedRect = boundsChecking(handles.index(of:gesture.view!)!, outerBounds!, frozenBounds!)
-      
-      
       // set point thats being moved
-      point = t.tensionedPoint(within: resolvedRect)
+      point = t.tensionedPoint(within: resolvedBoundary)
       gesture.view?.center = point.projection
       
       // Create Master rectangle from newly moved point and other points
-      let indexOfHandle = handles.index(of: gesture.view!)!
-      let master2 = stateMachine.redefine(self.frame.center, indexOfHandle, self.handles.map{$0.center})
+      lastMaster = stateMachine.redefine(self.frame.center, handleIndex, handleCenters)
 
-      
       // update all handles to correct points
-      let centers = stateMachine.centers(master2)
+      let centers = stateMachine.centers(lastMaster)
       for t in zip(centers, handles) { t.1.center = t.0 }
       
       // layout my view's outlines
       for var outline in outlines {
-        outline.layout(in: master2)
+        outline.layout(in: lastMaster)
       }
-
-
       
-      let positions = stateMachine.positions(indexOfHandle)
-      self.handler?(master2, positions)
+      let positions = stateMachine.positions(handleIndex)
+      self.handler?(lastMaster, positions)
       
-      self.lastMaster  = master2
+      
     case .ended:
       // Show Border
       for var h in hideables { h.isHidden = true }
@@ -150,14 +160,13 @@ class HandleViewRound1: UIView {
         gesture.view?.center = self.point.anchor
         
         // Create Master rectangle from gesture
-        let indexOfHandle = self.handles.index(of: gesture.view!)!
-        let master2 = self.stateMachine.redefine(self.frame.center, indexOfHandle, self.handles.map{ $0.center })
+        let master2 = self.stateMachine.redefine(self.frame.center, handleIndex, self.handles.map{ $0.center })
       
         // update all handles to correct points
         let centers = self.stateMachine.centers(master2)
         for t in zip(centers, self.handles) { t.1.center = t.0 }
         
-        let positions = self.stateMachine.positions(indexOfHandle)
+        let positions = self.stateMachine.positions(handleIndex)
         self.handler?(master2, positions)
         self.completed?(master2, positions)
       })

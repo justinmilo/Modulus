@@ -82,8 +82,7 @@ class SpriteScaffViewController : UIViewController {
   override func loadView() {
     let originZeroFrame = CGPoint.zero + CGSize(width:372, height:500)
     
-    handleView = HandleViewRound1(frame: originZeroFrame)
-    handleView.outerBounds = originZeroFrame.insetBy(dx: 40, dy: 40)
+    handleView = HandleViewRound1(frame: originZeroFrame, outerBounds: originZeroFrame.insetBy(dx: 30, dy: 30), master: originZeroFrame.insetBy(dx: 60, dy: 60))
     handleView.layer.borderColor = #colorLiteral(red: 0.2196078449, green: 0.007843137719, blue: 0.8549019694, alpha: 1).cgColor
     handleView.layer.borderWidth = 1.0
     

@@ -18,7 +18,7 @@
 		D01CA140207F82DD00362B63 /* RectIndex.swift in Sources */ = {isa = PBXBuildFile; fileRef = D01CA13F207F82DD00362B63 /* RectIndex.swift */; };
 		D01CA143207FF85500362B63 /* Accessors.swift in Sources */ = {isa = PBXBuildFile; fileRef = D01CA142207FF85500362B63 /* Accessors.swift */; };
 		D032675B207FFD6C00BBF563 /* HandlesViewCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00C75B6207C021200A5A0B2 /* HandlesViewCore.swift */; };
-		D0326763207FFE3800BBF563 /* HandlesRound1Tests2.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0326762207FFE3800BBF563 /* HandlesRound1Tests2.swift */; };
+		D0326763207FFE3800BBF563 /* HandlesCoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0326762207FFE3800BBF563 /* HandlesCoreTests.swift */; };
 		D032676A207FFE5F00BBF563 /* RectIndex.swift in Sources */ = {isa = PBXBuildFile; fileRef = D01CA13F207F82DD00362B63 /* RectIndex.swift */; };
 		D032676B207FFE9400BBF563 /* ForwardPipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = D056A39A2015815000C3B3B1 /* ForwardPipe.swift */; };
 		D032676C207FFE9400BBF563 /* Accessors.swift in Sources */ = {isa = PBXBuildFile; fileRef = D01CA142207FF85500362B63 /* Accessors.swift */; };
@@ -151,7 +151,7 @@
 		D01CA13F207F82DD00362B63 /* RectIndex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RectIndex.swift; sourceTree = "<group>"; };
 		D01CA142207FF85500362B63 /* Accessors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Accessors.swift; path = HandlesRound1/Functional/Accessors.swift; sourceTree = SOURCE_ROOT; };
 		D0326760207FFE3800BBF563 /* HandlesRound1Tests2.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HandlesRound1Tests2.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		D0326762207FFE3800BBF563 /* HandlesRound1Tests2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandlesRound1Tests2.swift; sourceTree = "<group>"; };
+		D0326762207FFE3800BBF563 /* HandlesCoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandlesCoreTests.swift; sourceTree = "<group>"; };
 		D0326764207FFE3800BBF563 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D03E03D72011653B002D47F3 /* DeepPressGestureRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepPressGestureRecognizer.swift; sourceTree = "<group>"; };
 		D03E03D920124DB8002D47F3 /* Testing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Testing.swift; sourceTree = "<group>"; };
@@ -274,7 +274,7 @@
 				D0B218D120215E8F004684FC /* Media.xcassets */,
 				D00069E7200BD08300E8D5F3 /* HandlesRound1Tests */,
 				D00069F2200BD08300E8D5F3 /* HandlesRound1UITests */,
-				D0326761207FFE3800BBF563 /* HandlesRound1Tests2 */,
+				D0326761207FFE3800BBF563 /* HandlesCoreTests */,
 				D00069D1200BD08300E8D5F3 /* Products */,
 				D03E03D920124DB8002D47F3 /* Testing.swift */,
 			);
@@ -341,13 +341,13 @@
 			path = "HandlesView Core";
 			sourceTree = "<group>";
 		};
-		D0326761207FFE3800BBF563 /* HandlesRound1Tests2 */ = {
+		D0326761207FFE3800BBF563 /* HandlesCoreTests */ = {
 			isa = PBXGroup;
 			children = (
-				D0326762207FFE3800BBF563 /* HandlesRound1Tests2.swift */,
+				D0326762207FFE3800BBF563 /* HandlesCoreTests.swift */,
 				D0326764207FFE3800BBF563 /* Info.plist */,
 			);
-			path = HandlesRound1Tests2;
+			path = HandlesCoreTests;
 			sourceTree = "<group>";
 		};
 		D03E03F520125DF8002D47F3 /* GrasshopperRound2 */ = {
@@ -796,7 +796,7 @@
 			files = (
 				D032676C207FFE9400BBF563 /* Accessors.swift in Sources */,
 				D032676A207FFE5F00BBF563 /* RectIndex.swift in Sources */,
-				D0326763207FFE3800BBF563 /* HandlesRound1Tests2.swift in Sources */,
+				D0326763207FFE3800BBF563 /* HandlesCoreTests.swift in Sources */,
 				D0326772207FFE9400BBF563 /* SemiRing.swift in Sources */,
 				D0326773207FFE9400BBF563 /* GrabBag.swift in Sources */,
 				D0326770207FFE9400BBF563 /* Curry.swift in Sources */,
@@ -1066,7 +1066,7 @@
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = V69QAU95S7;
-				INFOPLIST_FILE = HandlesRound1Tests2/Info.plist;
+				INFOPLIST_FILE = HandlesCoreTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.sound.sands.HandlesRound1Tests2;
@@ -1084,7 +1084,7 @@
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = V69QAU95S7;
-				INFOPLIST_FILE = HandlesRound1Tests2/Info.plist;
+				INFOPLIST_FILE = HandlesCoreTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.sound.sands.HandlesRound1Tests2;
