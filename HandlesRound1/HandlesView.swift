@@ -35,15 +35,20 @@ class HandleViewRound1: UIView {
   public var lastMaster : CGRect // FIXME : Should be read only
   public var outerBounds : CGRect
   
+  private weak var scrollView : UIScrollView?
+  private weak var rootView: UIView?
+  
   // Main init
-  init(frame: CGRect, outerBounds: CGRect, master: CGRect)
+  init(frame: CGRect, outerBounds: CGRect, master: CGRect, scrollView: UIScrollView, rootView: UIView)
   {
     precondition(frame.contains(outerBounds))
     precondition(outerBounds.contains(master))
     
-    self.outerBounds = outerBounds
     self.stateMachine = BoundingBoxState.centeredEdge
+    self.outerBounds = outerBounds
     self.lastMaster = master
+    self.scrollView = scrollView
+    self.rootView = rootView
     
     // Create Background View
     
@@ -81,7 +86,7 @@ class HandleViewRound1: UIView {
     
     
     // Order Subviews and add to view
-    for v in [b1, blueBorder, greenBorder, frozen] + handles { self.addSubview(v) }
+    for v in [b1, greenBorder, blueBorder, frozen] + handles { self.addSubview(v) }
     
 
   }
@@ -103,6 +108,7 @@ class HandleViewRound1: UIView {
     let loc = gesture.location(in: gesture.view!.superview!)
     var handleIndex : Int { return self.handles.index(of: gesture.view!)! }
     var handleCenters : [CGPoint] { return self.handles.map{$0.center} }
+    var handlePosition : Position2D { return handleIndex |> stateMachine.positions }
     
     switch gesture.state
     {
@@ -115,13 +121,16 @@ class HandleViewRound1: UIView {
       
       // Create frozenBounds rectangle from newly moved point and other points
       let handleDefinedRect = stateMachine.redefine( frame.center,  handleIndex, handleCenters)
-      let frozenBounds = handleDefinedRect.insetBy(dx: buttonSize.width, dy: buttonSize.height) // insetIf( handleDefinedRect, buttonSize: buttonSize)
-      // bounds rects
-      resolvedBoundary = boundsChecking(handleIndex, outerBounds, handleDefinedRect)
+      let frozenBounds = handleDefinedRect.insetBy(dx: buttonSize.width/4, dy: buttonSize.height/4)
+      let innerBounds = (frame.center, handlePosition, frozenBounds) |> stateMachine.innerRect
+      let aresolvedBoundary = (outerBounds, innerBounds) |> stateMachine.boundaries(handlePosition)
       
-      greenBorder.layout(in: handleDefinedRect)
-      blueBorder.layout(in: outerBounds)
-      frozen.layout(in: resolvedBoundary)
+      
+      greenBorder.layout(in: frozenBounds)
+      blueBorder.layout(in: innerBounds)
+      frozen.layout(in: aresolvedBoundary)
+      
+      resolvedBoundary = aresolvedBoundary
       
       // Show Border
       for var h in hideables { h.isHidden = false }
@@ -138,6 +147,55 @@ class HandleViewRound1: UIView {
       
       // Create Master rectangle from newly moved point and other points
       lastMaster = stateMachine.redefine(self.frame.center, handleIndex, handleCenters)
+      
+      // scrollview stuff
+      // take touchPoint -> if beyondBounds & growingIsAllowed
+      //      touchPoint -> transform -> offsetAmount
+      //                              -> master.size
+      //                              -> rootView.size
+      //                              -> scrollView.contentSize
+      //                              -> scrollView.contentOffset
+      if !outerBounds.contains(t) // && growingIsAllowed()
+      {
+        // get a *unit*vector distance from our bounds rect to touch point
+        let angledVectorDelta = t.clamp(to:outerBounds) - t
+        let edge = handlePosition |> positionToEdgePosition
+        let orthoDistance = angledVectorDelta |> get(edge! |> positionPath)
+        print(edge)
+        
+        // transform my distance (in this case trying without much transform)
+        let offsetAmount = orthoDistance / 2
+        
+        // create a size to size transform
+        let b : WritableKeyPath<CGSize, CGFloat> = edge! |> positionPath
+        let c = { (a:CGFloat) in a + offsetAmount }
+        let sizeToSize : (CGSize) -> CGSize = c |> prop(b)
+        
+        // set master for a minute
+        lastMaster.size = lastMaster.size |> sizeToSize
+        
+        // set master for a minute
+        self.frame.size = self.frame.size |> sizeToSize
+        
+        // set rootview
+        //rootView?.frame = rootView!.frame |> increasingEdge(at: edge!, with: offsetAmount)
+        rootView!.frame.size = rootView!.frame.size |> sizeToSize
+        print(rootView!.frame.size)
+        
+        // set scrollview's contentSize
+        scrollView?.contentSize = scrollView!.contentSize |> sizeToSize
+        print(scrollView?.contentSize)
+        
+        // set content offset
+        if edge! == .right || edge! == .bottom {
+          let offsetVector = unitVector(for: edge!) * offsetAmount
+          scrollView?.contentOffset = scrollView!.contentOffset + offsetVector
+        }
+        
+        
+        
+        
+      }
 
       // update all handles to correct points
       let centers = stateMachine.centers(lastMaster)

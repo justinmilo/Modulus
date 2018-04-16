@@ -29,6 +29,42 @@
 		D0326771207FFE9400BBF563 /* SemiGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A6EC5D2055E09900C90EA3 /* SemiGroup.swift */; };
 		D0326772207FFE9400BBF563 /* SemiRing.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0731D06204DF662004C8FF7 /* SemiRing.swift */; };
 		D0326773207FFE9400BBF563 /* GrabBag.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A6EC592055DD8A00C90EA3 /* GrabBag.swift */; };
+		D03267742082DC6900BBF563 /* HandlesViewCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00C75B6207C021200A5A0B2 /* HandlesViewCore.swift */; };
+		D03267752082DD7E00BBF563 /* EdgeAlignments.swift in Sources */ = {isa = PBXBuildFile; fileRef = D079B6BD201D19600070EB40 /* EdgeAlignments.swift */; };
+		D03267762082DDA100BBF563 /* CGRect+Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = D064BDE4200D94C60032C153 /* CGRect+Utility.swift */; };
+		D03267772082DDA700BBF563 /* CGAffineTransform+Math.swift in Sources */ = {isa = PBXBuildFile; fileRef = D064BDF3200D94C60032C153 /* CGAffineTransform+Math.swift */; };
+		D03267782082DDA700BBF563 /* CGAffineTransform+Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = D064BDE5200D94C60032C153 /* CGAffineTransform+Utility.swift */; };
+		D03267792082DDA700BBF563 /* CGAngle.swift in Sources */ = {isa = PBXBuildFile; fileRef = D064BDE9200D94C60032C153 /* CGAngle.swift */; };
+		D032677A2082DDA700BBF563 /* CGAngle+Math.swift in Sources */ = {isa = PBXBuildFile; fileRef = D064BDE6200D94C60032C153 /* CGAngle+Math.swift */; };
+		D032677B2082DDA700BBF563 /* CGAngle+Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = D064BDE3200D94C60032C153 /* CGAngle+Utility.swift */; };
+		D032677C2082DDA700BBF563 /* CGDouble+Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = D064BDF4200D94C60032C153 /* CGDouble+Utility.swift */; };
+		D032677D2082DDA700BBF563 /* CGFloat+Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = D064BDEA200D94C60032C153 /* CGFloat+Utility.swift */; };
+		D032677E2082DDA700BBF563 /* CGPoint+Math.swift in Sources */ = {isa = PBXBuildFile; fileRef = D064BDE8200D94C60032C153 /* CGPoint+Math.swift */; };
+		D032677F2082DDA700BBF563 /* CGPoint+Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = D064BDF2200D94C60032C153 /* CGPoint+Utility.swift */; };
+		D03267802082DDA700BBF563 /* CGRay.swift in Sources */ = {isa = PBXBuildFile; fileRef = D064BDEC200D94C60032C153 /* CGRay.swift */; };
+		D03267812082DDA700BBF563 /* CGRect+Math.swift in Sources */ = {isa = PBXBuildFile; fileRef = D064BDE0200D94C60032C153 /* CGRect+Math.swift */; };
+		D03267822082DDA700BBF563 /* CGScale.swift in Sources */ = {isa = PBXBuildFile; fileRef = D064BDF1200D94C60032C153 /* CGScale.swift */; };
+		D03267832082DDA700BBF563 /* CGScale+Math.swift in Sources */ = {isa = PBXBuildFile; fileRef = D064BDED200D94C60032C153 /* CGScale+Math.swift */; };
+		D03267842082DDA700BBF563 /* CGScale+Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = D064BDE2200D94C60032C153 /* CGScale+Utility.swift */; };
+		D03267852082DDA700BBF563 /* CGSegment.swift in Sources */ = {isa = PBXBuildFile; fileRef = D064BDE1200D94C60032C153 /* CGSegment.swift */; };
+		D03267862082DDA700BBF563 /* CGSegment+Math.swift in Sources */ = {isa = PBXBuildFile; fileRef = D064BDEB200D94C60032C153 /* CGSegment+Math.swift */; };
+		D03267872082DDA700BBF563 /* CGSegment+Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = D064BDF5200D94C60032C153 /* CGSegment+Utility.swift */; };
+		D03267882082DDA700BBF563 /* CGSize+Math.swift in Sources */ = {isa = PBXBuildFile; fileRef = D064BDF0200D94C60032C153 /* CGSize+Math.swift */; };
+		D03267892082DDA700BBF563 /* CGSize+Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = D064BDE7200D94C60032C153 /* CGSize+Utility.swift */; };
+		D032678A2082DDA700BBF563 /* CGVector+Math.swift in Sources */ = {isa = PBXBuildFile; fileRef = D064BDEF200D94C60032C153 /* CGVector+Math.swift */; };
+		D032678B2082DDA700BBF563 /* CGVector+Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = D064BDEE200D94C60032C153 /* CGVector+Utility.swift */; };
+		D032678C2082DDE600BBF563 /* CGRect+Utility+Nonstandard.swift in Sources */ = {isa = PBXBuildFile; fileRef = D064BDF7200D94C60032C153 /* CGRect+Utility+Nonstandard.swift */; };
+		D032678D2082DDE600BBF563 /* CGVector+Utility+Nonstandard.swift in Sources */ = {isa = PBXBuildFile; fileRef = D064BDF8200D94C60032C153 /* CGVector+Utility+Nonstandard.swift */; };
+		D032678E2082DDE600BBF563 /* CGScale+Utility+Nonstandard.swift in Sources */ = {isa = PBXBuildFile; fileRef = D064BDF9200D94C60032C153 /* CGScale+Utility+Nonstandard.swift */; };
+		D032678F2082DDE600BBF563 /* CGPoint+Utility+Nonstandard.swift in Sources */ = {isa = PBXBuildFile; fileRef = D064BDFA200D94C60032C153 /* CGPoint+Utility+Nonstandard.swift */; };
+		D03267902082DDE600BBF563 /* CGSize+Utility+Nonstandard.swift in Sources */ = {isa = PBXBuildFile; fileRef = D064BDFB200D94C60032C153 /* CGSize+Utility+Nonstandard.swift */; };
+		D03267912082DDE600BBF563 /* CGAffineTransform+Utility+Nonstandard.swift in Sources */ = {isa = PBXBuildFile; fileRef = D064BDFC200D94C60032C153 /* CGAffineTransform+Utility+Nonstandard.swift */; };
+		D03267922082DDE600BBF563 /* CGAngle+Utility+Nonstandard.swift in Sources */ = {isa = PBXBuildFile; fileRef = D064BDFD200D94C60032C153 /* CGAngle+Utility+Nonstandard.swift */; };
+		D03267952082DE8D00BBF563 /* GraphicsCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03267942082DE8D00BBF563 /* GraphicsCore.swift */; };
+		D03267962082DE8D00BBF563 /* GraphicsCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03267942082DE8D00BBF563 /* GraphicsCore.swift */; };
+		D03267972082DEDE00BBF563 /* CGRect+Inset+JSMath.swift in Sources */ = {isa = PBXBuildFile; fileRef = D079B6BB201D193E0070EB40 /* CGRect+Inset+JSMath.swift */; };
+		D032679A2083E96300BBF563 /* EdgePosition.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03267992083E96300BBF563 /* EdgePosition.swift */; };
+		D032679B2083E96300BBF563 /* EdgePosition.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03267992083E96300BBF563 /* EdgePosition.swift */; };
 		D03E03D82011653B002D47F3 /* DeepPressGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03E03D72011653B002D47F3 /* DeepPressGestureRecognizer.swift */; };
 		D03E03DA20124DB8002D47F3 /* Testing.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03E03D920124DB8002D47F3 /* Testing.swift */; };
 		D03E040020125DF8002D47F3 /* Sprite2DView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03E03F720125DF8002D47F3 /* Sprite2DView.swift */; };
@@ -153,6 +189,9 @@
 		D0326760207FFE3800BBF563 /* HandlesRound1Tests2.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HandlesRound1Tests2.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0326762207FFE3800BBF563 /* HandlesCoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandlesCoreTests.swift; sourceTree = "<group>"; };
 		D0326764207FFE3800BBF563 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D03267942082DE8D00BBF563 /* GraphicsCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GraphicsCore.swift; path = HandlesRound1/GraphicsCore.swift; sourceTree = SOURCE_ROOT; };
+		D03267982083E83E00BBF563 /* EdgeAlignments.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EdgeAlignments.swift; sourceTree = "<group>"; };
+		D03267992083E96300BBF563 /* EdgePosition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EdgePosition.swift; sourceTree = "<group>"; };
 		D03E03D72011653B002D47F3 /* DeepPressGestureRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepPressGestureRecognizer.swift; sourceTree = "<group>"; };
 		D03E03D920124DB8002D47F3 /* Testing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Testing.swift; sourceTree = "<group>"; };
 		D03E03F720125DF8002D47F3 /* Sprite2DView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sprite2DView.swift; sourceTree = "<group>"; };
@@ -298,6 +337,7 @@
 				D0A6EDF720745DE600C644F0 /* SelectionCore.swift */,
 				D0BCAFBA201CDC4300C4EAA5 /* SpriteScaffViewController.swift */,
 				D04F8DC420475F2000929849 /* ScaffViewCore.swift */,
+				D03267942082DE8D00BBF563 /* GraphicsCore.swift */,
 				D0B69D2420435F3900AEA01B /* SpriteKit */,
 				D04153C3202B9FB400BD7B72 /* View.swift */,
 				D0F09A55201CCD3C00720FD5 /* HandlesView.swift */,
@@ -334,6 +374,8 @@
 		D00C75B8207C028C00A5A0B2 /* HandlesView Core */ = {
 			isa = PBXGroup;
 			children = (
+				D03267982083E83E00BBF563 /* EdgeAlignments.swift */,
+				D03267992083E96300BBF563 /* EdgePosition.swift */,
 				D00C75B6207C021200A5A0B2 /* HandlesViewCore.swift */,
 				D0AEF45F2013D507005F761B /* TensionedPoint.swift */,
 				D01CA13F207F82DD00362B63 /* RectIndex.swift */,
@@ -756,11 +798,13 @@
 				D056A39E20177F0B00C3B3B1 /* Grid.swift in Sources */,
 				D01CA143207FF85500362B63 /* Accessors.swift in Sources */,
 				D0051E26201D2BC900C0128A /* PageViewController.swift in Sources */,
+				D032679A2083E96300BBF563 /* EdgePosition.swift in Sources */,
 				D064BE1A200D94C60032C153 /* CGScale+Utility+Nonstandard.swift in Sources */,
 				D04F8DC520475F2000929849 /* ScaffViewCore.swift in Sources */,
 				D03E03DA20124DB8002D47F3 /* Testing.swift in Sources */,
 				D0FC06252049DEE500175F06 /* ScaffGraph.swift in Sources */,
 				D093215120113DCB007BFCC3 /* Layout.swift in Sources */,
+				D03267952082DE8D00BBF563 /* GraphicsCore.swift in Sources */,
 				D0ACE36020588E50007AB54D /* EffectfulCompose.swift in Sources */,
 				D0731D07204DF662004C8FF7 /* SemiRing.swift in Sources */,
 				D093209A20113DCB007BFCC3 /* MultipleLayouts.swift in Sources */,
@@ -796,12 +840,46 @@
 			files = (
 				D032676C207FFE9400BBF563 /* Accessors.swift in Sources */,
 				D032676A207FFE5F00BBF563 /* RectIndex.swift in Sources */,
+				D03267762082DDA100BBF563 /* CGRect+Utility.swift in Sources */,
+				D03267752082DD7E00BBF563 /* EdgeAlignments.swift in Sources */,
+				D03267972082DEDE00BBF563 /* CGRect+Inset+JSMath.swift in Sources */,
 				D0326763207FFE3800BBF563 /* HandlesCoreTests.swift in Sources */,
+				D03267922082DDE600BBF563 /* CGAngle+Utility+Nonstandard.swift in Sources */,
 				D0326772207FFE9400BBF563 /* SemiRing.swift in Sources */,
+				D032679B2083E96300BBF563 /* EdgePosition.swift in Sources */,
+				D03267882082DDA700BBF563 /* CGSize+Math.swift in Sources */,
+				D032677E2082DDA700BBF563 /* CGPoint+Math.swift in Sources */,
+				D03267892082DDA700BBF563 /* CGSize+Utility.swift in Sources */,
+				D03267862082DDA700BBF563 /* CGSegment+Math.swift in Sources */,
+				D032678E2082DDE600BBF563 /* CGScale+Utility+Nonstandard.swift in Sources */,
+				D032678D2082DDE600BBF563 /* CGVector+Utility+Nonstandard.swift in Sources */,
+				D032677B2082DDA700BBF563 /* CGAngle+Utility.swift in Sources */,
 				D0326773207FFE9400BBF563 /* GrabBag.swift in Sources */,
+				D032678F2082DDE600BBF563 /* CGPoint+Utility+Nonstandard.swift in Sources */,
 				D0326770207FFE9400BBF563 /* Curry.swift in Sources */,
+				D032677D2082DDA700BBF563 /* CGFloat+Utility.swift in Sources */,
+				D03267962082DE8D00BBF563 /* GraphicsCore.swift in Sources */,
+				D03267782082DDA700BBF563 /* CGAffineTransform+Utility.swift in Sources */,
+				D03267822082DDA700BBF563 /* CGScale.swift in Sources */,
+				D032677A2082DDA700BBF563 /* CGAngle+Math.swift in Sources */,
+				D03267902082DDE600BBF563 /* CGSize+Utility+Nonstandard.swift in Sources */,
+				D032678B2082DDA700BBF563 /* CGVector+Utility.swift in Sources */,
+				D03267832082DDA700BBF563 /* CGScale+Math.swift in Sources */,
+				D032677F2082DDA700BBF563 /* CGPoint+Utility.swift in Sources */,
 				D032676F207FFE9400BBF563 /* EffectfulCompose.swift in Sources */,
+				D03267772082DDA700BBF563 /* CGAffineTransform+Math.swift in Sources */,
+				D032678C2082DDE600BBF563 /* CGRect+Utility+Nonstandard.swift in Sources */,
+				D03267912082DDE600BBF563 /* CGAffineTransform+Utility+Nonstandard.swift in Sources */,
+				D032677C2082DDA700BBF563 /* CGDouble+Utility.swift in Sources */,
+				D03267792082DDA700BBF563 /* CGAngle.swift in Sources */,
+				D03267852082DDA700BBF563 /* CGSegment.swift in Sources */,
+				D03267742082DC6900BBF563 /* HandlesViewCore.swift in Sources */,
+				D03267842082DDA700BBF563 /* CGScale+Utility.swift in Sources */,
+				D032678A2082DDA700BBF563 /* CGVector+Math.swift in Sources */,
 				D032676D207FFE9400BBF563 /* SingleTypeComposition.swift in Sources */,
+				D03267802082DDA700BBF563 /* CGRay.swift in Sources */,
+				D03267812082DDA700BBF563 /* CGRect+Math.swift in Sources */,
+				D03267872082DDA700BBF563 /* CGSegment+Utility.swift in Sources */,
 				D032676E207FFE9400BBF563 /* ForwardCompose.swift in Sources */,
 				D032676B207FFE9400BBF563 /* ForwardPipe.swift in Sources */,
 				D0326771207FFE9400BBF563 /* SemiGroup.swift in Sources */,

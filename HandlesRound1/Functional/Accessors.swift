@@ -30,15 +30,35 @@ func prop<Root, Value>(_ kp: WritableKeyPath<Root, Value>)
     }
 }
 
-func first<A,B,C>(_ value: (A,B,C)) -> A
-{
-  return value.0
+func first<A, B, C>(_ f: @escaping (A) -> C) -> ((A, B)) -> (C, B) {
+  return { pair in
+    return (f(pair.0), pair.1)
+  }
 }
-func second<A,B,C>(_ value: (A,B,C)) -> B
-{
-  return value.1
+
+func first<A, B, C, T>(_ f: @escaping (A) -> T) -> ((A, B, C)) -> (T, B, C) {
+  return { pair in
+    return (f(pair.0), pair.1, pair.2)
+  }
 }
-func third<A,B,C>(_ value: (A,B,C)) -> C
-{
-  return value.2
+
+
+func second<A, B, C>(_ f: @escaping (B) -> C) -> ((A, B)) -> (A, C) {
+  return { pair in
+    return (pair.0, f(pair.1))
+  }
 }
+
+
+func second<A, B, C, T>(_ f: @escaping (B) -> T) -> ((A, B, C)) -> (A, T, C) {
+  return { pair in
+    return (pair.0, f(pair.1), pair.2)
+  }
+}
+
+func third<A, B, C, T>(_ f: @escaping (C) -> T) -> ((A, B, C)) -> (A, B, T) {
+  return { pair in
+    return (pair.0, pair.1, f(pair.2))
+  }
+}
+

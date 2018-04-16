@@ -39,7 +39,40 @@ class HandlesRound1Tests2: XCTestCase {
     XCTAssert(RectIndex(1).counterClockwise == RectIndex(0) )
     XCTAssert(RectIndex(0).counterClockwise == RectIndex(3) )
   }
+  
+  func test() {
+    XCTAssert(
+      edgeInnerRect(at: CGPoint(0,0),
+                    position: (.top, .center),
+                    inner: CGRect(-150,-150, 300, 300)) == CGRect(-150, -150, 300, 150)
+    )
+    XCTAssert(
+      edgeInnerRect(at: CGPoint(2,2),
+                    position: (.top, .center),
+                    inner: CGRect(0,0, 4, 4)) == CGRect(0, 0, 4, 2)
+    )
+    XCTAssert(
+      edgeInnerRect(at: CGPoint(2,2),
+                    position: (.center, .left),
+                    inner: CGRect(0,0, 4, 4)) == CGRect(0, 0, 2, 4)
+    )
+  }
+  
+  func testFinalBoundary() {
+    let f = BoundingBoxState.centeredEdge.boundaries
     
+    print((CGRect(0,0, 20, 20),CGRect(0, 10, 20, 5))
+      |> f((.top, .center)))
+    
+    XCTAssert(
+      (CGRect(0,0, 20, 20),CGRect(0, 10, 20, 5))
+        |> f((.top, .center))
+        == CGRect(0,0,20,15)
+        )
+    
+  }
+  
+  
     func testPerformanceExample() {
         // This is an example of a performance test case.
         self.measure {

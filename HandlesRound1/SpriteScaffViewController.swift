@@ -82,16 +82,9 @@ class SpriteScaffViewController : UIViewController {
   override func loadView() {
     let originZeroFrame = CGPoint.zero + CGSize(width:372, height:500)
     
-    handleView = HandleViewRound1(frame: originZeroFrame, outerBounds: originZeroFrame.insetBy(dx: 30, dy: 30), master: originZeroFrame.insetBy(dx: 60, dy: 60))
-    handleView.layer.borderColor = #colorLiteral(red: 0.2196078449, green: 0.007843137719, blue: 0.8549019694, alpha: 1).cgColor
-    handleView.layer.borderWidth = 1.0
-    
-
     rootView = UIView(frame: originZeroFrame)
     rootView.layer.borderColor = #colorLiteral(red: 0.9372549057, green: 0.3490196168, blue: 0.1921568662, alpha: 1).cgColor
     rootView.layer.borderWidth = 1.0
-   
-    [handleView].forEach{ v in rootView.addSubview(v) }
     
     scrollView = UIScrollView(frame: initialFrame)
     scrollView.backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
@@ -101,6 +94,17 @@ class SpriteScaffViewController : UIViewController {
     scrollView.contentSize = rootView.bounds.size
     scrollView.showsVerticalScrollIndicator = true
     scrollView.showsHorizontalScrollIndicator = true
+    
+    
+    handleView = HandleViewRound1(frame: originZeroFrame,
+                                  outerBounds: originZeroFrame.insetBy(dx: 30, dy: 30),
+                                  master: originZeroFrame.insetBy(dx: 60, dy: 60),
+                                  scrollView: self.scrollView,
+                                  rootView: self.rootView)
+    handleView.layer.borderColor = #colorLiteral(red: 0.2196078449, green: 0.007843137719, blue: 0.8549019694, alpha: 1).cgColor
+    handleView.layer.borderWidth = 1.0
+    
+    rootView.addSubview(handleView)
     
     view = UIView(frame: initialFrame)
     view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(SpriteScaffViewController.tap)))

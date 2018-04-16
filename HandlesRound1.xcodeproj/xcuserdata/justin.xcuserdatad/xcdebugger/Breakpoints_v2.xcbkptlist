@@ -131,5 +131,85 @@
             landmarkType = "9">
          </BreakpointContent>
       </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "HandlesRound1/HandlesView Core/HandlesViewCore.swift"
+            timestampString = "545540349.482496"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "106"
+            endingLineNumber = "106"
+            landmarkName = "edgeInnerRect(at:position:inner:)"
+            landmarkType = "9">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "HandlesRound1/HandlesView Core/HandlesViewCore.swift"
+            timestampString = "545540349.48256"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "115"
+            endingLineNumber = "115"
+            landmarkName = "unknown"
+            landmarkType = "0">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 ((HandlesRound1.VerticalPosition, HandlesRound1.HorizontalPosition)) -&gt; (__C.CGRect, __C.CGRect) -&gt; __C.CGRect in variable initialization expression of HandlesRound1.edgeBoundsCheck : ((HandlesRound1.VerticalPosition, HandlesRound1.HorizontalPosition)) -&gt; (__C.CGRect, __C.CGRect) -&gt; __C.CGRect"
+                  moduleName = "HandlesRound1"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/justin/Dropbox/Developer/To%20Delete%20at%20some%20point/HandlesRound1/HandlesRound1/HandlesView%20Core/HandlesViewCore.swift"
+                  timestampString = "545529122.414511"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "116"
+                  endingLineNumber = "116"
+                  offsetFromSymbolStart = "62">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (__C.CGRect, __C.CGRect) -&gt; __C.CGRect in closure #1 ((HandlesRound1.VerticalPosition, HandlesRound1.HorizontalPosition)) -&gt; (__C.CGRect, __C.CGRect) -&gt; __C.CGRect in variable initialization expression of HandlesRound1.edgeBoundsCheck : ((HandlesRound1.VerticalPosition, HandlesRound1.HorizontalPosition)) -&gt; (__C.CGRect, __C.CGRect) -&gt; __C.CGRect"
+                  moduleName = "HandlesRound1"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/justin/Dropbox/Developer/To%20Delete%20at%20some%20point/HandlesRound1/HandlesRound1/HandlesView%20Core/HandlesViewCore.swift"
+                  timestampString = "545529122.4173861"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "117"
+                  endingLineNumber = "117"
+                  offsetFromSymbolStart = "70">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "HandlesRound1/HandlesView Core/HandlesViewCore.swift"
+            timestampString = "545540349.482613"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "126"
+            endingLineNumber = "126"
+            landmarkName = "unknown"
+            landmarkType = "0">
+         </BreakpointContent>
+      </BreakpointProxy>
    </Breakpoints>
 </Bucket>
