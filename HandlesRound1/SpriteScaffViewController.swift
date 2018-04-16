@@ -34,6 +34,7 @@ let negatedVector = zurry(flip(CGPoint.asVector)) >>> zurry(flip(CGVector.negate
 
 class SpriteScaffViewController : UIViewController {
   // View and Model
+  var twoDView : Sprite2DView!
   var handleView : HandleViewRound1!
   var rootView : UIView!
   var scrollView : UIScrollView!
@@ -75,6 +76,8 @@ class SpriteScaffViewController : UIViewController {
     let size = self.graph |> self.editingView.size
     let newRect = self.handleView.bounds.withInsetRect(ofSize: size, hugging: (.center, .center))
     self.handleView.set(master: newRect)
+    self.draw(in: newRect)
+
   }
   
   var b: NSKeyValueObservation!
@@ -96,15 +99,25 @@ class SpriteScaffViewController : UIViewController {
     scrollView.showsHorizontalScrollIndicator = true
     
     
+    
+    twoDView = Sprite2DView(frame:
+      //originZeroFrame) 
+       CGPoint.zero + CGSize( 1000, 1000) )
+    twoDView.layer.borderColor = #colorLiteral(red: 0.4666666687, green: 0.7647058964, blue: 0.2666666806, alpha: 1).cgColor
+    twoDView.layer.borderWidth = 1.0
+    
     handleView = HandleViewRound1(frame: originZeroFrame,
                                   outerBounds: originZeroFrame.insetBy(dx: 30, dy: 30),
                                   master: originZeroFrame.insetBy(dx: 60, dy: 60),
                                   scrollView: self.scrollView,
-                                  rootView: self.rootView)
+                                  rootView: self.rootView,
+                                  cameraNode: twoDView.cameraNode
+    )
     handleView.layer.borderColor = #colorLiteral(red: 0.2196078449, green: 0.007843137719, blue: 0.8549019694, alpha: 1).cgColor
     handleView.layer.borderWidth = 1.0
     
-    rootView.addSubview(handleView)
+    
+   [twoDView, handleView].forEach{ v in rootView.addSubview(v) }
     
     view = UIView(frame: initialFrame)
     view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(SpriteScaffViewController.tap)))
@@ -118,22 +131,6 @@ class SpriteScaffViewController : UIViewController {
     
     self.handleView.handler =    {
       master, positions in
-      // Create more space for everyone if it's getting tighter
-//      let delta = self.handleView.frame.size - master.size
-//      let limit : CGFloat = 100.0
-//      if delta.width < limit
-//      {
-//        //self.handleView.frame.x += -limit
-//        self.handleView.frame.width += limit * 2
-//        self.handleView.outerBounds = self.handleView.frame.insetBy(dx: 20, dy: 20)
-//        
-//        self.scrollView.contentSize = self.handleView.frame.size
-//        self.scrollView.contentOffset.x += limit
-//        //self.twoDView.frame.width += limit
-//        
-//        self.rootView.frame.x += -limit
-//        self.rootView.frame.width += limit * 2
-//      }
       
       
        // Create New Model &  // Find Orirgin
@@ -141,6 +138,8 @@ class SpriteScaffViewController : UIViewController {
       let size = self.graph |> self.editingView.size
       let newRect = (master, size, positions) |> centeredRect
       
+      self.draw(in: newRect)
+
     }
     
     self.handleView.completed = {
@@ -155,12 +154,33 @@ class SpriteScaffViewController : UIViewController {
     
   }
   
+  // newRect a product of the Bounding Box + a generated size + a position
+  func draw(in newRect: CGRect) {
+    // overriding whatever the position is
+    //let newRect = self.view.bounds.withInsetRect(ofSize: newRect.size, hugging: (.center, .center))
+    
+    
+    self.twoDView.cameraNode.position = newRect.center
+    
+    let b = self.graph |> self.editingView.composite // >>> moop
+    
+    // Set & Redraw Geometry
+    self.twoDView.redraw( b )
+    
+    
+    /// OVERRIDING THE MASTER
+    //self.handleView.set(master: newRect)
+  }
+  
+  
+
   @objc func tap(g: UIGestureRecognizer)
   {
     // if insideTGyg`1``1`q`1q`q1
     if self.handleView.lastMaster.contains(
       g.location(ofTouch: 0, in: self.view)
     ) {
+      highlightCell(touch: g.location(ofTouch: 0, in: self.view))
     }
     else {
       changeCompositeStyle()
@@ -176,6 +196,67 @@ class SpriteScaffViewController : UIViewController {
   }
   
   private var swapIndex2 = 0
+  
+  func highlightCell (touch: CGPoint) {
+    
+    
+    
+    // bind values to these functions
+    let rectToSprite = self.twoDView.bounds.height |> curry(uiToSprite(height:rect:))
+    let pointToSprite = self.twoDView.bounds.height |> curry(uiToSprite(height:point:))
+    let yToSprite = self.twoDView.bounds.height |> curry(uiToSprite(height:y:))
+    
+    
+    // Properly Controllers concern
+    let tS = touch |> pointToSprite
+    let rectS = self.handleView.lastMaster |> rectToSprite
+    //let nede = ( tS, self.graph |> editingView.origin >>> negatedVector)
+    //  |> moveByVector
+    let p = (tS, rectS) |> viewSpaceToModelSpace
+    
+    // Properly models concern
+    let editBoundaries = self.graph |> editingView.grid2D ///
+    let toGridIndices = editBoundaries |> curry(pointToGridIndices) >>>  handleTupleOptionWith
+    
+    // Get Model Indices
+    let indices = (p |> toGridIndices)
+    // c is something lik (0, 1)
+    // or (1, 2)
+    
+    
+    // Get Model Rect
+    let mRect = (indices, editBoundaries) |> modelRect
+    // x is something like (0.0, 30.0, 100.0, 100.0)
+    // (0.0, 0.0, 100.0, 30.0)
+    
+    // bring model rect into the real world!
+    let z = (mRect, self.handleView.lastMaster.origin.asVector()) |> moveByVector
+    let cellRectValue = z |> rectToSprite
+    let y = self.handleView.lastMaster.midY |> yToSprite
+    let flippedRect = (cellRectValue, y )  |> mirrorVertically
+    // flipped rect is situated in sprite kit space
+    
+    self.graph.edges = editingView.selectedCell(indices, self.graph.grid, self.graph.edges)
+    
+    buildFromScratch()
+    addTempRect(rect: flippedRect, color: .white)
+  }
+  
+  
+  func addTempRect( rect: CGRect, color: UIColor) {
+    let globalLabel = SKShapeNode(rect: rect )
+    globalLabel.fillColor = color
+    self.twoDView.scene?.addChild(globalLabel)
+    globalLabel.alpha = 0.0
+    let fadeInOut = SKAction.sequence([
+      .fadeAlpha(to: 0.3, duration: 0.2),
+      .fadeAlpha(to: 0.0,duration: 0.4)])
+    globalLabel.run(fadeInOut, completion: {
+      print("End and Fade Out")
+    })
+  }
+
+
   
 }
 

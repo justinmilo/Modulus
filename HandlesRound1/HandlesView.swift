@@ -8,6 +8,7 @@
 
 import CoreGraphics
 import UIKit
+import SpriteKit
 
 protocol Hideable {
   var isHidden: Bool { get set }
@@ -37,9 +38,10 @@ class HandleViewRound1: UIView {
   
   private weak var scrollView : UIScrollView?
   private weak var rootView: UIView?
+  private weak var cameraNode : SKCameraNode?
   
   // Main init
-  init(frame: CGRect, outerBounds: CGRect, master: CGRect, scrollView: UIScrollView, rootView: UIView)
+  init(frame: CGRect, outerBounds: CGRect, master: CGRect, scrollView: UIScrollView, rootView: UIView, cameraNode: SKCameraNode)
   {
     precondition(frame.contains(outerBounds))
     precondition(outerBounds.contains(master))
@@ -49,6 +51,7 @@ class HandleViewRound1: UIView {
     self.lastMaster = master
     self.scrollView = scrollView
     self.rootView = rootView
+    self.cameraNode = cameraNode
     
     // Create Background View
     
@@ -159,15 +162,14 @@ class HandleViewRound1: UIView {
       {
         // get a *unit*vector distance from our bounds rect to touch point
         let angledVectorDelta = t.clamp(to:outerBounds) - t
-        let edge = handlePosition |> positionToEdgePosition
-        let orthoDistance = angledVectorDelta |> get(edge! |> positionPath)
-        print(edge)
+        let edgePos = handlePosition |> positionToEdgePosition
+        let orthoDistance = angledVectorDelta |> get(edgePos! |> positionPath)
         
         // transform my distance (in this case trying without much transform)
         let offsetAmount = orthoDistance / 2
         
         // create a size to size transform
-        let b : WritableKeyPath<CGSize, CGFloat> = edge! |> positionPath
+        let b : WritableKeyPath<CGSize, CGFloat> = edgePos! |> positionPath
         let c = { (a:CGFloat) in a + offsetAmount }
         let sizeToSize : (CGSize) -> CGSize = c |> prop(b)
         
@@ -176,6 +178,9 @@ class HandleViewRound1: UIView {
         
         // set master for a minute
         self.frame.size = self.frame.size |> sizeToSize
+        
+        self.cameraNode!.position = self.cameraNode!.position +  (edgePos! |> unitVector) * offsetAmount
+        
         
         // set rootview
         //rootView?.frame = rootView!.frame |> increasingEdge(at: edge!, with: offsetAmount)
@@ -187,8 +192,8 @@ class HandleViewRound1: UIView {
         print(scrollView?.contentSize)
         
         // set content offset
-        if edge! == .right || edge! == .bottom {
-          let offsetVector = unitVector(for: edge!) * offsetAmount
+        if edgePos! == .right || edgePos! == .bottom {
+          let offsetVector = unitVector(for: edgePos!) * offsetAmount
           scrollView?.contentOffset = scrollView!.contentOffset + offsetVector
         }
         

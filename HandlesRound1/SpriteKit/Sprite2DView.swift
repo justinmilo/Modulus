@@ -20,19 +20,26 @@ extension Float {
 
 
 // Used to be view controller
-
+/// Geometry View
 class Sprite2DView : SKView {
   
   var scale : CGFloat = 1.0
+  var cameraNode: SKCameraNode
   
   override init(frame: CGRect)
   {
+  self.cameraNode = SKCameraNode()
+    
+    
     super.init(frame: frame)
     
     // Specialtiy SpriteKitScene
     let aScene = SKScene(size: frame.size)
     self.presentScene(aScene)
     self.ignoresSiblingOrder = true
+    aScene.camera = self.cameraNode
+    cameraNode.position = frame.center
+    print(aScene.camera)
   }
   
   required init?(coder aDecoder: NSCoder) {
