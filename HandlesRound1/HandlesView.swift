@@ -38,10 +38,10 @@ class HandleViewRound1: UIView {
   
   private weak var scrollView : UIScrollView?
   private weak var rootView: UIView?
-  private weak var cameraNode : SKCameraNode?
+  private weak var graphicsView : UIView?
   
   // Main init
-  init(frame: CGRect, outerBounds: CGRect, master: CGRect, scrollView: UIScrollView, rootView: UIView, cameraNode: SKCameraNode)
+  init(frame: CGRect, outerBounds: CGRect, master: CGRect, scrollView: UIScrollView, rootView: UIView, graphicsView: UIView)
   {
     precondition(frame.contains(outerBounds))
     precondition(outerBounds.contains(master))
@@ -51,7 +51,7 @@ class HandleViewRound1: UIView {
     self.lastMaster = master
     self.scrollView = scrollView
     self.rootView = rootView
-    self.cameraNode = cameraNode
+    self.graphicsView = graphicsView
     
     // Create Background View
     
@@ -179,7 +179,7 @@ class HandleViewRound1: UIView {
         // set master for a minute
         self.frame.size = self.frame.size |> sizeToSize
         
-        self.cameraNode!.position = self.cameraNode!.position +  (edgePos! |> unitVector) * offsetAmount
+        self.graphicsView!.frame.size = self.graphicsView!.frame.size |> sizeToSize
         
         
         // set rootview

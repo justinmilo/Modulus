@@ -105,13 +105,14 @@ class SpriteScaffViewController : UIViewController {
        CGPoint.zero + CGSize( 1000, 1000) )
     twoDView.layer.borderColor = #colorLiteral(red: 0.4666666687, green: 0.7647058964, blue: 0.2666666806, alpha: 1).cgColor
     twoDView.layer.borderWidth = 1.0
+    twoDView.scene?.scaleMode = .resizeFill
     
     handleView = HandleViewRound1(frame: originZeroFrame,
                                   outerBounds: originZeroFrame.insetBy(dx: 30, dy: 30),
                                   master: originZeroFrame.insetBy(dx: 60, dy: 60),
                                   scrollView: self.scrollView,
                                   rootView: self.rootView,
-                                  cameraNode: twoDView.cameraNode
+                                  graphicsView: twoDView
     )
     handleView.layer.borderColor = #colorLiteral(red: 0.2196078449, green: 0.007843137719, blue: 0.8549019694, alpha: 1).cgColor
     handleView.layer.borderWidth = 1.0
@@ -159,10 +160,19 @@ class SpriteScaffViewController : UIViewController {
     // overriding whatever the position is
     //let newRect = self.view.bounds.withInsetRect(ofSize: newRect.size, hugging: (.center, .center))
     
+    // Create New Model &  // Find Orirgin
+    //let origin = (self.graph, newRect, self.twoDView.bounds.height) |> self.editingView.origin
+    let pointToSprite = self.twoDView.bounds.height |> curry(uiToSprite(height:point:))
+    let origin = (newRect.bottomLeft) |> pointToSprite
+    let o2 =
+      (origin,
+       self.graph |> editingView.origin >>> negatedVector)
+        |> moveByVector
     
-    self.twoDView.cameraNode.position = newRect.center
+    // Create Geometry
+    let moop = o2.asVector() |> move(by:) |> curry(map)
+    let b = self.graph |> self.editingView.composite >>> moop
     
-    let b = self.graph |> self.editingView.composite // >>> moop
     
     // Set & Redraw Geometry
     self.twoDView.redraw( b )
