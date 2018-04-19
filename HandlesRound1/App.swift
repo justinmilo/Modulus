@@ -16,7 +16,7 @@ struct GraphEditingView {
   /// takes a bounding box size, and any existing structure ([Edge]) to interprit a new ScaffGraph,a fully 3D structure
   let build: (CGSize, [Edge]) -> (GraphPositions, [Edge])
   
-  /// origin: the offset from the 0,0 corner of the bounding box
+  /// origin: in this editing view slice, the offset from the 0,0 corner of the bounding box
   let origin : (ScaffGraph) -> CGPoint
   /// Related to the size of the bounding box
   let size : (ScaffGraph) -> CGSize

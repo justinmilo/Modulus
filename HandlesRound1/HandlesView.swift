@@ -160,37 +160,38 @@ class HandleViewRound1: UIView {
       //                              -> scrollView.contentOffset
       if !outerBounds.contains(t) // && growingIsAllowed()
       {
+        // Get Point
         // get a *unit*vector distance from our bounds rect to touch point
         let angledVectorDelta = t.clamp(to:outerBounds) - t
-        let edgePos = handlePosition |> positionToEdgePosition
-        let orthoDistance = angledVectorDelta |> get(edgePos! |> positionPath)
+        let edgePos : EdgePosition! = handlePosition |> positionToEdgePosition
+        let orthoDistance = angledVectorDelta |> get(edgePos |> positionPath)
         
+        // Transform
         // transform my distance (in this case trying without much transform)
-        let offsetAmount = orthoDistance / 2
+        let offsetAmount = abs( orthoDistance / 2 )
         
+        // Change Sizes
         // create a size to size transform
         let b : WritableKeyPath<CGSize, CGFloat> = edgePos! |> positionPath
         let c = { (a:CGFloat) in a + offsetAmount }
-        let sizeToSize : (CGSize) -> CGSize = c |> prop(b)
+        let resized : (CGSize) -> CGSize = c |> prop(b)
         
-        // set master for a minute
-        lastMaster.size = lastMaster.size |> sizeToSize
+        // set master size for a minute
+        lastMaster.size = lastMaster.size |> resized
         
-        // set master for a minute
-        self.frame.size = self.frame.size |> sizeToSize
+        // set self
+        self.frame.size = self.frame.size |> resized
         
-        self.graphicsView!.frame.size = self.graphicsView!.frame.size |> sizeToSize
-        
+        // set graphicsView
+        self.graphicsView!.frame.size = self.graphicsView!.frame.size |> resized
         
         // set rootview
-        //rootView?.frame = rootView!.frame |> increasingEdge(at: edge!, with: offsetAmount)
-        rootView!.frame.size = rootView!.frame.size |> sizeToSize
-        print(rootView!.frame.size)
+        rootView!.frame.size = rootView!.frame.size |> resized
         
         // set scrollview's contentSize
-        scrollView?.contentSize = scrollView!.contentSize |> sizeToSize
-        print(scrollView?.contentSize)
+        scrollView?.contentSize = scrollView!.contentSize |> resized
         
+        // Change Content Offset
         // set content offset
         if edgePos! == .right || edgePos! == .bottom {
           let offsetVector = unitVector(for: edgePos!) * offsetAmount

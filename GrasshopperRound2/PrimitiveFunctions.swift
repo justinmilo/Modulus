@@ -77,6 +77,11 @@ func move<T: Geometry> (by vector: CGVector) -> (T) -> T
 {
   return { moveByVector(initialNode: $0, vector: vector) }
 }
+func moveGeneric<T: Geometry> (by vector: CGVector) -> (T) -> T
+{
+  return { moveByVector(initialNode: $0, vector: vector) }
+}
+
 func move(by vectorP: CGVector) -> (Geometry) -> Geometry
 {
   return { move(item: $0, vector: vectorP) }

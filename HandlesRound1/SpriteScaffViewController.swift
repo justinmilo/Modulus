@@ -26,7 +26,9 @@ func flip<A, C>(_ f: @escaping (A) -> () -> C) -> () -> (A) -> C {
   return { { a in f(a)() } }
 }
 
-let negatedVector = zurry(flip(CGPoint.asVector)) >>> zurry(flip(CGVector.negated))
+let asVector = zurry(flip(CGPoint.asVector))
+let negated = zurry(flip(CGVector.negated))
+let asNegatedVector = asVector >>> negated
 
 
 
@@ -38,6 +40,7 @@ class SpriteScaffViewController : UIViewController {
   var handleView : HandleViewRound1!
   var rootView : UIView!
   var scrollView : UIScrollView!
+  private var testView: UIView!
   
   let graph : ScaffGraph
   
@@ -98,11 +101,11 @@ class SpriteScaffViewController : UIViewController {
     scrollView.showsVerticalScrollIndicator = true
     scrollView.showsHorizontalScrollIndicator = true
     
+    testView = UIView()
+    testView.layer.borderColor = #colorLiteral(red: 0.7450980544, green: 0.1568627506, blue: 0.07450980693, alpha: 1).cgColor
+    testView.layer.borderWidth = 2.0
     
-    
-    twoDView = Sprite2DView(frame:
-      //originZeroFrame) 
-       CGPoint.zero + CGSize( 1000, 1000) )
+    twoDView = Sprite2DView(frame:originZeroFrame )
     twoDView.layer.borderColor = #colorLiteral(red: 0.4666666687, green: 0.7647058964, blue: 0.2666666806, alpha: 1).cgColor
     twoDView.layer.borderWidth = 1.0
     twoDView.scene?.scaleMode = .resizeFill
@@ -117,65 +120,112 @@ class SpriteScaffViewController : UIViewController {
     handleView.layer.borderColor = #colorLiteral(red: 0.2196078449, green: 0.007843137719, blue: 0.8549019694, alpha: 1).cgColor
     handleView.layer.borderWidth = 1.0
     
-    
-   [twoDView, handleView].forEach{ v in rootView.addSubview(v) }
+   [twoDView, handleView, testView].forEach{ v in rootView.addSubview(v) }
     
     view = UIView(frame: initialFrame)
     view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(SpriteScaffViewController.tap)))
     view.addSubview ( scrollView )
     
-//    b = view.observe(\UIView.safeAreaInsets, options: NSKeyValueObservingOptions.new) { (a, b) in
-//      print("From the observe!", self.view.safeAreaInsets)
-//      self.scrollView.contentInset.bottom = b.newValue!.bottom + 4
-//      //self.scrollView.contentSize = self.rootView.bounds.size.applying(edgeInsets: b.newValue!)
-//    }
+    self.handleView.handler = handleChange(master:position:)
+    self.handleView.completed = handleCompletion(master:positions:)
     
-    self.handleView.handler =    {
-      master, positions in
-      
-      
-       // Create New Model &  // Find Orirgin
-      (self.graph.grid, self.graph.edges) = (master.size, self.graph.edges) |> self.editingView.build
-      let size = self.graph |> self.editingView.size
-      let newRect = (master, size, positions) |> centeredRect
-      
-      self.draw(in: newRect)
+  }
+  
+  func handleChange( master: CGRect, position: Position2D)
+  {
+    
+    // Create New Model &  // Find Orirgin
+    // Setting up our interior vie
+    (self.graph.grid, self.graph.edges) = (master.size, self.graph.edges) |> self.editingView.build
+    let size = self.graph |> self.editingView.size
+    let newRect = (master, size, position) |> centeredRect
+    
+    self.draw(in: newRect)
 
-    }
+  }
+  
+  func handleCompletion( master : CGRect, positions: Position2D)
+  {
+    // Create New Model
+    (self.graph.grid, self.graph.edges) = (master.size, self.graph.edges) |> self.editingView.build
+    let size = self.graph |> self.editingView.size
+    let  newRect = (master, size, positions) |> centeredRect
     
-    self.handleView.completed = {
-      master, positions in
-      // Create New Model
-      (self.graph.grid, self.graph.edges) = (master.size, self.graph.edges) |> self.editingView.build
-      let size = self.graph |> self.editingView.size
-      let  newRect = (master, size, positions) |> centeredRect
-      
-      self.handleView.set(master: newRect )
+    self.handleView.set(master: newRect )
     }
+  
+  func layout(with size: CGSize, at offset:CGPoint)
+  {
+//    let deltaToScrollCenter = CGVector.zero
+//    scrollView.contentOffset = deltaToScrollCenter + offset
     
   }
   
   // newRect a product of the Bounding Box + a generated size + a position
   func draw(in newRect: CGRect) {
-    // overriding whatever the position is
-    //let newRect = self.view.bounds.withInsetRect(ofSize: newRect.size, hugging: (.center, .center))
     
-    // Create New Model &  // Find Orirgin
-    //let origin = (self.graph, newRect, self.twoDView.bounds.height) |> self.editingView.origin
+    // Create New Model &  // Find Origin
+
     let pointToSprite = self.twoDView.bounds.height |> curry(uiToSprite(height:point:))
-    let origin = (newRect.bottomLeft) |> pointToSprite
-    let o2 =
-      (origin,
-       self.graph |> editingView.origin >>> negatedVector)
-        |> moveByVector
+    let viewOrigin = (newRect.bottomLeft) |> pointToSprite
+    let graphOrigin = self.graph |> editingView.origin
+    let o2 = (viewOrigin, graphOrigin |> asNegatedVector) |> moveByVector
     
     // Create Geometry
-    let moop = o2.asVector() |> move(by:) |> curry(map)
-    let b = self.graph |> self.editingView.composite >>> moop
+    let moveAll = o2.asVector() |> move(by:) |> curry(map) // function to move all individual elements
+    let b = self.graph |> self.editingView.composite >>> moveAll
     
+    
+    
+    
+    
+    
+    /// Create seom DEBUG Diagnostics ,,,,,,,,,
+    /// DEBUG
+    // rect -> corner and center points -> doubled labels
+    //                                  -> doubled Strings
+    // rect -> points
+    let pointsToConsider = corners <> { [$0.center] }
+    let points = newRect |> pointsToConsider
+    
+    //                                 p -> (p, p)
+    let doubledPoints : (CGPoint) -> (CGPoint, CGPoint) =
+    {
+      ( $0 |> move(by: unitY * 10),
+        $0 |> move(by: unitY * -10))
+    }
+    let doubleStrings : (CGPoint) -> (String, String) =
+    { p in
+      (p |> pointToSprite >>> { "\($0)sk" },
+       p |> { "\($0)ui" }  )
+    }
+    let combine : (CGPoint, String) -> Label = { Label.init(text: $1, position: $0, rotation: .h) }
+    
+    
+    let doubleLabelMaker =
+      translateToCGPointInSKCoordinates(from: handleView.frame, to: twoDView.frame)
+        >>> doubledPoints
+        >>> { ($0.0 |> pointToLabel, $0.1 |> pointToLabel) } |> map // >>> pointsToLabels
+    let labelTexts = (doubleStrings |> map) // >>> pointsToLabels
+    let changeText = prop(\Label.text)
+    let addStringToLabel = { lab, str in lab |> changeText{_ in str} }
+    let texts : ([CGPoint]) -> [Label] = { zip($0 |> doubleLabelMaker,
+                                        $0 |> labelTexts).flatMap{
+      return [addStringToLabel($0.0.0, $0.1.0) , addStringToLabel($0.0.1, $0.1.1)]
+    }
+    }
+    let compacted = points |> texts
+    let centerPoint = [newRect.bottomLeft, viewOrigin] |> texts
+    let dude = compacted + centerPoint
+    /// ............ Create seom DEBUG Diagnostics
+    /// DEBUG
+    
+    //
+    testView.frame = newRect
+    //
     
     // Set & Redraw Geometry
-    self.twoDView.redraw( b )
+    self.twoDView.redraw( b + dude )
     
     
     /// OVERRIDING THE MASTER

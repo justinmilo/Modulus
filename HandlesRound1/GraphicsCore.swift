@@ -9,6 +9,40 @@
 import CoreGraphics
 
 
+//struct Email: Decodable, RawRepresentable { let rawValue: String }
+// {"email": String}
+enum SKTag {}
+typealias SKRect = Tagged<SKTag, CGRect>
+typealias SKPoint = Tagged<SKTag, CGPoint>
+
+extension Tagged where RawValue == CGPoint {
+  init (x: CGFloat, y:CGFloat) { self.init(rawValue: CGPoint.init(x:x,y:y)) }
+  init (_ x: CGFloat, _ y:CGFloat) { self.init(rawValue: CGPoint.init(x:x,y:y)) }
+}
+
+// Func translate between two sibling coordiante systems
+// point lives in _UISibling_
+func translate(from uisibling: CGRect, to sksibling: CGRect) -> (CGPoint) -> SKPoint
+{
+  let xDelta = uisibling.origin.x - sksibling.origin.x
+  let yDelta = uisibling.origin.y - sksibling.origin.y
+  
+  return { sibPoint in
+    SKPoint( x: sibPoint.x + xDelta, y: sksibling.size.height - (sibPoint.y + yDelta))
+  }
+}
+
+func translateToCGPointInSKCoordinates(from uisibling: CGRect, to sksibling: CGRect) -> (CGPoint) -> CGPoint
+{
+  let xDelta = uisibling.origin.x - sksibling.origin.x
+  let yDelta = uisibling.origin.y - sksibling.origin.y
+  
+  return { sibPoint in
+    CGPoint( x: sibPoint.x + xDelta, y: sksibling.size.height - (sibPoint.y + yDelta))
+  }
+}
+
+
 func uiToSprite(height: CGFloat, rect: CGRect) -> CGRect
 {
   return CGRect(x:rect.x ,
