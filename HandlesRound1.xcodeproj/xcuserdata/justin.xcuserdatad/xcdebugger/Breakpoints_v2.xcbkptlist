@@ -161,38 +161,6 @@
             endingLineNumber = "115"
             landmarkName = "unknown"
             landmarkType = "0">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 ((HandlesRound1.VerticalPosition, HandlesRound1.HorizontalPosition)) -&gt; (__C.CGRect, __C.CGRect) -&gt; __C.CGRect in variable initialization expression of HandlesRound1.edgeBoundsCheck : ((HandlesRound1.VerticalPosition, HandlesRound1.HorizontalPosition)) -&gt; (__C.CGRect, __C.CGRect) -&gt; __C.CGRect"
-                  moduleName = "HandlesRound1"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/justin/Dropbox/Developer/To%20Delete%20at%20some%20point/HandlesRound1/HandlesRound1/HandlesView%20Core/HandlesViewCore.swift"
-                  timestampString = "545846451.521925"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "116"
-                  endingLineNumber = "116"
-                  offsetFromSymbolStart = "62">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (__C.CGRect, __C.CGRect) -&gt; __C.CGRect in closure #1 ((HandlesRound1.VerticalPosition, HandlesRound1.HorizontalPosition)) -&gt; (__C.CGRect, __C.CGRect) -&gt; __C.CGRect in variable initialization expression of HandlesRound1.edgeBoundsCheck : ((HandlesRound1.VerticalPosition, HandlesRound1.HorizontalPosition)) -&gt; (__C.CGRect, __C.CGRect) -&gt; __C.CGRect"
-                  moduleName = "HandlesRound1"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/justin/Dropbox/Developer/To%20Delete%20at%20some%20point/HandlesRound1/HandlesRound1/HandlesView%20Core/HandlesViewCore.swift"
-                  timestampString = "545846451.524381"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "117"
-                  endingLineNumber = "117"
-                  offsetFromSymbolStart = "70">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy

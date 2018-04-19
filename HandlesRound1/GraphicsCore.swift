@@ -22,7 +22,7 @@ extension Tagged where RawValue == CGPoint {
 
 // Func translate between two sibling coordiante systems
 // point lives in _UISibling_
-func translate(from uisibling: CGRect, to sksibling: CGRect) -> (CGPoint) -> SKPoint
+func translate(from uisibling: CGRect, toSKCoordIn sksibling: CGRect) -> (CGPoint) -> SKPoint
 {
   let xDelta = uisibling.origin.x - sksibling.origin.x
   let yDelta = uisibling.origin.y - sksibling.origin.y
@@ -34,11 +34,8 @@ func translate(from uisibling: CGRect, to sksibling: CGRect) -> (CGPoint) -> SKP
 
 func translateToCGPointInSKCoordinates(from uisibling: CGRect, to sksibling: CGRect) -> (CGPoint) -> CGPoint
 {
-  let xDelta = uisibling.origin.x - sksibling.origin.x
-  let yDelta = uisibling.origin.y - sksibling.origin.y
-  
   return { sibPoint in
-    CGPoint( x: sibPoint.x + xDelta, y: sksibling.size.height - (sibPoint.y + yDelta))
+    translate(from: uisibling, toSKCoordIn: sksibling)(sibPoint).rawValue
   }
 }
 

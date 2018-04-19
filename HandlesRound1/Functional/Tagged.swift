@@ -39,3 +39,56 @@ extension Tagged: ExpressibleByIntegerLiteral where RawValue: ExpressibleByInteg
   
   
 }
+
+extension Tagged : Hashable where RawValue : Hashable
+{
+  var hashValue: Int {
+    return rawValue.hashValue
+  }
+}
+
+extension Tagged : Numeric where RawValue : Numeric
+{
+
+  init?<T>(exactly source: T) where T : BinaryInteger {
+    guard let rawValue = RawValue.init(exactly: source) else { return nil}
+  
+    self.rawValue = rawValue
+  }
+  
+  var magnitude: RawValue.Magnitude {
+    return rawValue.magnitude
+  }
+  
+  
+  typealias Magnitude = RawValue.Magnitude
+  
+  static func + (lhs: Tagged<Tag, RawValue>, rhs: Tagged<Tag, RawValue>) -> Tagged<Tag, RawValue> {
+    return Tagged(rawValue: lhs.rawValue + rhs.rawValue)
+  }
+  
+  static func += (lhs: inout Tagged<Tag, RawValue>, rhs: Tagged<Tag, RawValue>) {
+    lhs = lhs + rhs
+  }
+  
+  static func - (lhs: Tagged<Tag, RawValue>, rhs: Tagged<Tag, RawValue>) -> Tagged<Tag, RawValue> {
+    return Tagged(rawValue: lhs.rawValue - rhs.rawValue)
+  }
+  
+  static func -= (lhs: inout Tagged<Tag, RawValue>, rhs: Tagged<Tag, RawValue>) {
+    lhs = lhs - rhs
+  }
+  
+  
+  static func * (lhs: Tagged<Tag, RawValue>, rhs: Tagged<Tag, RawValue>) -> Tagged<Tag, RawValue> {
+    return Tagged(rawValue: lhs.rawValue * rhs.rawValue)
+  }
+  
+  static func *= (lhs: inout Tagged<Tag, RawValue>, rhs: Tagged<Tag, RawValue>) {
+    lhs = lhs * rhs
+  }
+  
+}
+
+
+
