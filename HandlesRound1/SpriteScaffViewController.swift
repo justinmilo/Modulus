@@ -175,81 +175,16 @@ class SpriteScaffViewController : UIViewController {
     let moveAll = o2.asVector() |> move(by:) |> curry(map) // function to move all individual elements
     let b = self.graph |> self.editingView.composite >>> moveAll
     
+    /// Add UI Elements to test layout
+    
+    
+    // Set & Redraw Geometry
+    self.twoDView.redraw(b) // + dude  )
+    
     
     
     /// Add UI Elements to test layout
     
-    /// Create seom DEBUG Diagnostics ,,,,,,,,,
-    /// DEBUG
-    // rect -> corner and center points -> doubled labels
-    //                                  -> doubled Strings
-    // rect -> points
-    let pointsToConsider = corners <> { [$0.center] }
-    let points = newRect |> pointsToConsider
-    
-    //                                 p -> (p, p)
-    let doubledPoints : (CGPoint) -> (CGPoint, CGPoint) =
-    {
-      ( $0 |> move(by: unitY * 10),
-        $0 |> move(by: unitY * -10))
-    }
-    let doubleStrings : (CGPoint) -> (String, String) =
-    { p in
-      (p |> pointToSprite >>> { "\($0)sk" },
-       p |> { "\($0)ui" }  )
-    }
-    let doubleLabelMaker : ([CGPoint]) -> [(Label, Label)] = translateToCGPointInSKCoordinates(from: handleView.frame, to: twoDView.frame)
-        >>> doubledPoints
-        >>> { ($0.0 |> pointToLabel, $0.1 |> pointToLabel) } |> map
-    let labelTexts = (doubleStrings |> map)
-    let changeText = prop(\Label.text)
-    let addStringToLabel = { lab, str in lab |> changeText{_ in str} }
-    let texts : ([CGPoint]) -> [Label] = { zip($0 |> doubleLabelMaker,
-                                        $0 |> labelTexts).flatMap{
-      return [addStringToLabel($0.0.0, $0.1.0) , addStringToLabel($0.0.1, $0.1.1)]
-    }
-    }
-    let compacted = points |> texts
-    let centerPoint = [newRect.bottomLeft, viewOrigin] |> texts
-    
-    /// ............ Create seom DEBUG Diagnostics
-    /// DEBUG
-    
-    
-    
-    let basicGrid = (0..<10)
-      .map{CGFloat($0) * 50.0}
-      .map{CGPoint(50, $0) }
-    
-    
-    let dude = compacted + centerPoint + basicGrid |> texts
-    
-    // Set & Redraw Geometry
-    self.twoDView.redraw( b ) // + dude  )
-    
-    
-    
-    
-    {
-      // create tags
-      let tags = views
-        .enumerated()
-        .map{ return 10 + $0.offset }
-      
-      // Remove anything with my Tag if this is the second time running
-      tags.forEach { tag in view.subviews.first(where:{ $0.tag == tag })?.removeFromSuperview() }
-      
-      // Create label and put in view
-      zip(views,tags).forEach {
-        $0.tag = $1
-        view.addSubview($0)
-      }
-    }
-    let newLabel = ("\(newRect.center)ui", newRect.center, #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1)) |> ColoredLabel.init |> get(\ColoredLabel.asView)
-    let basicGridAsViews = basicGrid.map { ("\($0)ui", $0, #colorLiteral(red: 0.2588235438, green: 0.7568627596, blue: 0.9686274529, alpha: 1)) |> ColoredLabel.init |> get(\ColoredLabel.asView) }
-      
-    
-    // ([newLabel] + basicGridAsViews) |> curry(replaceInPlace)(self.twoDView)
     
     
     //

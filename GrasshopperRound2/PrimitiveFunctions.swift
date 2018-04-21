@@ -197,5 +197,43 @@ func grid(p: CGPoint, dx: CGFloat, dy: CGFloat, ex: Int, ey: Int)
   
 }
 
+/// Create seom DEBUG Diagnostics ,,,,,,,,,
+/// DEBUG
+// rect -> corner and center points -> doubled labels
+//                                  -> doubled Strings
+// rect -> points
+let debugRect : (CGRect)->() = {
+  newRect in
 
+let pointsToConsider = corners <> { [$0.center] }
+let points = newRect |> pointsToConsider
+
+//                                 p -> (p, p)
+let doubledPoints : (CGPoint) -> (CGPoint, CGPoint) =
+{
+  ( $0 |> move(by: unitY * 10),
+    $0 |> move(by: unitY * -10))
+}
+let doubleStrings : (CGPoint) -> (String, String) =
+{ p in
+  (p |> pointToSprite >>> { "\($0)sk" },
+   p |> { "\($0)ui" }  )
+}
+let doubleLabelMaker : ([CGPoint]) -> [(Label, Label)] = translateToCGPointInSKCoordinates(from: handleView.frame, to: twoDView.frame)
+  >>> doubledPoints
+  >>> { ($0.0 |> pointToLabel, $0.1 |> pointToLabel) } |> map
+let labelTexts = (doubleStrings |> map)
+let changeText = prop(\Label.text)
+let addStringToLabel = { lab, str in lab |> changeText{_ in str} }
+let texts : ([CGPoint]) -> [Label] = { zip($0 |> doubleLabelMaker,
+                                           $0 |> labelTexts).flatMap{
+                                            return [addStringToLabel($0.0.0, $0.1.0) , addStringToLabel($0.0.1, $0.1.1)]
+  }
+}
+let compacted = points |> texts
+let centerPoint = [newRect.bottomLeft, viewOrigin] |> texts
+
+/// ............ Create seom DEBUG Diagnostics
+/// DEBUG
+}
 

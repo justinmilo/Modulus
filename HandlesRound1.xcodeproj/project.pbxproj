@@ -114,6 +114,7 @@
 		D079B6BC201D193E0070EB40 /* CGRect+Inset+JSMath.swift in Sources */ = {isa = PBXBuildFile; fileRef = D079B6BB201D193E0070EB40 /* CGRect+Inset+JSMath.swift */; };
 		D079B6BE201D19600070EB40 /* EdgeAlignments.swift in Sources */ = {isa = PBXBuildFile; fileRef = D079B6BD201D19600070EB40 /* EdgeAlignments.swift */; };
 		D08A6F93202AA58E00EF9E68 /* EdgeToGeometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = D08A6F92202AA58E00EF9E68 /* EdgeToGeometry.swift */; };
+		D08F42FB208BBB0400F393D6 /* UIKit+Grasshopper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D08F42FA208BBB0400F393D6 /* UIKit+Grasshopper.swift */; };
 		D0915FA32088F4AE0067C02A /* Tagged.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0915FA22088F4AE0067C02A /* Tagged.swift */; };
 		D0915FAB208901DD0067C02A /* GraphicsCoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0915FAA208901DD0067C02A /* GraphicsCoreTests.swift */; };
 		D0915FB2208902760067C02A /* CGAffineTransform+Math.swift in Sources */ = {isa = PBXBuildFile; fileRef = D064BDF3200D94C60032C153 /* CGAffineTransform+Math.swift */; };
@@ -292,6 +293,7 @@
 		D079B6BB201D193E0070EB40 /* CGRect+Inset+JSMath.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "CGRect+Inset+JSMath.swift"; path = "../../Deploy/Deploy/Drawing/CG and UIKit/CGRect+Inset+JSMath.swift"; sourceTree = "<group>"; };
 		D079B6BD201D19600070EB40 /* EdgeAlignments.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EdgeAlignments.swift; path = ../../Control/Control/Sources/EdgeAlignments.swift; sourceTree = "<group>"; };
 		D08A6F92202AA58E00EF9E68 /* EdgeToGeometry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EdgeToGeometry.swift; sourceTree = "<group>"; };
+		D08F42FA208BBB0400F393D6 /* UIKit+Grasshopper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "UIKit+Grasshopper.swift"; path = "GrasshopperRound2/UIKit+Grasshopper.swift"; sourceTree = SOURCE_ROOT; };
 		D0915FA22088F4AE0067C02A /* Tagged.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tagged.swift; sourceTree = "<group>"; };
 		D0915FA8208901DD0067C02A /* GraphicsCoreTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GraphicsCoreTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0915FAA208901DD0067C02A /* GraphicsCoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphicsCoreTests.swift; sourceTree = "<group>"; };
@@ -468,6 +470,7 @@
 				D0DA9BBA203A666A0019F6EE /* PrimitiveFunctions.swift */,
 				D08A6F92202AA58E00EF9E68 /* EdgeToGeometry.swift */,
 				D0DE1BB02089394300775312 /* Primitive+UIKit.swift */,
+				D08F42FA208BBB0400F393D6 /* UIKit+Grasshopper.swift */,
 				D0DE1BB22089411B00775312 /* Primitive+SpriteKit.swift */,
 				D04153C1202B7CA300BD7B72 /* Array+CGPoint+Utility.swift */,
 				D056A3A020177F1000C3B3B1 /* Grids */,
@@ -885,6 +888,7 @@
 				D064BE08200D94C60032C153 /* CGAngle+Math.swift in Sources */,
 				D04153C4202B9FB400BD7B72 /* View.swift in Sources */,
 				D064BE0B200D94C60032C153 /* CGAngle.swift in Sources */,
+				D08F42FB208BBB0400F393D6 /* UIKit+Grasshopper.swift in Sources */,
 				D09C3C43206B32370053EE2A /* App.swift in Sources */,
 				D03E040320125DF8002D47F3 /* DrawingPrimitives.swift in Sources */,
 				D079B6BC201D193E0070EB40 /* CGRect+Inset+JSMath.swift in Sources */,
