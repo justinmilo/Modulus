@@ -228,6 +228,10 @@ func createLableNode(_ label: Label) -> SKLabelNode {
   return node
 }
 
+func changeFontColor(color: UIColor, _ node: SKLabelNode) {
+  node.fontColor = color
+}
+
 func createLineShapeNode(_ line: Line) -> SKShapeNode {
 let path = CGMutablePath()
 path.move(to: line.start)
