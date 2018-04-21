@@ -62,6 +62,11 @@ class Sprite2DView : SKView {
   // put on the canvas!!
   func addChildR<T>(_ node: T)
   {
+    if let representable = node as? SKRepresentable
+    {
+      representable.asNode |> scene!.addChild
+    }
+    
     if let oval = node as? Oval
     {
       createOval(oval) |> scene!.addChild
