@@ -225,13 +225,11 @@ class SpriteScaffViewController : UIViewController {
     let dude = compacted + centerPoint + basicGrid |> texts
     
     // Set & Redraw Geometry
-    self.twoDView.redraw( b + dude  )
+    self.twoDView.redraw( b ) // + dude  )
     
     
     
-    /// Add UI Elements to test layout
     
-    func replaceInPlace(in view: UIView, views: [UIView])
     {
       // create tags
       let tags = views
@@ -251,7 +249,7 @@ class SpriteScaffViewController : UIViewController {
     let basicGridAsViews = basicGrid.map { ("\($0)ui", $0, #colorLiteral(red: 0.2588235438, green: 0.7568627596, blue: 0.9686274529, alpha: 1)) |> ColoredLabel.init |> get(\ColoredLabel.asView) }
       
     
-    ([newLabel] + basicGridAsViews) |> curry(replaceInPlace)(self.twoDView)
+    // ([newLabel] + basicGridAsViews) |> curry(replaceInPlace)(self.twoDView)
     
     
     //
