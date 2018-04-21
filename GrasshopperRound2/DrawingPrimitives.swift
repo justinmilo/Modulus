@@ -34,6 +34,13 @@ extension Label {
   init(text: String) { self.text = text }
 }
 
+struct ColoredLabel : Geometry {
+  var text : String
+  var position : CGPoint = CGPoint.zero
+  var color : UIColor
+}
+extension ColoredLabel { var asLabel : Label { return Label(text: text, position: position, rotation: .h)}}
+
 struct Oval : Geometry {
   var ellipseOf: CGSize
   var lineWidth = 1.0
