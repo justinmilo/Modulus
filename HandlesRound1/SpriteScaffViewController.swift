@@ -166,7 +166,7 @@ class SpriteScaffViewController : UIViewController {
     
     // Create New Model &  // Find Origin
 
-    let pointToSprite = self.twoDView.bounds.height |> curry(uiToSprite(height:point:))
+    let pointToSprite = translateToCGPointInSKCoordinates(from: handleView.frame, to: twoDView.frame)
     let viewOrigin = (newRect.bottomLeft) |> pointToSprite
     let graphOrigin = self.graph |> editingView.origin
     let o2 = (viewOrigin, graphOrigin |> asNegatedVector) |> moveByVector
@@ -177,8 +177,7 @@ class SpriteScaffViewController : UIViewController {
     
     
     
-    
-    
+    /// Add UI Elements to test layout
     
     /// Create seom DEBUG Diagnostics ,,,,,,,,,
     /// DEBUG
@@ -199,14 +198,10 @@ class SpriteScaffViewController : UIViewController {
       (p |> pointToSprite >>> { "\($0)sk" },
        p |> { "\($0)ui" }  )
     }
-    let combine : (CGPoint, String) -> Label = { Label.init(text: $1, position: $0, rotation: .h) }
-    
-    
-    let doubleLabelMaker =
-      translateToCGPointInSKCoordinates(from: handleView.frame, to: twoDView.frame)
+    let doubleLabelMaker : ([CGPoint]) -> [(Label, Label)] = translateToCGPointInSKCoordinates(from: handleView.frame, to: twoDView.frame)
         >>> doubledPoints
-        >>> { ($0.0 |> pointToLabel, $0.1 |> pointToLabel) } |> map // >>> pointsToLabels
-    let labelTexts = (doubleStrings |> map) // >>> pointsToLabels
+        >>> { ($0.0 |> pointToLabel, $0.1 |> pointToLabel) } |> map
+    let labelTexts = (doubleStrings |> map)
     let changeText = prop(\Label.text)
     let addStringToLabel = { lab, str in lab |> changeText{_ in str} }
     let texts : ([CGPoint]) -> [Label] = { zip($0 |> doubleLabelMaker,
@@ -216,17 +211,52 @@ class SpriteScaffViewController : UIViewController {
     }
     let compacted = points |> texts
     let centerPoint = [newRect.bottomLeft, viewOrigin] |> texts
-    let dude = compacted + centerPoint
+    
     /// ............ Create seom DEBUG Diagnostics
     /// DEBUG
     
-    //
-    testView.frame = newRect
-    //
+    
+    
+    let basicGrid = (0..<10)
+      .map{CGFloat($0) * 50.0}
+      .map{CGPoint(50, $0) }
+    
+    
+    let dude = compacted + centerPoint + basicGrid |> texts
     
     // Set & Redraw Geometry
-    self.twoDView.redraw( b + dude )
+    self.twoDView.redraw( b + dude  )
     
+    
+    
+    /// Add UI Elements to test layout
+    
+    func replaceInPlace(in view: UIView, views: [UIView])
+    {
+      // create tags
+      let tags = views
+        .enumerated()
+        .map{ return 10 + $0.offset }
+      
+      // Remove anything with my Tag if this is the second time running
+      tags.forEach { tag in view.subviews.first(where:{ $0.tag == tag })?.removeFromSuperview() }
+      
+      // Create label and put in view
+      zip(views,tags).forEach {
+        $0.tag = $1
+        view.addSubview($0)
+      }
+    }
+    let newLabel = ("\(newRect.center)ui", newRect.center, #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1)) |> ColoredLabel.init |> get(\ColoredLabel.asView)
+    let basicGridAsViews = basicGrid.map { ("\($0)ui", $0, #colorLiteral(red: 0.2588235438, green: 0.7568627596, blue: 0.9686274529, alpha: 1)) |> ColoredLabel.init |> get(\ColoredLabel.asView) }
+      
+    
+    ([newLabel] + basicGridAsViews) |> curry(replaceInPlace)(self.twoDView)
+    
+    
+    //
+    // testView.frame = newRect
+    //
     
     /// OVERRIDING THE MASTER
     //self.handleView.set(master: newRect)

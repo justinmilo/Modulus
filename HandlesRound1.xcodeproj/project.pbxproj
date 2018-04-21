@@ -182,7 +182,8 @@
 		D0BCAFBB201CDC4300C4EAA5 /* SpriteScaffViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BCAFBA201CDC4300C4EAA5 /* SpriteScaffViewController.swift */; };
 		D0DA9BB92039E1C60019F6EE /* TexturedView+SKSpriteNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0DA9BB82039E1C60019F6EE /* TexturedView+SKSpriteNode.swift */; };
 		D0DA9BBB203A666A0019F6EE /* PrimitiveFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0DA9BBA203A666A0019F6EE /* PrimitiveFunctions.swift */; };
-		D0DE1BAF208935BC00775312 /* Point.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0DE1BAE208935BC00775312 /* Point.swift */; };
+		D0DE1BB12089394300775312 /* Primitive+UIKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0DE1BB02089394300775312 /* Primitive+UIKit.swift */; };
+		D0DE1BB32089411B00775312 /* Primitive+SpriteKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0DE1BB22089411B00775312 /* Primitive+SpriteKit.swift */; };
 		D0F09A56201CCD3C00720FD5 /* HandlesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0F09A55201CCD3C00720FD5 /* HandlesView.swift */; };
 		D0FB935F20277CCB00265740 /* Graph.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0FB935E20277CCB00265740 /* Graph.swift */; };
 		D0FC06232049DE6200175F06 /* ScaffGraphCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0FC06222049DE6200175F06 /* ScaffGraphCore.swift */; };
@@ -320,7 +321,8 @@
 		D0BCAFBA201CDC4300C4EAA5 /* SpriteScaffViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpriteScaffViewController.swift; sourceTree = "<group>"; };
 		D0DA9BB82039E1C60019F6EE /* TexturedView+SKSpriteNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TexturedView+SKSpriteNode.swift"; sourceTree = "<group>"; };
 		D0DA9BBA203A666A0019F6EE /* PrimitiveFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrimitiveFunctions.swift; sourceTree = "<group>"; };
-		D0DE1BAE208935BC00775312 /* Point.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Point.swift; sourceTree = "<group>"; };
+		D0DE1BB02089394300775312 /* Primitive+UIKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Primitive+UIKit.swift"; sourceTree = "<group>"; };
+		D0DE1BB22089411B00775312 /* Primitive+SpriteKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Primitive+SpriteKit.swift"; sourceTree = "<group>"; };
 		D0E0D0672026015600EF986D /* ForwardCompose.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForwardCompose.swift; sourceTree = "<group>"; };
 		D0F09A55201CCD3C00720FD5 /* HandlesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandlesView.swift; sourceTree = "<group>"; };
 		D0FB935E20277CCB00265740 /* Graph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Graph.swift; sourceTree = "<group>"; };
@@ -465,6 +467,8 @@
 				D03E03FB20125DF8002D47F3 /* DrawingPrimitives.swift */,
 				D0DA9BBA203A666A0019F6EE /* PrimitiveFunctions.swift */,
 				D08A6F92202AA58E00EF9E68 /* EdgeToGeometry.swift */,
+				D0DE1BB02089394300775312 /* Primitive+UIKit.swift */,
+				D0DE1BB22089411B00775312 /* Primitive+SpriteKit.swift */,
 				D04153C1202B7CA300BD7B72 /* Array+CGPoint+Utility.swift */,
 				D056A3A020177F1000C3B3B1 /* Grids */,
 			);
@@ -559,7 +563,6 @@
 			children = (
 				D056A39A2015815000C3B3B1 /* ForwardPipe.swift */,
 				D0915FA22088F4AE0067C02A /* Tagged.swift */,
-				D0DE1BAE208935BC00775312 /* Point.swift */,
 				D01CA142207FF85500362B63 /* Accessors.swift */,
 				D0A6EC5B2055DE8D00C90EA3 /* SingleTypeComposition.swift */,
 				D0E0D0672026015600EF986D /* ForwardCompose.swift */,
@@ -871,13 +874,13 @@
 				D064BE14200D94C60032C153 /* CGPoint+Utility.swift in Sources */,
 				D0B218D0201F6491004684FC /* Vertical+HorizontalController.swift in Sources */,
 				D056A3992015696A00C3B3B1 /* TwoMeterModel.swift in Sources */,
-				D0DE1BAF208935BC00775312 /* Point.swift in Sources */,
 				D064BE0F200D94C60032C153 /* CGScale+Math.swift in Sources */,
 				D0B86C65202FC09200CCB3F7 /* ViewFunctions.swift in Sources */,
 				D064BE0C200D94C60032C153 /* CGFloat+Utility.swift in Sources */,
 				D03E040020125DF8002D47F3 /* Sprite2DView.swift in Sources */,
 				D064BE06200D94C60032C153 /* CGRect+Utility.swift in Sources */,
 				D0006A02200BD09A00E8D5F3 /* ButtonView.swift in Sources */,
+				D0DE1BB12089394300775312 /* Primitive+UIKit.swift in Sources */,
 				D04153C2202B7CA300BD7B72 /* Array+CGPoint+Utility.swift in Sources */,
 				D064BE08200D94C60032C153 /* CGAngle+Math.swift in Sources */,
 				D04153C4202B9FB400BD7B72 /* View.swift in Sources */,
@@ -906,6 +909,7 @@
 				D064BE0A200D94C60032C153 /* CGPoint+Math.swift in Sources */,
 				D056A39E20177F0B00C3B3B1 /* Grid.swift in Sources */,
 				D01CA143207FF85500362B63 /* Accessors.swift in Sources */,
+				D0DE1BB32089411B00775312 /* Primitive+SpriteKit.swift in Sources */,
 				D0051E26201D2BC900C0128A /* PageViewController.swift in Sources */,
 				D032679A2083E96300BBF563 /* EdgePosition.swift in Sources */,
 				D064BE1A200D94C60032C153 /* CGScale+Utility+Nonstandard.swift in Sources */,
