@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Singalong
 
 func replaceInPlace(in view: UIView, views: [UIView])
 {

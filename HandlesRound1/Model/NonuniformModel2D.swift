@@ -7,7 +7,7 @@
 //
 
 import CoreGraphics
-
+import Singalong
 
 struct NonuniformModel2D {
   var origin: CGPoint

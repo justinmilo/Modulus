@@ -8,6 +8,7 @@
 
 import CoreGraphics
 import SpriteKit
+import Singalong
 
 
 let descriptionScaff : (Scaff2D.ScaffType) -> String =

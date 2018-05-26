@@ -1,6 +1,7 @@
 //: Playground - noun: a place where people can play
 
 import CoreGraphics
+import Singalong
 
 struct GraphSegments
 {

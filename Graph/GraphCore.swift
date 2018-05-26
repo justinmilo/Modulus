@@ -7,6 +7,7 @@
 //
 
 import CoreGraphics
+import Singalong
 
 func add(edges:[Edge], new:Edge)-> [Edge]
 {
@@ -372,7 +373,7 @@ let isSpanning = Predicate{ $0 - $1 > 1 }
 let isLessThanOrEqual : Predicate<(Int,Int)> = Predicate{ $0 <= $1 }
 
 let isHalfStradlingItem : (Int) -> Predicate<(Int,Int)> = {
-  middle in
+  (middle:Int) -> Predicate<(Int,Int)> in
   return Predicate{
     return ($0 <= middle) && (middle < $1) ||
       ($0 > middle) && (middle >= $1)

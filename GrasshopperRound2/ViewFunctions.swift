@@ -7,6 +7,9 @@
 //
 
 import CoreGraphics
+import Singalong
+import Geo
+import GrippableView
 
 func log<A>(_ loggableItem: A) -> A
 {

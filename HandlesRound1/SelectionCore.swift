@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Singalong
 
 typealias SelectionArgs = (PointIndex2D, GraphPositions, [Edge])
 
@@ -72,8 +73,8 @@ func topfilterDiagsWithBayIndex(edges: [Edge], bayIndex:BayIndex2D )->[Edge]
 
 func bazAll(filterDiags : @escaping ([Edge],BayIndex2D )->[Edge],
             populate:  @escaping ((GraphPositions) -> (PointIndex2D) -> [PointIndex]),
-            test1:  FunctionS<Edge, Bool>,
-            test2:  FunctionS<Edge, Bool>) ->
+            test1:  functionS<Edge, Bool>,
+            test2:  functionS<Edge, Bool>) ->
   (PointIndex2D,
   GraphPositions,
   [Edge]) -> [Edge] {

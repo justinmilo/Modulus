@@ -6,6 +6,7 @@
 //  Copyright © 2018 Justin Smith. All rights reserved.
 //
 import CoreGraphics
+import Singalong
 
 typealias ViewComposite = (ScaffGraph) -> [Geometry]
 

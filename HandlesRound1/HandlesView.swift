@@ -9,6 +9,9 @@
 import CoreGraphics
 import UIKit
 import SpriteKit
+import Singalong
+import Geo
+import GrippableView
 
 protocol Hideable {
   var isHidden: Bool { get set }
@@ -26,7 +29,7 @@ class HandleViewRound1: UIView {
   private var stateMachine : BoundingBoxState!
   private var handles : [UIView] = [] // Clockwise from topLeft
   private let buttonSize = CGSize(44, 44)
-  private var outlines: [AnyLayout<UIView>] = []
+  private var outline: UIView!
   private var hideables: [Hideable] = []
   private var outerBoundaryView : UIView!
   
@@ -72,7 +75,7 @@ class HandleViewRound1: UIView {
     frozen.layer.borderWidth = 1.0
     frozen.layer.borderColor = UIColor.lightGray.cgColor
     
-    outlines += [AnyLayout(b1)] // Make Layouts for outlines, could be
+    outline = b1 // Make Layouts for outlines, could be
     hideables = [b1, frozen, blueBorder, greenBorder] // collect in hideables array
     // ... End borders
     
@@ -128,10 +131,9 @@ class HandleViewRound1: UIView {
       let innerBounds = (frame.center, handlePosition, frozenBounds) |> stateMachine.innerRect
       let aresolvedBoundary = (outerBounds, innerBounds) |> stateMachine.boundaries(handlePosition)
       
-      
-      greenBorder.layout(in: frozenBounds)
-      blueBorder.layout(in: innerBounds)
-      frozen.layout(in: aresolvedBoundary)
+      greenBorder.frame = frozenBounds
+      blueBorder.frame = innerBounds
+      frozen.frame = aresolvedBoundary
       
       resolvedBoundary = aresolvedBoundary
       
@@ -208,9 +210,9 @@ class HandleViewRound1: UIView {
       for t in zip(centers, handles) { t.1.center = t.0 }
       
       // layout my view's outlines
-      for var outline in outlines {
-        outline.layout(in: lastMaster)
-      }
+     
+        outline.frame = lastMaster
+      
       
       let positions = stateMachine.positions(handleIndex)
       self.handler?(lastMaster, positions)
@@ -251,9 +253,7 @@ class HandleViewRound1: UIView {
       
       
       // layout my view's outlines
-      for var outline in self.outlines {
-        outline.layout(in: master)
-      }
+      self.outline.frame = self.lastMaster
       
        self.lastMaster  = master
       

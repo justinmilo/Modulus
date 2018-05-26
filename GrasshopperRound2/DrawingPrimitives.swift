@@ -13,7 +13,8 @@ import Foundation
 
 import CoreGraphics
 import UIKit
-
+import Singalong
+import Geo
 
 enum Orthogonal {
   case horizontal

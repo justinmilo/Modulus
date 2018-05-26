@@ -7,6 +7,7 @@
 //
 
 import CoreGraphics
+import Singalong
 
 
 func plan(_ p3: Point3) -> CGPoint { return CGPoint(x: p3.x, y: p3.y) }

@@ -9,6 +9,8 @@
 import UIKit
 import SpriteKit
 import GameplayKit
+import Singalong
+import Geo
 
 extension Float {
   func rounded(toPlaces places:Int) -> Float {

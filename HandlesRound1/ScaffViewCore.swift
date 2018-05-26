@@ -7,6 +7,8 @@
 //
 
 import CoreGraphics
+import Singalong
+import Geo
 
 func lowToHigh(gIndex: (x: Int,y:Int))->
   ( p1:(x:Int, y: Int),
