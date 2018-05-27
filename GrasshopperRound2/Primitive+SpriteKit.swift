@@ -9,6 +9,7 @@
 import SpriteKit
 import Singalong
 
+
 protocol SKRepresentable
 {
   var asNode : SKNode { get }
@@ -23,3 +24,16 @@ extension ColoredLabel : SKRepresentable
     return newNode
   }
 }
+
+
+func zurry<B>(_ g: ()->B ) -> B
+{
+  return g()
+}
+func flip<A, C>(_ f: @escaping (A) -> () -> C) -> () -> (A) -> C {
+  return { { a in f(a)() } }
+}
+
+let asVector = zurry(flip(CGPoint.asVector))
+let negated = zurry(flip(CGVector.negated))
+let asNegatedVector = asVector >>> negated

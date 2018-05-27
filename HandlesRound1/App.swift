@@ -144,6 +144,7 @@ func app() -> UIViewController
   
   //return foo(ll, "Front View")
 
+  return SpriteScaffViewController(graph: graph, mapping: planMap)
   
   return VerticalController(upperLeft: foo(uL, "Plan View"),
                             upperRight: foo(uR, "Rotated Plan View"),
