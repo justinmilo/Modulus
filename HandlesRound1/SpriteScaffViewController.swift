@@ -12,20 +12,12 @@ import Singalong
 import GrippableView
 
 
-
-
-
 import SpriteKit
-
-
-
-
-
 
 class SpriteScaffViewController : UIViewController {
   // View and Model
   var twoDView : Sprite2DView!
-  var canvas : Canvas!
+  var canvas : CanvasViewport!
   
   
   let graph : ScaffGraph
@@ -66,7 +58,8 @@ class SpriteScaffViewController : UIViewController {
     
     let size = self.graph |> self.editingView.size
     let newRect = self.canvas.master //self.handleView.bounds.withInsetRect(ofSize: size, hugging: (.center, .center))
-    //self.handleView.set(master: newRect)
+    
+    self.canvas.master = newRect
     self.draw(in: newRect)
 
   }
@@ -74,17 +67,13 @@ class SpriteScaffViewController : UIViewController {
   var b: NSKeyValueObservation!
   
   override func loadView() {
-    
-    
-    
 
-    
     twoDView = Sprite2DView(frame:initialFrame )
     twoDView.layer.borderWidth = 1.0
     twoDView.scene?.scaleMode = .resizeFill
   
     
-    canvas = Canvas(frame: initialFrame, element: twoDView)
+    canvas = CanvasViewport(frame: initialFrame, element: twoDView)
     
     view = UIView(frame: initialFrame)
     view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(SpriteScaffViewController.tap)))
@@ -123,7 +112,7 @@ class SpriteScaffViewController : UIViewController {
     let  newRect = (master, size, positions) |> centeredRect
     
     // TODO
-    //self.canvas.set(master: newRect )
+    self.canvas.master = newRect
     }
   
   func layout(with size: CGSize, at offset:CGPoint)
@@ -138,7 +127,7 @@ class SpriteScaffViewController : UIViewController {
     
     // Create New Model &  // Find Origin
 
-    let pointToSprite = translateToCGPointInSKCoordinates(from: canvas.element.frame, to: twoDView.frame)
+    let pointToSprite = translateToCGPointInSKCoordinates(from: canvas.canvas.frame, to: twoDView.frame)
     let viewOrigin = (newRect.bottomLeft) |> pointToSprite
     let graphOrigin = self.graph |> editingView.origin
     let o2 = (viewOrigin, graphOrigin |> asNegatedVector) |> moveByVector
