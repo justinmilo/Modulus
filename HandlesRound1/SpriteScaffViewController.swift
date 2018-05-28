@@ -12,6 +12,17 @@ import Singalong
 import GrippableView
 
 
+
+
+struct Driver
+{
+  // Drawing pure function
+  var editingView : GraphEditingView
+  var loadedViews : [GraphEditingView]
+}
+
+
+
 import SpriteKit
 
 class SpriteScaffViewController : UIViewController {
@@ -22,9 +33,6 @@ class SpriteScaffViewController : UIViewController {
   
   let graph : ScaffGraph
   
-  // Drawing pure function
-  var editingView : GraphEditingView
-  var loadedViews : [GraphEditingView]
   
   // Eventually dependency injected
   var initialFrame : CGRect
