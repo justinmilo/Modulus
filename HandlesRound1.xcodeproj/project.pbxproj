@@ -39,6 +39,7 @@
 		D093215820114134007BFCC3 /* AnyLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D093215720114134007BFCC3 /* AnyLayout.swift */; };
 		D09C3C43206B32370053EE2A /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = D09C3C42206B32370053EE2A /* App.swift */; };
 		D0A6EDF820745DE600C644F0 /* SelectionCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A6EDF720745DE600C644F0 /* SelectionCore.swift */; };
+		D0A8B9C220BC9AC600D4C301 /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A8B9C120BC9AC500D4C301 /* Environment.swift */; };
 		D0B218D0201F6491004684FC /* Vertical+HorizontalController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B218CF201F6491004684FC /* Vertical+HorizontalController.swift */; };
 		D0B218D220215E90004684FC /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D0B218D120215E8F004684FC /* Media.xcassets */; };
 		D0B5EC1A2048E79500EAC94F /* GraphCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B5EC192048E79500EAC94F /* GraphCore.swift */; };
@@ -138,6 +139,7 @@
 		D093215720114134007BFCC3 /* AnyLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnyLayout.swift; sourceTree = "<group>"; };
 		D09C3C42206B32370053EE2A /* App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
 		D0A6EDF720745DE600C644F0 /* SelectionCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectionCore.swift; sourceTree = "<group>"; };
+		D0A8B9C120BC9AC500D4C301 /* Environment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = SOURCE_ROOT; };
 		D0B218CF201F6491004684FC /* Vertical+HorizontalController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Vertical+HorizontalController.swift"; sourceTree = "<group>"; };
 		D0B218D120215E8F004684FC /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
 		D0B5EC192048E79500EAC94F /* GraphCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphCore.swift; sourceTree = "<group>"; };
@@ -240,6 +242,7 @@
 			isa = PBXGroup;
 			children = (
 				D09C3C42206B32370053EE2A /* App.swift */,
+				D0A8B9C120BC9AC500D4C301 /* Environment.swift */,
 				D0ECD78B20B9F0B300C3F6D0 /* HandlesView.swift */,
 				D0ECD78D20B9F12700C3F6D0 /* HandlesView Core */,
 				D0A6EDF720745DE600C644F0 /* SelectionCore.swift */,
@@ -626,6 +629,7 @@
 				D093215220113DCB007BFCC3 /* MarginLayout.swift in Sources */,
 				D0DA9BB92039E1C60019F6EE /* TexturedView+SKSpriteNode.swift in Sources */,
 				D0B5EC1A2048E79500EAC94F /* GraphCore.swift in Sources */,
+				D0A8B9C220BC9AC600D4C301 /* Environment.swift in Sources */,
 				D093215420113DCB007BFCC3 /* MarginIntrinsicSizeLayout.swift in Sources */,
 				D04A73752022B4C900C46501 /* NonuniformModel2D.swift in Sources */,
 				D056A39E20177F0B00C3B3B1 /* Grid.swift in Sources */,

@@ -60,16 +60,14 @@ let originFirstLedger: (ScaffGraph) -> CGPoint = { graph in return CGPoint(0, gr
 
 func app() -> UIViewController
 {
-  let initial = CGSize3(width: 300, depth: 100, elev: 400) |> createGrid
-  let graph = ScaffGraph(grid: initial.0, edges: initial.1)
-  // graph is passed passed by reference here ...
+   // graph is passed passed by reference here ...
   
   
   //      let uR2 = SpriteScaffViewController(graph: graph, mapping: frontMap2)
   
   
   let frontMap = graphViewGenerator(
-    build: sizeFront(graph) |> overall, //>>> createScaffolding,
+    build: sizeFront(Current.graph) |> overall, //>>> createScaffolding,
     origin: originZero,
     size: sizeFromFullScaff,
     composite: [front1,
@@ -79,7 +77,7 @@ func app() -> UIViewController
     selectedCell: bazFront)
   
     let frontMap2 = graphViewGenerator(
-      build: sizeFront(graph) |> overall, //>>> createScaffolding,
+      build: sizeFront(Current.graph) |> overall, //>>> createScaffolding,
       origin: originFirstLedger,
       size: sizeSchematicFront,
       composite: [front1,
@@ -94,7 +92,7 @@ func app() -> UIViewController
   
   
   let planMap = graphViewGenerator(
-    build: sizePlan(graph) |> overall,
+    build: sizePlan(Current.graph) |> overall,
     origin: originZero,
     size: sizeFromPlanScaff,
     composite: [finalDimComp,
@@ -103,7 +101,7 @@ func app() -> UIViewController
     selectedCell: bazTop)
   
   let planMapRotated = graphViewGenerator(
-    build: sizePlanRotated(graph) |> overall,
+    build: sizePlanRotated(Current.graph) |> overall,
     origin: originZero,
     size: sizeFromRotatedPlanScaff,
     composite: [rotatedFinalDimComp],
@@ -113,7 +111,7 @@ func app() -> UIViewController
   
   
   let sideMap = graphViewGenerator(
-    build: sizeSide(graph) |> overall,
+    build: sizeSide(Current.graph) |> overall,
     origin: originZero,
     size: sizeFromFullScaffSide,
     composite: [side1,
@@ -135,16 +133,16 @@ func app() -> UIViewController
     return ulN
   }
   
-  let uL = SpriteScaffViewController(graph: graph, mapping: planMap)
-  let uR = SpriteScaffViewController(graph: graph, mapping: planMapRotated)
-  let ll = SpriteScaffViewController(graph: graph, mapping: frontMap)
-  let lr = SpriteScaffViewController(graph: graph, mapping: sideMap)
+  let uL = SpriteScaffViewController(mapping: planMap)
+  let uR = SpriteScaffViewController(mapping: planMapRotated)
+  let ll = SpriteScaffViewController(mapping: frontMap)
+  let lr = SpriteScaffViewController(mapping: sideMap)
   
   //return foo(lr, "Side View")
   
   //return foo(ll, "Front View")
 
-  // return SpriteScaffViewController(graph: graph, mapping: planMap)
+  //return SpriteScaffViewController(graph: graph, mapping: planMap)
   
   return VerticalController(upperLeft: foo(uL, "Plan View"),
                             upperRight: foo(uR, "Rotated Plan View"),

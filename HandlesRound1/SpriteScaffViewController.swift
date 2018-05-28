@@ -16,9 +16,6 @@ import GrippableView
 
 struct Driver
 {
-  // Drawing pure function
-  var editingView : GraphEditingView
-  var loadedViews : [GraphEditingView]
 }
 
 
@@ -31,15 +28,16 @@ class SpriteScaffViewController : UIViewController {
   var canvas : CanvasViewport!
   
   
-  let graph : ScaffGraph
+  // Drawing pure function
+  var editingView : GraphEditingView
+  var loadedViews : [GraphEditingView]
   
   
   // Eventually dependency injected
   var initialFrame : CGRect
   
-  init(graph: ScaffGraph, mapping: [GraphEditingView] )
+  init(mapping: [GraphEditingView] )
   {
-    self.graph = graph
     
     editingView = mapping[0]
     loadedViews = mapping
@@ -60,12 +58,12 @@ class SpriteScaffViewController : UIViewController {
   
   func buildFromScratch()
   {
-    //let size = self.graph |> self.editingView.size
+    //let size = Current.graph |> self.editingView.size
     //let newRect = self.view.bounds.withInsetRect(ofSize: size, hugging: (.center, .center))
     //self.handleView.set(master: newRect)
     
-    let size = self.graph |> self.editingView.size
-    let newRect = self.canvas.master //self.handleView.bounds.withInsetRect(ofSize: size, hugging: (.center, .center))
+    let size = Current.graph |> self.editingView.size
+    let newRect = self.canvas.bounds.withInsetRect(ofSize: size, hugging: (.center, .center))
     
     self.canvas.master = newRect
     self.draw(in: newRect)
@@ -104,8 +102,8 @@ class SpriteScaffViewController : UIViewController {
     
     // Create New Model &  // Find Orirgin
     // Setting up our interior vie
-    (self.graph.grid, self.graph.edges) = (master.size, self.graph.edges) |> self.editingView.build
-    let size = self.graph |> self.editingView.size
+    (Current.graph.grid, Current.graph.edges) = (master.size, Current.graph.edges) |> self.editingView.build
+    let size = Current.graph |> self.editingView.size
     let newRect = (master, size, position) |> centeredRect
     
     self.draw(in: newRect)
@@ -115,8 +113,8 @@ class SpriteScaffViewController : UIViewController {
   func handleCompletion( master : CGRect, positions: Position2D)
   {
     // Create New Model
-    (self.graph.grid, self.graph.edges) = (master.size, self.graph.edges) |> self.editingView.build
-    let size = self.graph |> self.editingView.size
+    (Current.graph.grid, Current.graph.edges) = (master.size, Current.graph.edges) |> self.editingView.build
+    let size = Current.graph |> self.editingView.size
     let  newRect = (master, size, positions) |> centeredRect
     
     // TODO
@@ -137,12 +135,12 @@ class SpriteScaffViewController : UIViewController {
 
     let pointToSprite = translateToCGPointInSKCoordinates(from: canvas.canvas.frame, to: twoDView.frame)
     let viewOrigin = (newRect.bottomLeft) |> pointToSprite
-    let graphOrigin = self.graph |> editingView.origin
+    let graphOrigin = Current.graph |> editingView.origin
     let o2 = (viewOrigin, graphOrigin |> asNegatedVector) |> moveByVector
     
     // Create Geometry
     let moveAll = o2.asVector() |> move(by:) |> curry(map) // function to move all individual elements
-    let b = self.graph |> self.editingView.composite >>> moveAll
+    let b = Current.graph |> self.editingView.composite >>> moveAll
     
     /// Add UI Elements to test layout
     
@@ -205,12 +203,12 @@ class SpriteScaffViewController : UIViewController {
     // Properly Controllers concern
     let tS = touch |> pointToSprite
     let rectS = self.canvas.master |> rectToSprite
-    //let nede = ( tS, self.graph |> editingView.origin >>> negatedVector)
+    //let nede = ( tS, Current.graph |> editingView.origin >>> negatedVector)
     //  |> moveByVector
     let p = (tS, rectS) |> viewSpaceToModelSpace
     
     // Properly models concern
-    let editBoundaries = self.graph |> editingView.grid2D ///
+    let editBoundaries = Current.graph |> editingView.grid2D ///
     let toGridIndices = editBoundaries |> curry(pointToGridIndices) >>>  handleTupleOptionWith
     
     // Get Model Indices
@@ -231,7 +229,7 @@ class SpriteScaffViewController : UIViewController {
     let flippedRect = (cellRectValue, y )  |> mirrorVertically
     // flipped rect is situated in sprite kit space
     
-    self.graph.edges = editingView.selectedCell(indices, self.graph.grid, self.graph.edges)
+    Current.graph.edges = editingView.selectedCell(indices, Current.graph.grid, Current.graph.edges)
     
     buildFromScratch()
     addTempRect(rect: flippedRect, color: .white)
