@@ -511,7 +511,7 @@ let anyComaprison : ((PointIndex) -> Int, Edge) -> (Int, Int) = {
 }
 let anyComparisonCurried = curry(anyComaprison)
 
-func clipOne(max: PointIndex, t: (PointIndex) -> Int, edges:[Edge]) -> [Edge]
+func clipOne(max: PointIndex, t: @escaping (PointIndex) -> Int, edges:[Edge]) -> [Edge]
 {
   
   let bound_oneLessThan = anyComparisonCurried(t) >>> either(t(max), <)

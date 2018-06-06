@@ -19,7 +19,6 @@
 		D03E03DA20124DB8002D47F3 /* Testing.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03E03D920124DB8002D47F3 /* Testing.swift */; };
 		D03E040020125DF8002D47F3 /* Sprite2DView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03E03F720125DF8002D47F3 /* Sprite2DView.swift */; };
 		D03E040320125DF8002D47F3 /* DrawingPrimitives.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03E03FB20125DF8002D47F3 /* DrawingPrimitives.swift */; };
-		D03E040620125DF8002D47F3 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D03E03FE20125DF8002D47F3 /* Info.plist */; };
 		D04153C2202B7CA300BD7B72 /* Array+CGPoint+Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04153C1202B7CA300BD7B72 /* Array+CGPoint+Utility.swift */; };
 		D04A73752022B4C900C46501 /* NonuniformModel2D.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04A73742022B4C900C46501 /* NonuniformModel2D.swift */; };
 		D04F8DC520475F2000929849 /* ScaffViewCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04F8DC420475F2000929849 /* ScaffViewCore.swift */; };
@@ -126,7 +125,6 @@
 		D00069D3200BD08300E8D5F3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D00069DA200BD08300E8D5F3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D00069DD200BD08300E8D5F3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		D00069DF200BD08300E8D5F3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = Info.plist; path = "/Users/justin/Dropbox/Developer/To Delete at some point/HandlesRound1/HandlesRound1/Other Stuff/Info.plist"; sourceTree = "<absolute>"; };
 		D00069E4200BD08300E8D5F3 /* HandlesRound1Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HandlesRound1Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D00069E8200BD08300E8D5F3 /* HandlesRound1Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandlesRound1Tests.swift; sourceTree = "<group>"; };
 		D00069EA200BD08300E8D5F3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -281,7 +279,6 @@
 				D04153C5202BB18C00BD7B72 /* Model */,
 				D0931FD520113DCA007BFCC3 /* Layouts */,
 				D03E03F520125DF8002D47F3 /* GrasshopperRound2 */,
-				D0AEF45D2013A6FC005F761B /* Other Stuff */,
 				D0ECD79820B9F21D00C3F6D0 /* CGRect+Inset.swift */,
 			);
 			path = HandlesRound1;
@@ -317,6 +314,7 @@
 		D03E03F520125DF8002D47F3 /* GrasshopperRound2 */ = {
 			isa = PBXGroup;
 			children = (
+				D0AEF45D2013A6FC005F761B /* Other Stuff */,
 				D0B86C64202FC09200CCB3F7 /* ViewFunctions.swift */,
 				D0BAD734204228F700406E70 /* ViewComposite.swift */,
 				D03E03FB20125DF8002D47F3 /* DrawingPrimitives.swift */,
@@ -390,7 +388,6 @@
 				D00069D3200BD08300E8D5F3 /* AppDelegate.swift */,
 				D03E03FE20125DF8002D47F3 /* Info.plist */,
 				D0B218CF201F6491004684FC /* Vertical+HorizontalController.swift */,
-				D00069DF200BD08300E8D5F3 /* Info.plist */,
 				D00069DC200BD08300E8D5F3 /* LaunchScreen.storyboard */,
 				D00069DA200BD08300E8D5F3 /* Assets.xcassets */,
 				D0051E25201D2BC900C0128A /* PageViewController.swift */,
@@ -591,7 +588,6 @@
 				D00069DB200BD08300E8D5F3 /* Assets.xcassets in Resources */,
 				D0B218D220215E90004684FC /* Media.xcassets in Resources */,
 				D0B69D262043632D00AEA01B /* GameScene.sks in Resources */,
-				D03E040620125DF8002D47F3 /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

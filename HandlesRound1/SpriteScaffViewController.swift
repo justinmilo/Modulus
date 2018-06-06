@@ -38,15 +38,12 @@ class SpriteScaffViewController : UIViewController {
   
   init(mapping: [GraphEditingView] )
   {
-    
     editingView = mapping[0]
     loadedViews = mapping
     
     initialFrame = UIScreen.main.bounds
     
     super.init(nibName: nil, bundle: nil)
-    
-    
   }
   
   required init?(coder aDecoder: NSCoder) { fatalError("init(coder:) has not been implemented") }
@@ -73,38 +70,40 @@ class SpriteScaffViewController : UIViewController {
   var b: NSKeyValueObservation!
   
   override func loadView() {
-
     twoDView = Sprite2DView(frame:initialFrame )
     twoDView.layer.borderWidth = 1.0
     twoDView.scene?.scaleMode = .resizeFill
   
-    
     canvas = CanvasViewport(frame: initialFrame, element: twoDView)
     
     view = UIView(frame: initialFrame)
     view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(SpriteScaffViewController.tap)))
     view.addSubview ( canvas )
     
-    //self.handleView.handler = handleChange(master:position:)
-    //self.handleView.completed = handleCompletion(master:positions:)
-    canvas.masterChanged = self.handleChange
+    canvas.selectionOriginChanged = self.originChange
+    canvas.selectionSizeChanged = self.sizeChange
   }
   
-  func handleChange( master: CGRect)
-  {
-    self.handleChange(master: master, position: (.center, .center))
-    // Create New Mod
+  func originChange( origin: CGPoint) {
+//    let position : Position2D = (.center, .center)
+//    let master = self.canvas.master
+//    // Create New Mod
+//    // Create New Model &  // Find Orirgin
+//    // Setting up our interior vie
+//    (Current.graph.grid, Current.graph.edges) = (master.size, Current.graph.edges) |> self.editingView.build
+//    let size = Current.graph |> self.editingView.size
+//    let newRect = (master, size, position) |> centeredRect
+//
+//    self.draw(in: newRect)
   }
   
-  
-  func handleChange( master: CGRect, position: Position2D)
-  {
-    
+  func sizeChange( size: CGSize) {
+    let position : Position2D = (.center, .center)
     // Create New Model &  // Find Orirgin
     // Setting up our interior vie
-    (Current.graph.grid, Current.graph.edges) = (master.size, Current.graph.edges) |> self.editingView.build
+    (Current.graph.grid, Current.graph.edges) = (size, Current.graph.edges) |> self.editingView.build
     let size = Current.graph |> self.editingView.size
-    let newRect = (master, size, position) |> centeredRect
+    let newRect = (self.canvas.master, size, position) |> centeredRect
     
     self.draw(in: newRect)
 
@@ -128,6 +127,7 @@ class SpriteScaffViewController : UIViewController {
     
   }
   
+  
   // newRect a product of the Bounding Box + a generated size + a position
   func draw(in newRect: CGRect) {
     
@@ -148,18 +148,10 @@ class SpriteScaffViewController : UIViewController {
     // Set & Redraw Geometry
     self.twoDView.redraw(b) // + dude  )
     
-    
-    
-    /// Add UI Elements to test layout
-    
-    
-    
-    //
-    // testView.frame = newRect
-    //
+    /// Add UI Elements to test layou
     
     /// OVERRIDING THE MASTER
-    //self.handleView.set(master: newRect)
+    //self.canvas.master = newRect
   }
   
   

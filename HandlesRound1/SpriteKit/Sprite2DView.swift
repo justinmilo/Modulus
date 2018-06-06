@@ -29,8 +29,6 @@ class Sprite2DView : SKView {
   
   override init(frame: CGRect)
   {
-    
-    
     super.init(frame: frame)
     
     // Specialtiy SpriteKitScene
