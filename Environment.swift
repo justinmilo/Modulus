@@ -8,6 +8,7 @@
 
 import Foundation
 import Singalong
+import Graphe
 
 extension ScaffGraph
 {

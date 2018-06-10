@@ -10,14 +10,7 @@ import UIKit
 import Geo
 import Singalong
 import GrippableView
-
-
-
-
-struct Driver
-{
-}
-
+import Graphe
 
 
 import SpriteKit
@@ -40,9 +33,7 @@ class SpriteScaffViewController : UIViewController {
   {
     editingView = mapping[0]
     loadedViews = mapping
-    
     initialFrame = UIScreen.main.bounds
-    
     super.init(nibName: nil, bundle: nil)
   }
   
@@ -52,51 +43,44 @@ class SpriteScaffViewController : UIViewController {
     // Set view upon initial loading
     buildFromScratch()
   }
-  
-  func buildFromScratch()
-  {
-    //let size = Current.graph |> self.editingView.size
-    //let newRect = self.view.bounds.withInsetRect(ofSize: size, hugging: (.center, .center))
-    //self.handleView.set(master: newRect)
-    
-    let size = Current.graph |> self.editingView.size
-    let newRect = self.canvas.bounds.withInsetRect(ofSize: size, hugging: (.center, .center))
-    
-    self.canvas.master = newRect
-    self.draw(in: newRect)
-
-  }
-  
-  var b: NSKeyValueObservation!
-  
   override func loadView() {
     twoDView = Sprite2DView(frame:initialFrame )
     twoDView.layer.borderWidth = 1.0
     twoDView.scene?.scaleMode = .resizeFill
   
     canvas = CanvasViewport(frame: initialFrame, element: twoDView)
+    canvas.selectionOriginChanged = self.originChange
+    canvas.selectionSizeChanged = self.sizeChange
+    canvas.didEndEdit = self.editEnded
     
     view = UIView(frame: initialFrame)
     view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(SpriteScaffViewController.tap)))
     view.addSubview ( canvas )
+  }
+  /// Handler for Edit End
+  func editEnded() {
+    self.handleCompletion(master: self.canvas.master, positions: (.bottom, .left))
+  }
+  
+  func buildFromScratch()
+  {
+    let size = Current.graph |> self.editingView.size
+    let newRect = self.canvas.bounds.withInsetRect(ofSize: size, hugging: (.center, .center))
     
-    canvas.selectionOriginChanged = self.originChange
-    canvas.selectionSizeChanged = self.sizeChange
+    self.canvas.master = newRect
+    self.draw(in: newRect)
   }
-  
+  /// Handler for Selection Origin Changed
   func originChange( origin: CGPoint) {
-//    let position : Position2D = (.center, .center)
-//    let master = self.canvas.master
-//    // Create New Mod
-//    // Create New Model &  // Find Orirgin
-//    // Setting up our interior vie
-//    (Current.graph.grid, Current.graph.edges) = (master.size, Current.graph.edges) |> self.editingView.build
-//    let size = Current.graph |> self.editingView.size
-//    let newRect = (master, size, position) |> centeredRect
-//
-//    self.draw(in: newRect)
+  
+    let editOrigin = self.editOrigin(newRect: canvas.master)
+    self.twoDView.mainNode.position = editOrigin
   }
   
+  var _previousRect = CGRect.zero
+  /// Handler for Selection Size Changed
+  ///
+  /// Checks if newSize should be redrawn
   func sizeChange( size: CGSize) {
     let position : Position2D = (.center, .center)
     // Create New Model &  // Find Orirgin
@@ -105,53 +89,41 @@ class SpriteScaffViewController : UIViewController {
     let size = Current.graph |> self.editingView.size
     let newRect = (self.canvas.master, size, position) |> centeredRect
     
-    self.draw(in: newRect)
-
+    if newRect.size != _previousRect.size {
+      self.draw(in: newRect)
+    }
+    if newRect.origin != _previousRect.origin {
+      self.originChange(origin: newRect.origin)
+    }
+    _previousRect = newRect
   }
   
   func handleCompletion( master : CGRect, positions: Position2D)
   {
     // Create New Model
-    (Current.graph.grid, Current.graph.edges) = (master.size, Current.graph.edges) |> self.editingView.build
     let size = Current.graph |> self.editingView.size
     let  newRect = (master, size, positions) |> centeredRect
     
-    // TODO
-    self.canvas.master = newRect
-    }
-  
-  func layout(with size: CGSize, at offset:CGPoint)
-  {
-//    let deltaToScrollCenter = CGVector.zero
-//    scrollView.contentOffset = deltaToScrollCenter + offset
-    
+    self.canvas.animateMaster(to: newRect)
   }
   
+  /// Origin in SK Coordinates based on graphs origin
+  func editOrigin(newRect: CGRect) -> CGPoint
+  {
+    let pointToSprite: (CGPoint) -> CGPoint = translateToCGPointInSKCoordinates(from: canvas.canvas.frame, to: twoDView.frame)
+    let viewOrigin : CGPoint = (newRect.bottomLeft) |> pointToSprite
+    let graphOrigin : CGPoint = Current.graph |> editingView.origin
+    let editOrigin : CGPoint = (viewOrigin, graphOrigin|>asNegatedVector) |> moveByVector
+    return editOrigin
+  }
   
+  /// Draw func by redrawing new composite from curent graph
   // newRect a product of the Bounding Box + a generated size + a position
   func draw(in newRect: CGRect) {
-    
-    // Create New Model &  // Find Origin
-
-    let pointToSprite = translateToCGPointInSKCoordinates(from: canvas.canvas.frame, to: twoDView.frame)
-    let viewOrigin = (newRect.bottomLeft) |> pointToSprite
-    let graphOrigin = Current.graph |> editingView.origin
-    let o2 = (viewOrigin, graphOrigin |> asNegatedVector) |> moveByVector
-    
-    // Create Geometry
-    let moveAll = o2.asVector() |> move(by:) |> curry(map) // function to move all individual elements
-    let b = Current.graph |> self.editingView.composite >>> moveAll
-    
-    /// Add UI Elements to test layout
-    
-    
+    // Create New Model
+    let b = Current.graph |> self.editingView.composite
     // Set & Redraw Geometry
     self.twoDView.redraw(b) // + dude  )
-    
-    /// Add UI Elements to test layou
-    
-    /// OVERRIDING THE MASTER
-    //self.canvas.master = newRect
   }
   
   
@@ -245,5 +217,4 @@ class SpriteScaffViewController : UIViewController {
   
 }
 
-typealias PointIndex2D = (x:Int, y:Int)
 

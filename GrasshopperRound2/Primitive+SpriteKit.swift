@@ -8,6 +8,7 @@
 
 import SpriteKit
 import Singalong
+import Geo
 
 
 protocol SKRepresentable
@@ -37,3 +38,8 @@ func flip<A, C>(_ f: @escaping (A) -> () -> C) -> () -> (A) -> C {
 let asVector = zurry(flip(CGPoint.asVector))
 let negated = zurry(flip(CGVector.negated))
 let asNegatedVector = asVector >>> negated
+
+func moveNode(by vectorP: CGVector) -> (SKNode) -> Void
+{
+  return {  $0.position = $0.position + vectorP }
+}

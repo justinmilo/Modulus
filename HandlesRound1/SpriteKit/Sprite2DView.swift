@@ -26,13 +26,16 @@ extension Float {
 class Sprite2DView : SKView {
   
   var scale : CGFloat = 1.0
+  var mainNode : SKNode
   
   override init(frame: CGRect)
   {
+    mainNode = SKNode()
     super.init(frame: frame)
     
     // Specialtiy SpriteKitScene
     let aScene = SKScene(size: frame.size)
+    aScene.addChild(mainNode)
     self.presentScene(aScene)
     self.ignoresSiblingOrder = true
   }
@@ -42,7 +45,9 @@ class Sprite2DView : SKView {
   }
   
   func redraw(_ g:[Geometry]) {
-    self.scene!.removeAllChildren()
+    self.mainNode.removeFromParent()
+    self.mainNode = SKNode()
+    scene?.addChild(mainNode)
     
     for item in g
     {
@@ -59,12 +64,12 @@ class Sprite2DView : SKView {
   {
     if let representable = node as? SKRepresentable
     {
-      representable.asNode |> scene!.addChild
+      representable.asNode |> mainNode.addChild
     }
     
     if let oval = node as? Oval
     {
-      createOval(oval) |> scene!.addChild
+      createOval(oval) |> mainNode.addChild
     }
     else if let label = node as? Label
     {
@@ -72,19 +77,19 @@ class Sprite2DView : SKView {
       //n.position = CGPoint(300,300)
 
       n |> scalePosition(scale)
-      n |> scene!.addChild
+      n |> mainNode.addChild
     }
     else if let line = node as? Line
     {
       let node = createLineShapeNode(line)
       node |> scaleAll(scale)
-      node |> scene!.addChild
+      node |> mainNode.addChild
     }
     else if let line = node as? StrokedLine
     {
       let node = createLineShapeNode(line.line)
       
-      scene!.addChild(node)
+      mainNode.addChild(node)
     }
     else if let line = node as? Scaff2D
     {
@@ -92,7 +97,7 @@ class Sprite2DView : SKView {
       let newNode = createScaff2DNode(item: line)
       if let n = newNode {
         n |> scalePosition(scale)
-        n |> scene!.addChild
+        n |> mainNode.addChild
       }
       
     }
@@ -100,9 +105,9 @@ class Sprite2DView : SKView {
     else if let p = node as? LabeledPoint
     {
       let circleN = createCircleShapeNode(p)
-      circleN |> scene!.addChild
+      circleN |> mainNode.addChild
       let n = createLableNode(Label(text: p.label))
-      n |> scene!.addChild
+      n |> mainNode.addChild
       
     }
     else if let line = node as? TextureLine

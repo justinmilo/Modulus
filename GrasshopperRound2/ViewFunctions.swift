@@ -10,6 +10,7 @@ import CoreGraphics
 import Singalong
 import Geo
 import GrippableView
+import Graphe
 
 func log<A>(_ loggableItem: A) -> A
 {
@@ -45,7 +46,7 @@ func bindSize( master: CGRect, size: CGSize, positions: (VerticalPosition, Horiz
 func centeredRect( master: CGRect, size: CGSize, positions: (VerticalPosition, HorizontalPosition)) -> (CGRect)
 {
   // Find Orirgin
-  return master.withInsetRect( ofSize: size, hugging:  (.center, .center))
+  return master.withInsetRect( ofSize: size, hugging:  positions)
 }
 
 

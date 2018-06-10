@@ -7,6 +7,8 @@
 //
 import CoreGraphics
 import Singalong
+import Graphe
+
 
 typealias ViewComposite = (ScaffGraph) -> [Geometry]
 

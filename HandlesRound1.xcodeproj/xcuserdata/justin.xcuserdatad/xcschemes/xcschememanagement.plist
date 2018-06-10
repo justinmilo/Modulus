@@ -9,6 +9,11 @@
 			<key>orderHint</key>
 			<integer>0</integer>
 		</dict>
+		<key>HandlesRoundling.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>6</integer>
+		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
@@ -17,12 +22,7 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>D00069E3200BD08300E8D5F3</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>D00069EE200BD08300E8D5F3</key>
+		<key>D02670B220CCCF4F008E24FB</key>
 		<dict>
 			<key>primary</key>
 			<true/>

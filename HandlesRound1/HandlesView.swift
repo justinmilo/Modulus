@@ -12,6 +12,7 @@ import SpriteKit
 import Singalong
 import Geo
 import GrippableView
+import Graphe
 
 protocol Hideable {
   var isHidden: Bool { get set }
