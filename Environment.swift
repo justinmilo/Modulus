@@ -19,8 +19,18 @@ extension ScaffGraph
   }
 }
 
+struct EditingViews {
+  struct ViewMap { let label: String; let viewMap: [GraphEditingView] }
+  var plan : ViewMap = ViewMap(label: "Plan View", viewMap: planMap)
+  var rotatedPlan : ViewMap = ViewMap(label: "Rotated Plan View", viewMap: planMapRotated)
+  var front : ViewMap = ViewMap(label: "Front View", viewMap: frontMap)
+  var side : ViewMap = ViewMap( label: "Side View", viewMap: sideMap)
+}
+
 struct Environment {
   var graph = ScaffGraph()
+  var screen = UIScreen.main.bounds
+  var viewMaps = EditingViews()
 }
 
 var Current = Environment()

@@ -18,6 +18,30 @@
 		D02670BC20CCCF8E008E24FB /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A8B9C120BC9AC500D4C301 /* Environment.swift */; };
 		D026710A20CD5BE5008E24FB /* Graphe.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D026710920CD5BE5008E24FB /* Graphe.framework */; };
 		D026710B20CD5BE5008E24FB /* Graphe.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D026710920CD5BE5008E24FB /* Graphe.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		D026710E20CD776F008E24FB /* Sprite2DView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03E03F720125DF8002D47F3 /* Sprite2DView.swift */; };
+		D026710F20CD77A5008E24FB /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = D09C3C42206B32370053EE2A /* App.swift */; };
+		D026711020CD77D2008E24FB /* ViewFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B86C64202FC09200CCB3F7 /* ViewFunctions.swift */; };
+		D026711120CD77D2008E24FB /* ViewComposite.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BAD734204228F700406E70 /* ViewComposite.swift */; };
+		D026711220CD77D2008E24FB /* DrawingPrimitives.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03E03FB20125DF8002D47F3 /* DrawingPrimitives.swift */; };
+		D026711320CD77D2008E24FB /* PrimitiveFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0DA9BBA203A666A0019F6EE /* PrimitiveFunctions.swift */; };
+		D026711420CD77D2008E24FB /* EdgeToGeometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = D08A6F92202AA58E00EF9E68 /* EdgeToGeometry.swift */; };
+		D026711520CD77D2008E24FB /* Primitive+UIKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0DE1BB02089394300775312 /* Primitive+UIKit.swift */; };
+		D026711620CD77D2008E24FB /* UIKit+Grasshopper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D08F42FA208BBB0400F393D6 /* UIKit+Grasshopper.swift */; };
+		D026711720CD77D2008E24FB /* Primitive+SpriteKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0DE1BB22089411B00775312 /* Primitive+SpriteKit.swift */; };
+		D026711820CD77D2008E24FB /* Array+CGPoint+Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04153C1202B7CA300BD7B72 /* Array+CGPoint+Utility.swift */; };
+		D026711920CD77F6008E24FB /* NonuniformModel2D.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04A73742022B4C900C46501 /* NonuniformModel2D.swift */; };
+		D026711C20CD7871008E24FB /* Grid.swift in Sources */ = {isa = PBXBuildFile; fileRef = D026711A20CD7871008E24FB /* Grid.swift */; };
+		D026711E20CD9617008E24FB /* EdgeAlignments.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0ECD78E20B9F12700C3F6D0 /* EdgeAlignments.swift */; };
+		D026712020CD9648008E24FB /* CGRect+Inset.swift in Sources */ = {isa = PBXBuildFile; fileRef = D026711F20CD9639008E24FB /* CGRect+Inset.swift */; };
+		D026712120CD9649008E24FB /* CGRect+Inset.swift in Sources */ = {isa = PBXBuildFile; fileRef = D026711F20CD9639008E24FB /* CGRect+Inset.swift */; };
+		D026712220CD967D008E24FB /* TexturedView+SKSpriteNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0DA9BB82039E1C60019F6EE /* TexturedView+SKSpriteNode.swift */; };
+		D026712320CD96F0008E24FB /* SelectionCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A6EDF720745DE600C644F0 /* SelectionCore.swift */; };
+		D026712420CD973B008E24FB /* Vertical+HorizontalController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B218CF201F6491004684FC /* Vertical+HorizontalController.swift */; };
+		D026712520CD97CC008E24FB /* GraphicsCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03267942082DE8D00BBF563 /* GraphicsCore.swift */; };
+		D026712620CD97F1008E24FB /* HandlesViewCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0ECD78F20B9F12700C3F6D0 /* HandlesViewCore.swift */; };
+		D026712720CD9800008E24FB /* RectIndex.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0ECD79020B9F12700C3F6D0 /* RectIndex.swift */; };
+		D026712820CD9800008E24FB /* EdgePosition.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0ECD79120B9F12700C3F6D0 /* EdgePosition.swift */; };
+		D026712920CD9800008E24FB /* TensionedPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0ECD79220B9F12700C3F6D0 /* TensionedPoint.swift */; };
 		D0326763207FFE3800BBF563 /* HandlesCoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0326762207FFE3800BBF563 /* HandlesCoreTests.swift */; };
 		D03267952082DE8D00BBF563 /* GraphicsCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03267942082DE8D00BBF563 /* GraphicsCore.swift */; };
 		D03267962082DE8D00BBF563 /* GraphicsCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03267942082DE8D00BBF563 /* GraphicsCore.swift */; };
@@ -27,7 +51,6 @@
 		D04153C2202B7CA300BD7B72 /* Array+CGPoint+Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04153C1202B7CA300BD7B72 /* Array+CGPoint+Utility.swift */; };
 		D04A73752022B4C900C46501 /* NonuniformModel2D.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04A73742022B4C900C46501 /* NonuniformModel2D.swift */; };
 		D056A3992015696A00C3B3B1 /* TwoMeterModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D056A3982015696A00C3B3B1 /* TwoMeterModel.swift */; };
-		D056A39E20177F0B00C3B3B1 /* Grid.swift in Sources */ = {isa = PBXBuildFile; fileRef = D056A39C20177F0B00C3B3B1 /* Grid.swift */; };
 		D056A39F20177F0B00C3B3B1 /* PlanModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D056A39D20177F0B00C3B3B1 /* PlanModel.swift */; };
 		D08A6F93202AA58E00EF9E68 /* EdgeToGeometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = D08A6F92202AA58E00EF9E68 /* EdgeToGeometry.swift */; };
 		D08F42FB208BBB0400F393D6 /* UIKit+Grasshopper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D08F42FA208BBB0400F393D6 /* UIKit+Grasshopper.swift */; };
@@ -49,6 +72,9 @@
 		D0B86C65202FC09200CCB3F7 /* ViewFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B86C64202FC09200CCB3F7 /* ViewFunctions.swift */; };
 		D0BAD735204228F700406E70 /* ViewComposite.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BAD734204228F700406E70 /* ViewComposite.swift */; };
 		D0BCAFBB201CDC4300C4EAA5 /* SpriteScaffViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BCAFBA201CDC4300C4EAA5 /* SpriteScaffViewController.swift */; };
+		D0D6808020CDABED0074E97D /* Grid.swift in Sources */ = {isa = PBXBuildFile; fileRef = D026711A20CD7871008E24FB /* Grid.swift */; };
+		D0D6808220CEB0EF0074E97D /* ViewMaps.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D6808120CEB0EF0074E97D /* ViewMaps.swift */; };
+		D0D6808320CEB0EF0074E97D /* ViewMaps.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D6808120CEB0EF0074E97D /* ViewMaps.swift */; };
 		D0DA9BB92039E1C60019F6EE /* TexturedView+SKSpriteNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0DA9BB82039E1C60019F6EE /* TexturedView+SKSpriteNode.swift */; };
 		D0DA9BBB203A666A0019F6EE /* PrimitiveFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0DA9BBA203A666A0019F6EE /* PrimitiveFunctions.swift */; };
 		D0DE1BB12089394300775312 /* Primitive+UIKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0DE1BB02089394300775312 /* Primitive+UIKit.swift */; };
@@ -60,7 +86,6 @@
 		D0ECD79520B9F12800C3F6D0 /* RectIndex.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0ECD79020B9F12700C3F6D0 /* RectIndex.swift */; };
 		D0ECD79620B9F12800C3F6D0 /* EdgePosition.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0ECD79120B9F12700C3F6D0 /* EdgePosition.swift */; };
 		D0ECD79720B9F12800C3F6D0 /* TensionedPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0ECD79220B9F12700C3F6D0 /* TensionedPoint.swift */; };
-		D0ECD79920B9F21D00C3F6D0 /* CGRect+Inset.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0ECD79820B9F21D00C3F6D0 /* CGRect+Inset.swift */; };
 		D0F5C35120C03C6300B6A75F /* Singalong.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0ECD78920B9E5A400C3F6D0 /* Singalong.framework */; };
 		D0F5C35220C03C6300B6A75F /* Singalong.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D0ECD78920B9E5A400C3F6D0 /* Singalong.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D0F5C35320C03C6300B6A75F /* Geo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0ECD78720B9E59E00C3F6D0 /* Geo.framework */; };
@@ -135,6 +160,8 @@
 		D02670B520CCCF4F008E24FB /* HandlesRoundling.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HandlesRoundling.h; sourceTree = "<group>"; };
 		D02670B620CCCF4F008E24FB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D026710920CD5BE5008E24FB /* Graphe.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Graphe.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D026711A20CD7871008E24FB /* Grid.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Grid.swift; path = Grids/../Grid.swift; sourceTree = "<group>"; };
+		D026711F20CD9639008E24FB /* CGRect+Inset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGRect+Inset.swift"; sourceTree = "<group>"; };
 		D0326760207FFE3800BBF563 /* HandlesRound1Tests2.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HandlesRound1Tests2.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0326762207FFE3800BBF563 /* HandlesCoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandlesCoreTests.swift; sourceTree = "<group>"; };
 		D0326764207FFE3800BBF563 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -169,6 +196,7 @@
 		D0B86C64202FC09200CCB3F7 /* ViewFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewFunctions.swift; sourceTree = "<group>"; };
 		D0BAD734204228F700406E70 /* ViewComposite.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewComposite.swift; sourceTree = "<group>"; };
 		D0BCAFBA201CDC4300C4EAA5 /* SpriteScaffViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpriteScaffViewController.swift; sourceTree = "<group>"; };
+		D0D6808120CEB0EF0074E97D /* ViewMaps.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewMaps.swift; sourceTree = "<group>"; };
 		D0DA9BB82039E1C60019F6EE /* TexturedView+SKSpriteNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TexturedView+SKSpriteNode.swift"; sourceTree = "<group>"; };
 		D0DA9BBA203A666A0019F6EE /* PrimitiveFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrimitiveFunctions.swift; sourceTree = "<group>"; };
 		D0DE1BB02089394300775312 /* Primitive+UIKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Primitive+UIKit.swift"; sourceTree = "<group>"; };
@@ -182,7 +210,6 @@
 		D0ECD79020B9F12700C3F6D0 /* RectIndex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RectIndex.swift; sourceTree = "<group>"; };
 		D0ECD79120B9F12700C3F6D0 /* EdgePosition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EdgePosition.swift; sourceTree = "<group>"; };
 		D0ECD79220B9F12700C3F6D0 /* TensionedPoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TensionedPoint.swift; sourceTree = "<group>"; };
-		D0ECD79820B9F21D00C3F6D0 /* CGRect+Inset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGRect+Inset.swift"; sourceTree = "<group>"; };
 		D0F5C35520C03C6300B6A75F /* OffsetableCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = OffsetableCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0F5C35820C03C6300B6A75F /* ScrollViewGrower.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; path = ScrollViewGrower.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -275,17 +302,18 @@
 			isa = PBXGroup;
 			children = (
 				D09C3C42206B32370053EE2A /* App.swift */,
+				D0D6808120CEB0EF0074E97D /* ViewMaps.swift */,
 				D0A8B9C120BC9AC500D4C301 /* Environment.swift */,
+				D0B69D2420435F3900AEA01B /* SpriteKit */,
+				D0BCAFBA201CDC4300C4EAA5 /* SpriteScaffViewController.swift */,
 				D0ECD78B20B9F0B300C3F6D0 /* HandlesView.swift */,
 				D0ECD78D20B9F12700C3F6D0 /* HandlesView Core */,
 				D0A6EDF720745DE600C644F0 /* SelectionCore.swift */,
-				D0BCAFBA201CDC4300C4EAA5 /* SpriteScaffViewController.swift */,
 				D03267942082DE8D00BBF563 /* GraphicsCore.swift */,
-				D0B69D2420435F3900AEA01B /* SpriteKit */,
 				D04153C5202BB18C00BD7B72 /* Model */,
 				D0931FD520113DCA007BFCC3 /* Layouts */,
+				D0AEF45D2013A6FC005F761B /* Other Stuff */,
 				D03E03F520125DF8002D47F3 /* GrasshopperRound2 */,
-				D0ECD79820B9F21D00C3F6D0 /* CGRect+Inset.swift */,
 			);
 			path = HandlesRound1;
 			sourceTree = "<group>";
@@ -329,7 +357,7 @@
 		D03E03F520125DF8002D47F3 /* GrasshopperRound2 */ = {
 			isa = PBXGroup;
 			children = (
-				D0AEF45D2013A6FC005F761B /* Other Stuff */,
+				D026711A20CD7871008E24FB /* Grid.swift */,
 				D0B86C64202FC09200CCB3F7 /* ViewFunctions.swift */,
 				D0BAD734204228F700406E70 /* ViewComposite.swift */,
 				D03E03FB20125DF8002D47F3 /* DrawingPrimitives.swift */,
@@ -425,6 +453,7 @@
 				D0ECD79020B9F12700C3F6D0 /* RectIndex.swift */,
 				D0ECD79120B9F12700C3F6D0 /* EdgePosition.swift */,
 				D0ECD79220B9F12700C3F6D0 /* TensionedPoint.swift */,
+				D026711F20CD9639008E24FB /* CGRect+Inset.swift */,
 			);
 			name = "HandlesView Core";
 			path = "../../ScrollViewGrower/ScrollViewGrower/Handles View & Dependents/HandlesView Core";
@@ -688,7 +717,9 @@
 				D0ECD79720B9F12800C3F6D0 /* TensionedPoint.swift in Sources */,
 				D0DE1BB12089394300775312 /* Primitive+UIKit.swift in Sources */,
 				D04153C2202B7CA300BD7B72 /* Array+CGPoint+Utility.swift in Sources */,
+				D026712120CD9649008E24FB /* CGRect+Inset.swift in Sources */,
 				D08F42FB208BBB0400F393D6 /* UIKit+Grasshopper.swift in Sources */,
+				D026711C20CD7871008E24FB /* Grid.swift in Sources */,
 				D09C3C43206B32370053EE2A /* App.swift in Sources */,
 				D0ECD78C20B9F0B300C3F6D0 /* HandlesView.swift in Sources */,
 				D03E040320125DF8002D47F3 /* DrawingPrimitives.swift in Sources */,
@@ -697,16 +728,15 @@
 				D0A8B9C220BC9AC600D4C301 /* Environment.swift in Sources */,
 				D093215420113DCB007BFCC3 /* MarginIntrinsicSizeLayout.swift in Sources */,
 				D04A73752022B4C900C46501 /* NonuniformModel2D.swift in Sources */,
-				D056A39E20177F0B00C3B3B1 /* Grid.swift in Sources */,
 				D0DE1BB32089411B00775312 /* Primitive+SpriteKit.swift in Sources */,
 				D0051E26201D2BC900C0128A /* PageViewController.swift in Sources */,
+				D0D6808220CEB0EF0074E97D /* ViewMaps.swift in Sources */,
 				D03E03DA20124DB8002D47F3 /* Testing.swift in Sources */,
 				D093215120113DCB007BFCC3 /* Layout.swift in Sources */,
 				D03267952082DE8D00BBF563 /* GraphicsCore.swift in Sources */,
 				D093209A20113DCB007BFCC3 /* MultipleLayouts.swift in Sources */,
 				D0BAD735204228F700406E70 /* ViewComposite.swift in Sources */,
 				D093209D20113DCB007BFCC3 /* Layout-Logging.swift in Sources */,
-				D0ECD79920B9F21D00C3F6D0 /* CGRect+Inset.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -730,8 +760,32 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D0D6808020CDABED0074E97D /* Grid.swift in Sources */,
+				D026711520CD77D2008E24FB /* Primitive+UIKit.swift in Sources */,
+				D026711820CD77D2008E24FB /* Array+CGPoint+Utility.swift in Sources */,
+				D026712720CD9800008E24FB /* RectIndex.swift in Sources */,
+				D026711120CD77D2008E24FB /* ViewComposite.swift in Sources */,
+				D026712620CD97F1008E24FB /* HandlesViewCore.swift in Sources */,
 				D02670BB20CCCF72008E24FB /* SpriteScaffViewController.swift in Sources */,
+				D026711020CD77D2008E24FB /* ViewFunctions.swift in Sources */,
+				D026712820CD9800008E24FB /* EdgePosition.swift in Sources */,
+				D026711620CD77D2008E24FB /* UIKit+Grasshopper.swift in Sources */,
+				D026712320CD96F0008E24FB /* SelectionCore.swift in Sources */,
+				D026711220CD77D2008E24FB /* DrawingPrimitives.swift in Sources */,
+				D026712920CD9800008E24FB /* TensionedPoint.swift in Sources */,
+				D026711420CD77D2008E24FB /* EdgeToGeometry.swift in Sources */,
+				D026711720CD77D2008E24FB /* Primitive+SpriteKit.swift in Sources */,
+				D026710F20CD77A5008E24FB /* App.swift in Sources */,
+				D026711320CD77D2008E24FB /* PrimitiveFunctions.swift in Sources */,
+				D026712020CD9648008E24FB /* CGRect+Inset.swift in Sources */,
+				D026712520CD97CC008E24FB /* GraphicsCore.swift in Sources */,
+				D0D6808320CEB0EF0074E97D /* ViewMaps.swift in Sources */,
 				D02670BC20CCCF8E008E24FB /* Environment.swift in Sources */,
+				D026711920CD77F6008E24FB /* NonuniformModel2D.swift in Sources */,
+				D026711E20CD9617008E24FB /* EdgeAlignments.swift in Sources */,
+				D026712420CD973B008E24FB /* Vertical+HorizontalController.swift in Sources */,
+				D026712220CD967D008E24FB /* TexturedView+SKSpriteNode.swift in Sources */,
+				D026710E20CD776F008E24FB /* Sprite2DView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -915,7 +969,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.sound.HandlesRound.Draw.master;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -934,7 +988,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.sound.HandlesRound.Draw.master;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

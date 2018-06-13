@@ -39,9 +39,9 @@ class VerticalController: UIViewController, UIPageViewControllerDataSource, UIPa
     self.pageViewController = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .vertical, options: nil)
     self.pageViewController.dataSource = self
     self.restartAction(sender: self)
-    self.addChildViewController(self.pageViewController)
+    self.addChild(self.pageViewController)
     self.view.addSubview(pageViewController.view)
-    self.pageViewController.didMove(toParentViewController: self)
+    self.pageViewController.didMove(toParent: self)
     
     
     for c in content { c.pageViewController.delegate = self }
@@ -65,7 +65,7 @@ class VerticalController: UIViewController, UIPageViewControllerDataSource, UIPa
           let b = content[1]
           let target = b.content[index]
           content[1].pageViewController.setViewControllers([target],
-                                                           direction: UIPageViewControllerNavigationDirection.forward,
+                                                           direction: UIPageViewController.NavigationDirection.forward,
                                                            animated: true,
                                                            completion: { (_) in })
         }
@@ -77,7 +77,7 @@ class VerticalController: UIViewController, UIPageViewControllerDataSource, UIPa
         let b = content[0]
         let target = b.content[index]
         content[0].pageViewController.setViewControllers([target],
-                                                         direction: UIPageViewControllerNavigationDirection.forward,
+                                                         direction: UIPageViewController.NavigationDirection.forward,
                                                          animated: true,
                                                          completion: { (_) in })
       }
@@ -163,9 +163,9 @@ class HorizontalHolder: UIViewController, UIPageViewControllerDataSource  {
     pc.currentPageIndicatorTintColor = .white
     self.pageViewController.dataSource = self
     self.restartAction(sender: self)
-    self.addChildViewController(self.pageViewController)
+    self.addChild(self.pageViewController)
     self.view.addSubview(pageViewController.view)
-    self.pageViewController.didMove(toParentViewController: self)
+    self.pageViewController.didMove(toParent: self)
     
     
     super.viewDidLoad()

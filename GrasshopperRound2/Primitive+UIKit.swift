@@ -17,7 +17,7 @@ extension ColoredLabel : UIKitRepresentable
 {
   var asView: UIView {
     let uiLabel = UILabel(frame: self.position.asRect() )
-    uiLabel.attributedText = NSAttributedString(string: self.text, attributes: [NSAttributedStringKey.foregroundColor : self.color])
+    uiLabel.attributedText = NSAttributedString(string: self.text, attributes: [NSAttributedString.Key.foregroundColor : self.color])
     uiLabel.sizeToFit()
     return uiLabel
   }

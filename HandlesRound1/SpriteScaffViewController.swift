@@ -12,14 +12,18 @@ import Singalong
 import GrippableView
 import Graphe
 
+class EGView : UIView {
+  
+}
+
 
 import SpriteKit
 
-class SpriteScaffViewController : UIViewController {
+public class SpriteScaffViewController : UIViewController {
   // View and Model
   var twoDView : Sprite2DView!
   var canvas : CanvasViewport!
-  
+  var outline : UIView!
   
   // Drawing pure function
   var editingView : GraphEditingView
@@ -29,21 +33,21 @@ class SpriteScaffViewController : UIViewController {
   // Eventually dependency injected
   var initialFrame : CGRect
   
-  init(mapping: [GraphEditingView] )
+  public init(mapping: [GraphEditingView] )
   {
     editingView = mapping[0]
     loadedViews = mapping
-    initialFrame = UIScreen.main.bounds
+    initialFrame = Current.screen
     super.init(nibName: nil, bundle: nil)
   }
   
   required init?(coder aDecoder: NSCoder) { fatalError("init(coder:) has not been implemented") }
   
-  override func viewDidAppear(_ animated: Bool) {
+  override public func viewDidAppear(_ animated: Bool) {
     // Set view upon initial loading
     buildFromScratch()
   }
-  override func loadView() {
+  override public func loadView() {
     twoDView = Sprite2DView(frame:initialFrame )
     twoDView.layer.borderWidth = 1.0
     twoDView.scene?.scaleMode = .resizeFill
@@ -52,6 +56,12 @@ class SpriteScaffViewController : UIViewController {
     canvas.selectionOriginChanged = self.originChange
     canvas.selectionSizeChanged = self.sizeChange
     canvas.didEndEdit = self.editEnded
+    
+  
+    outline = EGView()
+    outline.layer.borderColor = UIColor.blue.cgColor
+    outline.layer.borderWidth = 3.0
+    self.canvas.canvas.addSubview(outline)
     
     view = UIView(frame: initialFrame)
     view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(SpriteScaffViewController.tap)))
@@ -68,6 +78,7 @@ class SpriteScaffViewController : UIViewController {
     let newRect = self.canvas.bounds.withInsetRect(ofSize: size, hugging: (.center, .center))
     
     self.canvas.master = newRect
+    self.originChange(origin: newRect.origin)
     self.draw(in: newRect)
   }
   /// Handler for Selection Origin Changed
@@ -85,7 +96,8 @@ class SpriteScaffViewController : UIViewController {
     let position : Position2D = (.center, .center)
     // Create New Model &  // Find Orirgin
     // Setting up our interior vie
-    (Current.graph.grid, Current.graph.edges) = (size, Current.graph.edges) |> self.editingView.build
+    let s3 = size |> self.editingView.size3(Current.graph)
+    (Current.graph.grid, Current.graph.edges) = self.editingView.build(s3, Current.graph.edges)
     let size = Current.graph |> self.editingView.size
     let newRect = (self.canvas.master, size, position) |> centeredRect
     

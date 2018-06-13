@@ -10,6 +10,7 @@ import CoreGraphics
 import Geo
 
 // Fixme graphics shouldent depending on POSITION
+
 extension CGRect {
   public func withInsetRect(ofSize size: CGSize, hugging walls: (VerticalPosition, HorizontalPosition) ) -> CGRect
   {

@@ -223,7 +223,7 @@ class HandleViewRound1: UIView {
       // Show Border
       for var h in hideables { h.isHidden = true }
 
-      UIView.animate(withDuration: 0.3, delay: 0.0, usingSpringWithDamping: 0.4, initialSpringVelocity: 1.0, options: UIViewAnimationOptions.allowUserInteraction, animations: {
+      UIView.animate(withDuration: 0.3, delay: 0.0, usingSpringWithDamping: 0.4, initialSpringVelocity: 1.0, options: UIView.AnimationOptions.allowUserInteraction, animations: {
         gesture.view?.center = self.point.anchor
         
         // Create Master rectangle from gesture
@@ -246,7 +246,7 @@ class HandleViewRound1: UIView {
   func set(master: CGRect)
   {
    
-    UIView.animate(withDuration: 0.3, delay: 0.0, usingSpringWithDamping: 0.4, initialSpringVelocity: 1.0, options: UIViewAnimationOptions.allowUserInteraction, animations: {
+    UIView.animate(withDuration: 0.3, delay: 0.0, usingSpringWithDamping: 0.4, initialSpringVelocity: 1.0, options: UIView.AnimationOptions.allowUserInteraction, animations: {
       
       // update all handles to correct points
       let centers = self.stateMachine.centers(master)
