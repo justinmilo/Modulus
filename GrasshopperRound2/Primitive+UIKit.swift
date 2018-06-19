@@ -22,3 +22,28 @@ extension ColoredLabel : UIKitRepresentable
     return uiLabel
   }
 }
+
+
+extension Label : UIKitRepresentable {
+  var asView: UIView {
+    let l = UILabel()
+    l.text = self.text
+    l.center = self.position
+    l.transform = l.transform.rotatedBy(degrees: 90.0)
+    return l
+  }
+}
+
+import Diagrams
+import Geo
+
+extension Line : Drawable{
+  func draw(in renderer: Renderer) {
+    renderer.move(to: self.start)
+    renderer.addLine(to: self.end)
+  }
+  var frame: CGRect {
+    return self.start + self.end
+  }
+}
+

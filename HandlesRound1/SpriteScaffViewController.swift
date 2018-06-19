@@ -21,7 +21,7 @@ import SpriteKit
 
 public class SpriteScaffViewController : UIViewController {
   // View and Model
-  var twoDView : Sprite2DView!
+  //var twoDView : Sprite2DView!
   var canvas : CanvasViewport!
   var outline : UIView!
   
@@ -48,20 +48,19 @@ public class SpriteScaffViewController : UIViewController {
     buildFromScratch()
   }
   override public func loadView() {
-    twoDView = Sprite2DView(frame:initialFrame )
-    twoDView.layer.borderWidth = 1.0
-    twoDView.scene?.scaleMode = .resizeFill
-  
-    canvas = CanvasViewport(frame: initialFrame, element: twoDView)
-    canvas.selectionOriginChanged = self.originChange
-    canvas.selectionSizeChanged = self.sizeChange
-    canvas.didEndEdit = self.editEnded
+//    twoDView = Sprite2DView(frame:initialFrame )
+//    twoDView.layer.borderWidth = 1.0
+//    twoDView.scene?.scaleMode = .resizeFill
     
-  
     outline = EGView()
     outline.layer.borderColor = UIColor.blue.cgColor
     outline.layer.borderWidth = 3.0
-    self.canvas.canvas.addSubview(outline)
+    //self.canvas.canvas.addSubview(outline)
+  
+    canvas = CanvasViewport(frame: initialFrame, element: outline)
+    canvas.selectionOriginChanged = self.originChange
+    canvas.selectionSizeChanged = self.sizeChange
+    canvas.didEndEdit = self.editEnded
     
     view = UIView(frame: initialFrame)
     view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(SpriteScaffViewController.tap)))
@@ -75,7 +74,7 @@ public class SpriteScaffViewController : UIViewController {
   func buildFromScratch()
   {
     let size = Current.graph |> self.editingView.size
-    let newRect = self.canvas.bounds.withInsetRect(ofSize: size, hugging: (.center, .center))
+    let newRect = self.canvas.bounds.withInsetRect(ofSize: size, hugging: (Geo.VerticalPosition.center, Geo.HorizontalPosition.center))
     
     self.canvas.master = newRect
     self.originChange(origin: newRect.origin)
@@ -84,8 +83,9 @@ public class SpriteScaffViewController : UIViewController {
   /// Handler for Selection Origin Changed
   func originChange( origin: CGPoint) {
   
-    let editOrigin = self.editOrigin(newRect: canvas.master)
-    self.twoDView.mainNode.position = editOrigin
+    //let editOrigin = self.editOrigin(newRect: canvas.master)
+    self.outline.frame.origin = origin//editOrigin
+    //self.twoDView.mainNode.position = editOrigin
   }
   
   var _previousRect = CGRect.zero
@@ -120,33 +120,36 @@ public class SpriteScaffViewController : UIViewController {
   }
   
   /// Origin in SK Coordinates based on graphs origin
-  func editOrigin(newRect: CGRect) -> CGPoint
-  {
-    let pointToSprite: (CGPoint) -> CGPoint = translateToCGPointInSKCoordinates(from: canvas.canvas.frame, to: twoDView.frame)
-    let viewOrigin : CGPoint = (newRect.bottomLeft) |> pointToSprite
-    let graphOrigin : CGPoint = Current.graph |> editingView.origin
-    let editOrigin : CGPoint = (viewOrigin, graphOrigin|>asNegatedVector) |> moveByVector
-    return editOrigin
-  }
+//  func editOrigin(newRect: CGRect) -> CGPoint
+//  {
+//    let pointToSprite: (CGPoint) -> CGPoint = translateToCGPointInSKCoordinates(from: canvas.canvas.frame, to: twoDView.frame)
+//    let viewOrigin : CGPoint = (newRect.bottomLeft) |> pointToSprite
+//    let graphOrigin : CGPoint = Current.graph |> editingView.origin
+//    let editOrigin : CGPoint = (viewOrigin, graphOrigin|>asNegatedVector) |> moveByVector
+//    return editOrigin
+//  }
   
   /// Draw func by redrawing new composite from curent graph
   // newRect a product of the Bounding Box + a generated size + a position
   func draw(in newRect: CGRect) {
     // Create New Model
-    let b = Current.graph |> self.editingView.composite
+    //let b = Current.graph |> self.editingView.composite
     // Set & Redraw Geometry
-    self.twoDView.redraw(b) // + dude  )
+    //self.twoDView.redraw(b) // + dude  )
+    print(newRect)
+    self.outline.frame = newRect
   }
   
   
 
   @objc func tap(g: UIGestureRecognizer)
   {
-    // if insideTGyg`1``1`q`1q`q1
+    // if insideTGyg
     if self.canvas.master.contains(
       g.location(ofTouch: 0, in: self.view)
     ) {
-      highlightCell(touch: g.location(ofTouch: 0, in: self.view))
+      //highlightCell(touch: g.location(ofTouch: 0, in: self.view))
+      print("TOuch")
     }
     else {
       changeCompositeStyle()
@@ -165,65 +168,63 @@ public class SpriteScaffViewController : UIViewController {
   
   
   
-  
-  func highlightCell (touch: CGPoint) {
-    
-    
-    
-    // bind values to these functions
-    let rectToSprite = self.twoDView.bounds.height |> curry(uiToSprite(height:rect:))
-    let pointToSprite = self.twoDView.bounds.height |> curry(uiToSprite(height:point:))
-    let yToSprite = self.twoDView.bounds.height |> curry(uiToSprite(height:y:))
-    
-    
-    // Properly Controllers concern
-    let tS = touch |> pointToSprite
-    let rectS = self.canvas.master |> rectToSprite
-    //let nede = ( tS, Current.graph |> editingView.origin >>> negatedVector)
-    //  |> moveByVector
-    let p = (tS, rectS) |> viewSpaceToModelSpace
-    
-    // Properly models concern
-    let editBoundaries = Current.graph |> editingView.grid2D ///
-    let toGridIndices = editBoundaries |> curry(pointToGridIndices) >>>  handleTupleOptionWith
-    
-    // Get Model Indices
-    let indices = (p |> toGridIndices)
-    // c is something lik (0, 1)
-    // or (1, 2)
-    
-    
-    // Get Model Rect
-    let mRect = (indices, editBoundaries) |> modelRect
-    // x is something like (0.0, 30.0, 100.0, 100.0)
-    // (0.0, 0.0, 100.0, 30.0)
-    
-    // bring model rect into the real world!
-    let z = (mRect, self.canvas.master.origin.asVector()) |> moveByVector
-    let cellRectValue = z |> rectToSprite
-    let y = self.canvas.master.midY |> yToSprite
-    let flippedRect = (cellRectValue, y )  |> mirrorVertically
-    // flipped rect is situated in sprite kit space
-    
-    Current.graph.edges = editingView.selectedCell(indices, Current.graph.grid, Current.graph.edges)
-    
-    buildFromScratch()
-    addTempRect(rect: flippedRect, color: .white)
-  }
+//
+//  func highlightCell (touch: CGPoint) {
+//
+//
+//
+//    // bind values to these functions
+//    let rectToSprite = self.twoDView.bounds.height |> curry(uiToSprite(height:rect:))
+//    let pointToSprite = self.twoDView.bounds.height |> curry(uiToSprite(height:point:))
+//    let yToSprite = self.twoDView.bounds.height |> curry(uiToSprite(height:y:))
+//
+//
+//    // Properly Controllers concern
+//    let tS = touch |> pointToSprite
+//    let rectS = self.canvas.master |> rectToSprite
+//    let p = (tS, rectS) |> viewSpaceToModelSpace
+//
+//    // Properly models concern
+//    let editBoundaries = Current.graph |> editingView.grid2D ///
+//    let toGridIndices = editBoundaries |> curry(pointToGridIndices) >>>  handleTupleOptionWith
+//
+//    // Get Model Indices
+//    let indices = (p |> toGridIndices)
+//    // c is something lik (0, 1)
+//    // or (1, 2)
+//
+//
+//    // Get Model Rect
+//    let mRect = (indices, editBoundaries) |> modelRect
+//    // x is something like (0.0, 30.0, 100.0, 100.0)
+//    // (0.0, 0.0, 100.0, 30.0)
+//
+//    // bring model rect into the real world!
+//    let z = (mRect, self.canvas.master.origin.asVector()) |> moveByVector
+//    let cellRectValue = z |> rectToSprite
+//    let y = self.canvas.master.midY |> yToSprite
+//    let flippedRect = (cellRectValue, y )  |> mirrorVertically
+//    // flipped rect is situated in sprite kit space
+//
+//    Current.graph.edges = editingView.selectedCell(indices, Current.graph.grid, Current.graph.edges)
+//
+//    buildFromScratch()
+//    addTempRect(rect: flippedRect, color: .white)
+//  }
   
   
-  func addTempRect( rect: CGRect, color: UIColor) {
-    let globalLabel = SKShapeNode(rect: rect )
-    globalLabel.fillColor = color
-    self.twoDView.scene?.addChild(globalLabel)
-    globalLabel.alpha = 0.0
-    let fadeInOut = SKAction.sequence([
-      .fadeAlpha(to: 0.3, duration: 0.2),
-      .fadeAlpha(to: 0.0,duration: 0.4)])
-    globalLabel.run(fadeInOut, completion: {
-      print("End and Fade Out")
-    })
-  }
+//  func addTempRect( rect: CGRect, color: UIColor) {
+//    let globalLabel = SKShapeNode(rect: rect )
+//    globalLabel.fillColor = color
+//    self.twoDView.scene?.addChild(globalLabel)
+//    globalLabel.alpha = 0.0
+//    let fadeInOut = SKAction.sequence([
+//      .fadeAlpha(to: 0.3, duration: 0.2),
+//      .fadeAlpha(to: 0.0,duration: 0.4)])
+//    globalLabel.run(fadeInOut, completion: {
+//      print("End and Fade Out")
+//    })
+//  }
 
 
   

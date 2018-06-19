@@ -417,6 +417,25 @@ func modelToLinework ( edges: [C2Edge] ) -> [Geometry]
   return (lines + labelsSecondPass)
 }
 
+func lineZero(line: Line)-> Bool
+{
+  return line.start == line.end
+}
+func reduceDuplicates(geo:[Line])-> [Line]
+{
+  var mutGeo = geo
+  mutGeo.removeAll( where: lineZero )
+  return mutGeo
+}
+
+#warning("Move to Singalong")
+func filter<T>() -> (Array<Any>) -> Array<T> {
+  return { anyArray in
+    anyArray.compactMap{  return $0 as? T }
+  }
+  
+}
+
 
 
 

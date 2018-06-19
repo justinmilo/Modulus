@@ -10,12 +10,3 @@ public protocol Layout {
     var contents: [Content] { get }
 }
 
-import UIKit
-extension UIView : Layout {
-  public func layout(in rect: CGRect)
-  {
-    self.frame = rect
-  }
-  public typealias Content = UIView
-  public var contents : [Content] { return [self] }
-}

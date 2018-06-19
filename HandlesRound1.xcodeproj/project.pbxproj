@@ -31,7 +31,6 @@
 		D026711820CD77D2008E24FB /* Array+CGPoint+Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04153C1202B7CA300BD7B72 /* Array+CGPoint+Utility.swift */; };
 		D026711920CD77F6008E24FB /* NonuniformModel2D.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04A73742022B4C900C46501 /* NonuniformModel2D.swift */; };
 		D026711C20CD7871008E24FB /* Grid.swift in Sources */ = {isa = PBXBuildFile; fileRef = D026711A20CD7871008E24FB /* Grid.swift */; };
-		D026711E20CD9617008E24FB /* EdgeAlignments.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0ECD78E20B9F12700C3F6D0 /* EdgeAlignments.swift */; };
 		D026712020CD9648008E24FB /* CGRect+Inset.swift in Sources */ = {isa = PBXBuildFile; fileRef = D026711F20CD9639008E24FB /* CGRect+Inset.swift */; };
 		D026712120CD9649008E24FB /* CGRect+Inset.swift in Sources */ = {isa = PBXBuildFile; fileRef = D026711F20CD9639008E24FB /* CGRect+Inset.swift */; };
 		D026712220CD967D008E24FB /* TexturedView+SKSpriteNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0DA9BB82039E1C60019F6EE /* TexturedView+SKSpriteNode.swift */; };
@@ -45,10 +44,20 @@
 		D0326763207FFE3800BBF563 /* HandlesCoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0326762207FFE3800BBF563 /* HandlesCoreTests.swift */; };
 		D03267952082DE8D00BBF563 /* GraphicsCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03267942082DE8D00BBF563 /* GraphicsCore.swift */; };
 		D03267962082DE8D00BBF563 /* GraphicsCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03267942082DE8D00BBF563 /* GraphicsCore.swift */; };
+		D036097B20D5968100C11E79 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D036097A20D5968100C11E79 /* ViewController.swift */; };
+		D036097D20D596E300C11E79 /* SpriteDriver.swift in Sources */ = {isa = PBXBuildFile; fileRef = D036097C20D596E300C11E79 /* SpriteDriver.swift */; };
+		D0360A1B20D6DA9700C11E79 /* ViewDiagramDriver.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0360A1A20D6DA9700C11E79 /* ViewDiagramDriver.swift */; };
+		D0360A1C20D6DAC000C11E79 /* ViewDiagramDriver.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0360A1A20D6DA9700C11E79 /* ViewDiagramDriver.swift */; };
+		D0360A3C20D6EE0900C11E79 /* Diagrams.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0360A3B20D6EE0900C11E79 /* Diagrams.framework */; };
+		D0360A3D20D6EE0900C11E79 /* Diagrams.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D0360A3B20D6EE0900C11E79 /* Diagrams.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D03E03DA20124DB8002D47F3 /* Testing.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03E03D920124DB8002D47F3 /* Testing.swift */; };
 		D03E040020125DF8002D47F3 /* Sprite2DView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03E03F720125DF8002D47F3 /* Sprite2DView.swift */; };
 		D03E040320125DF8002D47F3 /* DrawingPrimitives.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03E03FB20125DF8002D47F3 /* DrawingPrimitives.swift */; };
 		D04153C2202B7CA300BD7B72 /* Array+CGPoint+Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04153C1202B7CA300BD7B72 /* Array+CGPoint+Utility.swift */; };
+		D046292B20D9B1FF0037B63B /* Diagrams.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0360A3B20D6EE0900C11E79 /* Diagrams.framework */; };
+		D046292C20D9B1FF0037B63B /* Diagrams.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D0360A3B20D6EE0900C11E79 /* Diagrams.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		D046292E20D9B1FF0037B63B /* Layout.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D046292D20D9B1FF0037B63B /* Layout.framework */; };
+		D046292F20D9B1FF0037B63B /* Layout.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D046292D20D9B1FF0037B63B /* Layout.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D04A73752022B4C900C46501 /* NonuniformModel2D.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04A73742022B4C900C46501 /* NonuniformModel2D.swift */; };
 		D056A3992015696A00C3B3B1 /* TwoMeterModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D056A3982015696A00C3B3B1 /* TwoMeterModel.swift */; };
 		D056A39F20177F0B00C3B3B1 /* PlanModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D056A39D20177F0B00C3B3B1 /* PlanModel.swift */; };
@@ -81,7 +90,6 @@
 		D0DE1BB32089411B00775312 /* Primitive+SpriteKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0DE1BB22089411B00775312 /* Primitive+SpriteKit.swift */; };
 		D0ECD78620B9E59700C3F6D0 /* GrippableView.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0ECD78520B9E59700C3F6D0 /* GrippableView.framework */; };
 		D0ECD78C20B9F0B300C3F6D0 /* HandlesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0ECD78B20B9F0B300C3F6D0 /* HandlesView.swift */; };
-		D0ECD79320B9F12800C3F6D0 /* EdgeAlignments.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0ECD78E20B9F12700C3F6D0 /* EdgeAlignments.swift */; };
 		D0ECD79420B9F12800C3F6D0 /* HandlesViewCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0ECD78F20B9F12700C3F6D0 /* HandlesViewCore.swift */; };
 		D0ECD79520B9F12800C3F6D0 /* RectIndex.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0ECD79020B9F12700C3F6D0 /* RectIndex.swift */; };
 		D0ECD79620B9F12800C3F6D0 /* EdgePosition.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0ECD79120B9F12700C3F6D0 /* EdgePosition.swift */; };
@@ -133,6 +141,9 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				D046292C20D9B1FF0037B63B /* Diagrams.framework in Embed Frameworks */,
+				D0360A3D20D6EE0900C11E79 /* Diagrams.framework in Embed Frameworks */,
+				D046292F20D9B1FF0037B63B /* Layout.framework in Embed Frameworks */,
 				D0F5C35C20C03CA400B6A75F /* GrippableView.framework in Embed Frameworks */,
 				D0F5C35720C03C6300B6A75F /* OffsetableCore.framework in Embed Frameworks */,
 				D026710B20CD5BE5008E24FB /* Graphe.framework in Embed Frameworks */,
@@ -166,11 +177,16 @@
 		D0326762207FFE3800BBF563 /* HandlesCoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandlesCoreTests.swift; sourceTree = "<group>"; };
 		D0326764207FFE3800BBF563 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D03267942082DE8D00BBF563 /* GraphicsCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GraphicsCore.swift; path = HandlesRound1/GraphicsCore.swift; sourceTree = SOURCE_ROOT; };
+		D036097A20D5968100C11E79 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		D036097C20D596E300C11E79 /* SpriteDriver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpriteDriver.swift; sourceTree = "<group>"; };
+		D0360A1A20D6DA9700C11E79 /* ViewDiagramDriver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewDiagramDriver.swift; sourceTree = "<group>"; };
+		D0360A3B20D6EE0900C11E79 /* Diagrams.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Diagrams.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D03E03D920124DB8002D47F3 /* Testing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Testing.swift; sourceTree = "<group>"; };
 		D03E03F720125DF8002D47F3 /* Sprite2DView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sprite2DView.swift; sourceTree = "<group>"; };
 		D03E03FB20125DF8002D47F3 /* DrawingPrimitives.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DrawingPrimitives.swift; sourceTree = "<group>"; };
 		D03E03FE20125DF8002D47F3 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D04153C1202B7CA300BD7B72 /* Array+CGPoint+Utility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+CGPoint+Utility.swift"; sourceTree = "<group>"; };
+		D046292D20D9B1FF0037B63B /* Layout.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Layout.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D04A73742022B4C900C46501 /* NonuniformModel2D.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NonuniformModel2D.swift; sourceTree = "<group>"; };
 		D056A3982015696A00C3B3B1 /* TwoMeterModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwoMeterModel.swift; sourceTree = "<group>"; };
 		D056A39C20177F0B00C3B3B1 /* Grid.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Grid.swift; sourceTree = "<group>"; };
@@ -205,7 +221,6 @@
 		D0ECD78720B9E59E00C3F6D0 /* Geo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Geo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0ECD78920B9E5A400C3F6D0 /* Singalong.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Singalong.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0ECD78B20B9F0B300C3F6D0 /* HandlesView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HandlesView.swift; sourceTree = "<group>"; };
-		D0ECD78E20B9F12700C3F6D0 /* EdgeAlignments.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EdgeAlignments.swift; sourceTree = "<group>"; };
 		D0ECD78F20B9F12700C3F6D0 /* HandlesViewCore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HandlesViewCore.swift; sourceTree = "<group>"; };
 		D0ECD79020B9F12700C3F6D0 /* RectIndex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RectIndex.swift; sourceTree = "<group>"; };
 		D0ECD79120B9F12700C3F6D0 /* EdgePosition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EdgePosition.swift; sourceTree = "<group>"; };
@@ -219,6 +234,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D046292B20D9B1FF0037B63B /* Diagrams.framework in Frameworks */,
+				D0360A3C20D6EE0900C11E79 /* Diagrams.framework in Frameworks */,
+				D046292E20D9B1FF0037B63B /* Layout.framework in Frameworks */,
 				D0F5C35620C03C6300B6A75F /* OffsetableCore.framework in Frameworks */,
 				D0F5C35320C03C6300B6A75F /* Geo.framework in Frameworks */,
 				D026710A20CD5BE5008E24FB /* Graphe.framework in Frameworks */,
@@ -268,6 +286,8 @@
 		D00069C7200BD08300E8D5F3 = {
 			isa = PBXGroup;
 			children = (
+				D046292D20D9B1FF0037B63B /* Layout.framework */,
+				D0360A3B20D6EE0900C11E79 /* Diagrams.framework */,
 				D026710920CD5BE5008E24FB /* Graphe.framework */,
 				D0F5C35820C03C6300B6A75F /* ScrollViewGrower.app */,
 				D0F5C35520C03C6300B6A75F /* OffsetableCore.framework */,
@@ -304,6 +324,9 @@
 				D09C3C42206B32370053EE2A /* App.swift */,
 				D0D6808120CEB0EF0074E97D /* ViewMaps.swift */,
 				D0A8B9C120BC9AC500D4C301 /* Environment.swift */,
+				D036097A20D5968100C11E79 /* ViewController.swift */,
+				D036097C20D596E300C11E79 /* SpriteDriver.swift */,
+				D0360A1A20D6DA9700C11E79 /* ViewDiagramDriver.swift */,
 				D0B69D2420435F3900AEA01B /* SpriteKit */,
 				D0BCAFBA201CDC4300C4EAA5 /* SpriteScaffViewController.swift */,
 				D0ECD78B20B9F0B300C3F6D0 /* HandlesView.swift */,
@@ -358,9 +381,9 @@
 			isa = PBXGroup;
 			children = (
 				D026711A20CD7871008E24FB /* Grid.swift */,
+				D03E03FB20125DF8002D47F3 /* DrawingPrimitives.swift */,
 				D0B86C64202FC09200CCB3F7 /* ViewFunctions.swift */,
 				D0BAD734204228F700406E70 /* ViewComposite.swift */,
-				D03E03FB20125DF8002D47F3 /* DrawingPrimitives.swift */,
 				D0DA9BBA203A666A0019F6EE /* PrimitiveFunctions.swift */,
 				D08A6F92202AA58E00EF9E68 /* EdgeToGeometry.swift */,
 				D0DE1BB02089394300775312 /* Primitive+UIKit.swift */,
@@ -448,7 +471,6 @@
 		D0ECD78D20B9F12700C3F6D0 /* HandlesView Core */ = {
 			isa = PBXGroup;
 			children = (
-				D0ECD78E20B9F12700C3F6D0 /* EdgeAlignments.swift */,
 				D0ECD78F20B9F12700C3F6D0 /* HandlesViewCore.swift */,
 				D0ECD79020B9F12700C3F6D0 /* RectIndex.swift */,
 				D0ECD79120B9F12700C3F6D0 /* EdgePosition.swift */,
@@ -711,7 +733,6 @@
 				D0BCAFBB201CDC4300C4EAA5 /* SpriteScaffViewController.swift in Sources */,
 				D0B218D0201F6491004684FC /* Vertical+HorizontalController.swift in Sources */,
 				D056A3992015696A00C3B3B1 /* TwoMeterModel.swift in Sources */,
-				D0ECD79320B9F12800C3F6D0 /* EdgeAlignments.swift in Sources */,
 				D0B86C65202FC09200CCB3F7 /* ViewFunctions.swift in Sources */,
 				D03E040020125DF8002D47F3 /* Sprite2DView.swift in Sources */,
 				D0ECD79720B9F12800C3F6D0 /* TensionedPoint.swift in Sources */,
@@ -728,13 +749,16 @@
 				D0A8B9C220BC9AC600D4C301 /* Environment.swift in Sources */,
 				D093215420113DCB007BFCC3 /* MarginIntrinsicSizeLayout.swift in Sources */,
 				D04A73752022B4C900C46501 /* NonuniformModel2D.swift in Sources */,
+				D036097B20D5968100C11E79 /* ViewController.swift in Sources */,
 				D0DE1BB32089411B00775312 /* Primitive+SpriteKit.swift in Sources */,
+				D036097D20D596E300C11E79 /* SpriteDriver.swift in Sources */,
 				D0051E26201D2BC900C0128A /* PageViewController.swift in Sources */,
 				D0D6808220CEB0EF0074E97D /* ViewMaps.swift in Sources */,
 				D03E03DA20124DB8002D47F3 /* Testing.swift in Sources */,
 				D093215120113DCB007BFCC3 /* Layout.swift in Sources */,
 				D03267952082DE8D00BBF563 /* GraphicsCore.swift in Sources */,
 				D093209A20113DCB007BFCC3 /* MultipleLayouts.swift in Sources */,
+				D0360A1B20D6DA9700C11E79 /* ViewDiagramDriver.swift in Sources */,
 				D0BAD735204228F700406E70 /* ViewComposite.swift in Sources */,
 				D093209D20113DCB007BFCC3 /* Layout-Logging.swift in Sources */,
 			);
@@ -774,6 +798,7 @@
 				D026711220CD77D2008E24FB /* DrawingPrimitives.swift in Sources */,
 				D026712920CD9800008E24FB /* TensionedPoint.swift in Sources */,
 				D026711420CD77D2008E24FB /* EdgeToGeometry.swift in Sources */,
+				D0360A1C20D6DAC000C11E79 /* ViewDiagramDriver.swift in Sources */,
 				D026711720CD77D2008E24FB /* Primitive+SpriteKit.swift in Sources */,
 				D026710F20CD77A5008E24FB /* App.swift in Sources */,
 				D026711320CD77D2008E24FB /* PrimitiveFunctions.swift in Sources */,
@@ -782,7 +807,6 @@
 				D0D6808320CEB0EF0074E97D /* ViewMaps.swift in Sources */,
 				D02670BC20CCCF8E008E24FB /* Environment.swift in Sources */,
 				D026711920CD77F6008E24FB /* NonuniformModel2D.swift in Sources */,
-				D026711E20CD9617008E24FB /* EdgeAlignments.swift in Sources */,
 				D026712420CD973B008E24FB /* Vertical+HorizontalController.swift in Sources */,
 				D026712220CD967D008E24FB /* TexturedView+SKSpriteNode.swift in Sources */,
 				D026710E20CD776F008E24FB /* Sprite2DView.swift in Sources */,
@@ -894,7 +918,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -947,7 +971,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
@@ -966,7 +990,7 @@
 				INFOPLIST_FILE = HandlesRound1/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.sound.HandlesRound.Draw.master;
+				PRODUCT_BUNDLE_IDENTIFIER = com.sound.HandlesRound.Draw.UIKit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.2;
@@ -985,7 +1009,7 @@
 				INFOPLIST_FILE = HandlesRound1/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.sound.HandlesRound.Draw.master;
+				PRODUCT_BUNDLE_IDENTIFIER = com.sound.HandlesRound.Draw.UIKit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.2;

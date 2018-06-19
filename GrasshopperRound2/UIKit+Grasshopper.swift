@@ -9,6 +9,12 @@
 import UIKit
 import Singalong
 
+protocol UIRepresentable
+{
+  var asView : UIView { get }
+}
+
+
 func replaceInPlace(in view: UIView, views: [UIView])
 {
   // create tags
