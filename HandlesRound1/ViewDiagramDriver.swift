@@ -22,6 +22,7 @@ struct ViewDriver : Driver {
   
   var assemblyView : FixedEditableDiagramView<InsetStrokeDrawable<Diagram>>
   
+  
   // Drawing pure function
   var editingView : GraphEditingView
   
@@ -39,6 +40,7 @@ struct ViewDriver : Driver {
     assemblyView.backgroundColor = .lightGray
     
     twoDView.addSubview(assemblyView)
+    
   }
   
   

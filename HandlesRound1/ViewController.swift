@@ -10,6 +10,7 @@ import UIKit
 import Geo
 import GrippableView
 import Singalong
+import Layout
 
 
 // centerAnchor
@@ -21,17 +22,26 @@ func contentSizeFrom (offsetFromCenter: CGVector, itemSize: CGSize, viewPortSize
 
 
 
-class ViewController: UIViewController
+class ViewController<ConcreteDriver:Driver>: UIViewController
 {
 //  override func loadView() {
 //    self.view = GrippedViewHandles(frame: UIScreen.main.bounds)
 //  }
-  var driver : Driver
+  var driver : ConcreteDriver
+  var layoutAdapt : LayoutToDriver<ConcreteDriver>
+  var alignedLayout : PositionedLayout<LayoutToDriver<ConcreteDriver>>
   
-  init(driver: Driver)
+  init(driver: ConcreteDriver)
   {
     self.driver = driver
+    var layoutAdapt : LayoutToDriver<ConcreteDriver> = LayoutToDriver(
+      child: driver
+      )
+    alignedLayout = PositionedLayout(child: layoutAdapt, ofSize: CGSize.zero, aligned: (.center, .center))
     super.init(nibName: nil, bundle: nil)
+    
+    
+    
   }
   required init?(coder aDecoder: NSCoder) {
     fatalError("Init with coder not implemented")
@@ -50,16 +60,15 @@ class ViewController: UIViewController
     self.view = viewport
     self.viewport.canvas.addSubview(outline)
     viewport.selectionOriginChanged = { _ in
-      
       self.driver.layout(origin: self.viewport.master.origin)
-      //self.burstOutline(frame: self.viewport.master, burstIn: true)
       self.outline.frame.origin = self.viewport.master.origin
     }
     viewport.selectionSizeChanged = { _ in
+      
       let size = self.viewport.master.size |> self.driver.size
-      self.driver.layout(size: size)
-
-      //self.burstOutline(frame: self.viewport.master, burstIn: false)
+      
+      alignedLayout = PositionedLayout(child: layoutAdapt, ofSize: size, aligned: (.center, .center))
+      alignedLayout.layout(size: self.viewport.master)
     }
     viewport.didBeginEdit = {
       self.outline.removeFromSuperview()
