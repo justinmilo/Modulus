@@ -55,7 +55,7 @@ func foo(_ vm: EditingViews.ViewMap) -> UINavigationController
 func foo2(_ vm: EditingViews.ViewMap) -> UINavigationController
 {
   let driver = ViewDriver(mapping: vm.viewMap)
-  let vc : ViewController<ViewDriver> = ViewController(driver: driver)
+  let vc : ViewController = ViewController(driver: driver)
   let st = vm.label
   vc.title = st
   let ulN = UINavigationController(rootViewController: vc)

@@ -19,29 +19,31 @@ func contentSizeFrom (offsetFromCenter: CGVector, itemSize: CGSize, viewPortSize
 {
   return (viewPortSize / 2) + offsetFromCenter.asSize() + (itemSize / 2)
 }
+struct TestLayout
+{
+  //  override func loadView() {
+  //    self.view = GrippedViewHandles(frame: UIScreen.main.bounds)
+  //  }
+  var driver : ViewDriver
+  var alignedLayout : MarginLayout<UIView>
+}
+  
 
-
-
-class ViewController<ConcreteDriver:Driver>: UIViewController
+class ViewController: UIViewController
 {
 //  override func loadView() {
 //    self.view = GrippedViewHandles(frame: UIScreen.main.bounds)
 //  }
-  var driver : ConcreteDriver
-  var layoutAdapt : LayoutToDriver<ConcreteDriver>
-  var alignedLayout : PositionedLayout<LayoutToDriver<ConcreteDriver>>
+  var driver : ViewDriver
+  var alignedLayout : PositionedLayout<LayoutToDriver>
   
-  init(driver: ConcreteDriver)
+  init(driver: ViewDriver)
   {
     self.driver = driver
-    var layoutAdapt : LayoutToDriver<ConcreteDriver> = LayoutToDriver(
-      child: driver
-      )
+
+    let layoutAdapt = LayoutToDriver( child: driver )
     alignedLayout = PositionedLayout(child: layoutAdapt, ofSize: CGSize.zero, aligned: (.center, .center))
     super.init(nibName: nil, bundle: nil)
-    
-    
-    
   }
   required init?(coder aDecoder: NSCoder) {
     fatalError("Init with coder not implemented")
@@ -59,16 +61,21 @@ class ViewController<ConcreteDriver:Driver>: UIViewController
     viewport = CanvasViewport(frame: UIScreen.main.bounds, element: self.driver.content)
     self.view = viewport
     self.viewport.canvas.addSubview(outline)
-    viewport.selectionOriginChanged = { _ in
+    viewport.selectionOriginChanged = { [weak self] _ in
+      guard let self = self else { return }
       self.driver.layout(origin: self.viewport.master.origin)
       self.outline.frame.origin = self.viewport.master.origin
-    }
-    viewport.selectionSizeChanged = { _ in
       
+      self.alignedLayout.layout(in: self.viewport.master)
+    }
+    viewport.selectionSizeChanged = { [weak self] _ in
+      guard let self = self else { return }
       let size = self.viewport.master.size |> self.driver.size
       
-      alignedLayout = PositionedLayout(child: layoutAdapt, ofSize: size, aligned: (.center, .center))
-      alignedLayout.layout(size: self.viewport.master)
+      self.alignedLayout = PositionedLayout(child: LayoutToDriver(child: self.driver),
+                                            ofSize: size,
+                                            aligned: (.center, .center))
+      self.alignedLayout.layout(in: self.viewport.master)
     }
     viewport.didBeginEdit = {
       self.outline.removeFromSuperview()
