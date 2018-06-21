@@ -35,14 +35,14 @@ class ViewController: UIViewController
 //    self.view = GrippedViewHandles(frame: UIScreen.main.bounds)
 //  }
   var driver : ViewDriver
-  var alignedLayout : PositionedLayout<LayoutToDriver>
+  var alignedLayout : PositionedLayout<AnyLayout<UIView>>
   
   init(driver: ViewDriver)
   {
     self.driver = driver
-
-    let layoutAdapt = LayoutToDriver( child: driver )
-    alignedLayout = PositionedLayout(child: layoutAdapt, ofSize: CGSize.zero, aligned: (.center, .center))
+    self.alignedLayout = PositionedLayout(child: LayoutToDriver( child: driver ).log().asAny,
+                                     ofSize: CGSize.zero,
+                                     aligned: (.center, .center))
     super.init(nibName: nil, bundle: nil)
   }
   required init?(coder aDecoder: NSCoder) {
@@ -63,18 +63,17 @@ class ViewController: UIViewController
     self.viewport.canvas.addSubview(outline)
     viewport.selectionOriginChanged = { [weak self] _ in
       guard let self = self else { return }
-      self.driver.layout(origin: self.viewport.master.origin)
-      self.outline.frame.origin = self.viewport.master.origin
       
+      self.outline.frame.origin = self.viewport.master.origin
+
       self.alignedLayout.layout(in: self.viewport.master)
     }
     viewport.selectionSizeChanged = { [weak self] _ in
       guard let self = self else { return }
-      let size = self.viewport.master.size |> self.driver.size
       
-      self.alignedLayout = PositionedLayout(child: LayoutToDriver(child: self.driver),
-                                            ofSize: size,
-                                            aligned: (.center, .center))
+      let bestFit = self.viewport.master.size |> self.driver.size
+      
+      self.alignedLayout.size = bestFit
       self.alignedLayout.layout(in: self.viewport.master)
     }
     viewport.didBeginEdit = {
@@ -97,18 +96,6 @@ class ViewController: UIViewController
     self.outline.frame = self.viewport.master
   }
   
-  func burstOutline (frame: CGRect, burstIn: Bool) {
-    let v = UIView(frame: frame)
-    v.layer.borderColor = burstIn ? UIColor.red.cgColor : UIColor.green.cgColor
-    v.layer.borderWidth = 1.0
-    viewport.canvas.addSubview(v)
-    UIView.animate(withDuration: 0.5, animations: {
-      v.frame = burstIn ? v.frame.insetBy(dx: -10, dy: -10) : v.frame.insetBy(dx: 10, dy: 10)
-    }, completion: { (b) in
-      v.removeFromSuperview()
-    })
-    
-  }
 
   /// End Scrollview
   

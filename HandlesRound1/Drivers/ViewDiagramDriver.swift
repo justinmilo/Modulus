@@ -37,7 +37,6 @@ struct ViewDriver : Driver {
     
     let sub = InsetStrokeDrawable(subject:Diagram(elements:[]), strokeWidth: 8.0)
     assemblyView = FixedEditableDiagramView( subject: sub, config: Config(stroke: #colorLiteral(red: 0.2745098174, green: 0.4862745106, blue: 0.1411764771, alpha: 1), strokeWidth: 8.0))
-    assemblyView.backgroundColor = .lightGray
     
     twoDView.addSubview(assemblyView)
     
@@ -46,24 +45,23 @@ struct ViewDriver : Driver {
   
   /// move the origin
   func layout(origin: CGPoint) {
+    print("LAYOUT ORIGIN", origin.x)
     self.assemblyView.frame.origin = origin
   }
   
   /// Handler for Selection Size Changed
   mutating func layout(size: CGSize) {
+    print("LAYOUT SIZE", size.width)
+
     let artwork = Current.graph
       |> get(\ScaffGraph.planEdgesNoZeros)
       >>> modelToLinework
       >>> filter()
       >>> reduceDuplicates
-    print(artwork)
+
     let original = Diagram(elements:artwork)
-    let dia = InsetStrokeDrawable(subject: original, strokeWidth: 8.0)
-    print("original")
-    original.draw(in: TestRenderer())
-    print("dia")
-    dia.draw(in: TestRenderer())
-    assemblyView.ground = dia
+
+    assemblyView.ground = InsetStrokeDrawable(subject: original, strokeWidth: 8.0)
     assemblyView.setNeedsDisplay()
   
     // Set & Redraw Geometry

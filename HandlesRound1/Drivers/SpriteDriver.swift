@@ -10,59 +10,9 @@ import CoreGraphics
 import Singalong
 import Layout
 
-protocol Driver {
-  func size(for size: CGSize) -> CGSize
-  func layout(origin: CGPoint)
-  mutating func layout(size: CGSize)
-  mutating func bind(to uiRect: CGRect)
-  var content : UIView { get }
-}
 
-struct BarLayout : Layout
-{
-  var child: LayoutToDriver
-  typealias Content = UIView
-  var contents: [UIView] { return [UIView()] }
-  mutating func layout(in rect: CGRect) {
-  }
-}
 
-struct FooLayout <Child: Driver> : Layout
-{
-  var child: LayoutToDriver
-  typealias Content = UIView
-  var contents: [UIView] { return [child.child.content] }
-  mutating func layout(in rect: CGRect) {
-    child.layout(in: rect)
-  }
-}
 
-struct LayoutToDriver : Layout
-{
-  typealias Content = UIView
-  
-  var child: ViewDriver
-  var prevOrigin: CGPoint
-  var prevSize: CGSize
-  
-  public init( child: ViewDriver){
-    self.child = child
-    self.prevSize = CGSize.zero
-    self.prevOrigin = CGPoint.zero
-  }
-  mutating func layout(in rect: CGRect) {
-    if prevOrigin != rect.origin {
-      child.layout(origin: rect.origin)
-    }
-    if prevSize != rect.size {
-      child.layout(size: rect.size)
-    }
-    prevOrigin = rect.origin
-    prevSize = rect.size
-  }
-  
-  var contents: [UIView] { return [self.child.content] }
-}
 
 struct SpriteDriver  : Driver {
   
