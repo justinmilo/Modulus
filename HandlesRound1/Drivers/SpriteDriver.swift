@@ -15,6 +15,10 @@ import Layout
 
 
 struct SpriteDriver  : Driver {
+  func set(scale: CGFloat) {
+  
+  }
+  
   
   
   public init(mapping: [GraphEditingView] )

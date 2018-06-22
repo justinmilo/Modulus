@@ -27,20 +27,27 @@ struct TestLayout
   var driver : ViewDriver
   var alignedLayout : MarginLayout<UIView>
 }
-  
+
 
 class ViewController: UIViewController
 {
 //  override func loadView() {
 //    self.view = GrippedViewHandles(frame: UIScreen.main.bounds)
 //  }
-  var driver : ViewDriver
-  var alignedLayout : PositionedLayout<AnyLayout<UIView>>
+  var driver : LogDriver<ScaledDriver<LogDriver<ViewDriver>>>
+  var alignedLayout : PositionedLayout<TwoferLayout<AnyLayout<UIView>>>
   
   init(driver: ViewDriver)
   {
-    self.driver = driver
-    self.alignedLayout = PositionedLayout(child: LayoutToDriver( child: driver ).log().asAny,
+    self.driver = LogDriver(
+      child: ScaledDriver(
+        child: LogDriver(child:driver)
+      )
+    )
+    let adapaterLayout = LayoutToDriver( child: driver ).log().asAny
+    let beforeDriverLayout = TwoferLayout(child: adapaterLayout)
+
+    self.alignedLayout = PositionedLayout(child: beforeDriverLayout,
                                      ofSize: CGSize.zero,
                                      aligned: (.center, .center))
     super.init(nibName: nil, bundle: nil)
@@ -50,38 +57,33 @@ class ViewController: UIViewController
   }
   
   var viewport : CanvasViewport!
-  var outline : UIView = {
-    let v = UIView()
-    v.layer.borderColor = UIColor.blue.cgColor
-    v.layer.borderWidth = 2.0
-    return v
-  }()
   
   override func loadView() {
     viewport = CanvasViewport(frame: UIScreen.main.bounds, element: self.driver.content)
     self.view = viewport
-    self.viewport.canvas.addSubview(outline)
     viewport.selectionOriginChanged = { [weak self] _ in
       guard let self = self else { return }
       
-      self.outline.frame.origin = self.viewport.master.origin
 
-      self.alignedLayout.layout(in: self.viewport.master)
+      self.alignedLayout.layout(in: self.viewport.selection)
     }
     viewport.selectionSizeChanged = { [weak self] _ in
       guard let self = self else { return }
       
-      let bestFit = self.viewport.master.size |> self.driver.size
+      let bestFit = self.viewport.selection.size |> self.driver.size
       
       self.alignedLayout.size = bestFit
-      self.alignedLayout.layout(in: self.viewport.master)
+      self.alignedLayout.layout(in: self.viewport.selection)
     }
     viewport.didBeginEdit = {
-      self.outline.removeFromSuperview()
     }
     viewport.didEndEdit = {
-      self.outline.frame = self.viewport.master
-      self.viewport.canvas.addSubview(self.outline)
+      self.viewport.animateMaster(to:  self.alignedLayout.child.issuedRect! )
+    }
+    viewport.didEndZoom = { scale in
+      // viewports scale is reset at each didEndZoom call
+      // driver.scale needs to store the cumulative scale
+      self.driver.child.scale = scale
     }
   
   }
@@ -92,8 +94,6 @@ class ViewController: UIViewController
   }
   
   @objc func tap() {
-    print(self.outline.frame, self.viewport.master)
-    self.outline.frame = self.viewport.master
   }
   
 

@@ -12,16 +12,33 @@ import Layout
 import Singalong
 import Diagrams
 import Graphe
+import Geo
+
+struct TwoferLayout<Child : Layout> : Layout {
+  mutating func layout(in rect: CGRect) {
+    issuedRect = rect
+    self.child.layout(in: issuedRect!)
+  }
+  
+  var contents: [Child.Content] { return child.contents }
+  typealias Content = Child.Content
+  
+  
+  var issuedRect : CGRect? = nil
+  var child: Child
+  
+  public init( child : Child) { self.child = child}
+}
 
 typealias Config = FixedDiagramViewCongfiguration
 
-struct ViewDriver : Driver {
+class ViewDriver : Driver {
+  
   func bind(to uiRect: CGRect) {
     #warning("This is a dumb protocol requirement")
   }
   
-  var assemblyView : FixedEditableDiagramView<InsetStrokeDrawable<Diagram>>
-  
+  var assemblyView : FixedEditableDiagramView<InsetStrokeDrawable<Scaled<Diagram>>>
   
   // Drawing pure function
   var editingView : GraphEditingView
@@ -35,7 +52,7 @@ struct ViewDriver : Driver {
     
     twoDView = UIView(frame: Current.screen )
     
-    let sub = InsetStrokeDrawable(subject:Diagram(elements:[]), strokeWidth: 8.0)
+    let sub = InsetStrokeDrawable(subject:Diagram(elements:[]).scaled(by: 1.0), strokeWidth: 8.0)
     assemblyView = FixedEditableDiagramView( subject: sub, config: Config(stroke: #colorLiteral(red: 0.2745098174, green: 0.4862745106, blue: 0.1411764771, alpha: 1), strokeWidth: 8.0))
     
     twoDView.addSubview(assemblyView)
@@ -50,8 +67,17 @@ struct ViewDriver : Driver {
   }
   
   /// Handler for Selection Size Changed
-  mutating func layout(size: CGSize) {
-    print("LAYOUT SIZE", size.width)
+   func layout(size: CGSize) {
+    
+    
+    #warning("Stupid")
+    let width = Current.graph
+      |> editingView.size
+      >>> get(\CGSize.width)
+    let scale = size.width / width
+    #warning("End Stupid")
+    
+    print("LAYOUT SIZE", size, "LAYOUT Scale," , scale, "Basic size", size * scale)
 
     let artwork = Current.graph
       |> get(\ScaffGraph.planEdgesNoZeros)
@@ -59,9 +85,11 @@ struct ViewDriver : Driver {
       >>> filter()
       >>> reduceDuplicates
 
+  
     let original = Diagram(elements:artwork)
+    let scaledDiagram = original.scaled(by: scale) /// Stupid
 
-    assemblyView.ground = InsetStrokeDrawable(subject: original, strokeWidth: 8.0)
+    assemblyView.ground = InsetStrokeDrawable(subject: scaledDiagram, strokeWidth: 8.0)
     assemblyView.setNeedsDisplay()
   
     // Set & Redraw Geometry
@@ -69,9 +97,11 @@ struct ViewDriver : Driver {
   }
   
   func size(for size: CGSize) -> CGSize {
-    let s3 = size |> self.editingView.size3(Current.graph)
+    let s3 = size  |> self.editingView.size3(Current.graph)
     (Current.graph.grid, Current.graph.edges) = self.editingView.build(s3, Current.graph.edges)
-    return Current.graph |> self.editingView.size
+    let adjSize = Current.graph |> self.editingView.size
+    print("size from main driver",  adjSize)
+    return (Current.graph |> self.editingView.size)
   }
   
 }
