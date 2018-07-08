@@ -34,17 +34,13 @@ class ViewController: UIViewController
 //  override func loadView() {
 //    self.view = GrippedViewHandles(frame: UIScreen.main.bounds)
 //  }
-  var driver : LogDriver<ScaledDriver<LogDriver<ViewDriver>>>
-  var alignedLayout : PositionedLayout<TwoferLayout<AnyLayout<UIView>>>
+  var driver : ViewDriver
+  var alignedLayout : PositionedLayout<TwoferLayout<LayoutToDriver>>
   
   init(driver: ViewDriver)
   {
-    self.driver = LogDriver(
-      child: ScaledDriver(
-        child: LogDriver(child:driver)
-      )
-    )
-    let adapaterLayout = LayoutToDriver( child: driver ).log().asAny
+    self.driver = driver
+    let adapaterLayout = LayoutToDriver( child: driver )
     let beforeDriverLayout = TwoferLayout(child: adapaterLayout)
 
     self.alignedLayout = PositionedLayout(child: beforeDriverLayout,
@@ -61,10 +57,10 @@ class ViewController: UIViewController
   override func loadView() {
     viewport = CanvasViewport(frame: UIScreen.main.bounds, element: self.driver.content)
     self.view = viewport
+    
     viewport.selectionOriginChanged = { [weak self] _ in
       guard let self = self else { return }
-      
-
+  
       self.alignedLayout.layout(in: self.viewport.selection)
     }
     viewport.selectionSizeChanged = { [weak self] _ in
@@ -76,25 +72,49 @@ class ViewController: UIViewController
       self.alignedLayout.layout(in: self.viewport.selection)
     }
     viewport.didBeginEdit = {
+      //self.map.isHidden = false
     }
     viewport.didEndEdit = {
-      self.viewport.animateMaster(to:  self.alignedLayout.child.issuedRect! )
+      self.viewport.animateSelection(to:  self.alignedLayout.child.issuedRect! )
+    }
+    viewport.didBeginZoom = {
+      // viewports scale is reset at each didEndZoom call
+      // driver.scale needs to store the cumulative scale
+      print("before zoom begins - scale",  self.driver.scale)
+      print("before zoom begins - selection",  self.viewport.selection)
+    }
+    viewport.zooming = { scale in
+      self.driver.scale = scale
+      
     }
     viewport.didEndZoom = { scale in
       // viewports scale is reset at each didEndZoom call
       // driver.scale needs to store the cumulative scale
-      self.driver.child.scale = scale
+      print("scale from canvas selection - given",  scale)
+      print("scale from existing driver -  given",  self.driver.scale)
+      print("new-scale                 - direven",  self.driver.scale * scale)
+      self.driver.scale = scale
+      
+      let bestFit = self.viewport.selection.size |> self.driver.size
+      self.alignedLayout.size = bestFit
+      self.alignedLayout.layout(in: self.viewport.selection)
+      
+    
     }
   
   }
   
   override func viewDidLoad() {
     view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tap)))
-    self.driver.bind(to: self.viewport.canvas.frame)
   }
   
   @objc func tap() {
+    self.viewport.animateSelection(
+      to: self.viewport.canvas.convert(
+        CGRect.around(self.view.center, size: self.viewport!.selection.size),
+        from: self.view))
   }
+  
   
 
   /// End Scrollview

@@ -37,7 +37,7 @@ func app() -> UIViewController
 
 func foo2(_ vm: EditingViews.ViewMap) -> UINavigationController
 {
-  let driver = ViewDriver(mapping: vm.viewMap)
+  let driver = ViewDriver(mapping: vm.viewMap, scale: 1.0)
   let vc : ViewController = ViewController(driver: driver)
   let st = vm.label
   vc.title = st

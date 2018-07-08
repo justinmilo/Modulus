@@ -13,6 +13,7 @@
 		D00069E9200BD08300E8D5F3 /* HandlesRound1Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00069E8200BD08300E8D5F3 /* HandlesRound1Tests.swift */; };
 		D00069F4200BD08300E8D5F3 /* HandlesRound1UITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00069F3200BD08300E8D5F3 /* HandlesRound1UITests.swift */; };
 		D0051E26201D2BC900C0128A /* PageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0051E25201D2BC900C0128A /* PageViewController.swift */; };
+		D01A6E5A20DD5C2000250F32 /* LayoutToDriver.swift in Sources */ = {isa = PBXBuildFile; fileRef = D01A6E5920DD5C1F00250F32 /* LayoutToDriver.swift */; };
 		D02670B720CCCF4F008E24FB /* HandlesRoundling.h in Headers */ = {isa = PBXBuildFile; fileRef = D02670B520CCCF4F008E24FB /* HandlesRoundling.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D02670BB20CCCF72008E24FB /* SpriteScaffViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BCAFBA201CDC4300C4EAA5 /* SpriteScaffViewController.swift */; };
 		D02670BC20CCCF8E008E24FB /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A8B9C120BC9AC500D4C301 /* Environment.swift */; };
@@ -45,7 +46,6 @@
 		D03267952082DE8D00BBF563 /* GraphicsCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03267942082DE8D00BBF563 /* GraphicsCore.swift */; };
 		D03267962082DE8D00BBF563 /* GraphicsCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03267942082DE8D00BBF563 /* GraphicsCore.swift */; };
 		D036097B20D5968100C11E79 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D036097A20D5968100C11E79 /* ViewController.swift */; };
-		D036097D20D596E300C11E79 /* SpriteDriver.swift in Sources */ = {isa = PBXBuildFile; fileRef = D036097C20D596E300C11E79 /* SpriteDriver.swift */; };
 		D0360A1B20D6DA9700C11E79 /* ViewDiagramDriver.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0360A1A20D6DA9700C11E79 /* ViewDiagramDriver.swift */; };
 		D0360A1C20D6DAC000C11E79 /* ViewDiagramDriver.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0360A1A20D6DA9700C11E79 /* ViewDiagramDriver.swift */; };
 		D0360A3C20D6EE0900C11E79 /* Diagrams.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0360A3B20D6EE0900C11E79 /* Diagrams.framework */; };
@@ -61,8 +61,6 @@
 		D04A73752022B4C900C46501 /* NonuniformModel2D.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04A73742022B4C900C46501 /* NonuniformModel2D.swift */; };
 		D056A3992015696A00C3B3B1 /* TwoMeterModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D056A3982015696A00C3B3B1 /* TwoMeterModel.swift */; };
 		D056A39F20177F0B00C3B3B1 /* PlanModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D056A39D20177F0B00C3B3B1 /* PlanModel.swift */; };
-		D07BAE5C20DAFA9D00E4A3A5 /* Driver.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07BAE5B20DAFA9D00E4A3A5 /* Driver.swift */; };
-		D07BAE5E20DAFAAC00E4A3A5 /* LayoutToDriver.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07BAE5D20DAFAAC00E4A3A5 /* LayoutToDriver.swift */; };
 		D08A6F93202AA58E00EF9E68 /* EdgeToGeometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = D08A6F92202AA58E00EF9E68 /* EdgeToGeometry.swift */; };
 		D08F42FB208BBB0400F393D6 /* UIKit+Grasshopper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D08F42FA208BBB0400F393D6 /* UIKit+Grasshopper.swift */; };
 		D0915FAB208901DD0067C02A /* GraphicsCoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0915FAA208901DD0067C02A /* GraphicsCoreTests.swift */; };
@@ -169,6 +167,7 @@
 		D00069F3200BD08300E8D5F3 /* HandlesRound1UITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandlesRound1UITests.swift; sourceTree = "<group>"; };
 		D00069F5200BD08300E8D5F3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D0051E25201D2BC900C0128A /* PageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageViewController.swift; sourceTree = SOURCE_ROOT; };
+		D01A6E5920DD5C1F00250F32 /* LayoutToDriver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LayoutToDriver.swift; sourceTree = "<group>"; };
 		D02670B320CCCF4F008E24FB /* HandlesRoundling.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = HandlesRoundling.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D02670B520CCCF4F008E24FB /* HandlesRoundling.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HandlesRoundling.h; sourceTree = "<group>"; };
 		D02670B620CCCF4F008E24FB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -180,7 +179,6 @@
 		D0326764207FFE3800BBF563 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D03267942082DE8D00BBF563 /* GraphicsCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GraphicsCore.swift; path = HandlesRound1/GraphicsCore.swift; sourceTree = SOURCE_ROOT; };
 		D036097A20D5968100C11E79 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		D036097C20D596E300C11E79 /* SpriteDriver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpriteDriver.swift; sourceTree = "<group>"; };
 		D0360A1A20D6DA9700C11E79 /* ViewDiagramDriver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewDiagramDriver.swift; sourceTree = "<group>"; };
 		D0360A3B20D6EE0900C11E79 /* Diagrams.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Diagrams.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D03E03D920124DB8002D47F3 /* Testing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Testing.swift; sourceTree = "<group>"; };
@@ -194,8 +192,6 @@
 		D056A39C20177F0B00C3B3B1 /* Grid.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Grid.swift; sourceTree = "<group>"; };
 		D056A39D20177F0B00C3B3B1 /* PlanModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlanModel.swift; sourceTree = "<group>"; };
 		D07BAE5120DA943C00E4A3A5 /* HandlesRound2.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = HandlesRound2.xcodeproj; path = ../HandlesRound2/HandlesRound2.xcodeproj; sourceTree = "<group>"; };
-		D07BAE5B20DAFA9D00E4A3A5 /* Driver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Driver.swift; sourceTree = "<group>"; };
-		D07BAE5D20DAFAAC00E4A3A5 /* LayoutToDriver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayoutToDriver.swift; sourceTree = "<group>"; };
 		D08A6F92202AA58E00EF9E68 /* EdgeToGeometry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EdgeToGeometry.swift; sourceTree = "<group>"; };
 		D08F42FA208BBB0400F393D6 /* UIKit+Grasshopper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "UIKit+Grasshopper.swift"; path = "GrasshopperRound2/UIKit+Grasshopper.swift"; sourceTree = SOURCE_ROOT; };
 		D0915FA8208901DD0067C02A /* GraphicsCoreTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GraphicsCoreTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -421,9 +417,7 @@
 		D07BAE5A20DAFA8E00E4A3A5 /* Drivers */ = {
 			isa = PBXGroup;
 			children = (
-				D07BAE5B20DAFA9D00E4A3A5 /* Driver.swift */,
-				D07BAE5D20DAFAAC00E4A3A5 /* LayoutToDriver.swift */,
-				D036097C20D596E300C11E79 /* SpriteDriver.swift */,
+				D01A6E5920DD5C1F00250F32 /* LayoutToDriver.swift */,
 				D0360A1A20D6DA9700C11E79 /* ViewDiagramDriver.swift */,
 			);
 			path = Drivers;
@@ -760,8 +754,8 @@
 				D0B86C65202FC09200CCB3F7 /* ViewFunctions.swift in Sources */,
 				D03E040020125DF8002D47F3 /* Sprite2DView.swift in Sources */,
 				D0ECD79720B9F12800C3F6D0 /* TensionedPoint.swift in Sources */,
+				D01A6E5A20DD5C2000250F32 /* LayoutToDriver.swift in Sources */,
 				D0DE1BB12089394300775312 /* Primitive+UIKit.swift in Sources */,
-				D07BAE5C20DAFA9D00E4A3A5 /* Driver.swift in Sources */,
 				D04153C2202B7CA300BD7B72 /* Array+CGPoint+Utility.swift in Sources */,
 				D026712120CD9649008E24FB /* CGRect+Inset.swift in Sources */,
 				D08F42FB208BBB0400F393D6 /* UIKit+Grasshopper.swift in Sources */,
@@ -774,11 +768,9 @@
 				D04A73752022B4C900C46501 /* NonuniformModel2D.swift in Sources */,
 				D036097B20D5968100C11E79 /* ViewController.swift in Sources */,
 				D0DE1BB32089411B00775312 /* Primitive+SpriteKit.swift in Sources */,
-				D036097D20D596E300C11E79 /* SpriteDriver.swift in Sources */,
 				D0051E26201D2BC900C0128A /* PageViewController.swift in Sources */,
 				D0D6808220CEB0EF0074E97D /* ViewMaps.swift in Sources */,
 				D03E03DA20124DB8002D47F3 /* Testing.swift in Sources */,
-				D07BAE5E20DAFAAC00E4A3A5 /* LayoutToDriver.swift in Sources */,
 				D03267952082DE8D00BBF563 /* GraphicsCore.swift in Sources */,
 				D0360A1B20D6DA9700C11E79 /* ViewDiagramDriver.swift in Sources */,
 				D0BAD735204228F700406E70 /* ViewComposite.swift in Sources */,
