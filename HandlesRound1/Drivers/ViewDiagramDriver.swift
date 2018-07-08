@@ -32,14 +32,22 @@ struct TwoferLayout<Child : Layout> : Layout {
 
 typealias Config = FixedDiagramViewCongfiguration
 
-class ViewDriver  {
+class ViewDriver : Driver  {
+  func set(scale: CGFloat) {
+    self.scale = scale
+  }
+  
+  func bind(to uiRect: CGRect) {
+    return
+  }
+  
   
   
   var assemblyView : FixedEditableDiagramView<InsetStrokeDrawable<Scaled<Diagram>>>
   
   // Drawing pure function
   var editingView : GraphEditingView
-  var scale: CGFloat
+  private var scale: CGFloat
   var twoDView : UIView
   var content : UIView { return self.twoDView }
   
@@ -105,3 +113,10 @@ class ViewDriver  {
   }
   
 }
+
+
+
+
+
+
+

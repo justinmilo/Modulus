@@ -26,6 +26,12 @@ extension Float {
 class Sprite2DView : SKView {
   
   var scale : CGFloat = 1.0
+  {
+    didSet {
+      self.mainNode.xScale = scale
+      self.mainNode.yScale = scale
+    }
+  }
   var mainNode : SKNode
   
   override init(frame: CGRect)
@@ -45,9 +51,7 @@ class Sprite2DView : SKView {
   }
   
   func redraw(_ g:[Geometry]) {
-    self.mainNode.removeFromParent()
-    self.mainNode = SKNode()
-    scene?.addChild(mainNode)
+    self.mainNode.removeAllChildren()
     
     for item in g
     {
@@ -76,13 +80,13 @@ class Sprite2DView : SKView {
       let n = createLableNode(label)
       //n.position = CGPoint(300,300)
 
-      n |> scalePosition(scale)
+      //n |> scalePosition(scale)
       n |> mainNode.addChild
     }
     else if let line = node as? Line
     {
       let node = createLineShapeNode(line)
-      node |> scaleAll(scale)
+      //node |> scaleAll(scale)
       node |> mainNode.addChild
     }
     else if let line = node as? StrokedLine
@@ -96,7 +100,7 @@ class Sprite2DView : SKView {
       
       let newNode = createScaff2DNode(item: line)
       if let n = newNode {
-        n |> scalePosition(scale)
+        //n |> scalePosition(scale)
         n |> mainNode.addChild
       }
       

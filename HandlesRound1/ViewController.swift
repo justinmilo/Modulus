@@ -19,25 +19,25 @@ func contentSizeFrom (offsetFromCenter: CGVector, itemSize: CGSize, viewPortSize
 {
   return (viewPortSize / 2) + offsetFromCenter.asSize() + (itemSize / 2)
 }
-struct TestLayout
-{
-  //  override func loadView() {
-  //    self.view = GrippedViewHandles(frame: UIScreen.main.bounds)
-  //  }
-  var driver : ViewDriver
-  var alignedLayout : MarginLayout<UIView>
+
+protocol Driver {
+  var content : UIView { get }
+  func size(for size: CGSize) -> CGSize
+  mutating func layout(origin: CGPoint)
+  mutating func layout(size: CGSize)
+  mutating func set(scale: CGFloat)
+  mutating func bind(to uiRect: CGRect)
 }
 
-
-class ViewController: UIViewController
+class ViewController<DriverType : Driver> : UIViewController
 {
 //  override func loadView() {
 //    self.view = GrippedViewHandles(frame: UIScreen.main.bounds)
 //  }
-  var driver : ViewDriver
-  var alignedLayout : PositionedLayout<TwoferLayout<LayoutToDriver>>
+  var driver : DriverType
+  var alignedLayout : PositionedLayout<TwoferLayout<LayoutToDriver<DriverType>>>
   
-  init(driver: ViewDriver)
+  init(driver: DriverType)
   {
     self.driver = driver
     let adapaterLayout = LayoutToDriver( child: driver )
@@ -57,49 +57,57 @@ class ViewController: UIViewController
   override func loadView() {
     viewport = CanvasViewport(frame: UIScreen.main.bounds, element: self.driver.content)
     self.view = viewport
+    self.driver.bind(to: viewport.canvas.frame)
     
+    viewport.canvasChanged = { [weak self] newSize in
+      guard let self = self else { return }
+      
+      self.driver.bind(to: self.viewport.canvas.frame) /// Potentially not VPCoord
+    }
     viewport.selectionOriginChanged = { [weak self] _ in
       guard let self = self else { return }
   
-      self.alignedLayout.layout(in: self.viewport.selection)
+      self.alignedLayout.layout(in: self.viewport.selection) /// should be VPCoord
     }
     viewport.selectionSizeChanged = { [weak self] _ in
       guard let self = self else { return }
       
       let bestFit = self.viewport.selection.size |> self.driver.size
-      
       self.alignedLayout.size = bestFit
       self.alignedLayout.layout(in: self.viewport.selection)
     }
     viewport.didBeginEdit = {
+      self.logViewport()
       //self.map.isHidden = false
     }
     viewport.didEndEdit = {
+      self.logViewport()
       self.viewport.animateSelection(to:  self.alignedLayout.child.issuedRect! )
     }
     viewport.didBeginZoom = {
       // viewports scale is reset at each didEndZoom call
       // driver.scale needs to store the cumulative scale
-      print("before zoom begins - scale",  self.driver.scale)
+      //print("before zoom begins - scale",  self.driver.scale)
       print("before zoom begins - selection",  self.viewport.selection)
     }
     viewport.zooming = { scale in
-      self.driver.scale = scale
+      //self.driver.set(scale: scale)
       
     }
     viewport.didEndZoom = { scale in
+      self.logViewport()
+
       // viewports scale is reset at each didEndZoom call
       // driver.scale needs to store the cumulative scale
-      print("scale from canvas selection - given",  scale)
-      print("scale from existing driver -  given",  self.driver.scale)
-      print("new-scale                 - direven",  self.driver.scale * scale)
-      self.driver.scale = scale
+      print("didEndZOom")
+      //print("scale from canvas selection - given",  scale)
+      //print("scale from existing driver -  given",  self.driver.scale)
+      // print("new-scale                 - direven",  self.driver.scale * scale)
+      self.driver.set(scale: scale)
       
       let bestFit = self.viewport.selection.size |> self.driver.size
       self.alignedLayout.size = bestFit
       self.alignedLayout.layout(in: self.viewport.selection)
-      
-    
     }
   
   }
@@ -121,4 +129,20 @@ class ViewController: UIViewController
   
 }
 
+extension CanvasViewport {
+  func logViewport ()
+  {
+    print("ModelSpace size", self.selection.scaled(by: self.scale).rounded(places: 1))
+    print("PaperSpace size", self.selection.rounded(places: 1))
+    print("Scale", self.scale.rounded(places: 2))
+  }
+}
 
+extension ViewController {
+  func logViewport ()
+  {
+    self.viewport.logViewport()
+    print("Size", self.driver.size(for: self.viewport.selection.size) )
+  }
+  
+}

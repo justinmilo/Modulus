@@ -28,7 +28,10 @@ func translate(from uisibling: CGRect, toSKCoordIn sksibling: CGRect) -> (CGPoin
   let yDelta = uisibling.origin.y - sksibling.origin.y
   
   return { sibPoint in
-    SKPoint( x: sibPoint.x + xDelta, y: sksibling.size.height - (sibPoint.y + yDelta))
+    SKPoint(
+      x: sibPoint.x + xDelta,
+      y: sksibling.size.height - (sibPoint.y + yDelta)
+    )
   }
 }
 

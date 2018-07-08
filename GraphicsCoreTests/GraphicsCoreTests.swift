@@ -30,11 +30,34 @@ class GraphicsCoreTests: XCTestCase {
     
     func testRectIndex() {
       // This is an example of a functional test case.
-      XCTAssert( translate(from: CGRect(0,0,10,20), to: CGRect(0,0,10,20))( CGPoint(0,0) ) == SKPoint(0,20) )
-       XCTAssert( translate(from: CGRect(0,0,10,20), to: CGRect(0,0,10,20))( CGPoint(0,5) ) == SKPoint(0,15) )
-       XCTAssert( translate(from: CGRect(0,0,10,10), to: CGRect(5,5,5,5))( CGPoint(0,0) ) == SKPoint(-5,10) )
-       XCTAssert( translate(from: CGRect(0,0,10,10), to: CGRect(5,5,5,5))( CGPoint(5,5) ) == SKPoint(0,5) )
-       XCTAssert(translate(from: CGRect(0,0,10,10), to: CGRect(5,5,5,5))( CGPoint(10,10) ) == SKPoint(5,0) )
+      XCTAssert(
+        translate(
+          from: CGRect(0,0,10,20),
+          toSKCoordIn: CGRect(0,0,10,20))( CGPoint(0,0) )
+          == SKPoint(0,20)
+      )
+      XCTAssert(
+        translate(
+          from: CGRect(0,0,10,20),
+          toSKCoordIn: CGRect(0,0,10,20)
+        )(CGPoint(0,5)) == SKPoint(0,15) )
+      
+       XCTAssert(
+        translate(
+          from: CGRect(0,0,10,10),
+          toSKCoordIn: CGRect(5,5,5,5)
+          )( CGPoint(0,0) ) == SKPoint(-5,10) )
+      
+       XCTAssert(
+        translate(
+          from: CGRect(0,0,10,10),
+          toSKCoordIn: CGRect(5,5,5,5)
+          )( CGPoint(5,5) ) == SKPoint(0,5) )
+       XCTAssert(
+        translate(
+          from: CGRect(0,0,10,10),
+          toSKCoordIn: CGRect(5,5,5,5)
+        )(CGPoint(10,10) ) == SKPoint(5,0) )
       
     }
     

@@ -7,6 +7,7 @@
 //
 
 import XCTest
+import Singalong
 
 class HandlesRound1Tests2: XCTestCase {
     

@@ -35,9 +35,9 @@ func app() -> UIViewController
 
 
 
-func foo2(_ vm: EditingViews.ViewMap) -> UINavigationController
+func foo2(_ vm: EditingViews.ViewMap) -> UIViewController
 {
-  let driver = ViewDriver(mapping: vm.viewMap, scale: 1.0)
+  let driver = SpriteDriver(mapping: vm.viewMap)
   let vc : ViewController = ViewController(driver: driver)
   let st = vm.label
   vc.title = st
@@ -48,5 +48,5 @@ func foo2(_ vm: EditingViews.ViewMap) -> UINavigationController
   nav.tintColor = .white
   nav.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
   
-  return ulN
+  return vc//ulN
 }

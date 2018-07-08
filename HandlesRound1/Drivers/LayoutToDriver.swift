@@ -9,15 +9,15 @@
 import UIKit
 import Layout
 
-struct LayoutToDriver : Layout
+struct LayoutToDriver <DriverType : Driver> : Layout
 {
   typealias Content = UIView
   
-  var child: ViewDriver
+  var child: DriverType
   var prevOrigin: CGPoint
   var prevSize: CGSize
   
-  public init( child: ViewDriver){
+  public init( child: DriverType){
     self.child = child
     self.prevSize = CGSize.zero
     self.prevOrigin = CGPoint.zero
@@ -35,3 +35,4 @@ struct LayoutToDriver : Layout
   
   var contents: [UIView] { return [self.child.content] }
 }
+
