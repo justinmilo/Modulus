@@ -19,17 +19,17 @@ func app() -> UIViewController
    // graph is passed passed by reference here ...
   
   
-  //      let uR2 = SpriteScaffViewController(graph: graph, mapping: frontMap2)
+        //let uR2 = SpriteScaffViewController(graph: graph, mapping: frontMap2)
   
   
   
   
-  return foo2( Current.viewMaps.plan)
+  //return foo2( Current.viewMaps.plan)
   
-//  return VerticalController(upperLeft: foo2( Current.viewMaps.plan),
-//                            upperRight: foo2(Current.viewMaps.rotatedPlan),
-//                            lowerLeft: foo2(Current.viewMaps.front),
-//                            lowerRight: foo2(Current.viewMaps.side))
+  return VerticalController(upperLeft: foo2( Current.viewMaps.plan),
+                            upperRight: foo2(Current.viewMaps.rotatedPlan),
+                            lowerLeft: foo2(Current.viewMaps.front),
+                            lowerRight: foo2(Current.viewMaps.side))
 
 }
 
@@ -43,10 +43,13 @@ func foo2(_ vm: EditingViews.ViewMap) -> UIViewController
   vc.title = st
   let ulN = UINavigationController(rootViewController: vc)
   ulN.navigationBar.prefersLargeTitles = true
+  ulN.navigationItem.largeTitleDisplayMode = .always
+  ulN.hidesBarsOnSwipe = false
+  ulN.hidesBarsOnTap = false
   let nav = ulN.navigationBar
   nav.barStyle = UIBarStyle.blackTranslucent
   nav.tintColor = .white
   nav.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
   
-  return vc//ulN
+  return ulN
 }
