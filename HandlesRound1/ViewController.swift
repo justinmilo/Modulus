@@ -35,17 +35,15 @@ class ViewController<DriverType : Driver> : UIViewController
 //    self.view = GrippedViewHandles(frame: UIScreen.main.bounds)
 //  }
   var driver : DriverType
-  var alignedLayout : PositionedLayout<TwoferLayout<LayoutToDriver<DriverType>>>
+  var alignedLayout : PositionedLayout<IssuedLayout<LayoutToDriver<DriverType>>>
   
   init(driver: DriverType)
   {
     self.driver = driver
-    let adapaterLayout = LayoutToDriver( child: driver )
-    let beforeDriverLayout = TwoferLayout(child: adapaterLayout)
-
-    self.alignedLayout = PositionedLayout(child: beforeDriverLayout,
-                                     ofSize: CGSize.zero,
-                                     aligned: (.center, .center))
+    self.alignedLayout = PositionedLayout(
+      child: IssuedLayout(child: LayoutToDriver( child: driver )),
+      ofSize: CGSize.zero,
+      aligned: (.center, .center))
     super.init(nibName: nil, bundle: nil)
   }
   required init?(coder aDecoder: NSCoder) {
@@ -59,47 +57,73 @@ class ViewController<DriverType : Driver> : UIViewController
     self.view = viewport
     self.driver.bind(to: viewport.canvas.frame)
     
+    
     viewport.canvasChanged = { [weak self] newSize in
       guard let self = self else { return }
       
+      print("Canvas changed")
+      self.logViewport()
       self.driver.bind(to: self.viewport.canvas.frame) /// Potentially not VPCoord
+      // Now that the updated canvas is bound we want to
+      // *Force* a layout at the selection's origin
+      // This ignores whether the selection origin changed or not
+      // —functionality that is part of the self.alignedLayout stack—
+      // as a side note it also ignores alignment but this
+      // doesnt matter in this case since we are probabbly already snug
+      self.driver.layout(origin: self.viewport.selection.origin)
+      self.logViewport()
+      
+    print("Canas Changed End")
     }
     viewport.selectionOriginChanged = { [weak self] _ in
       guard let self = self else { return }
-  
+  print("selection origin changed")
       self.alignedLayout.layout(in: self.viewport.selection) /// should be VPCoord
     }
     viewport.selectionSizeChanged = { [weak self] _ in
       guard let self = self else { return }
-      
+      print("selection size changed")
+
       let bestFit = self.viewport.selection.size |> self.driver.size
       self.alignedLayout.size = bestFit
       self.alignedLayout.layout(in: self.viewport.selection)
     }
     viewport.didBeginEdit = {
+      print("did begin edit")
+
       self.logViewport()
       //self.map.isHidden = false
     }
     viewport.didEndEdit = {
+      print("did end edit")
+
       self.logViewport()
       self.viewport.animateSelection(to:  self.alignedLayout.child.issuedRect! )
     }
+    viewport.didBeginPan = {
+      self.logViewport()
+    }
     viewport.didBeginZoom = {
+      print("did begin zoom")
+
       // viewports scale is reset at each didEndZoom call
       // driver.scale needs to store the cumulative scale
       //print("before zoom begins - scale",  self.driver.scale)
       print("before zoom begins - selection",  self.viewport.selection)
     }
     viewport.zooming = { scale in
+      print("zooming")
+
       //self.driver.set(scale: scale)
       
     }
     viewport.didEndZoom = { scale in
+      print("did end zooom")
+
       self.logViewport()
 
       // viewports scale is reset at each didEndZoom call
       // driver.scale needs to store the cumulative scale
-      print("didEndZOom")
       //print("scale from canvas selection - given",  scale)
       //print("scale from existing driver -  given",  self.driver.scale)
       // print("new-scale                 - direven",  self.driver.scale * scale)
@@ -110,6 +134,11 @@ class ViewController<DriverType : Driver> : UIViewController
       self.alignedLayout.layout(in: self.viewport.selection)
     }
   
+  }
+  
+  override func viewDidLayoutSubviews() {
+    print("view did layout subviews")
+    super.viewDidLayoutSubviews()
   }
   
   override func viewDidLoad() {
@@ -132,9 +161,14 @@ class ViewController<DriverType : Driver> : UIViewController
 extension CanvasViewport {
   func logViewport ()
   {
-    print("ModelSpace size", self.selection.scaled(by: self.scale).rounded(places: 1))
-    print("PaperSpace size", self.selection.rounded(places: 1))
-    print("Scale", self.scale.rounded(places: 2))
+    print("----------")
+    print("-ModelSpace size", self.selection.scaled(by: self.scale).rounded(places: 1))
+    print("-PaperSpace size", self.selection.rounded(places: 1))
+    print("-Scale", self.scale.rounded(places: 2))
+    print("------")
+    print("-Offset", self.offset.rounded(places: 1))
+    print("-Canvas", self.canvas.frame.rounded(places: 1))
+
   }
 }
 
@@ -142,7 +176,9 @@ extension ViewController {
   func logViewport ()
   {
     self.viewport.logViewport()
-    print("Size", self.driver.size(for: self.viewport.selection.size) )
+    print("-Size", self.driver.size(for: self.viewport.selection.size) )
+    print("----------")
+
   }
   
 }

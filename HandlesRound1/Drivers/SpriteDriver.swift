@@ -11,11 +11,8 @@ import Singalong
 import Layout
 import Geo
 
-
-
-
-
 class SpriteDriver : Driver {
+  
   func set(scale: CGFloat) {
     twoDView.scale = scale
   }
@@ -58,15 +55,15 @@ class SpriteDriver : Driver {
     self._previousRect = size
   }
   
-  func size(for size: CGSize) -> CGSize {
+  func size(for viewportSize: CGSize) -> CGSize {
     
-    let scaledSize = (size / twoDView.scale)
-    let roundedScaledSize = scaledSize.rounded(places: 5)
+    let modelspaceSize_input = (viewportSize / twoDView.scale)
+    let roundedModelSize = modelspaceSize_input.rounded(places: 5)
     
-    let s3 = roundedScaledSize |> self.editingView.size3(Current.graph)
+    let s3 = roundedModelSize |> self.editingView.size3(Current.graph)
     (Current.graph.grid, Current.graph.edges) = self.editingView.build(s3, Current.graph.edges)
-    let modelSpaceSize =  Current.graph |> self.editingView.size
-    return modelSpaceSize * twoDView.scale
+    let modelSpaceSize_output =  Current.graph |> self.editingView.size
+    return modelSpaceSize_output * twoDView.scale
   }
   
   var editingView : GraphEditingView

@@ -14,25 +14,12 @@ import Diagrams
 import Graphe
 import Geo
 
-struct TwoferLayout<Child : Layout> : Layout {
-  mutating func layout(in rect: CGRect) {
-    issuedRect = rect
-    self.child.layout(in: issuedRect!)
-  }
-  
-  var contents: [Child.Content] { return child.contents }
-  typealias Content = Child.Content
-  
-  
-  var issuedRect : CGRect? = nil
-  var child: Child
-  
-  public init( child : Child) { self.child = child}
-}
+
 
 typealias Config = FixedDiagramViewCongfiguration
 
 class ViewDriver : Driver  {
+  
   func set(scale: CGFloat) {
     self.scale = scale
   }
