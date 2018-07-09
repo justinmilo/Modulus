@@ -64,8 +64,8 @@ let originFirstLedger: (ScaffGraph) -> CGPoint = { graph in return CGPoint(0, gr
 
 let frontMap = graphViewGenerator(
   build: overall,
-  origin: originFirstLedger,
-  size: sizeSchematicFront,
+  origin: originZero,
+  size: sizeFromFullScaff,
   size3: sizeFront,
   composite: [front1,
               front1 <> frontDim,

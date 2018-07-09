@@ -55,6 +55,13 @@ class SpriteDriver : Driver {
     self._previousRect = size
   }
   
+  var size : CGSize
+  {
+    get {
+      return Current.graph |> self.editingView.size
+    }
+  }
+  
   func size(for viewportSize: CGSize) -> CGSize {
     
     let modelspaceSize_input = (viewportSize / twoDView.scale)

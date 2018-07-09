@@ -29,15 +29,15 @@ protocol Driver {
   mutating func bind(to uiRect: CGRect)
 }
 
-class ViewController<DriverType : Driver> : UIViewController
+class ViewController : UIViewController
 {
 //  override func loadView() {
 //    self.view = GrippedViewHandles(frame: UIScreen.main.bounds)
 //  }
-  var driver : DriverType
-  var alignedLayout : PositionedLayout<IssuedLayout<LayoutToDriver<DriverType>>>
+  var driver : SpriteDriver
+  var alignedLayout : PositionedLayout<IssuedLayout<LayoutToDriver<SpriteDriver>>>
   
-  init(driver: DriverType)
+  init(driver: SpriteDriver)
   {
     self.driver = driver
     self.alignedLayout = PositionedLayout(
@@ -52,11 +52,22 @@ class ViewController<DriverType : Driver> : UIViewController
   
   var viewport : CanvasViewport!
   
+  override func viewWillAppear(_ animated: Bool) {
+    super.viewWillAppear(animated)
+    
+    self.driver.bind(to: viewport.canvas.frame)
+    let bestFit = driver.size
+    self.alignedLayout.size = bestFit
+    
+    let selection = CGRect.around(viewport.canvas.frame.center, size: bestFit)
+    self.viewport.animateSelection(to: selection)
+    
+    self.alignedLayout.layout(in: self.viewport.selection)
+  }
+  
   override func loadView() {
     viewport = CanvasViewport(frame: UIScreen.main.bounds, element: self.driver.content)
     self.view = viewport
-    self.driver.bind(to: viewport.canvas.frame)
-    
     
     viewport.canvasChanged = { [weak self] newSize in
       guard let self = self else { return }
