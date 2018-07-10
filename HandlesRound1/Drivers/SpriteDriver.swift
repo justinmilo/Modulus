@@ -26,6 +26,12 @@ class SpriteDriver : Driver {
     twoDView = Sprite2DView(frame:initialFrame )
     twoDView.layer.borderWidth = 1.0
     twoDView.scene?.scaleMode = .resizeFill
+    
+    scaleObserver = NotificationObserver(
+      notification: scaleChangeNotification,
+      block: { [weak self] in
+      self!.twoDView.scale = $0
+    })
   }
   
   func layout(origin: CGPoint) {
@@ -88,4 +94,5 @@ class SpriteDriver : Driver {
   }
   
   var uiPointToSprite : ((CGPoint)->CGPoint)!
+  var scaleObserver : NotificationObserver!
 }

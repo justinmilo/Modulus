@@ -31,6 +31,15 @@ struct Environment {
   var graph = ScaffGraph()
   var screen = UIScreen.main.bounds
   var viewMaps = EditingViews()
+  var scale : CGFloat = 1.0
+  {
+    didSet {
+      postNotification(note: scaleChangeNotification, value: scale)
+    }
+  }
 }
 
 var Current = Environment()
+
+
+let scaleChangeNotification : Notification<CGFloat> = Notification(name: "Scale Changed")
