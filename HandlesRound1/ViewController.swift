@@ -22,7 +22,7 @@ func contentSizeFrom (offsetFromCenter: CGVector, itemSize: CGSize, viewPortSize
 
 protocol Driver {
   var content : UIView { get }
-  func size(for size: CGSize) -> CGSize
+  func build(for size: CGSize) -> CGSize
   mutating func layout(origin: CGPoint)
   mutating func layout(size: CGSize)
   mutating func set(scale: CGFloat)
@@ -140,7 +140,7 @@ class ViewController : UIViewController
       // print("new-scale                 - direven",  self.driver.scale * scale)
       self.driver.set(scale: scale)
       
-      let bestFit = self.viewport.selection.size |> self.driver.size
+      let bestFit = self.viewport.selection.size |> self.driver.build
       self.driverLayout.size = bestFit
       self.driverLayout.layout(in: self.viewport.selection)
     }
@@ -187,7 +187,7 @@ extension ViewController {
   func logViewport ()
   {
     self.viewport.logViewport()
-    print("-Size", self.driver.size(for: self.viewport.selection.size) )
+    //print("-Size", self.driver.build(for: self.viewport.selection.size) )
     print("----------")
 
   }

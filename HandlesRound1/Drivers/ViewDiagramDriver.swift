@@ -82,7 +82,7 @@ class ViewDriver : Driver  {
     self.assemblyView.frame.size = size
   }
   
-  func size(for size: CGSize) -> CGSize {
+  func build(for size: CGSize) -> CGSize {
     print("size from main driver - given",  size)
     print("size from main driver - scale",  scale)
     print("size from main driver - pre-delivr",  size * (1/scale))

@@ -68,7 +68,7 @@ class SpriteDriver : Driver {
     }
   }
   
-  func size(for viewportSize: CGSize) -> CGSize {
+  func build(for viewportSize: CGSize) -> CGSize {
     
     let modelspaceSize_input = (viewportSize / twoDView.scale)
     let roundedModelSize = modelspaceSize_input.rounded(places: 5)
