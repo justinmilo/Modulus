@@ -41,11 +41,9 @@ func foo2(_ vm: EditingViews.ViewMap) -> UIViewController
   let vc : ViewController = ViewController(driver: driver)
   let st = vm.label
   vc.title = st
+  vc.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "3D", style: UIBarButtonItem.Style.plain , target: vc, action: #selector(ViewController.tap))
   let ulN = UINavigationController(rootViewController: vc)
   ulN.navigationBar.prefersLargeTitles = true
-  ulN.navigationItem.largeTitleDisplayMode = .always
-  ulN.hidesBarsOnSwipe = false
-  ulN.hidesBarsOnTap = false
   let nav = ulN.navigationBar
   nav.barStyle = UIBarStyle.blackTranslucent
   nav.tintColor = .white
