@@ -35,12 +35,12 @@ class ViewController : UIViewController
 //    self.view = GrippedViewHandles(frame: UIScreen.main.bounds)
 //  }
   var driver : SpriteDriver
-  var alignedLayout : PositionedLayout<IssuedLayout<LayoutToDriver<SpriteDriver>>>
+  var driverLayout : PositionedLayout<IssuedLayout<LayoutToDriver<SpriteDriver>>>
   
   init(driver: SpriteDriver)
   {
     self.driver = driver
-    self.alignedLayout = PositionedLayout(
+    self.driverLayout = PositionedLayout(
       child: IssuedLayout(child: LayoutToDriver( child: driver )),
       ofSize: CGSize.zero,
       aligned: (.center, .center))
@@ -57,12 +57,12 @@ class ViewController : UIViewController
     
     self.driver.bind(to: viewport.canvas.frame)
     let bestFit = driver.size
-    self.alignedLayout.size = bestFit
     
+    self.driverLayout.size = bestFit
     let selection = CGRect.around(viewport.canvas.frame.center, size: bestFit)
     self.viewport.animateSelection(to: selection)
     
-    self.alignedLayout.layout(in: self.viewport.selection)
+    self.driverLayout.layout(in: selection)
   }
   
   override func loadView() {
@@ -89,15 +89,15 @@ class ViewController : UIViewController
     viewport.selectionOriginChanged = { [weak self] _ in
       guard let self = self else { return }
   print("selection origin changed")
-      self.alignedLayout.layout(in: self.viewport.selection) /// should be VPCoord
+      self.driverLayout.layout(in: self.viewport.selection) /// should be VPCoord
     }
     viewport.selectionSizeChanged = { [weak self] _ in
       guard let self = self else { return }
       print("selection size changed")
 
       let bestFit = self.viewport.selection.size |> self.driver.size
-      self.alignedLayout.size = bestFit
-      self.alignedLayout.layout(in: self.viewport.selection)
+      self.driverLayout.size = bestFit
+      self.driverLayout.layout(in: self.viewport.selection)
     }
     viewport.didBeginEdit = {
       print("did begin edit")
@@ -141,8 +141,8 @@ class ViewController : UIViewController
       self.driver.set(scale: scale)
       
       let bestFit = self.viewport.selection.size |> self.driver.size
-      self.alignedLayout.size = bestFit
-      self.alignedLayout.layout(in: self.viewport.selection)
+      self.driverLayout.size = bestFit
+      self.driverLayout.layout(in: self.viewport.selection)
     }
   
   }
