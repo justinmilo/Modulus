@@ -109,7 +109,7 @@ class ViewController : UIViewController
       print("did end edit")
 
       self.logViewport()
-      self.viewport.animateSelection(to:  self.alignedLayout.child.issuedRect! )
+      self.viewport.animateSelection(to:  self.driverLayout.child.issuedRect! )
     }
     viewport.didBeginPan = {
       self.logViewport()
