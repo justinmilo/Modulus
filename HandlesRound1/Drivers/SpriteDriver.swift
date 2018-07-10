@@ -44,7 +44,7 @@ class SpriteDriver : Driver {
     
   }
   
-  var _previousRect = CGSize.zero
+  var _previousSize = CGSize.zero
   /// Handler for Selection Size Changed
   ///
   /// Checks if newSize should be redrawn
@@ -52,13 +52,13 @@ class SpriteDriver : Driver {
     // Create New Model &  // Find Orirgin
     // Setting up our interior vie)
     
-    if size != _previousRect {
+    if size != _previousSize {
       // Set & Redraw Geometry
       let geom = Current.graph |> self.editingView.composite
       self.twoDView.redraw(geom)
       //self.twoDView.draw(newRect)
     }
-    self._previousRect = size
+    self._previousSize = size
   }
   
   var size : CGSize
