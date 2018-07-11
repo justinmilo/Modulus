@@ -49,6 +49,8 @@
 		D033E37920F24E200026E1C4 /* HandlesViewCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0ECD78F20B9F12700C3F6D0 /* HandlesViewCore.swift */; };
 		D033E37B20F2C6130026E1C4 /* IssuedLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D033E37A20F2C6130026E1C4 /* IssuedLayout.swift */; };
 		D033E37C20F2C6130026E1C4 /* IssuedLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D033E37A20F2C6130026E1C4 /* IssuedLayout.swift */; };
+		D033F42520F426270026E1C4 /* TypedNotifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = D033F42420F426270026E1C4 /* TypedNotifications.swift */; };
+		D033F42620F426270026E1C4 /* TypedNotifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = D033F42420F426270026E1C4 /* TypedNotifications.swift */; };
 		D036097B20D5968100C11E79 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D036097A20D5968100C11E79 /* ViewController.swift */; };
 		D0360A1B20D6DA9700C11E79 /* ViewDiagramDriver.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0360A1A20D6DA9700C11E79 /* ViewDiagramDriver.swift */; };
 		D0360A1C20D6DAC000C11E79 /* ViewDiagramDriver.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0360A1A20D6DA9700C11E79 /* ViewDiagramDriver.swift */; };
@@ -184,6 +186,7 @@
 		D03267942082DE8D00BBF563 /* GraphicsCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GraphicsCore.swift; path = HandlesRound1/GraphicsCore.swift; sourceTree = SOURCE_ROOT; };
 		D033E37520F238FA0026E1C4 /* SpriteDriver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpriteDriver.swift; sourceTree = "<group>"; };
 		D033E37A20F2C6130026E1C4 /* IssuedLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssuedLayout.swift; sourceTree = "<group>"; };
+		D033F42420F426270026E1C4 /* TypedNotifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypedNotifications.swift; sourceTree = "<group>"; };
 		D036097A20D5968100C11E79 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		D0360A1A20D6DA9700C11E79 /* ViewDiagramDriver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewDiagramDriver.swift; sourceTree = "<group>"; };
 		D0360A3B20D6EE0900C11E79 /* Diagrams.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Diagrams.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -326,6 +329,7 @@
 				D0D6808120CEB0EF0074E97D /* ViewMaps.swift */,
 				D0A8B9C120BC9AC500D4C301 /* Environment.swift */,
 				D036097A20D5968100C11E79 /* ViewController.swift */,
+				D033F42420F426270026E1C4 /* TypedNotifications.swift */,
 				D07BAE5A20DAFA8E00E4A3A5 /* Drivers */,
 				D0B69D2420435F3900AEA01B /* SpriteKit */,
 				D07BAE5F20DBF70000E4A3A5 /* Emtpy Historical Files */,
@@ -756,6 +760,7 @@
 				D0ECD79420B9F12800C3F6D0 /* HandlesViewCore.swift in Sources */,
 				D00069D4200BD08300E8D5F3 /* AppDelegate.swift in Sources */,
 				D0ECD79520B9F12800C3F6D0 /* RectIndex.swift in Sources */,
+				D033F42520F426270026E1C4 /* TypedNotifications.swift in Sources */,
 				D033E37B20F2C6130026E1C4 /* IssuedLayout.swift in Sources */,
 				D0BCAFBB201CDC4300C4EAA5 /* SpriteScaffViewController.swift in Sources */,
 				D0B218D0201F6491004684FC /* Vertical+HorizontalController.swift in Sources */,
@@ -841,6 +846,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D033E37C20F2C6130026E1C4 /* IssuedLayout.swift in Sources */,
+				D033F42620F426270026E1C4 /* TypedNotifications.swift in Sources */,
 				D033E37820F24DF50026E1C4 /* RectIndex.swift in Sources */,
 				D033E37920F24E200026E1C4 /* HandlesViewCore.swift in Sources */,
 				D0326763207FFE3800BBF563 /* HandlesCoreTests.swift in Sources */,

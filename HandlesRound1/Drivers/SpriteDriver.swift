@@ -13,10 +13,6 @@ import Geo
 
 class SpriteDriver : Driver {
   
-  func set(scale: CGFloat) {
-    twoDView.scale = scale
-  }
-  
   public init(mapping: [GraphEditingView] )
   {
     editingView = mapping[0]
@@ -24,24 +20,30 @@ class SpriteDriver : Driver {
     initialFrame = Current.screen
     
     twoDView = Sprite2DView(frame:initialFrame )
-    twoDView.layer.borderWidth = 1.0
+    //twoDView.layer.borderWidth = 1.0
     twoDView.scene?.scaleMode = .resizeFill
     
     scaleObserver = NotificationObserver(
       notification: scaleChangeNotification,
       block: { [weak self] in
       self!.twoDView.scale = $0
+        print("      ------    SCALE CHANGED TO ", $0, " ------ ")
     })
   }
   
+  var _previousOrigin = (CGPoint.zero, CGPoint.zero)
+  
   func layout(origin: CGPoint) {
+    print("#Beg-Layout Origin")
+    let heightVector = unitY * (Current.graph |> self.editingView.size).height * Current.scale
     
     print("given origin", origin)
-    print("new origin", uiPointToSprite(origin) )
+    print("new origin", uiPointToSprite(origin)  - heightVector )
+    self._previousOrigin = (origin, uiPointToSprite(origin)  - heightVector )
     
-    let heightVector = unitY * (Current.graph |> self.editingView.size).height * twoDView.scale
     self.twoDView.mainNode.position = uiPointToSprite(origin)  - heightVector
-    
+    print("#End-Layout Origin")
+
   }
   
   var _previousSize = CGSize.zero
@@ -49,6 +51,8 @@ class SpriteDriver : Driver {
   ///
   /// Checks if newSize should be redrawn
   func layout(size: CGSize) {
+    print("#Beg-Layout Size")
+
     // Create New Model &  // Find Orirgin
     // Setting up our interior vie)
     
@@ -59,24 +63,35 @@ class SpriteDriver : Driver {
       //self.twoDView.draw(newRect)
     }
     self._previousSize = size
+    print("#End-Layout Size")
   }
   
   var size : CGSize
   {
     get {
-      return Current.graph |> self.editingView.size
+      return (Current.graph |> self.editingView.size) * Current.scale
     }
   }
   
   func build(for viewportSize: CGSize) -> CGSize {
-    
-    let modelspaceSize_input = (viewportSize / twoDView.scale)
+    print("#Beg-Build Simple")
+    return self.build(for:viewportSize, atScale: Current.scale)
+    print("#End-Build Simple")
+
+  }
+  
+  func build(for viewportSize: CGSize, atScale scale: CGFloat) -> CGSize {
+    print("#Beg-Build Scale")
+
+    let modelspaceSize_input = viewportSize / scale
     let roundedModelSize = modelspaceSize_input.rounded(places: 5)
     
     let s3 = roundedModelSize |> self.editingView.size3(Current.graph)
     (Current.graph.grid, Current.graph.edges) = self.editingView.build(s3, Current.graph.edges)
     let modelSpaceSize_output =  Current.graph |> self.editingView.size
     return modelSpaceSize_output * twoDView.scale
+    print("#End-Build Scale")
+
   }
   
   var editingView : GraphEditingView
@@ -89,10 +104,12 @@ class SpriteDriver : Driver {
   
   func bind(to uiRect: CGRect)
   {
-    print(twoDView.frame, twoDView.frame)
+    print("#Beg-Bind")
     self.uiPointToSprite = translateToCGPointInSKCoordinates(from: uiRect, to: twoDView.frame)
+    print("#End-Bind")
   }
   
   var uiPointToSprite : ((CGPoint)->CGPoint)!
+  
   var scaleObserver : NotificationObserver!
 }
