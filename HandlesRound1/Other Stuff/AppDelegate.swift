@@ -14,8 +14,8 @@ import UIKit
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-    var window: UIWindow?
-
+  var window: UIWindow?
+  var app : App?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
@@ -24,7 +24,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
       self.window?.makeKeyAndVisible()
       
-      self.window?.rootViewController = app()
+      self.app = App()
+      self.window?.rootViewController = app!.rootController
       
         return true
     }

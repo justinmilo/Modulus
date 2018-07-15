@@ -67,6 +67,8 @@
 		D04A73752022B4C900C46501 /* NonuniformModel2D.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04A73742022B4C900C46501 /* NonuniformModel2D.swift */; };
 		D056A3992015696A00C3B3B1 /* TwoMeterModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D056A3982015696A00C3B3B1 /* TwoMeterModel.swift */; };
 		D056A39F20177F0B00C3B3B1 /* PlanModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D056A39D20177F0B00C3B3B1 /* PlanModel.swift */; };
+		D06E02FA20F5CF33000E646F /* Volume.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D06E02F920F5CF33000E646F /* Volume.framework */; };
+		D06E02FB20F5CF33000E646F /* Volume.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D06E02F920F5CF33000E646F /* Volume.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D08A6F93202AA58E00EF9E68 /* EdgeToGeometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = D08A6F92202AA58E00EF9E68 /* EdgeToGeometry.swift */; };
 		D08F42FB208BBB0400F393D6 /* UIKit+Grasshopper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D08F42FA208BBB0400F393D6 /* UIKit+Grasshopper.swift */; };
 		D0915FAB208901DD0067C02A /* GraphicsCoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0915FAA208901DD0067C02A /* GraphicsCoreTests.swift */; };
@@ -154,6 +156,7 @@
 				D0F5C35720C03C6300B6A75F /* OffsetableCore.framework in Embed Frameworks */,
 				D026710B20CD5BE5008E24FB /* Graphe.framework in Embed Frameworks */,
 				D0F5C35420C03C6300B6A75F /* Geo.framework in Embed Frameworks */,
+				D06E02FB20F5CF33000E646F /* Volume.framework in Embed Frameworks */,
 				D0F5C35220C03C6300B6A75F /* Singalong.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
@@ -200,6 +203,7 @@
 		D056A3982015696A00C3B3B1 /* TwoMeterModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwoMeterModel.swift; sourceTree = "<group>"; };
 		D056A39C20177F0B00C3B3B1 /* Grid.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Grid.swift; sourceTree = "<group>"; };
 		D056A39D20177F0B00C3B3B1 /* PlanModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlanModel.swift; sourceTree = "<group>"; };
+		D06E02F920F5CF33000E646F /* Volume.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Volume.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D07BAE5120DA943C00E4A3A5 /* HandlesRound2.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = HandlesRound2.xcodeproj; path = ../HandlesRound2/HandlesRound2.xcodeproj; sourceTree = "<group>"; };
 		D08A6F92202AA58E00EF9E68 /* EdgeToGeometry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EdgeToGeometry.swift; sourceTree = "<group>"; };
 		D08F42FA208BBB0400F393D6 /* UIKit+Grasshopper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "UIKit+Grasshopper.swift"; path = "GrasshopperRound2/UIKit+Grasshopper.swift"; sourceTree = SOURCE_ROOT; };
@@ -244,6 +248,7 @@
 				D0F5C35320C03C6300B6A75F /* Geo.framework in Frameworks */,
 				D026710A20CD5BE5008E24FB /* Graphe.framework in Frameworks */,
 				D0F5C35120C03C6300B6A75F /* Singalong.framework in Frameworks */,
+				D06E02FA20F5CF33000E646F /* Volume.framework in Frameworks */,
 				D0ECD78620B9E59700C3F6D0 /* GrippableView.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -289,6 +294,7 @@
 		D00069C7200BD08300E8D5F3 = {
 			isa = PBXGroup;
 			children = (
+				D06E02F920F5CF33000E646F /* Volume.framework */,
 				D07BAE5120DA943C00E4A3A5 /* HandlesRound2.xcodeproj */,
 				D046292D20D9B1FF0037B63B /* Layout.framework */,
 				D0360A3B20D6EE0900C11E79 /* Diagrams.framework */,
@@ -326,8 +332,8 @@
 			isa = PBXGroup;
 			children = (
 				D09C3C42206B32370053EE2A /* App.swift */,
-				D0D6808120CEB0EF0074E97D /* ViewMaps.swift */,
 				D0A8B9C120BC9AC500D4C301 /* Environment.swift */,
+				D0D6808120CEB0EF0074E97D /* ViewMaps.swift */,
 				D036097A20D5968100C11E79 /* ViewController.swift */,
 				D033F42420F426270026E1C4 /* TypedNotifications.swift */,
 				D07BAE5A20DAFA8E00E4A3A5 /* Drivers */,
