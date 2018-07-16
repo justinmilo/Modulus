@@ -59,6 +59,19 @@ class Sprite2DView : SKView {
     }
   }
   
+  func addTempRect( rect: CGRect, color: UIColor) {
+    let globalLabel = SKShapeNode(rect: rect )
+    globalLabel.fillColor = color
+    self.scene?.addChild(globalLabel)
+    globalLabel.alpha = 0.0
+    let fadeInOut = SKAction.sequence([
+      .fadeAlpha(to: 0.3, duration: 0.2),
+      .fadeAlpha(to: 0.0,duration: 0.4)])
+    globalLabel.run(fadeInOut, completion: {
+      print("End and Fade Out")
+    })
+  }
+  
   // SceneKit Handlering...
   
   //var scene : SKScene

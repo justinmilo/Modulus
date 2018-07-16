@@ -10,8 +10,13 @@ import CoreGraphics
 import Singalong
 import Layout
 import Geo
+import Graphe
 
 class SpriteDriver : Driver {
+  
+  var uiPointToSprite : ((CGPoint)->CGPoint)!
+  var uiRectToSprite : ((CGRect)->CGRect)!
+  var scaleObserver : NotificationObserver!
   
   public init(mapping: [GraphEditingView] )
   {
@@ -23,6 +28,8 @@ class SpriteDriver : Driver {
     //twoDView.layer.borderWidth = 1.0
     twoDView.scene?.scaleMode = .resizeFill
     
+    twoDView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(SpriteDriver.tap)))
+    
     scaleObserver = NotificationObserver(
       notification: scaleChangeNotification,
       block: { [weak self] in
@@ -31,7 +38,7 @@ class SpriteDriver : Driver {
     })
   }
   
-  var _previousOrigin = (CGPoint.zero, CGPoint.zero)
+  var _previousOrigin = (ui:CGPoint.zero, sprite:CGPoint.zero)
   
   func layout(origin: CGPoint) {
     print("#Beg-Layout Origin")
@@ -58,16 +65,22 @@ class SpriteDriver : Driver {
     
     if size != _previousSize {
       // Set & Redraw Geometry
-      let geom = Current.graph |> self.editingView.composite
-      self.twoDView.redraw(geom)
+      self._layout(size: size)
       //self.twoDView.draw(newRect)
     }
     self._previousSize = size
     print("#End-Layout Size")
   }
   
-  var size : CGSize
+  private func _layout(size: CGSize)
   {
+    let geom = Current.graph |> self.editingView.composite
+    self.twoDView.redraw(geom)
+  }
+  
+  var _previousSetRect : CGRect { get { return CGRect(origin: _previousOrigin.ui, size:_previousSize) }}
+  
+  var size : CGSize {
     get {
       return (Current.graph |> self.editingView.size) * Current.scale
     }
@@ -106,10 +119,99 @@ class SpriteDriver : Driver {
   {
     print("#Beg-Bind")
     self.uiPointToSprite = translateToCGPointInSKCoordinates(from: uiRect, to: twoDView.frame)
+    self.uiRectToSprite = translateToCGRectInSKCoordinates(from: uiRect, to: twoDView.frame)
     print("#End-Bind")
   }
   
-  var uiPointToSprite : ((CGPoint)->CGPoint)!
   
-  var scaleObserver : NotificationObserver!
+  // MARK: TAP ITEMS...
+  @objc func tap(g: UIGestureRecognizer)
+  {
+    // if insideTGyg
+    if _previousSetRect.contains(
+      g.location(ofTouch: 0, in: self.twoDView)
+      ) {
+      highlightCell(touch: g.location(ofTouch: 0, in: self.twoDView))
+      print("TOuch")
+    }
+    else {
+      changeCompositeStyle()
+    }
+  }
+  
+  private var swapIndex = 0
+  func changeCompositeStyle ()
+  {
+    swapIndex = swapIndex+1 >= loadedViews.count ? 0 : swapIndex+1
+    self.editingView = loadedViews[swapIndex]
+    //      buildFromScratch()
+
+  }
+  
+  private var swapIndex2 = 0
+
+ 
+  
+
+  
+    func highlightCell (touch: CGPoint) {
+  
+  
+  
+      // bind values to these functions
+//      let rectToSprite = self.twoDView.bounds.height |> curry(uiToSprite(height:rect:))
+//      let pointToSprite = self.twoDView.bounds.height |> curry(uiToSprite(height:point:))
+//      let yToSprite = self.twoDView.bounds.height |> curry(uiToSprite(height:y:))
+  
+  
+      // Properly Controllers concern
+      let tS = touch |> uiPointToSprite
+      let rectS = self._previousSetRect |> uiRectToSprite
+      //#warning("doesnt' work with selection that isn't the bounds")
+      //let spriteOrigin = self._previousSetRect.bottomLeft |> uiRectToSprite
+      
+      //let rectS2 = (self._previousSetRect.topLeft |> uiPointToSprite) + (self._previousSetRect.bottomRight |> uiPointToSprite)
+      let p = (tS, rectS) |> viewSpaceToModelSpace
+      let scaledP = p * twoDView.scale; #warning("weird access of twoDView.scale")
+  
+      // Properly models concern
+      let editBoundaries = Current.graph |> editingView.grid2D ///
+      let toGridIndices = editBoundaries |> curry(pointToGridIndices) >>>  handleTupleOptionWith
+  
+      // Get Model Indices
+      let indices = (scaledP |> toGridIndices)
+      // c is something lik (0, 1)
+      // or (1, 2)
+  
+  
+      // Get Model Rect
+      let mRect = (indices, editBoundaries) |> modelRect
+      // x is something like (0.0, 30.0, 100.0, 100.0)
+      // (0.0, 0.0, 100.0, 30.0)
+      
+      let yToSprite = { self.uiPointToSprite!(CGPoint(0, $0)) }  >>> { return $0.y }
+  
+      // bring model rect into the real world!
+      //let mRect2 = mRect.scaled(by: 1/self.twoDView.scale)
+      let z = (mRect, self._previousOrigin.ui.asVector() ) |> moveByVector
+      let cellRectValue = z |> uiRectToSprite
+      let y = _previousSetRect.midY |> yToSprite
+      let flippedRect = (cellRectValue, y )  |> mirrorVertically
+      // flipped rect is situated in sprite kit space
+  
+      Current.graph.edges = editingView.selectedCell(indices, Current.graph.grid, Current.graph.edges)
+  
+      self._layout(size: _previousSize)
+      self.twoDView.addTempRect(rect: flippedRect, color: .white)
+    }
+  
+  
+  
+  
+  
+  // MARK: ...TAP ITEMS
+
 }
+
+
+

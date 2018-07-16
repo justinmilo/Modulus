@@ -164,16 +164,8 @@ class ViewController : UIViewController
     super.viewDidLayoutSubviews()
   }
   
-  override func viewDidLoad() {
-    view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tap)))
-  }
   
-  @objc func tap() {
-    self.viewport.animateSelection(
-      to: self.viewport.canvas.convert(
-        CGRect.around(self.view.center, size: self.viewport!.selection.size),
-        from: self.view))
-  }
+ 
   
   
 

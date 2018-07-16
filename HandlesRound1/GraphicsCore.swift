@@ -19,6 +19,9 @@ extension Tagged where RawValue == CGPoint {
   init (x: CGFloat, y:CGFloat) { self.init(rawValue: CGPoint.init(x:x,y:y)) }
   init (_ x: CGFloat, _ y:CGFloat) { self.init(rawValue: CGPoint.init(x:x,y:y)) }
 }
+extension Tagged where RawValue == CGRect {
+  init (x: CGFloat, y:CGFloat, width: CGFloat, height: CGFloat) { self.init(rawValue: CGRect.init(x:x,y:y,width:width,height:height)) }
+}
 
 // Func translate between two sibling coordiante systems
 // point lives in _UISibling_
@@ -35,6 +38,20 @@ func translate(from uisibling: CGRect, toSKCoordIn sksibling: CGRect) -> (CGPoin
   }
 }
 
+func translate(from uisibling: CGRect, toSKCoordIn sksibling: CGRect) -> (CGRect) -> SKRect
+{
+ 
+  return { sibRect in
+     let point = translate(from: uisibling, toSKCoordIn: sksibling)(sibRect.origin)
+    return SKRect(
+      x: point.rawValue.x,
+      y: point.rawValue.y,
+      width: sibRect.width,
+      height: sibRect.height
+    )
+  }
+}
+
 func translateToCGPointInSKCoordinates(from uisibling: CGRect, to sksibling: CGRect) -> (CGPoint) -> CGPoint
 {
   return { sibPoint in
@@ -42,6 +59,12 @@ func translateToCGPointInSKCoordinates(from uisibling: CGRect, to sksibling: CGR
   }
 }
 
+func translateToCGRectInSKCoordinates(from uisibling: CGRect, to sksibling: CGRect) -> (CGRect) -> CGRect
+{
+  return { sibPoint in
+    translate(from: uisibling, toSKCoordIn: sksibling)(sibPoint).rawValue
+  }
+}
 
 func uiToSprite(height: CGFloat, rect: CGRect) -> CGRect
 {

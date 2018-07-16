@@ -25,8 +25,8 @@ extension ScaffType.Axis {
   init (_ axis: Axis)
   {
     switch axis{
-    case .x : self = ScaffType.Axis.y
-    case .y : self = ScaffType.Axis.x
+    case .y : self = ScaffType.Axis.y
+    case .x : self = ScaffType.Axis.x
     }
   }
 }
@@ -51,11 +51,12 @@ func members(graph: ScaffGraph) -> [ScaffMember]
       )]
     case .diag:
       let seg3 = (graph.grid, edge) |> segment3
+      guard let axis = seg3|>axis, let run = (seg3|>run) else { return [] }
       return [ScaffMember(
         type: ScaffType.diag(
-          run: graph_measure( (seg3|>run)!),
+          run: graph_measure(run),
           rise: graph_measure(seg3|>rise),
-          axis: ScaffType.Axis( (seg3|>axis)! )
+          axis: ScaffType.Axis( axis )
         ),
         position: edge.p1.toPoint3(graph.grid).asDoubleTuple
       )]
