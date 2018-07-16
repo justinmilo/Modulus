@@ -156,44 +156,37 @@ class SpriteDriver : Driver {
   
     func highlightCell (touch: CGPoint) {
   
-  
-  
-      // bind values to these functions
-//      let rectToSprite = self.twoDView.bounds.height |> curry(uiToSprite(height:rect:))
-//      let pointToSprite = self.twoDView.bounds.height |> curry(uiToSprite(height:point:))
-//      let yToSprite = self.twoDView.bounds.height |> curry(uiToSprite(height:y:))
-  
+      let scale = twoDView.scale; #warning("weird access of twoDView.scale")
+
   
       // Properly Controllers concern
       let tS = touch |> uiPointToSprite
       let rectS = self._previousSetRect |> uiRectToSprite
-      //#warning("doesnt' work with selection that isn't the bounds")
-      //let spriteOrigin = self._previousSetRect.bottomLeft |> uiRectToSprite
       
-      //let rectS2 = (self._previousSetRect.topLeft |> uiPointToSprite) + (self._previousSetRect.bottomRight |> uiPointToSprite)
       let p = (tS, rectS) |> viewSpaceToModelSpace
-      let scaledP = p * twoDView.scale; #warning("weird access of twoDView.scale")
-  
+      let scaledP = p * 1/scale
       // Properly models concern
       let editBoundaries = Current.graph |> editingView.grid2D ///
       let toGridIndices = editBoundaries |> curry(pointToGridIndices) >>>  handleTupleOptionWith
   
       // Get Model Indices
       let indices = (scaledP |> toGridIndices)
-      // c is something lik (0, 1)
+      // indices is something lik (0, 1)
       // or (1, 2)
   
   
       // Get Model Rect
       let mRect = (indices, editBoundaries) |> modelRect
-      // x is something like (0.0, 30.0, 100.0, 100.0)
+      // mRect is something like (0.0, 30.0, 100.0, 100.0)
       // (0.0, 0.0, 100.0, 30.0)
+      
+      let scaledMRect = mRect.scaled(by: scale)
       
       let yToSprite = { self.uiPointToSprite!(CGPoint(0, $0)) }  >>> { return $0.y }
   
       // bring model rect into the real world!
       //let mRect2 = mRect.scaled(by: 1/self.twoDView.scale)
-      let z = (mRect, self._previousOrigin.ui.asVector() ) |> moveByVector
+      let z = (scaledMRect, self._previousOrigin.ui.asVector() ) |> moveByVector
       let cellRectValue = z |> uiRectToSprite
       let y = _previousSetRect.midY |> yToSprite
       let flippedRect = (cellRectValue, y )  |> mirrorVertically

@@ -45,7 +45,7 @@ func translate(from uisibling: CGRect, toSKCoordIn sksibling: CGRect) -> (CGRect
      let point = translate(from: uisibling, toSKCoordIn: sksibling)(sibRect.origin)
     return SKRect(
       x: point.rawValue.x,
-      y: point.rawValue.y,
+      y: point.rawValue.y-sibRect.height,
       width: sibRect.width,
       height: sibRect.height
     )
@@ -61,8 +61,8 @@ func translateToCGPointInSKCoordinates(from uisibling: CGRect, to sksibling: CGR
 
 func translateToCGRectInSKCoordinates(from uisibling: CGRect, to sksibling: CGRect) -> (CGRect) -> CGRect
 {
-  return { sibPoint in
-    translate(from: uisibling, toSKCoordIn: sksibling)(sibPoint).rawValue
+  return { sibRect in
+    translate(from: uisibling, toSKCoordIn: sksibling)(sibRect).rawValue
   }
 }
 
