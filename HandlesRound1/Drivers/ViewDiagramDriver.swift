@@ -13,7 +13,7 @@ import Singalong
 import Diagrams
 import Graphe
 import Geo
-
+import BlackCricket
 
 
 typealias Config = FixedDiagramViewCongfiguration

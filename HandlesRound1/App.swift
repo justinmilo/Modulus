@@ -102,10 +102,12 @@ func members(graph: ScaffGraph) -> [ScaffMember]
 let provider = members >>> AScaffProvider.init
 
 
-class App
+public class App
 {
+  public init() {
+  }
   
-  lazy var rootController: UIViewController =
+  public lazy var rootController: UIViewController =
   {
     //let uR2 = SpriteScaffViewController(graph: graph, mapping: frontMap2)
     //return foo2( Current.viewMaps.plan)

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>SchemeUserState</key>
+	<dict>
+		<key>BlackCricket.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>20</integer>
+		</dict>
+		<key>HandlesRound1.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>0</integer>
+		</dict>
+		<key>HandlesRoundling.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+			<key>orderHint</key>
+			<integer>7</integer>
+		</dict>
+		<key>Meccano.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+			<key>orderHint</key>
+			<integer>21</integer>
+		</dict>
+		<key>Modular.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>22</integer>
+		</dict>
+	</dict>
+	<key>SuppressBuildableAutocreation</key>
+	<dict>
+		<key>D00069CF200BD08300E8D5F3</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>D02670B220CCCF4F008E24FB</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>D09F364F210D039200D38F4C</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>D09F3670210D0C4200D38F4C</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>D0F58CF3210E201200AACC8F</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+	</dict>
+</dict>
+</plist>

@@ -9,6 +9,7 @@
 import Foundation
 import Graphe
 import Singalong
+import BlackCricket
 
 
 public struct GraphEditingView {

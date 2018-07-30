@@ -11,6 +11,9 @@ import SpriteKit
 import GameplayKit
 import Singalong
 import Geo
+import Make2D
+import BlackCricket
+
 
 extension Float {
   func rounded(toPlaces places:Int) -> Float {
@@ -84,34 +87,11 @@ class Sprite2DView : SKView {
       representable.asNode |> mainNode.addChild
     }
     
-    if let oval = node as? Oval
-    {
-      createOval(oval) |> mainNode.addChild
-    }
-    else if let label = node as? Label
-    {
-      let n = createLableNode(label)
-      //n.position = CGPoint(300,300)
-
-      //n |> scalePosition(scale)
-      n |> mainNode.addChild
-    }
-    else if let line = node as? Line
-    {
-      let node = createLineShapeNode(line)
-      //node |> scaleAll(scale)
-      node |> mainNode.addChild
-    }
-    else if let line = node as? StrokedLine
-    {
-      let node = createLineShapeNode(line.line)
-      
-      mainNode.addChild(node)
-    }
+   
     else if let line = node as? Scaff2D
     {
       
-      let newNode = createScaff2DNode(item: line)
+      let newNode = createScaff2DNode(item: line, cache: &self.cache)
       if let n = newNode {
         //n |> scalePosition(scale)
         n |> mainNode.addChild
@@ -119,18 +99,6 @@ class Sprite2DView : SKView {
       
     }
     
-    else if let p = node as? LabeledPoint
-    {
-      let circleN = createCircleShapeNode(p)
-      circleN |> mainNode.addChild
-      let n = createLableNode(Label(text: p.label))
-      n |> mainNode.addChild
-      
-    }
-    else if let line = node as? TextureLine
-    {
-      print(line)
-    }
     
     
     else { fatalError()}
@@ -150,148 +118,131 @@ class Sprite2DView : SKView {
   // Viewcontroller Functions
   
  
-  func convertGeneral ( item: Scaff2D) -> SKSpriteNode {
+  
+  
+  /*
+   createNameHash
+   if in cache
+     deploy Cached
+   else
+     create Node
+     cache node
+ */
+  
+  
+  
+}
+
+let twometer : CGFloat = 2.00/1.6476
+
+private func firstHalf( item: Scaff2D, cache : inout [SKSpriteNode]) -> SKSpriteNode {
+  let name = nameHash(item)
+  let copy = copyFromCache(name: name, cache: cache)
+  guard copy == nil else { return (copy!) }
+  
+  let imageGenny :()->UIImage = {
     let length = CGSegment(p1:item.start, p2:item.end).length
-    let name = (length, item.part, item.view) |> nameHash
-    let path = (length, item.part, item.view) |> image
-    let (ledgerNode, newCache) = (name, path!, self.cache) |> grabFromCacheOrCreate
-    cache = newCache
+    let path = (length, item.part, item.view) |> imageName
+    guard let aImage = UIImage(named: path!) else { fatalError("no Image")}
+    return aImage
+  }
+  
+  let (ledgerNode, newCache) = addToCache(name: name, imageGen: imageGenny , cache: cache)
+  cache = newCache
+  return ledgerNode
+}
+
+
+func convertNOROTGeneral ( item: Scaff2D, cache : inout [SKSpriteNode]) -> SKSpriteNode {
+  let ledgerNode : SKSpriteNode = firstHalf(item: item, cache: &cache)
+  
+  ledgerNode.setScale( twometer)
+  ledgerNode.position = (item.start + item.end).center
+  return ledgerNode
+}
+
+
+func convertDynamic ( item: Scaff2D, cache : inout [SKSpriteNode]) -> SKSpriteNode {
+  precondition(item.part == .diag)
+  
+  let name = nameHash(item)
+  let copy = copyFromCache(name: name, cache: cache)
+  guard copy == nil else { return (copy!) }
+  
+  let imageGenny :()->UIImage = {
+    let box = item.start + item.end
+    let foo = diagImage(riseMM: box.height * 10, runMM: box.width * 10)
+    return foo
+  }
+  
+  let (ledgerNode, newCache) = addToCache(name: name, imageGen: imageGenny , cache: cache)
+  cache = newCache
+  
+  ledgerNode.setScale( twometer/3)
+  ledgerNode.xScale = item.upToTheRight == true ? ledgerNode.xScale :  -ledgerNode.xScale
+  ledgerNode.position = (item.start + item.end).center + unitY * -36/3 + unitX * 5
+  return ledgerNode
+}
+
+
+func createScaff2DNode (item: Scaff2D, cache: inout [SKSpriteNode]) -> SKNode?
+{
+  switch (item.part,  item.view) {
+  case (.ledger, .plan),
+       (.standard,  .plan),
+       (.diag, .plan):
+    let ledgerNode: SKSpriteNode
+    ledgerNode = firstHalf(item: item, cache: &cache)
     
-    let twometer : CGFloat = 2.00/1.6476
     ledgerNode.setScale( twometer)
     ledgerNode.position = (item.start + item.end).center
     ledgerNode.zRotation = CGFloat(item.start.x == item.end.x ? CGFloat.halfPi : 0)
     return ledgerNode
-  }
-  
-  func convertNOROTGeneral ( item: Scaff2D) -> SKSpriteNode {
-    let length = CGSegment(p1:item.start, p2:item.end).length
-    let name = (length, item.part, item.view) |> nameHash
-    let path = (length, item.part, item.view) |> image
-    let (ledgerNode, newCache) = (name, path!, self.cache) |> grabFromCacheOrCreate
-    cache = newCache
+  case (.jack,  .plan): return nil
+  case (.basecollar, .plan): return nil
+
+  case (.ledger, .longitudinal),
+       (.ledger, .cross):
+    let node = convertNOROTGeneral(item: item, cache:&cache)
+    let adjujstmentV = CGVector(0, -1.44) * (2.00/1.6476)
+    node.position = node.position + adjujstmentV
+    return node
     
-    let twometer : CGFloat = 2.00/1.6476
-    ledgerNode.setScale( twometer)
-    ledgerNode.position = (item.start + item.end).center
-    return ledgerNode
-  }
-  
-  func createScaff2DNode (item: Scaff2D) -> SKNode?
-  {
-    switch (item.part,  item.view) {
-    case (.ledger, .plan): return convertGeneral(item: item)
-    case (.standard,  .plan): return convertGeneral(item: item)
-    case (.jack,  .plan): return nil
-    case (.basecollar, .plan): return nil
-    case (.diag, .plan): return convertGeneral(item: item)
-      
-    case (.ledger, .longitudinal),
-         (.ledger, .cross):
-      let node = convertNOROTGeneral(item: item)
-      let adjujstmentV = CGVector(0, -1.44) * (2.00/1.6476)
-      node.position = node.position + adjujstmentV
-      return node
-      
-    case (.diag, .longitudinal),
-         (.diag, .cross):
-      let cgPath = CGMutablePath()
-      cgPath.move(to: item.start)
-      cgPath.addLine(to: item.end)
-      let node = SKShapeNode(path: cgPath)
-      return node
-      
-    case (.standard,  .longitudinal),
-         (.standard,  .cross):
-      
-      let node = convertNOROTGeneral(item: item)
-      let adjujstmentV = CGVector(0, 8.64) * (2.00/1.6476)
-      node.position = node.position + adjujstmentV
-      return node
-      
-    case (.jack,  .longitudinal),
-         (.jack,  .cross):
-      let node = convertNOROTGeneral(item: item)
-      let     adjujstmentV = CGVector(0, 0) * (2.00/1.6476)
-      node.position = node.position + adjujstmentV
-      return node
-      
-    case (.basecollar, .longitudinal),
-         (.basecollar, .cross):
-      let node = convertNOROTGeneral(item: item)
-      let     adjujstmentV = CGVector(0, 4.74) * (2.00/1.6476)
-      node.position = node.position + adjujstmentV
-      return node
-      
-    }
-  }
-  
-}
-
-
-
-func createOval(_ oval: Oval) -> SKShapeNode
-{
-  let node = SKShapeNode(ellipseOf: oval.ellipseOf)
-  node.fillColor = oval.fillColor
-  node.lineWidth = 0.0
-  return node
-}
-
-
-
-func createLableNode(_ label: Label) -> SKLabelNode {
-  let node = SKLabelNode(text: label.text)
-  node.fontName = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.medium).fontName
-  node.fontSize = 14// * scale
-  node.zRotation = label.rotation == .h ? 0.0 : 0.5 * CGFloat.pi
-  node.position = label.position
-  node.verticalAlignmentMode = .center
-  return node
-}
-
-func changeFontColor(color: UIColor, _ node: SKLabelNode) {
-  node.fontColor = color
-}
-
-func createLineShapeNode(_ line: Line) -> SKShapeNode {
-let path = CGMutablePath()
-path.move(to: line.start)
-path.addLine(to: line.end)
-let node = SKShapeNode(path: path)
-  return node
-}
-
-func createCircleShapeNode(_ line: Geometry) -> SKShapeNode {
-  let rectSize = CGSize(5,5)
-  let path = CGMutablePath()
-  path.move(to: line.position)
-  path.addEllipse(in: CGRect.around(line.position, size: rectSize))
-  let node = SKShapeNode(path: path)
-  return node
-}
-
-
-func scaleTransform( _ scale: CGFloat) -> (SKNode)-> Void
-{
-  return {skNode in
-    skNode.setScale(scale)
+  case (.diag, .longitudinal):
+    let node = convertDynamic(item: item, cache:&cache)
+    let adjujstmentV = CGVector(0, 8.64) * (2.00/1.6476)
+    node.position = node.position + adjujstmentV
+    return node
+    
+  case (.diag, .cross):
+    let cgPath = CGMutablePath()
+    cgPath.move(to: item.start)
+    cgPath.addLine(to: item.end)
+    let node = SKShapeNode(path: cgPath)
+    return node
+    
+  case (.standard,  .longitudinal),
+       (.standard,  .cross):
+    
+    let node = convertNOROTGeneral(item: item, cache:&cache)
+    let adjujstmentV = CGVector(0, 8.64) * (2.00/1.6476)
+    node.position = node.position + adjujstmentV
+    return node
+    
+  case (.jack,  .longitudinal),
+       (.jack,  .cross):
+    let node = convertNOROTGeneral(item: item, cache:&cache)
+    let     adjujstmentV = CGVector(0, 0) * (2.00/1.6476)
+    node.position = node.position + adjujstmentV
+    return node
+    
+  case (.basecollar, .longitudinal),
+       (.basecollar, .cross):
+    let node = convertNOROTGeneral(item: item, cache:&cache)
+    let     adjujstmentV = CGVector(0, 4.74) * (2.00/1.6476)
+    node.position = node.position + adjujstmentV
+    return node
+    
   }
 }
 
-func scalePosition( _ scale: CGFloat) -> (SKNode)-> Void
-{
-  return {skNode in
-    skNode.position = skNode.position * scale
-  }
-}
-
-func highlightStrokeShapeNode(node:SKShapeNode)-> Void
-{
-  node.lineWidth = 2.0
-  node.strokeColor = #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)
-}
-
-
-
-let scaleAll : (CGFloat) -> (SKNode)-> Void = scaleTransform <> scalePosition

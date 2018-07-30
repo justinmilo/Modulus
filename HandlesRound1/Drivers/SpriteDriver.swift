@@ -11,6 +11,7 @@ import Singalong
 import Layout
 import Geo
 import Graphe
+import BlackCricket
 
 class SpriteDriver : Driver {
   
@@ -145,6 +146,7 @@ class SpriteDriver : Driver {
     swapIndex = swapIndex+1 >= loadedViews.count ? 0 : swapIndex+1
     self.editingView = loadedViews[swapIndex]
     //      buildFromScratch()
+    self._layout(size: _previousSize)
 
   }
   

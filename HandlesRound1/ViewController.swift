@@ -11,6 +11,7 @@ import Geo
 import GrippableView
 import Singalong
 import Layout
+import Make2D
 
 
 // centerAnchor
