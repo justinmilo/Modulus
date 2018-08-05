@@ -111,7 +111,10 @@ public class App
   {
     //let uR2 = SpriteScaffViewController(graph: graph, mapping: frontMap2)
     //return foo2( Current.viewMaps.plan)
-    
+//     }()
+//    public lazy var rootController: UIViewController =
+//    {
+//
     return VerticalController(upperLeft: foo2( Current.viewMaps.plan),
                               upperRight: foo2(Current.viewMaps.rotatedPlan),
                               lowerLeft: foo2(Current.viewMaps.front),

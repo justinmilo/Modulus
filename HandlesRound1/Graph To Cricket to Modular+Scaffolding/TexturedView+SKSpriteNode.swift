@@ -30,13 +30,20 @@ let descriptionDrawing : (Scaff2D.DrawingType) -> String =
   case .plan: return "Plan"
   }
 }
+let descriptionDiag : (Scaff2D) -> String? =
+{
+  guard case .diag = $0.part else { return nil }
+  return $0.upToTheRight ? "upToTheRight" : "upToTheLeft"
+}
 
 import Geo
 let nameHash : ( Scaff2D)  -> String = {
   (scaff) in
   let length = CGSegment(p1:scaff.start, p2:scaff.end).length
   let box = scaff.start + scaff.end
-  return "\(length),\(box.size.height/box.size.width)-" + ((scaff.part |> descriptionScaff) +  (scaff.view |> descriptionDrawing))
+  let text = "\(length),\(box.size.height/box.size.width)-" + ((scaff.part |> descriptionScaff) + (scaff.view |> descriptionDrawing)) + (descriptionDiag(scaff) ?? "")
+  print(text)
+  return text
 }
 
 let imageName : ( CGFloat, Scaff2D.ScaffType, Scaff2D.DrawingType) -> String? = {

@@ -72,11 +72,10 @@ extension LabeledPoint : SKRepresentable
   var asNode: SKNode {
     let circleN = createCircleShapeNode(self)
     let n = createLableNode(Label(text: self.label))
+    n.position = self.position
+    circleN.addChild(n)
     
-    let newNode = SKNode()
-    newNode.addChild(circleN)
-    newNode.addChild(n)
-    return newNode
+    return circleN
 
   }
 }
@@ -131,6 +130,7 @@ func createCircleShapeNode(_ line: Geometry) -> SKShapeNode {
   let node = SKShapeNode(path: path)
   return node
 }
+
 
 
 func scaleTransform( _ scale: CGFloat) -> (SKNode)-> Void

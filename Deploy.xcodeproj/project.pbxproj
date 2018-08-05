@@ -10,7 +10,6 @@
 		D00069D4200BD08300E8D5F3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00069D3200BD08300E8D5F3 /* AppDelegate.swift */; };
 		D00069DB200BD08300E8D5F3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D00069DA200BD08300E8D5F3 /* Assets.xcassets */; };
 		D00069DE200BD08300E8D5F3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D00069DC200BD08300E8D5F3 /* LaunchScreen.storyboard */; };
-		D025BF40210E6C6500083117 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D025BF3F210E6C6500083117 /* Media.xcassets */; };
 		D026710A20CD5BE5008E24FB /* Graphe.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D026710920CD5BE5008E24FB /* Graphe.framework */; };
 		D026710B20CD5BE5008E24FB /* Graphe.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D026710920CD5BE5008E24FB /* Graphe.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D0326763207FFE3800BBF563 /* HandlesCoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0326762207FFE3800BBF563 /* HandlesCoreTests.swift */; };
@@ -33,6 +32,7 @@
 		D09F3680210D0E1700D38F4C /* PrimitiveFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0DA9BBA203A666A0019F6EE /* PrimitiveFunctions.swift */; };
 		D09F3681210D0F0C00D38F4C /* Array+CGPoint+Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04153C1202B7CA300BD7B72 /* Array+CGPoint+Utility.swift */; };
 		D0B69D262043632D00AEA01B /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = D0B69D252043632D00AEA01B /* GameScene.sks */; };
+		D0D55C36210F280F004EF894 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D025BF3F210E6C6500083117 /* Media.xcassets */; };
 		D0E9D8B82107B7790072E403 /* Make2D.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0E9D8B72107B7790072E403 /* Make2D.framework */; };
 		D0E9D8B92107B7790072E403 /* Make2D.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D0E9D8B72107B7790072E403 /* Make2D.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D0ECD78620B9E59700C3F6D0 /* GrippableView.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0ECD78520B9E59700C3F6D0 /* GrippableView.framework */; };
@@ -43,7 +43,7 @@
 		D0F58CFB210E201200AACC8F /* Modular.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0F58CF4210E201200AACC8F /* Modular.framework */; };
 		D0F58CFC210E201200AACC8F /* Modular.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D0F58CF4210E201200AACC8F /* Modular.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D0F58D00210E202900AACC8F /* ViewFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B86C64202FC09200CCB3F7 /* ViewFunctions.swift */; };
-		D0F58D01210E202900AACC8F /* ScaffoldingAdapters.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0F58CE4210E13F300AACC8F /* ScaffoldingAdapters.swift */; };
+		D0F58D01210E202900AACC8F /* Scaff2D.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0F58CE4210E13F300AACC8F /* Scaff2D.swift */; };
 		D0F58D02210E202A00AACC8F /* ModularAdapters.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0F58CE7210E14AC00AACC8F /* ModularAdapters.swift */; };
 		D0F58D03210E202A00AACC8F /* Sprite2DView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03E03F720125DF8002D47F3 /* Sprite2DView.swift */; };
 		D0F58D04210E202A00AACC8F /* TexturedView+SKSpriteNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0DA9BB82039E1C60019F6EE /* TexturedView+SKSpriteNode.swift */; };
@@ -69,7 +69,6 @@
 		D0F58D19210E207300AACC8F /* PageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0051E25201D2BC900C0128A /* PageViewController.swift */; };
 		D0F58D1A210E207300AACC8F /* ViewComposite.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BAD734204228F700406E70 /* ViewComposite.swift */; };
 		D0F58D1C210E212D00AACC8F /* Diagrams.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0F58D1B210E212D00AACC8F /* Diagrams.framework */; };
-		D0F58D1E210E212D00AACC8F /* Drawable.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0F58D1D210E212D00AACC8F /* Drawable.framework */; };
 		D0F58D20210E212D00AACC8F /* Geo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0F58D1F210E212D00AACC8F /* Geo.framework */; };
 		D0F58D22210E212D00AACC8F /* Graphe.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0F58D21210E212D00AACC8F /* Graphe.framework */; };
 		D0F58D23210E212D00AACC8F /* BlackCricket.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D09F3671210D0C4200D38F4C /* BlackCricket.framework */; };
@@ -84,6 +83,7 @@
 		D0F5C35620C03C6300B6A75F /* OffsetableCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0F5C35520C03C6300B6A75F /* OffsetableCore.framework */; };
 		D0F5C35720C03C6300B6A75F /* OffsetableCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D0F5C35520C03C6300B6A75F /* OffsetableCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D0F5C35C20C03CA400B6A75F /* GrippableView.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D0ECD78520B9E59700C3F6D0 /* GrippableView.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		D0FD71002117260000B27092 /* EditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0FD70FF2117260000B27092 /* EditViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -214,7 +214,7 @@
 		D0ECD79020B9F12700C3F6D0 /* RectIndex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RectIndex.swift; sourceTree = "<group>"; };
 		D0ECD79120B9F12700C3F6D0 /* EdgePosition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EdgePosition.swift; sourceTree = "<group>"; };
 		D0ECD79220B9F12700C3F6D0 /* TensionedPoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TensionedPoint.swift; sourceTree = "<group>"; };
-		D0F58CE4210E13F300AACC8F /* ScaffoldingAdapters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScaffoldingAdapters.swift; sourceTree = "<group>"; };
+		D0F58CE4210E13F300AACC8F /* Scaff2D.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scaff2D.swift; sourceTree = "<group>"; };
 		D0F58CE7210E14AC00AACC8F /* ModularAdapters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModularAdapters.swift; sourceTree = "<group>"; };
 		D0F58CF4210E201200AACC8F /* Modular.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Modular.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0F58CF6210E201200AACC8F /* Modular.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Modular.h; sourceTree = "<group>"; };
@@ -228,6 +228,7 @@
 		D0F58D28210E214400AACC8F /* Volume.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Volume.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0F58D2A210E216E00AACC8F /* Make2D.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Make2D.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0F5C35520C03C6300B6A75F /* OffsetableCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = OffsetableCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D0FD70FF2117260000B27092 /* EditViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -293,7 +294,6 @@
 				D0F58D29210E214400AACC8F /* Volume.framework in Frameworks */,
 				D0F58D23210E212D00AACC8F /* BlackCricket.framework in Frameworks */,
 				D0F58D1C210E212D00AACC8F /* Diagrams.framework in Frameworks */,
-				D0F58D1E210E212D00AACC8F /* Drawable.framework in Frameworks */,
 				D0F58D20210E212D00AACC8F /* Geo.framework in Frameworks */,
 				D0F58D22210E212D00AACC8F /* Graphe.framework in Frameworks */,
 			);
@@ -344,6 +344,7 @@
 				D09C3C42206B32370053EE2A /* App.swift */,
 				D0A8B9C120BC9AC500D4C301 /* Environment.swift */,
 				D0D6808120CEB0EF0074E97D /* ViewMaps.swift */,
+				D0FD70FF2117260000B27092 /* EditViewController.swift */,
 				D036097A20D5968100C11E79 /* ViewController.swift */,
 				D033F42420F426270026E1C4 /* TypedNotifications.swift */,
 				D025BF3F210E6C6500083117 /* Media.xcassets */,
@@ -477,7 +478,7 @@
 			children = (
 				D0BAD734204228F700406E70 /* ViewComposite.swift */,
 				D0B86C64202FC09200CCB3F7 /* ViewFunctions.swift */,
-				D0F58CE4210E13F300AACC8F /* ScaffoldingAdapters.swift */,
+				D0F58CE4210E13F300AACC8F /* Scaff2D.swift */,
 				D0F58CE7210E14AC00AACC8F /* ModularAdapters.swift */,
 				D0DA9BB82039E1C60019F6EE /* TexturedView+SKSpriteNode.swift */,
 			);
@@ -718,7 +719,6 @@
 			files = (
 				D00069DE200BD08300E8D5F3 /* LaunchScreen.storyboard in Resources */,
 				D00069DB200BD08300E8D5F3 /* Assets.xcassets in Resources */,
-				D025BF40210E6C6500083117 /* Media.xcassets in Resources */,
 				D0B69D262043632D00AEA01B /* GameScene.sks in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -762,6 +762,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D0D55C36210F280F004EF894 /* Media.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -774,6 +775,7 @@
 			files = (
 				D00069D4200BD08300E8D5F3 /* AppDelegate.swift in Sources */,
 				D03E03DA20124DB8002D47F3 /* Testing.swift in Sources */,
+				D0FD71002117260000B27092 /* EditViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -838,7 +840,7 @@
 				D0F58D0D210E207300AACC8F /* SpriteDriver.swift in Sources */,
 				D0F58D14210E207300AACC8F /* TensionedPoint.swift in Sources */,
 				D0F58D03210E202A00AACC8F /* Sprite2DView.swift in Sources */,
-				D0F58D01210E202900AACC8F /* ScaffoldingAdapters.swift in Sources */,
+				D0F58D01210E202900AACC8F /* Scaff2D.swift in Sources */,
 				D0F58D18210E207300AACC8F /* Vertical+HorizontalController.swift in Sources */,
 				D0F58D09210E207300AACC8F /* ViewController.swift in Sources */,
 				D0F58D19210E207300AACC8F /* PageViewController.swift in Sources */,
