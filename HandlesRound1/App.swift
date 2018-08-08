@@ -11,115 +11,61 @@ import Singalong
 import Graphe
 import Volume
 
-struct AScaffProvider : ScaffProvider {
-  var scaff: [ScaffMember]
+
+
+
+class LoadingViewController : UIViewController {
+  
 }
 
-extension Point3 {
-  var asDoubleTuple: (x: Double, y: Double, z: Double)
-  {
-    return (x: Double(x), y: Double(y), z: Double(z))
-  }
-}
-extension ScaffType.Axis {
-  init (_ axis: Axis)
-  {
-    switch axis{
-    case .y : self = ScaffType.Axis.y
-    case .x : self = ScaffType.Axis.x
-    }
-  }
-}
-
-func graph_measure(_ cgFloat: CGFloat) -> Measurement<UnitLength>
-{
-  return Measurement(
-  value: Double(cgFloat),
-  unit: UnitLength.centimeters)
-}
-
-
-func members(graph: ScaffGraph) -> [ScaffMember]
-{
-  return graph.edges.flatMap { edge -> [ScaffMember] in
-    
-    switch edge.content {
-    case .bc:
-      return [ScaffMember(
-        type: .bc,
-        position: edge.p1.toPoint3(graph.grid).asDoubleTuple
-      )]
-    case .diag:
-      let seg3 = (graph.grid, edge) |> segment3
-      guard let axis = seg3|>axis, let run = (seg3|>run) else { return [] }
-      return [ScaffMember(
-        type: ScaffType.diag(
-          run: graph_measure(run),
-          rise: graph_measure(seg3|>rise),
-          axis: ScaffType.Axis( axis )
-        ),
-        position: edge.p1.toPoint3(graph.grid).asDoubleTuple
-      )]
-    case .jack:
-      return [ScaffMember(
-        type: .screwJack,
-        position: edge.p1.toPoint3(graph.grid).asDoubleTuple
-      )]
-    case .ledger:
-      let seg3 = (graph.grid, edge) |> segment3
-      return [ScaffMember(
-        type: .ledger(
-          size: graph_measure((seg3|>run)!),
-          axis: ScaffType.Axis( (seg3|>axis)! ) ),
-        position: edge.p1.toPoint3(graph.grid).asDoubleTuple)]
-    case .standardGroup:
-      let seg3 = (graph.grid, edge) |> segment3
-      
-      let mxRpt = maximumRepeated(availableInventory: [50,100,150,200,250,300], targetMaximum: seg3|>rise)
-      
-      let pos = mxRpt.reduce([0]){ (posRes, nextSeg) -> [CGFloat] in
-        return posRes + [posRes.last! + nextSeg]
-        
-      }
-      
-      return zip(mxRpt, pos).map{
-        (stHeight, stPos) -> ScaffMember in
-        let base3 = edge.p1.toPoint3(graph.grid).asDoubleTuple
-        let pos3 = (base3.x, base3.y, base3.z + Double(stPos))
-        return ScaffMember(
-          type: .standard(size: graph_measure( stHeight ), with: false),
-          position: pos3)
-        
-        
-      }
-    }
-      
-      
-      
-  }
-}
-
-let provider = members >>> AScaffProvider.init
-
-
-public class App
-{
+public class App {
   public init() {
+    Current = .mock
+    
+    Current.file.load { [weak self] in
+      guard let self = self else { return }
+      switch $0 {
+      case let .success(value):
+        let edit = EditViewController(
+          config: EditViewContConfiguration(
+            initialValue: [value])
+          { (anItem:Item<ScaffGraph> , cell: UITableViewCell) -> UITableViewCell in
+            cell.textLabel?.text = anItem.name
+            return cell
+          }
+        )
+        edit.didSelect = { (item, cell) in
+          self.rootController.pushViewController(self.gridController, animated: true)
+        }
+        self.rootController.setViewControllers([edit], animated: false)
+      case let .error(error):
+        fatalError()
+      }
+    }
   }
   
-  public lazy var rootController: UIViewController =
-  {
-    //let uR2 = SpriteScaffViewController(graph: graph, mapping: frontMap2)
-    //return foo2( Current.viewMaps.plan)
-//     }()
-//    public lazy var rootController: UIViewController =
-//    {
-//
-    return VerticalController(upperLeft: foo2( Current.viewMaps.plan),
-                              upperRight: foo2(Current.viewMaps.rotatedPlan),
-                              lowerLeft: foo2(Current.viewMaps.front),
-                              lowerRight: foo2(Current.viewMaps.side))
+  public lazy var rootController: UINavigationController = {
     
+    let nav = UINavigationController(rootViewController: LoadingViewController())
+    styleNav(nav)
+    return nav
+    
+  }()
+  
+  
+  public lazy var gridController: UIViewController = {
+    let func1 = flip(curry(controllerFromMap))(self)
+      //>>> embedInNav
+      //>>> inToOut(styleNav)
+    
+    let vc = VerticalController(
+      upperLeft: Current.viewMaps.plan |> func1,
+      upperRight: Current.viewMaps.rotatedPlan |> func1,
+      lowerLeft: Current.viewMaps.front |> func1,
+      lowerRight: Current.viewMaps.side |> func1)
+    vc.title = Current.viewMaps.plan.label
+    vc.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "3D", style: UIBarButtonItem.Style.plain , target: self, action: #selector(App.present3D))
+    return vc
   }()
   
   @objc func dismiss3D()
@@ -146,25 +92,37 @@ public class App
     self.rootController.present(ulN, animated: true, completion: nil)
   }
   
-  func foo2(_ vm: EditingViews.ViewMap) -> UIViewController
-  {
-    let driver = SpriteDriver(mapping: vm.viewMap)
-    let vc : ViewController = ViewController(driver: driver)
-    let st = vm.label
-    vc.title = st
-    vc.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "3D", style: UIBarButtonItem.Style.plain , target: self, action: #selector(App.present3D))
-    let ulN = UINavigationController(rootViewController: vc)
-    ulN.navigationBar.prefersLargeTitles = true
-    let nav = ulN.navigationBar
-    nav.barStyle = UIBarStyle.blackTranslucent
-    nav.tintColor = .white
-    nav.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
-    
-    return ulN
-  }
+  
   
 }
 
 
+func controllerFromMap(_ vm: EditingViews.ViewMap, target: Any ) -> UIViewController
+{
+  let driver = SpriteDriver(mapping: vm.viewMap)
+  let vc : ViewController = ViewController(driver: driver)
+  let st = vm.label
+  vc.title = st
+  vc.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "3D", style: UIBarButtonItem.Style.plain , target: target, action: #selector(App.present3D))
+  return vc
+}
 
+func styleNav(_ ulN: UINavigationController) {
+  ulN.navigationBar.prefersLargeTitles = true
+  let nav = ulN.navigationBar
+  nav.barStyle = UIBarStyle.blackTranslucent
+  nav.tintColor = .white
+  nav.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+}
 
+func embedInNav(_ vc: UIViewController)-> UINavigationController {
+  let ulN = UINavigationController(rootViewController: vc)
+  return ulN
+}
+
+func inToOut<A>( _ f: @escaping (A)->Void) -> (A)->A {
+  return { a in
+    f(a)
+    return a
+  }
+}

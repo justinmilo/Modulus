@@ -33,6 +33,8 @@
 		D09F3681210D0F0C00D38F4C /* Array+CGPoint+Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04153C1202B7CA300BD7B72 /* Array+CGPoint+Utility.swift */; };
 		D0B69D262043632D00AEA01B /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = D0B69D252043632D00AEA01B /* GameScene.sks */; };
 		D0D55C36210F280F004EF894 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D025BF3F210E6C6500083117 /* Media.xcassets */; };
+		D0DAFC0F2118F634003F552A /* 3DExchange.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0DAFC0E2118F634003F552A /* 3DExchange.swift */; };
+		D0DAFC112118F737003F552A /* StartingItems.json in Resources */ = {isa = PBXBuildFile; fileRef = D0DAFC102118F737003F552A /* StartingItems.json */; };
 		D0E9D8B82107B7790072E403 /* Make2D.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0E9D8B72107B7790072E403 /* Make2D.framework */; };
 		D0E9D8B92107B7790072E403 /* Make2D.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D0E9D8B72107B7790072E403 /* Make2D.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D0ECD78620B9E59700C3F6D0 /* GrippableView.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0ECD78520B9E59700C3F6D0 /* GrippableView.framework */; };
@@ -83,7 +85,9 @@
 		D0F5C35620C03C6300B6A75F /* OffsetableCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0F5C35520C03C6300B6A75F /* OffsetableCore.framework */; };
 		D0F5C35720C03C6300B6A75F /* OffsetableCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D0F5C35520C03C6300B6A75F /* OffsetableCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D0F5C35C20C03CA400B6A75F /* GrippableView.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D0ECD78520B9E59700C3F6D0 /* GrippableView.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		D0FD71002117260000B27092 /* EditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0FD70FF2117260000B27092 /* EditViewController.swift */; };
+		D0FD71012117275400B27092 /* EditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0FD70FF2117260000B27092 /* EditViewController.swift */; };
+		D0FD710321172BD700B27092 /* SimpleBarButtonViewContoller.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0FD710221172BD700B27092 /* SimpleBarButtonViewContoller.swift */; };
+		D0FD710521172C2600B27092 /* Changeset.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0FD710421172C2600B27092 /* Changeset.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -203,6 +207,8 @@
 		D0D6808120CEB0EF0074E97D /* ViewMaps.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewMaps.swift; sourceTree = "<group>"; };
 		D0DA9BB82039E1C60019F6EE /* TexturedView+SKSpriteNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TexturedView+SKSpriteNode.swift"; sourceTree = "<group>"; };
 		D0DA9BBA203A666A0019F6EE /* PrimitiveFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrimitiveFunctions.swift; sourceTree = "<group>"; };
+		D0DAFC0E2118F634003F552A /* 3DExchange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = 3DExchange.swift; sourceTree = "<group>"; };
+		D0DAFC102118F737003F552A /* StartingItems.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = StartingItems.json; sourceTree = "<group>"; };
 		D0DE1BB02089394300775312 /* Primitive+UIKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Primitive+UIKit.swift"; sourceTree = "<group>"; };
 		D0DE1BB22089411B00775312 /* Primitive+SpriteKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Primitive+SpriteKit.swift"; sourceTree = "<group>"; };
 		D0E9D8B72107B7790072E403 /* Make2D.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Make2D.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -229,6 +235,8 @@
 		D0F58D2A210E216E00AACC8F /* Make2D.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Make2D.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0F5C35520C03C6300B6A75F /* OffsetableCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = OffsetableCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0FD70FF2117260000B27092 /* EditViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditViewController.swift; sourceTree = "<group>"; };
+		D0FD710221172BD700B27092 /* SimpleBarButtonViewContoller.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SimpleBarButtonViewContoller.swift; sourceTree = "<group>"; };
+		D0FD710421172C2600B27092 /* Changeset.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Changeset.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -343,8 +351,10 @@
 				D0AEF45D2013A6FC005F761B /* Deploy App */,
 				D09C3C42206B32370053EE2A /* App.swift */,
 				D0A8B9C120BC9AC500D4C301 /* Environment.swift */,
+				D0DAFC0E2118F634003F552A /* 3DExchange.swift */,
+				D0DAFC102118F737003F552A /* StartingItems.json */,
 				D0D6808120CEB0EF0074E97D /* ViewMaps.swift */,
-				D0FD70FF2117260000B27092 /* EditViewController.swift */,
+				D0FD710621172C2A00B27092 /* TableViewController */,
 				D036097A20D5968100C11E79 /* ViewController.swift */,
 				D033F42420F426270026E1C4 /* TypedNotifications.swift */,
 				D025BF3F210E6C6500083117 /* Media.xcassets */,
@@ -492,6 +502,16 @@
 				D0F58CF7210E201200AACC8F /* Info.plist */,
 			);
 			path = Modular;
+			sourceTree = "<group>";
+		};
+		D0FD710621172C2A00B27092 /* TableViewController */ = {
+			isa = PBXGroup;
+			children = (
+				D0FD70FF2117260000B27092 /* EditViewController.swift */,
+				D0FD710421172C2600B27092 /* Changeset.swift */,
+				D0FD710221172BD700B27092 /* SimpleBarButtonViewContoller.swift */,
+			);
+			path = TableViewController;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -763,6 +783,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D0D55C36210F280F004EF894 /* Media.xcassets in Resources */,
+				D0DAFC112118F737003F552A /* StartingItems.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -775,7 +796,6 @@
 			files = (
 				D00069D4200BD08300E8D5F3 /* AppDelegate.swift in Sources */,
 				D03E03DA20124DB8002D47F3 /* Testing.swift in Sources */,
-				D0FD71002117260000B27092 /* EditViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -839,7 +859,9 @@
 				D0F58D0A210E207300AACC8F /* TypedNotifications.swift in Sources */,
 				D0F58D0D210E207300AACC8F /* SpriteDriver.swift in Sources */,
 				D0F58D14210E207300AACC8F /* TensionedPoint.swift in Sources */,
+				D0FD710521172C2600B27092 /* Changeset.swift in Sources */,
 				D0F58D03210E202A00AACC8F /* Sprite2DView.swift in Sources */,
+				D0FD710321172BD700B27092 /* SimpleBarButtonViewContoller.swift in Sources */,
 				D0F58D01210E202900AACC8F /* Scaff2D.swift in Sources */,
 				D0F58D18210E207300AACC8F /* Vertical+HorizontalController.swift in Sources */,
 				D0F58D09210E207300AACC8F /* ViewController.swift in Sources */,
@@ -848,6 +870,7 @@
 				D0F58D07210E207300AACC8F /* Environment.swift in Sources */,
 				D0F58D0C210E207300AACC8F /* ViewDiagramDriver.swift in Sources */,
 				D0F58D16210E207300AACC8F /* SelectionCore.swift in Sources */,
+				D0DAFC0F2118F634003F552A /* 3DExchange.swift in Sources */,
 				D0F58D15210E207300AACC8F /* CGRect+Inset.swift in Sources */,
 				D0F58D06210E207300AACC8F /* App.swift in Sources */,
 				D0F58D08210E207300AACC8F /* ViewMaps.swift in Sources */,
@@ -857,6 +880,7 @@
 				D0F58D0F210E207300AACC8F /* SpriteScaffViewController.swift in Sources */,
 				D0F58D0B210E207300AACC8F /* LayoutToDriver.swift in Sources */,
 				D0F58D00210E202900AACC8F /* ViewFunctions.swift in Sources */,
+				D0FD71012117275400B27092 /* EditViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

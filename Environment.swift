@@ -17,6 +17,9 @@ extension ScaffGraph
     let initial = CGSize3(width: 300, depth: 100, elev: 400) |> createGrid
     self.init(grid: initial.0, edges: initial.1)
   }
+  
+  static var mock : ScaffGraph = CGSize3(width: 300, depth: 100, elev: 400) |> createGrid >>> ScaffGraph.init
+  
 }
 
 struct EditingViews {
@@ -27,7 +30,59 @@ struct EditingViews {
   var side : ViewMap = ViewMap( label: "Side View", viewMap: sideMap)
 }
 
+
+
+struct Item<Content> : Equatable {
+  static func == (lhs: Item<Content>, rhs: Item<Content>) -> Bool {
+    return lhs.id == rhs.id
+  }
+  
+  let content: Content
+  let id: String
+  let name: String
+}
+
+extension Item : Codable where Content : Codable { }
+extension Item where Content == ScaffGraph {
+  static var mock : Item<Content> = Item(content:ScaffGraph.mock, id: "Mock", name: "First Graph")
+}
+
+typealias ScaffItem = Item<ScaffGraph>
+
+enum Result<Value, Error> {
+  case success(Value)
+  case error(Error)
+}
+
+struct Filer {
+  var load = loadItems
+  var save = saveItems
+}
+
+func loadItems(completion: (Result<ScaffItem, Swift.Error>) -> Void) {
+  
+}
+
+func saveItems(item: ScaffItem) {
+  let encoder = JSONEncoder()
+  encoder.outputFormatting = .prettyPrinted
+  let data = try! encoder.encode(item)
+  print(String(data: data, encoding: .utf8)!)
+}
+
+extension Filer {
+  static var mock : Filer = Filer( load: { completion in
+    completion(.success(.mock))
+  }, save: {
+    let encoder = JSONEncoder()
+    encoder.outputFormatting = .prettyPrinted
+    let data = try! encoder.encode($0)
+    print(String(data: data, encoding: .utf8)!)
+  })
+}
+
 struct Environment {
+  var file = Filer()
   var graph = ScaffGraph()
   var screen = UIScreen.main.bounds
   var viewMaps = EditingViews()
@@ -38,6 +93,20 @@ struct Environment {
     }
   }
 }
+
+extension EditingViews {
+  static var mock = EditingViews()
+}
+
+extension Environment {
+  static var mock = Environment(
+    file: .mock,
+    graph: .mock,
+    screen: CGRect(0,0,300, 600),
+    viewMaps: .mock,
+    scale: 1.0)
+}
+
 
 var Current = Environment()
 

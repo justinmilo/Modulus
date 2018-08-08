@@ -33,7 +33,7 @@ struct UndoHistory<Item> {
 
 struct BarButtonConfiguration {
     enum ButtonType {
-        case system(UIBarButtonSystemItem)
+      case system(UIBarButtonItem.SystemItem)
         case custom(String)
     }
     let type : ButtonType
@@ -41,7 +41,7 @@ struct BarButtonConfiguration {
 }
 
 public struct EditViewContConfiguration<A, Cell: UITableViewCell> {
-    let style : UITableViewStyle
+  let style : UITableView.Style
     var initialValue : [A]
     
     let navTitle : String
@@ -75,17 +75,17 @@ public class EditViewController<A : Equatable, Cell: UITableViewCell> : SimpleBa
                 {
                 case .deletion:
                     print("UHDS-Deletion")
-                    tableView.deleteRows(at: [ip], with: UITableViewRowAnimation.none)
+                    tableView.deleteRows(at: [ip], with: UITableView.RowAnimation.none)
                   didDelete(ip.row, oldValue.currentValue[ip.row])
                 case .insertion:
                     print("UHDS-insertion")
-                    tableView.insertRows(at: [ip], with: UITableViewRowAnimation.left)
+                    tableView.insertRows(at: [ip], with: UITableView.RowAnimation.left)
                 case let .move(origin: origin):
                     print("UHDS-Move")
                     tableView.moveRow(at:  IndexPath(row: origin, section: 0), to:ip)
                 case .substitution:
                     print("UHDS-Substituion")
-                    tableView.reloadRows(at: [ip], with: UITableViewRowAnimation.left)
+                    tableView.reloadRows(at: [ip], with: UITableView.RowAnimation.left)
                 }
             }
             tableView.endUpdates()
@@ -119,7 +119,7 @@ public class EditViewController<A : Equatable, Cell: UITableViewCell> : SimpleBa
           self.transitionCoordinator?.notifyWhenInteractionChanges{
             context in
             if (context.isCancelled) {
-              self.tableView.selectRow(at: selectedRowIndexPath, animated: false, scrollPosition: UITableViewScrollPosition.none)
+              self.tableView.selectRow(at: selectedRowIndexPath, animated: false, scrollPosition: UITableView.ScrollPosition.none)
             }
           }
         }
@@ -133,12 +133,12 @@ public class EditViewController<A : Equatable, Cell: UITableViewCell> : SimpleBa
     override public var canBecomeFirstResponder : Bool {
         return true
     }
-    override public func motionEnded(_ motion: UIEventSubtype, with event: UIEvent?) {
+  override public func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
         if motion == .motionShake && self.undoHistory.canUndo {
-            let undoPrompt = UIAlertController(title: "Undo", message: nil, preferredStyle: UIAlertControllerStyle.alert)
-            undoPrompt.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: ({ (ui:UIAlertAction) -> Void in
+          let undoPrompt = UIAlertController(title: "Undo", message: nil, preferredStyle: UIAlertController.Style.alert)
+          undoPrompt.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler: ({ (ui:UIAlertAction) -> Void in
             })))
-            undoPrompt.addAction(UIAlertAction(title: "Undo", style: UIAlertActionStyle.default, handler: ({ (ui:UIAlertAction) -> Void in
+            undoPrompt.addAction(UIAlertAction(title: "Undo", style: UIAlertAction.Style.default, handler: ({ (ui:UIAlertAction) -> Void in
                     self.undoHistory.undo()
             })))
             
@@ -189,7 +189,7 @@ public class EditViewController<A : Equatable, Cell: UITableViewCell> : SimpleBa
     
     override public func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         return [
-        UITableViewRowAction(style: UITableViewRowActionStyle.default, title: "Delete") { (UITableViewRowAction, NSIndexPath) in
+          UITableViewRowAction(style: UITableViewRowAction.Style.default, title: "Delete") { (UITableViewRowAction, NSIndexPath) in
             
                 self.undoHistory.currentValue.remove(at: indexPath.row)
             }
