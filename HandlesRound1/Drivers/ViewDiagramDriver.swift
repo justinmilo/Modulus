@@ -37,11 +37,12 @@ class ViewDriver : Driver  {
   private var scale: CGFloat
   var twoDView : UIView
   var content : UIView { return self.twoDView }
+  let id : String
   
-  public init(mapping: [GraphEditingView], scale: CGFloat)
+  public init(mapping: [GraphEditingView], id: String , scale: CGFloat)
   {
     editingView = mapping[0]
-    
+    self.id = id
     twoDView = UIView(frame: Current.screen )
     
     self.scale = scale
@@ -59,13 +60,15 @@ class ViewDriver : Driver  {
     self.assemblyView.frame.origin = origin
   }
   
+  var graph : ScaffGraph { return Current.model.getItem(id: self.id)!.content }
+  
   /// Handler for Selection Size Changed
    func layout(size: CGSize) {
     
     
     print("LAYOUT SIZE", size, "LAYOUT Scale," , scale, "Basic size", size * scale)
 
-    let artwork = Current.graph
+    let artwork = self.graph
       |> get(\ScaffGraph.planEdgesNoZeros)
       >>> modelToLinework
       >>> filter()
@@ -91,12 +94,12 @@ class ViewDriver : Driver  {
     let roundedScaledSize = CGSize(width: scaledSize.width.rounded(places: 5), height: scaledSize.height.rounded(places: 5))
     
     print("size from main driver - delivr",  roundedScaledSize)
-    let s3 =  roundedScaledSize |> self.editingView.size3(Current.graph)
-    (Current.graph.grid, Current.graph.edges) = self.editingView.build(s3, Current.graph.edges)
-    let adjSize = Current.graph |> self.editingView.size
+    let s3 =  roundedScaledSize |> self.editingView.size3(self.graph)
+    (self.graph.grid, self.graph.edges) = self.editingView.build(s3, self.graph.edges)
+    let adjSize = self.graph |> self.editingView.size
     print("size from main driver - scaled",  adjSize)
     print("size from main driver - return",  adjSize  * scale)
-    return (Current.graph |> self.editingView.size) * scale
+    return (self.graph |> self.editingView.size) * scale
   }
   
 }

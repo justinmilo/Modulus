@@ -18,9 +18,11 @@ class SpriteDriver : Driver {
   var uiPointToSprite : ((CGPoint)->CGPoint)!
   var uiRectToSprite : ((CGRect)->CGRect)!
   var scaleObserver : NotificationObserver!
+  var graph : ScaffGraph
   
-  public init(mapping: [GraphEditingView] )
+  public init(mapping: [GraphEditingView], graph: ScaffGraph )
   {
+    self.graph = graph
     editingView = mapping[0]
     loadedViews = mapping
     initialFrame = Current.screen
@@ -43,7 +45,7 @@ class SpriteDriver : Driver {
   
   func layout(origin: CGPoint) {
     print("#Beg-Layout Origin")
-    let heightVector = unitY * (Current.graph |> self.editingView.size).height * Current.scale
+    let heightVector = unitY * (self.graph |> self.editingView.size).height * Current.scale
     
     print("given origin", origin)
     print("new origin", uiPointToSprite(origin)  - heightVector )
@@ -75,7 +77,7 @@ class SpriteDriver : Driver {
   
   private func _layout(size: CGSize)
   {
-    let geom = Current.graph |> self.editingView.composite
+    let geom = self.graph |> self.editingView.composite
     self.twoDView.redraw(geom)
   }
   
@@ -83,7 +85,7 @@ class SpriteDriver : Driver {
   
   var size : CGSize {
     get {
-      return (Current.graph |> self.editingView.size) * Current.scale
+      return (self.graph |> self.editingView.size) * Current.scale
     }
   }
   
@@ -100,9 +102,9 @@ class SpriteDriver : Driver {
     let modelspaceSize_input = viewportSize / scale
     let roundedModelSize = modelspaceSize_input.rounded(places: 5)
     
-    let s3 = roundedModelSize |> self.editingView.size3(Current.graph)
-    (Current.graph.grid, Current.graph.edges) = self.editingView.build(s3, Current.graph.edges)
-    let modelSpaceSize_output =  Current.graph |> self.editingView.size
+    let s3 = roundedModelSize |> self.editingView.size3(self.graph)
+    (self.graph.grid, self.graph.edges) = self.editingView.build(s3, self.graph.edges)
+    let modelSpaceSize_output =  self.graph |> self.editingView.size
     return modelSpaceSize_output * twoDView.scale
     print("#End-Build Scale")
 
@@ -168,7 +170,7 @@ class SpriteDriver : Driver {
       let p = (tS, rectS) |> viewSpaceToModelSpace
       let scaledP = p * 1/scale
       // Properly models concern
-      let editBoundaries = Current.graph |> editingView.grid2D ///
+      let editBoundaries = self.graph |> editingView.grid2D ///
       let toGridIndices = editBoundaries |> curry(pointToGridIndices) >>>  handleTupleOptionWith
   
       // Get Model Indices
@@ -194,7 +196,7 @@ class SpriteDriver : Driver {
       let flippedRect = (cellRectValue, y )  |> mirrorVertically
       // flipped rect is situated in sprite kit space
   
-      Current.graph.edges = editingView.selectedCell(indices, Current.graph.grid, Current.graph.edges)
+      self.graph.edges = editingView.selectedCell(indices, self.graph.grid, self.graph.edges)
   
       self._layout(size: _previousSize)
       self.twoDView.addTempRect(rect: flippedRect, color: .white)

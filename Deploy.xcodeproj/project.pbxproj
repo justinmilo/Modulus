@@ -22,6 +22,7 @@
 		D046292F20D9B1FF0037B63B /* Layout.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D046292D20D9B1FF0037B63B /* Layout.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D06E02FA20F5CF33000E646F /* Volume.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D06E02F920F5CF33000E646F /* Volume.framework */; };
 		D06E02FB20F5CF33000E646F /* Volume.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D06E02F920F5CF33000E646F /* Volume.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		D07C56B9211E74F50073D7A7 /* HorizontalPageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07C56B8211E74F50073D7A7 /* HorizontalPageController.swift */; };
 		D0915FAB208901DD0067C02A /* GraphicsCoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0915FAA208901DD0067C02A /* GraphicsCoreTests.swift */; };
 		D0915FCF2089027C0067C02A /* GraphicsCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03267942082DE8D00BBF563 /* GraphicsCore.swift */; };
 		D09F3675210D0C4200D38F4C /* BlackCricket.h in Headers */ = {isa = PBXBuildFile; fileRef = D09F3673210D0C4200D38F4C /* BlackCricket.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -67,7 +68,7 @@
 		D0F58D15210E207300AACC8F /* CGRect+Inset.swift in Sources */ = {isa = PBXBuildFile; fileRef = D026711F20CD9639008E24FB /* CGRect+Inset.swift */; };
 		D0F58D16210E207300AACC8F /* SelectionCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A6EDF720745DE600C644F0 /* SelectionCore.swift */; };
 		D0F58D17210E207300AACC8F /* GraphicsCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03267942082DE8D00BBF563 /* GraphicsCore.swift */; };
-		D0F58D18210E207300AACC8F /* Vertical+HorizontalController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B218CF201F6491004684FC /* Vertical+HorizontalController.swift */; };
+		D0F58D18210E207300AACC8F /* VerticalPageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B218CF201F6491004684FC /* VerticalPageController.swift */; };
 		D0F58D19210E207300AACC8F /* PageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0051E25201D2BC900C0128A /* PageViewController.swift */; };
 		D0F58D1A210E207300AACC8F /* ViewComposite.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BAD734204228F700406E70 /* ViewComposite.swift */; };
 		D0F58D1C210E212D00AACC8F /* Diagrams.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0F58D1B210E212D00AACC8F /* Diagrams.framework */; };
@@ -188,6 +189,7 @@
 		D04153C1202B7CA300BD7B72 /* Array+CGPoint+Utility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+CGPoint+Utility.swift"; sourceTree = "<group>"; };
 		D046292D20D9B1FF0037B63B /* Layout.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Layout.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D06E02F920F5CF33000E646F /* Volume.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Volume.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D07C56B8211E74F50073D7A7 /* HorizontalPageController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizontalPageController.swift; sourceTree = "<group>"; };
 		D08A6F92202AA58E00EF9E68 /* EdgeToGeometry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EdgeToGeometry.swift; sourceTree = "<group>"; };
 		D0915FA8208901DD0067C02A /* GraphicsCoreTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GraphicsCoreTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0915FAA208901DD0067C02A /* GraphicsCoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphicsCoreTests.swift; sourceTree = "<group>"; };
@@ -199,7 +201,7 @@
 		D09F3674210D0C4200D38F4C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D0A6EDF720745DE600C644F0 /* SelectionCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectionCore.swift; sourceTree = "<group>"; };
 		D0A8B9C120BC9AC500D4C301 /* Environment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = SOURCE_ROOT; };
-		D0B218CF201F6491004684FC /* Vertical+HorizontalController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Vertical+HorizontalController.swift"; sourceTree = "<group>"; };
+		D0B218CF201F6491004684FC /* VerticalPageController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerticalPageController.swift; sourceTree = "<group>"; };
 		D0B69D252043632D00AEA01B /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
 		D0B86C64202FC09200CCB3F7 /* ViewFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewFunctions.swift; sourceTree = "<group>"; };
 		D0BAD734204228F700406E70 /* ViewComposite.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewComposite.swift; sourceTree = "<group>"; };
@@ -365,7 +367,8 @@
 				D0ECD78D20B9F12700C3F6D0 /* HandlesView Core */,
 				D0A6EDF720745DE600C644F0 /* SelectionCore.swift */,
 				D03267942082DE8D00BBF563 /* GraphicsCore.swift */,
-				D0B218CF201F6491004684FC /* Vertical+HorizontalController.swift */,
+				D0B218CF201F6491004684FC /* VerticalPageController.swift */,
+				D07C56B8211E74F50073D7A7 /* HorizontalPageController.swift */,
 				D0051E25201D2BC900C0128A /* PageViewController.swift */,
 				D0F58CE6210E146F00AACC8F /* Graph To Cricket to Modular+Scaffolding */,
 				D03E03F520125DF8002D47F3 /* BlackCricket */,
@@ -863,12 +866,13 @@
 				D0F58D03210E202A00AACC8F /* Sprite2DView.swift in Sources */,
 				D0FD710321172BD700B27092 /* SimpleBarButtonViewContoller.swift in Sources */,
 				D0F58D01210E202900AACC8F /* Scaff2D.swift in Sources */,
-				D0F58D18210E207300AACC8F /* Vertical+HorizontalController.swift in Sources */,
+				D0F58D18210E207300AACC8F /* VerticalPageController.swift in Sources */,
 				D0F58D09210E207300AACC8F /* ViewController.swift in Sources */,
 				D0F58D19210E207300AACC8F /* PageViewController.swift in Sources */,
 				D0F58D10210E207300AACC8F /* HandlesView.swift in Sources */,
 				D0F58D07210E207300AACC8F /* Environment.swift in Sources */,
 				D0F58D0C210E207300AACC8F /* ViewDiagramDriver.swift in Sources */,
+				D07C56B9211E74F50073D7A7 /* HorizontalPageController.swift in Sources */,
 				D0F58D16210E207300AACC8F /* SelectionCore.swift in Sources */,
 				D0DAFC0F2118F634003F552A /* 3DExchange.swift in Sources */,
 				D0F58D15210E207300AACC8F /* CGRect+Inset.swift in Sources */,

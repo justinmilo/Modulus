@@ -8,13 +8,12 @@
 
 import UIKit
 
-class VerticalController: UIViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate {
+class VerticalPageController: UIViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate {
   var pageViewController: UIPageViewController!
-  var content : [HorizontalHolder]!
+  var content : [HorizontalPageHolder]!
   
   var conts : [UIViewController]
-  init(upperLeft: UIViewController, upperRight: UIViewController, lowerLeft: UIViewController, lowerRight: UIViewController)
-  {
+  init(upperLeft: UIViewController, upperRight: UIViewController, lowerLeft: UIViewController, lowerRight: UIViewController) {
     self.conts = [upperLeft, upperRight, lowerLeft, lowerRight]
     super.init(nibName: nil, bundle: nil)
   }
@@ -27,8 +26,8 @@ class VerticalController: UIViewController, UIPageViewControllerDataSource, UIPa
     
     
     self.content = [
-      HorizontalHolder(content:  [conts[0], conts[1]]),
-      HorizontalHolder(content:  [conts[2], conts[3]])
+      HorizontalPageHolder(content:  [conts[0], conts[1]]),
+      HorizontalPageHolder(content:  [conts[2], conts[3]])
     ]
     
     super.viewDidLoad()
@@ -43,6 +42,9 @@ class VerticalController: UIViewController, UIPageViewControllerDataSource, UIPa
     self.view.addSubview(pageViewController.view)
     self.pageViewController.didMove(toParent: self)
     
+    let v = UIView(frame: CGRect( (self.view.frame.width - 200)/2, 300, 50, 100))
+    v.backgroundColor = .blue
+    self.view.addSubview(v)
     
     for c in content { c.pageViewController.delegate = self }
   }
@@ -135,82 +137,4 @@ class VerticalController: UIViewController, UIPageViewControllerDataSource, UIPa
 
 
 
-
-class HorizontalHolder: UIViewController, UIPageViewControllerDataSource  {
-
-  var pageViewController: UIPageViewController
-  var content : [UIViewController]!
-  
-  required init?(coder aDecoder: NSCoder) {
-    fatalError()
-  }
-  
-  init(content: [UIViewController])
-  {
-    self.pageViewController = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
-    super.init(nibName: nil, bundle: nil)
-    
-    
-    self.content = content
-  }
-  
-  
-  override func viewDidLoad() {
-    
-    
-    let pc = UIPageControl.appearance()
-    pc.pageIndicatorTintColor = .lightGray
-    pc.currentPageIndicatorTintColor = .white
-    self.pageViewController.dataSource = self
-    self.restartAction(sender: self)
-    self.addChild(self.pageViewController)
-    self.view.addSubview(pageViewController.view)
-    self.pageViewController.didMove(toParent: self)
-    
-    
-    super.viewDidLoad()
-  }
-    
-    func restartAction(sender: AnyObject) {
-      self.pageViewController.setViewControllers([self.viewControllerAtIndex(index: 0)], direction: .forward, animated: true, completion: nil)
-    }
-    
-    func viewControllerAtIndex(index: Int) -> UIViewController {
-      return self.content[index]
-    }
-    
-
-    
-  func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
-
-      if viewController == self.content[0] {
-        return nil
-      }
-      else if viewController == self.content[1] {
-        return self.content[0]
-      }
-      return nil
-    }
-    
-  func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
-
-      if viewController == self.content[0] {
-        return self.content[1]
-      }
-      else if viewController == self.content[1] {
-        return nil
-      }
-      return nil
-    }
-    
-  func presentationCount(for pageViewController: UIPageViewController) -> Int // The number of items reflected in the page indicator.
-  {
-      return self.content.count
-    }
-    
-func presentationIndex(for pageViewController: UIPageViewController) -> Int // The selected item reflected in the page indicator.
-{
-      return 0
-    }
-  }
 
