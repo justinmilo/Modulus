@@ -105,17 +105,12 @@ public class GraphNavigator {
   lazy var vc: UIViewController = quadVC()
   
   
+  
   lazy var mock : UIViewController = {
     
     let func1 : (EditingViews.ViewMap)->UIViewController =  curry(controller2FromMap)(self)
     
-    
-    let vc = VerticalPageController(
-      upperLeft: Current.viewMaps.plan |> func1,
-      upperRight: Current.viewMaps.rotatedPlan |> func1,
-      lowerLeft: Current.viewMaps.front |> func1,
-      lowerRight: Current.viewMaps.side |> func1)
-    vc.title = Current.viewMaps.plan.label
+    let vc = createVC(func1: func1)
     vc.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "3D", style: UIBarButtonItem.Style.plain , target: self, action: #selector(GraphNavigator.present3D))
     return vc
   }()
@@ -126,44 +121,33 @@ public class GraphNavigator {
     >>> embedInNav
     >>> inToOut(styleNav)
     
+    let vc = createVC(func1: func1)
     
-    let vc = VerticalPageController(
-      upperLeft: Current.viewMaps.plan |> func1,
-      upperRight: Current.viewMaps.rotatedPlan |> func1,
-      lowerLeft: Current.viewMaps.front |> func1,
-      lowerRight: Current.viewMaps.side |> func1)
-    vc.title = Current.viewMaps.plan.label
+    //vc.title = Current.viewMaps.plan.label
     vc.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "3D", style: UIBarButtonItem.Style.plain , target: self, action: #selector(GraphNavigator.present3D))
     return vc
   }()
   
-  lazy var quadVC : ()->VerticalPageController  = {
+  lazy var quadVC : ()->PageController<UIViewController>  = {
     
-    let func1 : (EditingViews.ViewMap)->UIViewController = { ($0, self.graph) } >>> curry(controllerFromMap)(self)
+    let func1 : (EditingViews.ViewMap)->UIViewController = { ($0, self.graph) } >>> curry(controllerFromMap)(self) >>> inToOut(addBarSafely)
     
-    let vc = VerticalPageController(
-      upperLeft: Current.viewMaps.plan |> func1,
-      upperRight: Current.viewMaps.rotatedPlan |> func1,
-      lowerLeft: Current.viewMaps.front |> func1,
-      lowerRight: Current.viewMaps.side |> func1)
+    let vc = createVC(func1: func1)
     vc.title = Current.viewMaps.plan.label
     vc.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "3D", style: UIBarButtonItem.Style.plain , target: self, action: #selector(GraphNavigator.present3D))
     return vc
   }
   
   
-  lazy var quadNavs : ()->VerticalPageController  = {
+  lazy var quadNavs : ()->PageController<UIViewController>  = {
     
     let func1 : (EditingViews.ViewMap)->UIViewController = { ($0, self.graph) } >>> curry(controllerFromMap)(self)
       >>> embedInNav
       >>> inToOut(styleNav)
     
     
-    let vc = VerticalPageController(
-      upperLeft: Current.viewMaps.plan |> func1,
-      upperRight: Current.viewMaps.rotatedPlan |> func1,
-      lowerLeft: Current.viewMaps.front |> func1,
-      lowerRight: Current.viewMaps.side |> func1)
+    let vc = createVC(func1: func1)
+
     vc.title = Current.viewMaps.plan.label
     vc.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "3D", style: UIBarButtonItem.Style.plain , target: self, action: #selector(GraphNavigator.present3D))
     return vc
@@ -215,5 +199,16 @@ func controller2FromMap(target: Any, _ vm: EditingViews.ViewMap) -> UIViewContro
   let st = vm.label
   vc.title = st
   vc.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "3D", style: UIBarButtonItem.Style.plain , target: target, action: #selector(GraphNavigator.present3D))
+  return vc
+}
+
+func createVC(func1 : (EditingViews.ViewMap)->UIViewController )->PageController<UIViewController>{
+  let top = [Current.viewMaps.plan, Current.viewMaps.rotatedPlan].map(func1)
+  let bottom = [Current.viewMaps.front, Current.viewMaps.side].map(func1)
+  let topRow = PageController(orientation: .horizontal, content: top)
+  let botttomRow = PageController( orientation: .horizontal, content: bottom )
+  let vc = PageController(orientation: .vertical, content: [topRow, botttomRow])
+  topRow.delegate = vc
+  botttomRow.delegate = vc
   return vc
 }

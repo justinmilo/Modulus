@@ -84,7 +84,6 @@
 		D0F58D16210E207300AACC8F /* SelectionCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A6EDF720745DE600C644F0 /* SelectionCore.swift */; };
 		D0F58D17210E207300AACC8F /* GraphicsCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03267942082DE8D00BBF563 /* GraphicsCore.swift */; };
 		D0F58D18210E207300AACC8F /* VerticalPageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B218CF201F6491004684FC /* VerticalPageController.swift */; };
-		D0F58D19210E207300AACC8F /* PageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0051E25201D2BC900C0128A /* PageViewController.swift */; };
 		D0F58D1A210E207300AACC8F /* ViewComposite.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BAD734204228F700406E70 /* ViewComposite.swift */; };
 		D0F58D1C210E212D00AACC8F /* Diagrams.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0F58D1B210E212D00AACC8F /* Diagrams.framework */; };
 		D0F58D20210E212D00AACC8F /* Geo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0F58D1F210E212D00AACC8F /* Geo.framework */; };
@@ -202,7 +201,6 @@
 		D00069DD200BD08300E8D5F3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D00069E4200BD08300E8D5F3 /* DeployTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DeployTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D00069EF200BD08300E8D5F3 /* DeployUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DeployUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		D0051E25201D2BC900C0128A /* PageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PageViewController.swift; path = HandlesRound1/PageViewController.swift; sourceTree = SOURCE_ROOT; };
 		D01A6E5920DD5C1F00250F32 /* LayoutToDriver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LayoutToDriver.swift; sourceTree = "<group>"; };
 		D025BF3F210E6C6500083117 /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
 		D026710920CD5BE5008E24FB /* Graphe.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Graphe.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -432,7 +430,6 @@
 				D06560422127974B00E2B880 /* PageController.swift */,
 				D0B218CF201F6491004684FC /* VerticalPageController.swift */,
 				D07C56B8211E74F50073D7A7 /* HorizontalPageController.swift */,
-				D0051E25201D2BC900C0128A /* PageViewController.swift */,
 				D0CBE3F0211F36A300A661F0 /* New Quad Page */,
 				D0F58CE6210E146F00AACC8F /* Graph To Cricket to Modular+Scaffolding */,
 				D03E03F520125DF8002D47F3 /* BlackCricket */,
@@ -1000,7 +997,6 @@
 				D0CBE3F8211F91FD00A661F0 /* ScrollableViewController.swift in Sources */,
 				D0F58D18210E207300AACC8F /* VerticalPageController.swift in Sources */,
 				D0F58D09210E207300AACC8F /* ViewController.swift in Sources */,
-				D0F58D19210E207300AACC8F /* PageViewController.swift in Sources */,
 				D0F58D10210E207300AACC8F /* HandlesView.swift in Sources */,
 				D0F58D07210E207300AACC8F /* Environment.swift in Sources */,
 				D0CBE3F7211F91FD00A661F0 /* BViewController.swift in Sources */,
