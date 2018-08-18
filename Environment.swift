@@ -118,7 +118,7 @@ extension ItemList where T == ScaffGraph {
   static var mock : ItemList<ScaffGraph> = {
     var list = ItemList([
       Item(content: (100,100,450) |> createScaffolding, id: "Mock0", name: "First Graph"),
-      Item(content: (2000,2000,100) |> createScaffolding, id: "Mock1", name: "Second Graph"),
+      Item(content: (1000,1000,100) |> createScaffolding, id: "Mock1", name: "Second Graph"),
       Item(content: (500,1000,1000) |> createScaffolding, id: "Mock2", name: "Third Graph")])
     list.addOrReplace(item: Item(content: (500,300,1000) |> createScaffolding, id: "Mock3", name: "Force Graph"))
 

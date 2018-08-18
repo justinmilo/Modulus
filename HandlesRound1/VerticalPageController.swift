@@ -8,11 +8,15 @@
 
 import UIKit
 
+
+ 
+
 class VerticalPageController: UIViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate {
+  typealias ContentType = HorizontalPageHolder
   var pageViewController: UIPageViewController!
   var content : [HorizontalPageHolder]!
-  
   var conts : [UIViewController]
+  
   init(upperLeft: UIViewController, upperRight: UIViewController, lowerLeft: UIViewController, lowerRight: UIViewController) {
     self.conts = [upperLeft, upperRight, lowerLeft, lowerRight]
     super.init(nibName: nil, bundle: nil)
@@ -29,29 +33,23 @@ class VerticalPageController: UIViewController, UIPageViewControllerDataSource, 
       HorizontalPageHolder(content:  [conts[0], conts[1]]),
       HorizontalPageHolder(content:  [conts[2], conts[3]])
     ]
+    self.content.forEach { (horizontal) in
+      horizontal.delegate = self
+    }
     
     super.viewDidLoad()
     
-    let pc = UIPageControl.appearance()
-    pc.pageIndicatorTintColor = .lightGray
-    pc.currentPageIndicatorTintColor = .white
     self.pageViewController = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .vertical, options: nil)
     self.pageViewController.dataSource = self
-    self.restartAction(sender: self)
+    self.pageViewController.delegate = self
+    self.pageViewController.setViewControllers([self.viewControllerAtIndex(index: 0)], direction: .forward, animated: true, completion: nil)
     self.addChild(self.pageViewController)
     self.view.addSubview(pageViewController.view)
     self.pageViewController.didMove(toParent: self)
     
-    let v = UIView(frame: CGRect( (self.view.frame.width - 200)/2, 300, 50, 100))
-    v.backgroundColor = .blue
-    self.view.addSubview(v)
-    
     for c in content { c.pageViewController.delegate = self }
   }
-  
-  func restartAction(sender: AnyObject) {
-    self.pageViewController.setViewControllers([self.viewControllerAtIndex(index: 0)], direction: .forward, animated: true, completion: nil)
-  }
+
   
   func viewControllerAtIndex(index: Int) -> UIViewController {
     return self.content[index]
@@ -59,67 +57,86 @@ class VerticalPageController: UIViewController, UIPageViewControllerDataSource, 
   
   func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
    
+   
+    if pageViewController == content[0].pageViewController, // if caller is the first (top) controller
+      completed == true, // and completed (didn't fall back)
+      let first = content[0].pageViewController.viewControllers?.first, // get the sub
+      let index = content[0].content.index(of: first) // grab the current subindex
+    {
+      let target = content[1].content[index]
+      content[1].pageViewController.setViewControllers([target], direction: .forward, animated: true, completion: nil)
+    }
     
-    if pageViewController == content[0].pageViewController, completed == true
+    if pageViewController == content[1].pageViewController,
+      completed == true,
+      let first = content[1].pageViewController.viewControllers?.first,
+      let index = content[1].content.index(of: first)
     {
-        if let first = content[0].pageViewController.viewControllers?.first, let index = content[0].content.index(of: first)
-        {
-          let b = content[1]
-          let target = b.content[index]
-          content[1].pageViewController.setViewControllers([target],
-                                                           direction: UIPageViewController.NavigationDirection.forward,
-                                                           animated: true,
-                                                           completion: { (_) in })
-        }
+      let target = content[0].content[index]
+      content[0].pageViewController.setViewControllers([target], direction: .forward, animated: true, completion: nil)
     }
-    if pageViewController == content[1].pageViewController, completed == true
-    {
-      if let first = content[1].pageViewController.viewControllers?.first, let index = content[1].content.index(of: first)
-      {
-        let b = content[0]
-        let target = b.content[index]
-        content[0].pageViewController.setViewControllers([target],
-                                                         direction: UIPageViewController.NavigationDirection.forward,
-                                                         animated: true,
-                                                         completion: { (_) in })
-      }
-    }
+    
+    guard completed else { return}
+    guard let first =  pageViewController.viewControllers?.first else { return }
+    print(navigationController?.title, "TAGG1-V")
+    self.title = first.title
+    first.navigationController?.title = first.title
+    self.navigationItem.title = first.title
+    self.navigationController?.title = first.title
+    
+    
+    print(first.title, "TAGG-V")
   }
   
+  // Data Source
   func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
-    
-    if viewController == self.content[0] {
-      return nil
-    }
-    else if viewController == self.content[1] {
-      return self.content[0]
-    }
-    return nil
+    print(content)
+    return content.previousElement(at: content.firstIndex(of: viewController as! ContentType)! )
   }
-  
+  // Data Source
   func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
-    
-    if viewController == self.content[0] {
-      return self.content[1]
-    }
-    else if viewController == self.content[1] {
-      return nil
-    }
-    return nil
+    let con = content.nextElement(at: content.firstIndex(of: viewController as! ContentType)! )
+    return con
   }
   
-  func presentationCount(for pageViewController: UIPageViewController) -> Int // The number of items reflected in the page indicator.
-  {
-    return self.content.count
+  
+}
+
+extension VerticalPageController : HorizontalDelegate {
+  func didTransitionToViewController(vc: UIViewController) {
+    self.title = vc.title
+    self.navigationItem.title = vc.title
+    self.navigationController?.title = vc.title
   }
   
-  func presentationIndex(for pageViewController: UIPageViewController) -> Int // The selected item reflected in the page indicator.
-  {
-    return 0
-  }
+  
 }
 
 
+
+
+
+extension Array {
+  func previous(index: Index) -> Index? {
+    return index == startIndex
+    ?  nil
+    : index - 1
+  }
+  func next(index: Index) -> Index? {
+    return index == endIndex - 1
+      ?  nil
+      : index + 1
+  }
+  func previousElement(at index: Index) -> Element? {
+    guard let prevI = self.previous(index: index) else { return nil}
+    return self[prevI]
+  }
+
+  func nextElement(at index: Index) -> Element? {
+    guard let nextI = self.next(index: index) else { return nil}
+    return self[nextI]
+  }
+}
 
 
 
