@@ -37,6 +37,7 @@
 		D09F367F210D0DB200D38F4C /* DrawingPrimitives.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03E03FB20125DF8002D47F3 /* DrawingPrimitives.swift */; };
 		D09F3680210D0E1700D38F4C /* PrimitiveFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0DA9BBA203A666A0019F6EE /* PrimitiveFunctions.swift */; };
 		D09F3681210D0F0C00D38F4C /* Array+CGPoint+Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04153C1202B7CA300BD7B72 /* Array+CGPoint+Utility.swift */; };
+		D0B0A2A62129E8E700AAC17B /* Items.json in Resources */ = {isa = PBXBuildFile; fileRef = D0DAFC102118F737003F552A /* Items.json */; };
 		D0B69D262043632D00AEA01B /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = D0B69D252043632D00AEA01B /* GameScene.sks */; };
 		D0CBE3F6211F90CB00A661F0 /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0CBE3F5211F90CB00A661F0 /* App.swift */; };
 		D0CBE3F7211F91FD00A661F0 /* BViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0CBE3F1211F36A300A661F0 /* BViewController.swift */; };
@@ -50,7 +51,7 @@
 		D0CBE403211F9EB100A661F0 /* Modular.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D0F58CF4210E201200AACC8F /* Modular.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D0D55C36210F280F004EF894 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D025BF3F210E6C6500083117 /* Media.xcassets */; };
 		D0DAFC0F2118F634003F552A /* 3DExchange.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0DAFC0E2118F634003F552A /* 3DExchange.swift */; };
-		D0DAFC112118F737003F552A /* StartingItems.json in Resources */ = {isa = PBXBuildFile; fileRef = D0DAFC102118F737003F552A /* StartingItems.json */; };
+		D0DAFC112118F737003F552A /* Items.json in Resources */ = {isa = PBXBuildFile; fileRef = D0DAFC102118F737003F552A /* Items.json */; };
 		D0E9D8B82107B7790072E403 /* Make2D.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0E9D8B72107B7790072E403 /* Make2D.framework */; };
 		D0E9D8B92107B7790072E403 /* Make2D.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D0E9D8B72107B7790072E403 /* Make2D.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D0ECD78620B9E59700C3F6D0 /* GrippableView.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0ECD78520B9E59700C3F6D0 /* GrippableView.framework */; };
@@ -256,7 +257,7 @@
 		D0DA9BB82039E1C60019F6EE /* TexturedView+SKSpriteNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TexturedView+SKSpriteNode.swift"; sourceTree = "<group>"; };
 		D0DA9BBA203A666A0019F6EE /* PrimitiveFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrimitiveFunctions.swift; sourceTree = "<group>"; };
 		D0DAFC0E2118F634003F552A /* 3DExchange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = 3DExchange.swift; sourceTree = "<group>"; };
-		D0DAFC102118F737003F552A /* StartingItems.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = StartingItems.json; sourceTree = "<group>"; };
+		D0DAFC102118F737003F552A /* Items.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Items.json; sourceTree = "<group>"; };
 		D0DE1BB02089394300775312 /* Primitive+UIKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Primitive+UIKit.swift"; sourceTree = "<group>"; };
 		D0DE1BB22089411B00775312 /* Primitive+SpriteKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Primitive+SpriteKit.swift"; sourceTree = "<group>"; };
 		D0E9D8B72107B7790072E403 /* Make2D.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Make2D.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -414,7 +415,7 @@
 				D09C3C42206B32370053EE2A /* App.swift */,
 				D0A8B9C120BC9AC500D4C301 /* Environment.swift */,
 				D0DAFC0E2118F634003F552A /* 3DExchange.swift */,
-				D0DAFC102118F737003F552A /* StartingItems.json */,
+				D0DAFC102118F737003F552A /* Items.json */,
 				D0D6808120CEB0EF0074E97D /* ViewMaps.swift */,
 				D0FD710621172C2A00B27092 /* TableViewController */,
 				D036097A20D5968100C11E79 /* ViewController.swift */,
@@ -848,6 +849,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D0B0A2A62129E8E700AAC17B /* Items.json in Resources */,
 				D00069DE200BD08300E8D5F3 /* LaunchScreen.storyboard in Resources */,
 				D00069DB200BD08300E8D5F3 /* Assets.xcassets in Resources */,
 				D0B69D262043632D00AEA01B /* GameScene.sks in Resources */,
@@ -903,7 +905,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D0D55C36210F280F004EF894 /* Media.xcassets in Resources */,
-				D0DAFC112118F737003F552A /* StartingItems.json in Resources */,
+				D0DAFC112118F737003F552A /* Items.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

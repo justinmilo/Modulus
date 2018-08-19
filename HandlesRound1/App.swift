@@ -11,16 +11,8 @@ import Singalong
 import Graphe
 import Volume
 
-
-
-
-class LoadingViewController : UIViewController {
-  
-}
-
 public class App {
   public init() {
-    Current = .mock
   }
   
   public lazy var rootController: UIViewController = loadEntryTable
@@ -35,6 +27,8 @@ public class App {
     
     switch load {
     case let .success(value):
+      
+      Current.model = value
       
       let edit = EditViewController(
         config: EditViewContConfiguration(
@@ -64,11 +58,7 @@ public class App {
     return GraphNavigator(id: id)
   }
   
-  
-  
-  
 }
-
 
 
 func styleNav(_ ulN: UINavigationController) {
@@ -84,6 +74,7 @@ func embedInNav(_ vc: UIViewController)-> UINavigationController {
   return ulN
 }
 
+#warning("Move to Singalong")
 func inToOut<A>( _ f: @escaping (A)->Void) -> (A)->A {
   return { a in
     f(a)
@@ -102,66 +93,55 @@ public class GraphNavigator {
     }
   }
   
-  lazy var vc: UIViewController = quadVC()
-  
-  
-  
-  lazy var mock : UIViewController = {
-    
-    let func1 : (EditingViews.ViewMap)->UIViewController =  curry(controller2FromMap)(self)
-    
-    let vc = createVC(func1: func1)
-    vc.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "3D", style: UIBarButtonItem.Style.plain , target: self, action: #selector(GraphNavigator.present3D))
-    return vc
-  }()
-  
-  lazy var mockInternalNav : UIViewController = {
+  lazy var vc: UIViewController = quadVC
+  typealias ViewMap = EditingViews.ViewMap
 
-    let func1 : (EditingViews.ViewMap)->UIViewController =  curry(controller2FromMap)(self)
-    >>> embedInNav
-    >>> inToOut(styleNav)
-    
-    let vc = createVC(func1: func1)
-    
-    //vc.title = Current.viewMaps.plan.label
-    vc.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "3D", style: UIBarButtonItem.Style.plain , target: self, action: #selector(GraphNavigator.present3D))
-    return vc
-  }()
-  
-  lazy var quadVC : ()->PageController<UIViewController>  = {
-    
-    let func1 : (EditingViews.ViewMap)->UIViewController = { ($0, self.graph) } >>> curry(controllerFromMap)(self) >>> inToOut(addBarSafely)
-    
-    let vc = createVC(func1: func1)
-    vc.title = Current.viewMaps.plan.label
-    vc.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "3D", style: UIBarButtonItem.Style.plain , target: self, action: #selector(GraphNavigator.present3D))
-    return vc
-  }
-  
-  
-  lazy var quadNavs : ()->PageController<UIViewController>  = {
-    
-    let func1 : (EditingViews.ViewMap)->UIViewController = { ($0, self.graph) } >>> curry(controllerFromMap)(self)
+  lazy var mockCreator : (ViewMap)->UIViewController =
+    curry(mockControllerFromMap)(self)
+  lazy var mockInternalNavFunc : (ViewMap)->UIViewController =
+    curry(mockControllerFromMap)(self)
       >>> embedInNav
       >>> inToOut(styleNav)
-    
-    
-    let vc = createVC(func1: func1)
+  lazy var quadVCFunc : (ViewMap)->UIViewController =
+    { ($0, self.graph) }
+      >>> curry(controllerFromMap)(self)
+      >>> inToOut(addBarSafely)
+  
+  lazy var mock : UIViewController =  mockCreator(Current.viewMaps.front) |> addNavBarItem
+  lazy var mockInternalNav : UIViewController = mockInternalNavFunc(Current.viewMaps.front) |> addNavBarItem
+  lazy var quadVC : PageController<UIViewController> = quadVCFunc |> createPageController
+    >>> addNavBarItem
+  lazy var quadNavs : PageController<UIViewController>  =
+    { ($0, self.graph) }
+      >>> curry(controllerFromMap)(self)
+      >>> inToOut(addBarSafely)
+      >>> embedInNav
+      >>> inToOut(styleNav)
+      |> createPageController
 
-    vc.title = Current.viewMaps.plan.label
-    vc.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "3D", style: UIBarButtonItem.Style.plain , target: self, action: #selector(GraphNavigator.present3D))
+  func addNavBarItem<ReturnVC:UIViewController>(vc :ReturnVC ) -> ReturnVC {
+    vc.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Save", style: UIBarButtonItem.Style.plain , target: self, action: #selector(GraphNavigator.save))
+    //vc.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "3D", style: UIBarButtonItem.Style.plain , target: self, action: #selector(GraphNavigator.present3D))
     return vc
   }
   
+  @objc func save() {
+    Current.file.save(Current.model)
+  }
+  
+  
   let id : String
-  @objc func present3D()
-  {
+  @objc func present3D() {
+    
+    if let item = Current.model.getItem(id: id) {
+      Current.model.addOrReplace(item: item )
+    }
+    
     let scaffProvider = Current.model.getItem(id: id)!.content |> provider
     let newVC = CADViewController(grid: scaffProvider)
     
     let ulN = UINavigationController(rootViewController: newVC)
     ulN.navigationBar.prefersLargeTitles = false
-    let nav = ulN.navigationBar
     newVC.navigationItem.rightBarButtonItem = UIBarButtonItem(
       title: "Dismiss",
       style: UIBarButtonItem.Style.plain ,
@@ -174,6 +154,7 @@ public class GraphNavigator {
   }
   
   
+  
   @objc func dismiss3D() {
     self.vc.dismiss(animated: true, completion: nil)
   }
@@ -182,27 +163,23 @@ public class GraphNavigator {
   
 }
 
-func controllerFromMap(target: Any, _ vm: EditingViews.ViewMap, graph: ScaffGraph) -> UIViewController
-{
+func controllerFromMap(target: Any, _ vm: EditingViews.ViewMap, graph: ScaffGraph) -> UIViewController {
   let driver = SpriteDriver(mapping: vm.viewMap, graph: graph)
   let vc : ViewController = ViewController(driver: driver)
-  let st = vm.label
-  vc.title = st
+  vc.title = vm.label
   vc.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "3D", style: UIBarButtonItem.Style.plain , target: target, action: #selector(GraphNavigator.present3D))
   return vc
 }
 
-func controller2FromMap(target: Any, _ vm: EditingViews.ViewMap) -> UIViewController
-{
+func mockControllerFromMap(target: Any, _ vm: EditingViews.ViewMap) -> UIViewController {
   let vc = UIViewController()
   vc.view.backgroundColor = .red
-  let st = vm.label
-  vc.title = st
+  vc.title = vm.label
   vc.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "3D", style: UIBarButtonItem.Style.plain , target: target, action: #selector(GraphNavigator.present3D))
   return vc
 }
 
-func createVC(func1 : (EditingViews.ViewMap)->UIViewController )->PageController<UIViewController>{
+func createPageController(func1 : (EditingViews.ViewMap)->UIViewController )->PageController<UIViewController>{
   let top = [Current.viewMaps.plan, Current.viewMaps.rotatedPlan].map(func1)
   let bottom = [Current.viewMaps.front, Current.viewMaps.side].map(func1)
   let topRow = PageController(orientation: .horizontal, content: top)

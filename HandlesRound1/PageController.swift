@@ -53,14 +53,14 @@ class PageController<ControllerType:UIViewController>: UIPageViewController, UIP
   
   // MARK: Optional Datasource
   // The number of items reflected in the page indicator.
-  func presentationCount(for pageViewController: UIPageViewController) -> Int {
-    return self.content.count
-  }
-  
-  // The selected item reflected in the page indicator.
-  func presentationIndex(for pageViewController: UIPageViewController) -> Int {
-    return 0
-  }
+//  func presentationCount(for pageViewController: UIPageViewController) -> Int {
+//    return self.content.count
+//  }
+//
+//  // The selected item reflected in the page indicator.
+//  func presentationIndex(for pageViewController: UIPageViewController) -> Int {
+//    return 0
+//  }
   
   func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
     

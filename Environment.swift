@@ -57,7 +57,6 @@ struct ItemList<T> {
   init<S:Sequence> (_ s: S) where S.Element == Item<T> {
     self.store = zip(0...,s).reduce([:]) { (res, next) in
       let (seqIndex, item) = next
-      print(res.keys, item.id)
       guard !res.keys.contains(item.id) else { fatalError("ItemList initialized with a repeating ID")}
 
       var mutRes = res
@@ -134,17 +133,20 @@ enum Result<Value, Error> {
 struct FileIO {
   var load = loadItems
   var save = saveItems
-  
-  
 }
 
 enum LoadError : Error {
   case noData
   case noJson
+  case badURL
 }
 
 func loadItems()  -> Result<ItemList<ScaffGraph>, LoadError> {
-  guard let data = FileManager.default.contents(atPath: "items.json") else {
+  
+  guard let url = Bundle.main.url(forResource: "Items", withExtension: "json") else {
+    return .error( LoadError.badURL )
+  }
+  guard let data = try? Data(contentsOf: url) else {
     return .error( LoadError.noData )
   }
   do {
@@ -156,14 +158,17 @@ func loadItems()  -> Result<ItemList<ScaffGraph>, LoadError> {
   }
 }
 
-
-
 func saveItems(item: ItemList<ScaffGraph>) {
   let encoder = JSONEncoder()
   encoder.outputFormatting = .prettyPrinted
   let data = try! encoder.encode(item)
-  print(String(data: data, encoding: .utf8)!)
-  try! data.write(to: Current.persistenceURL)
+  do {
+    print ( Current.persistenceURL)
+  try data.write(to: Current.persistenceURL)
+  } catch {
+    print ( error)
+    fatalError()
+  }
 }
 
 extension FileIO {
@@ -177,34 +182,37 @@ extension FileIO {
   })
 }
 
+class DummyClass {
+  
+}
+
 func getPersistenceURL() -> URL {
-  let documentDirectory = try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor:nil, create:false)
-  let fileURL = documentDirectory.appendingPathComponent("Items.json")
+  let path = Bundle(for: DummyClass.self).bundleURL
+  //let documentDirectory = try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor:nil, create:false)
+  let fileURL = path.appendingPathComponent("Items.json")
   return fileURL
 }
 
 
 
+
+
+extension EditingViews {
+  static var mock = EditingViews()
+}
+
+
 struct Environment {
   var persistenceURL : URL = getPersistenceURL()
   var file = FileIO()
-  var model : ItemList<ScaffGraph> = ItemList([]) {
-    didSet{
-      file.save(model)
-    }
-  }
+  var model : ItemList<ScaffGraph> = ItemList([])
   var screen = UIScreen.main.bounds
   var viewMaps = EditingViews()
-  var scale : CGFloat = 1.0
-  {
+  var scale : CGFloat = 1.0 {
     didSet {
       postNotification(note: scaleChangeNotification, value: scale)
     }
   }
-}
-
-extension EditingViews {
-  static var mock = EditingViews()
 }
 
 extension Environment {
@@ -217,8 +225,6 @@ extension Environment {
     scale: 1.0)
 }
 
-
 var Current = Environment()
-
 
 let scaleChangeNotification : Notification<CGFloat> = Notification(name: "Scale Changed")

@@ -15,7 +15,7 @@ import Foundation
 import Singalong
 import Geo
 
-func addBarSafely(to viewController: UIViewController) {
+func addBarSafely<T:UIViewController>(to viewController: T) {
   let vis : ()->UIVisualEffectView = {
     let v2 = UIVisualEffectView(effect: UIBlurEffect(style:.light))
     v2.frame = viewController.view.frame.bottomLeft + (viewController.view.frame.bottomRight - unitY * 108.0)
