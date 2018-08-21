@@ -29,22 +29,33 @@ protocol Driver {
   mutating func bind(to uiRect: CGRect)
 }
 
-class ViewController : UIViewController
+class ViewController : UIViewController, SpriteDriverDelegate
 {
+  func didAddEdge() {
+    Current.file.save(Current.model)
+  }
+  
 //  override func loadView() {
 //    self.view = GrippedViewHandles(frame: UIScreen.main.bounds)
 //  }
   var driver : SpriteDriver
   var driverLayout : PositionedLayout<IssuedLayout<LayoutToDriver<SpriteDriver>>>
+  var scale : CGFloat {
+    didSet {
+      postNotification(note: scaleChangeNotification, value: scale)
+    }
+  }
   
   init(driver: SpriteDriver)
   {
     self.driver = driver
+    self.scale = driver.scale
     self.driverLayout = PositionedLayout(
       child: IssuedLayout(child: LayoutToDriver( child: driver )),
       ofSize: CGSize.zero,
       aligned: (.center, .center))
     super.init(nibName: nil, bundle: nil)
+    self.driver.delgate = self
   }
   required init?(coder aDecoder: NSCoder) {
     fatalError("Init with coder not implemented")
@@ -55,7 +66,7 @@ class ViewController : UIViewController
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
     
-    self.viewport.scale = Current.scale
+    self.viewport.scale = self.scale
     self.driver.bind(to: viewport.canvas.frame)
     let bestFit = driver.size
     
@@ -100,7 +111,7 @@ class ViewController : UIViewController
       guard let self = self else { return }
       print("Beg-selection size changed")
 
-      let bestFit = (self.viewport.selection.size, self.interimScale ?? Current.scale) |> self.driver.build
+      let bestFit = (self.viewport.selection.size, self.interimScale ?? self.scale) |> self.driver.build
       self.driverLayout.size = bestFit
       self.driverLayout.layout(in: self.viewport.selection)
       print("End-selection size changed")
@@ -115,7 +126,7 @@ class ViewController : UIViewController
     }
     viewport.didEndEdit = {
       print("Beg-did end edit")
-
+      Current.file.save(Current.model)
       self.logViewport()
       self.viewport.animateSelection(to:  self.driverLayout.child.issuedRect! )
       print("End-did end edit")
@@ -148,7 +159,7 @@ class ViewController : UIViewController
 
       
       self.interimScale = nil
-      Current.scale = scale
+      self.scale = scale
       
       let bestFit = self.viewport.selection.size |> self.driver.build
       self.driverLayout.size = bestFit

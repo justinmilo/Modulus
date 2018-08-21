@@ -39,7 +39,8 @@ public class App {
         }
       )
       edit.didSelect = { (item, cell) in
-        self.loadEntryTable.pushViewController(self.gridNavigator(id: cell.id).vc, animated: true)
+        self.currentNavigator = GraphNavigator(id: cell.id)
+        self.loadEntryTable.pushViewController(self.currentNavigator.vc, animated: true)
       }
       
       let nav = UINavigationController(rootViewController: edit)
@@ -52,12 +53,7 @@ public class App {
   
     
   }()
-  
-  
-  public func gridNavigator(id: String) -> GraphNavigator {
-    return GraphNavigator(id: id)
-  }
-  
+  var currentNavigator : GraphNavigator!
 }
 
 
@@ -102,15 +98,16 @@ public class GraphNavigator {
     curry(mockControllerFromMap)(self)
       >>> embedInNav
       >>> inToOut(styleNav)
-  lazy var quadVCFunc : (ViewMap)->UIViewController =
-    { ($0, self.graph) }
-      >>> curry(controllerFromMap)(self)
-      >>> inToOut(addBarSafely)
+  
   
   lazy var mock : UIViewController =  mockCreator(Current.viewMaps.front) |> addNavBarItem
   lazy var mockInternalNav : UIViewController = mockInternalNavFunc(Current.viewMaps.front) |> addNavBarItem
-  lazy var quadVC : PageController<UIViewController> = quadVCFunc |> createPageController
-    >>> addNavBarItem
+  lazy var quadVC : PageController<UIViewController> =
+    { ($0, self.graph) }
+      >>> curry(controllerFromMap)(self)
+      >>> inToOut(addBarSafely)
+      |> createPageController
+      >>> addNavBarItem
   lazy var quadNavs : PageController<UIViewController>  =
     { ($0, self.graph) }
       >>> curry(controllerFromMap)(self)
@@ -120,8 +117,8 @@ public class GraphNavigator {
       |> createPageController
 
   func addNavBarItem<ReturnVC:UIViewController>(vc :ReturnVC ) -> ReturnVC {
-    vc.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Save", style: UIBarButtonItem.Style.plain , target: self, action: #selector(GraphNavigator.save))
-    //vc.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "3D", style: UIBarButtonItem.Style.plain , target: self, action: #selector(GraphNavigator.present3D))
+    //vc.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Save", style: UIBarButtonItem.Style.plain , target: self, action: #selector(GraphNavigator.save))
+    vc.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "3D", style: UIBarButtonItem.Style.plain , target: self, action: #selector(GraphNavigator.present3D))
     return vc
   }
   
@@ -164,7 +161,7 @@ public class GraphNavigator {
 }
 
 func controllerFromMap(target: Any, _ vm: EditingViews.ViewMap, graph: ScaffGraph) -> UIViewController {
-  let driver = SpriteDriver(mapping: vm.viewMap, graph: graph)
+  let driver = SpriteDriver(mapping: vm.viewMap, graph: graph, scale: 1.0)
   let vc : ViewController = ViewController(driver: driver)
   vc.title = vm.label
   vc.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "3D", style: UIBarButtonItem.Style.plain , target: target, action: #selector(GraphNavigator.present3D))

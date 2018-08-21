@@ -17,8 +17,8 @@ import Geo
 
 func addBarSafely<T:UIViewController>(to viewController: T) {
   let vis : ()->UIVisualEffectView = {
-    let v2 = UIVisualEffectView(effect: UIBlurEffect(style:.light))
-    v2.frame = viewController.view.frame.bottomLeft + (viewController.view.frame.bottomRight - unitY * 108.0)
+    let v2 = UIVisualEffectView(effect: UIBlurEffect(style:.dark))
+    v2.frame = viewController.view.frame.bottomLeft + (viewController.view.frame.bottomRight - unitY * 88)
     return v2
   }
   

@@ -13,29 +13,36 @@ import Geo
 import Graphe
 import BlackCricket
 
+protocol SpriteDriverDelegate : class {
+  func didAddEdge()
+}
+
 class SpriteDriver : Driver {
   
   var uiPointToSprite : ((CGPoint)->CGPoint)!
   var uiRectToSprite : ((CGRect)->CGRect)!
   var scaleObserver : NotificationObserver!
+  var scale: CGFloat
   var graph : ScaffGraph
+  weak var delgate : SpriteDriverDelegate?
   
-  public init(mapping: [GraphEditingView], graph: ScaffGraph )
-  {
+  public init(mapping: [GraphEditingView], graph: ScaffGraph, scale: CGFloat ) {
     self.graph = graph
     editingView = mapping[0]
     loadedViews = mapping
     initialFrame = Current.screen
     
     twoDView = Sprite2DView(frame:initialFrame )
-    //twoDView.layer.borderWidth = 1.0
     twoDView.scene?.scaleMode = .resizeFill
     
+    self.scale = scale
     twoDView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(SpriteDriver.tap)))
+    
     
     scaleObserver = NotificationObserver(
       notification: scaleChangeNotification,
       block: { [weak self] in
+        self?.scale = $0
       self!.twoDView.scale = $0
         print("      ------    SCALE CHANGED TO ", $0, " ------ ")
     })
@@ -45,7 +52,7 @@ class SpriteDriver : Driver {
   
   func layout(origin: CGPoint) {
     print("#Beg-Layout Origin")
-    let heightVector = unitY * (self.graph |> self.editingView.size).height * Current.scale
+    let heightVector = unitY * (self.graph |> self.editingView.size).height * self.scale
     
     print("given origin", origin)
     print("new origin", uiPointToSprite(origin)  - heightVector )
@@ -85,13 +92,13 @@ class SpriteDriver : Driver {
   
   var size : CGSize {
     get {
-      return (self.graph |> self.editingView.size) * Current.scale
+      return (self.graph |> self.editingView.size) * self.scale
     }
   }
   
   func build(for viewportSize: CGSize) -> CGSize {
     print("#Beg-Build Simple")
-    return self.build(for:viewportSize, atScale: Current.scale)
+    return self.build(for:viewportSize, atScale: self.scale)
     print("#End-Build Simple")
 
   }
@@ -118,8 +125,7 @@ class SpriteDriver : Driver {
   // Eventually dependency injected
   var initialFrame : CGRect
   
-  func bind(to uiRect: CGRect)
-  {
+  func bind(to uiRect: CGRect) {
     print("#Beg-Bind")
     self.uiPointToSprite = translateToCGPointInSKCoordinates(from: uiRect, to: twoDView.frame)
     self.uiRectToSprite = translateToCGRectInSKCoordinates(from: uiRect, to: twoDView.frame)
@@ -128,8 +134,7 @@ class SpriteDriver : Driver {
   
   
   // MARK: TAP ITEMS...
-  @objc func tap(g: UIGestureRecognizer)
-  {
+  @objc func tap(g: UIGestureRecognizer) {
     // if insideTGyg
     if _previousSetRect.contains(
       g.location(ofTouch: 0, in: self.twoDView)
@@ -149,62 +154,52 @@ class SpriteDriver : Driver {
     self.editingView = loadedViews[swapIndex]
     //      buildFromScratch()
     self._layout(size: _previousSize)
-
+    
   }
   
   private var swapIndex2 = 0
-
- 
   
-
-  
-    func highlightCell (touch: CGPoint) {
-  
-      let scale = twoDView.scale; #warning("weird access of twoDView.scale")
-
-  
-      // Properly Controllers concern
-      let tS = touch |> uiPointToSprite
-      let rectS = self._previousSetRect |> uiRectToSprite
-      
-      let p = (tS, rectS) |> viewSpaceToModelSpace
-      let scaledP = p * 1/scale
-      // Properly models concern
-      let editBoundaries = self.graph |> editingView.grid2D ///
-      let toGridIndices = editBoundaries |> curry(pointToGridIndices) >>>  handleTupleOptionWith
-  
-      // Get Model Indices
-      let indices = (scaledP |> toGridIndices)
-      // indices is something lik (0, 1)
-      // or (1, 2)
-  
-  
-      // Get Model Rect
-      let mRect = (indices, editBoundaries) |> modelRect
-      // mRect is something like (0.0, 30.0, 100.0, 100.0)
-      // (0.0, 0.0, 100.0, 30.0)
-      
-      let scaledMRect = mRect.scaled(by: scale)
-      
-      let yToSprite = { self.uiPointToSprite!(CGPoint(0, $0)) }  >>> { return $0.y }
-  
-      // bring model rect into the real world!
-      //let mRect2 = mRect.scaled(by: 1/self.twoDView.scale)
-      let z = (scaledMRect, self._previousOrigin.ui.asVector() ) |> moveByVector
-      let cellRectValue = z |> uiRectToSprite
-      let y = _previousSetRect.midY |> yToSprite
-      let flippedRect = (cellRectValue, y )  |> mirrorVertically
-      // flipped rect is situated in sprite kit space
-  
-      self.graph.edges = editingView.selectedCell(indices, self.graph.grid, self.graph.edges)
-  
-      self._layout(size: _previousSize)
-      self.twoDView.addTempRect(rect: flippedRect, color: .white)
-    }
-  
-  
-  
-  
+  func highlightCell (touch: CGPoint) {
+        
+    // Properly Controllers concern
+    let tS = touch |> uiPointToSprite
+    let rectS = self._previousSetRect |> uiRectToSprite
+    
+    let p = (tS, rectS) |> viewSpaceToModelSpace
+    let scaledP = p * 1/scale
+    // Properly models concern
+    let editBoundaries = self.graph |> editingView.grid2D ///
+    let toGridIndices = editBoundaries |> curry(pointToGridIndices) >>>  handleTupleOptionWith
+    
+    // Get Model Indices
+    let indices = (scaledP |> toGridIndices)
+    // indices is something lik (0, 1)
+    // or (1, 2)
+    
+    
+    // Get Model Rect
+    let mRect = (indices, editBoundaries) |> modelRect
+    // mRect is something like (0.0, 30.0, 100.0, 100.0)
+    // (0.0, 0.0, 100.0, 30.0)
+    
+    let scaledMRect = mRect.scaled(by: scale)
+    
+    let yToSprite = { self.uiPointToSprite!(CGPoint(0, $0)) }  >>> { return $0.y }
+    
+    // bring model rect into the real world!
+    //let mRect2 = mRect.scaled(by: 1/self.twoDView.scale)
+    let z = (scaledMRect, self._previousOrigin.ui.asVector() ) |> moveByVector
+    let cellRectValue = z |> uiRectToSprite
+    let y = _previousSetRect.midY |> yToSprite
+    let flippedRect = (cellRectValue, y )  |> mirrorVertically
+    // flipped rect is situated in sprite kit space
+    
+    self.graph.edges = editingView.selectedCell(indices, self.graph.grid, self.graph.edges)
+    delgate?.didAddEdge()
+    
+    self._layout(size: _previousSize)
+    self.twoDView.addTempRect(rect: flippedRect, color: .white)
+  }
   
   // MARK: ...TAP ITEMS
 
