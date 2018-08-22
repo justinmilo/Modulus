@@ -56,6 +56,9 @@ func inToOut<A>( _ f: @escaping (A)->Void) -> (A)->A {
     return a
   }
 }
+public func zflip<A,C>(_ t: @escaping (A)->()->C ) -> (A)->(C) {
+  return zurry(flip(t))
+}
 
 
 func controllerFromMap(target: Any, _ vm: EditingViews.ViewMap, graph: ScaffGraph) -> UIViewController {

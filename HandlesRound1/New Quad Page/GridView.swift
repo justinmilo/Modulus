@@ -11,9 +11,7 @@ import Foundation
 import Singalong
 import Geo
 
-public func zflip<A,C>(_ t: @escaping (A)->()->C ) -> (A)->(C) {
-  return zurry(flip(t))
-}
+
 
 
 class GridView : UIView {
