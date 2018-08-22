@@ -40,9 +40,6 @@
 		D0B0A2A62129E8E700AAC17B /* Items.json in Resources */ = {isa = PBXBuildFile; fileRef = D0DAFC102118F737003F552A /* Items.json */; };
 		D0B69D262043632D00AEA01B /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = D0B69D252043632D00AEA01B /* GameScene.sks */; };
 		D0CBE3F6211F90CB00A661F0 /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0CBE3F5211F90CB00A661F0 /* App.swift */; };
-		D0CBE3F7211F91FD00A661F0 /* BViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0CBE3F1211F36A300A661F0 /* BViewController.swift */; };
-		D0CBE3F8211F91FD00A661F0 /* ScrollableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0CBE3F2211F36A300A661F0 /* ScrollableViewController.swift */; };
-		D0CBE3FA211F94BA00A661F0 /* GridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0CBE3F9211F94BA00A661F0 /* GridView.swift */; };
 		D0CBE3FC211F9EA500A661F0 /* Singalong.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0CBE3FB211F9EA500A661F0 /* Singalong.framework */; };
 		D0CBE3FD211F9EA500A661F0 /* Singalong.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D0CBE3FB211F9EA500A661F0 /* Singalong.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D0CBE3FF211F9EA500A661F0 /* Geo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0CBE3FE211F9EA500A661F0 /* Geo.framework */; };
@@ -52,6 +49,7 @@
 		D0D55C36210F280F004EF894 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D025BF3F210E6C6500083117 /* Media.xcassets */; };
 		D0D5612B212DDA500059874B /* QuadDriver.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D5612A212DDA500059874B /* QuadDriver.swift */; };
 		D0D5612D212DE1EE0059874B /* Array+PreviousNext.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D5612C212DE1EE0059874B /* Array+PreviousNext.swift */; };
+		D0D5612F212DE4410059874B /* PlaygroundScrollabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D5612E212DE4410059874B /* PlaygroundScrollabel.swift */; };
 		D0DAFC0F2118F634003F552A /* 3DExchange.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0DAFC0E2118F634003F552A /* 3DExchange.swift */; };
 		D0DAFC112118F737003F552A /* Items.json in Resources */ = {isa = PBXBuildFile; fileRef = D0DAFC102118F737003F552A /* Items.json */; };
 		D0E9D8B82107B7790072E403 /* Make2D.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0E9D8B72107B7790072E403 /* Make2D.framework */; };
@@ -247,14 +245,12 @@
 		D0B86C64202FC09200CCB3F7 /* ViewFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewFunctions.swift; sourceTree = "<group>"; };
 		D0BAD734204228F700406E70 /* ViewComposite.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewComposite.swift; sourceTree = "<group>"; };
 		D0BCAFBA201CDC4300C4EAA5 /* SpriteScaffViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpriteScaffViewController.swift; sourceTree = "<group>"; };
-		D0CBE3F1211F36A300A661F0 /* BViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BViewController.swift; sourceTree = "<group>"; };
-		D0CBE3F2211F36A300A661F0 /* ScrollableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScrollableViewController.swift; sourceTree = "<group>"; };
 		D0CBE3F5211F90CB00A661F0 /* App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
-		D0CBE3F9211F94BA00A661F0 /* GridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridView.swift; sourceTree = "<group>"; };
 		D0CBE3FB211F9EA500A661F0 /* Singalong.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Singalong.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0CBE3FE211F9EA500A661F0 /* Geo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Geo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0D5612A212DDA500059874B /* QuadDriver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuadDriver.swift; sourceTree = "<group>"; };
 		D0D5612C212DE1EE0059874B /* Array+PreviousNext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+PreviousNext.swift"; sourceTree = "<group>"; };
+		D0D5612E212DE4410059874B /* PlaygroundScrollabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaygroundScrollabel.swift; sourceTree = "<group>"; };
 		D0D6808120CEB0EF0074E97D /* ViewMaps.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewMaps.swift; sourceTree = "<group>"; };
 		D0DA9BB82039E1C60019F6EE /* TexturedView+SKSpriteNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TexturedView+SKSpriteNode.swift"; sourceTree = "<group>"; };
 		D0DA9BBA203A666A0019F6EE /* PrimitiveFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrimitiveFunctions.swift; sourceTree = "<group>"; };
@@ -434,7 +430,6 @@
 				D06560422127974B00E2B880 /* PageController.swift */,
 				D0D5612A212DDA500059874B /* QuadDriver.swift */,
 				D0D5612C212DE1EE0059874B /* Array+PreviousNext.swift */,
-				D0CBE3F0211F36A300A661F0 /* New Quad Page */,
 				D0F58CE6210E146F00AACC8F /* Graph To Cricket to Modular+Scaffolding */,
 				D03E03F520125DF8002D47F3 /* BlackCricket */,
 			);
@@ -533,16 +528,6 @@
 			path = SpriteKit;
 			sourceTree = "<group>";
 		};
-		D0CBE3F0211F36A300A661F0 /* New Quad Page */ = {
-			isa = PBXGroup;
-			children = (
-				D0CBE3F1211F36A300A661F0 /* BViewController.swift */,
-				D0CBE3F9211F94BA00A661F0 /* GridView.swift */,
-				D0CBE3F2211F36A300A661F0 /* ScrollableViewController.swift */,
-			);
-			path = "New Quad Page";
-			sourceTree = "<group>";
-		};
 		D0ECD78420B9E59700C3F6D0 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -582,6 +567,7 @@
 				D0F58CE4210E13F300AACC8F /* Scaff2D.swift */,
 				D0F58CE7210E14AC00AACC8F /* ModularAdapters.swift */,
 				D0DA9BB82039E1C60019F6EE /* TexturedView+SKSpriteNode.swift */,
+				D0D5612E212DE4410059874B /* PlaygroundScrollabel.swift */,
 			);
 			path = "Graph To Cricket to Modular+Scaffolding";
 			sourceTree = "<group>";
@@ -997,15 +983,12 @@
 				D0F58D14210E207300AACC8F /* TensionedPoint.swift in Sources */,
 				D0FD710521172C2600B27092 /* Changeset.swift in Sources */,
 				D0F58D03210E202A00AACC8F /* Sprite2DView.swift in Sources */,
-				D0CBE3FA211F94BA00A661F0 /* GridView.swift in Sources */,
 				D0FD710321172BD700B27092 /* SimpleBarButtonViewContoller.swift in Sources */,
 				D0D5612B212DDA500059874B /* QuadDriver.swift in Sources */,
 				D0F58D01210E202900AACC8F /* Scaff2D.swift in Sources */,
-				D0CBE3F8211F91FD00A661F0 /* ScrollableViewController.swift in Sources */,
 				D0F58D09210E207300AACC8F /* ViewController.swift in Sources */,
 				D0F58D10210E207300AACC8F /* HandlesView.swift in Sources */,
 				D0F58D07210E207300AACC8F /* Environment.swift in Sources */,
-				D0CBE3F7211F91FD00A661F0 /* BViewController.swift in Sources */,
 				D0F58D0C210E207300AACC8F /* ViewDiagramDriver.swift in Sources */,
 				D07C56B9211E74F50073D7A7 /* App+FreeFunctions.swift in Sources */,
 				D0F58D16210E207300AACC8F /* SelectionCore.swift in Sources */,
@@ -1013,6 +996,7 @@
 				D0656045212797DD00E2B880 /* PageController.swift in Sources */,
 				D0F58D15210E207300AACC8F /* CGRect+Inset.swift in Sources */,
 				D0F58D06210E207300AACC8F /* App.swift in Sources */,
+				D0D5612F212DE4410059874B /* PlaygroundScrollabel.swift in Sources */,
 				D0F58D08210E207300AACC8F /* ViewMaps.swift in Sources */,
 				D0F58D0E210E207300AACC8F /* IssuedLayout.swift in Sources */,
 				D0F58D04210E202A00AACC8F /* TexturedView+SKSpriteNode.swift in Sources */,
