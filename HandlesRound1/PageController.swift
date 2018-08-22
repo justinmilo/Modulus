@@ -9,7 +9,7 @@
 import UIKit
 
 protocol PageControllerDelegate : class {
-  func didTransition(to viewController: UIViewController)
+  func didTransition(to viewController: UIViewController, within pageController: PageController<UIViewController>)
 }
 
 // MARK: PageController
@@ -42,7 +42,7 @@ class PageController<ControllerType:UIViewController>: UIPageViewController, UIP
     
     guard let first = viewControllers?.first, let safeFirst = first as? ControllerType else { return }
     
-    self.newDelegate?.didTransition(to: safeFirst)
+    self.newDelegate?.didTransition(to: safeFirst, within: self as! PageController<UIViewController>)
     
     self.title = first.title
   }
@@ -51,7 +51,7 @@ class PageController<ControllerType:UIViewController>: UIPageViewController, UIP
     fatalError("init(coder:) has not been implemented")
   }
   
-  // MARK: Optional Datasource
+  // MAsRK: Optional Datasource
   // The number of items reflected in the page indicator.
 //  func presentationCount(for pageViewController: UIPageViewController) -> Int {
 //    return self.content.count
@@ -68,7 +68,7 @@ class PageController<ControllerType:UIViewController>: UIPageViewController, UIP
     guard completed else { return}
     guard let first =  pageViewController.viewControllers?.first, let safeFirst = first as? ControllerType else { return }
 
-    self.newDelegate?.didTransition(to: safeFirst)
+    self.newDelegate?.didTransition(to: safeFirst, within: self as! PageController<UIViewController>)
     
     self.title = first.title
   }
@@ -77,9 +77,9 @@ class PageController<ControllerType:UIViewController>: UIPageViewController, UIP
 }
 
 extension PageController : PageControllerDelegate {
-  func didTransition(to viewController: UIViewController) {
+  func didTransition(to viewController: UIViewController, within pageController: PageController<UIViewController>) {
     print(viewController.title)
-    self.newDelegate?.didTransition(to: viewController)
+    self.newDelegate?.didTransition(to: viewController, within: self as! PageController<UIViewController>)
     self.title = viewController.title
   }
   
