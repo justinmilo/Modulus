@@ -9,27 +9,27 @@
 import UIKit
 
 protocol PageControllerDelegate : class {
-  func didTransition(to viewController: UIViewController, within pageController: PageController<UIViewController>)
+  func didTransition(to viewController: UIViewController, within pageController: PageController)
 }
 
 // MARK: PageController
-class PageController<ControllerType:UIViewController>: UIPageViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate{
+class PageController: UIPageViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate{
   
   // MARK: Data Source
   func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
-    return content.previousElement(at: content.firstIndex(of: viewController as! ControllerType)! )
+    return content.previousElement(at: content.firstIndex(of: viewController)! )
   }
   
   func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
-    return content.nextElement(at: content.firstIndex(of: viewController as! ControllerType)! )
+    return content.nextElement(at: content.firstIndex(of: viewController)! )
   }
   
   // MARK: Init
-  let content: [ControllerType]
+  let content: [UIViewController]
   weak var newDelegate : PageControllerDelegate?
   
   init(orientation: UIPageViewController.NavigationOrientation,
-       content: [ControllerType]) {
+       content: [UIViewController]) {
     self.content = content
     super.init(transitionStyle: .scroll, navigationOrientation: orientation, options: nil)
     self.dataSource = self
@@ -37,12 +37,19 @@ class PageController<ControllerType:UIViewController>: UIPageViewController, UIP
     self.setViewControllers([content[0]], direction: .forward, animated: true, completion: nil)
   }
   
+  /// Sets single viewcontroller as current without issuing any delegate callbacks
+  func quitelySetViewController(_ vc: UIViewController){
+    super.setViewControllers([vc], direction: UIPageViewController.NavigationDirection.forward, animated: false)
+    guard let first = viewControllers?.first else { return }
+    self.title = first.title
+  }
+  
   override func setViewControllers(_ viewControllers: [UIViewController]?, direction: UIPageViewController.NavigationDirection, animated: Bool, completion: ((Bool) -> Void)? = nil) {
     super.setViewControllers(viewControllers, direction: direction, animated: animated, completion: completion)
     
-    guard let first = viewControllers?.first, let safeFirst = first as? ControllerType else { return }
+    guard let first = viewControllers?.first else { return }
     
-    self.newDelegate?.didTransition(to: safeFirst, within: self as! PageController<UIViewController>)
+    self.newDelegate?.didTransition(to: first, within: self)
     
     self.title = first.title
   }
@@ -66,9 +73,10 @@ class PageController<ControllerType:UIViewController>: UIPageViewController, UIP
     
     
     guard completed else { return}
-    guard let first =  pageViewController.viewControllers?.first, let safeFirst = first as? ControllerType else { return }
+    guard let first =  pageViewController.viewControllers?.first, let safeFirst = first as? UIViewController else { return }
+    guard let pgVC = pageViewController as? PageController else { return }
 
-    self.newDelegate?.didTransition(to: safeFirst, within: self as! PageController<UIViewController>)
+    self.newDelegate?.didTransition(to: safeFirst, within: pgVC)
     
     self.title = first.title
   }
@@ -77,9 +85,9 @@ class PageController<ControllerType:UIViewController>: UIPageViewController, UIP
 }
 
 extension PageController : PageControllerDelegate {
-  func didTransition(to viewController: UIViewController, within pageController: PageController<UIViewController>) {
+  func didTransition(to viewController: UIViewController, within pageController: PageController) {
     print(viewController.title)
-    self.newDelegate?.didTransition(to: viewController, within: self as! PageController<UIViewController>)
+    self.newDelegate?.didTransition(to: viewController, within: pageController)
     self.title = viewController.title
   }
   

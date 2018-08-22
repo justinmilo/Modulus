@@ -27,7 +27,7 @@
 		D0656045212797DD00E2B880 /* PageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06560422127974B00E2B880 /* PageController.swift */; };
 		D06E02FA20F5CF33000E646F /* Volume.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D06E02F920F5CF33000E646F /* Volume.framework */; };
 		D06E02FB20F5CF33000E646F /* Volume.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D06E02F920F5CF33000E646F /* Volume.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		D07C56B9211E74F50073D7A7 /* HorizontalPageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07C56B8211E74F50073D7A7 /* HorizontalPageController.swift */; };
+		D07C56B9211E74F50073D7A7 /* App+FreeFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07C56B8211E74F50073D7A7 /* App+FreeFunctions.swift */; };
 		D0915FAB208901DD0067C02A /* GraphicsCoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0915FAA208901DD0067C02A /* GraphicsCoreTests.swift */; };
 		D0915FCF2089027C0067C02A /* GraphicsCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03267942082DE8D00BBF563 /* GraphicsCore.swift */; };
 		D09F3675210D0C4200D38F4C /* BlackCricket.h in Headers */ = {isa = PBXBuildFile; fileRef = D09F3673210D0C4200D38F4C /* BlackCricket.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -50,6 +50,8 @@
 		D0CBE402211F9EB100A661F0 /* Modular.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0F58CF4210E201200AACC8F /* Modular.framework */; };
 		D0CBE403211F9EB100A661F0 /* Modular.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D0F58CF4210E201200AACC8F /* Modular.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D0D55C36210F280F004EF894 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D025BF3F210E6C6500083117 /* Media.xcassets */; };
+		D0D5612B212DDA500059874B /* QuadDriver.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D5612A212DDA500059874B /* QuadDriver.swift */; };
+		D0D5612D212DE1EE0059874B /* Array+PreviousNext.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D5612C212DE1EE0059874B /* Array+PreviousNext.swift */; };
 		D0DAFC0F2118F634003F552A /* 3DExchange.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0DAFC0E2118F634003F552A /* 3DExchange.swift */; };
 		D0DAFC112118F737003F552A /* Items.json in Resources */ = {isa = PBXBuildFile; fileRef = D0DAFC102118F737003F552A /* Items.json */; };
 		D0E9D8B82107B7790072E403 /* Make2D.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0E9D8B72107B7790072E403 /* Make2D.framework */; };
@@ -84,7 +86,6 @@
 		D0F58D15210E207300AACC8F /* CGRect+Inset.swift in Sources */ = {isa = PBXBuildFile; fileRef = D026711F20CD9639008E24FB /* CGRect+Inset.swift */; };
 		D0F58D16210E207300AACC8F /* SelectionCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A6EDF720745DE600C644F0 /* SelectionCore.swift */; };
 		D0F58D17210E207300AACC8F /* GraphicsCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03267942082DE8D00BBF563 /* GraphicsCore.swift */; };
-		D0F58D18210E207300AACC8F /* VerticalPageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B218CF201F6491004684FC /* VerticalPageController.swift */; };
 		D0F58D1A210E207300AACC8F /* ViewComposite.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BAD734204228F700406E70 /* ViewComposite.swift */; };
 		D0F58D1C210E212D00AACC8F /* Diagrams.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0F58D1B210E212D00AACC8F /* Diagrams.framework */; };
 		D0F58D20210E212D00AACC8F /* Geo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0F58D1F210E212D00AACC8F /* Geo.framework */; };
@@ -230,7 +231,7 @@
 		D052B407211F2CEA008DD455 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D06560422127974B00E2B880 /* PageController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageController.swift; sourceTree = "<group>"; };
 		D06E02F920F5CF33000E646F /* Volume.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Volume.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		D07C56B8211E74F50073D7A7 /* HorizontalPageController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizontalPageController.swift; sourceTree = "<group>"; };
+		D07C56B8211E74F50073D7A7 /* App+FreeFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "App+FreeFunctions.swift"; sourceTree = "<group>"; };
 		D08A6F92202AA58E00EF9E68 /* EdgeToGeometry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EdgeToGeometry.swift; sourceTree = "<group>"; };
 		D0915FA8208901DD0067C02A /* GraphicsCoreTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GraphicsCoreTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0915FAA208901DD0067C02A /* GraphicsCoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphicsCoreTests.swift; sourceTree = "<group>"; };
@@ -242,7 +243,6 @@
 		D09F3674210D0C4200D38F4C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D0A6EDF720745DE600C644F0 /* SelectionCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectionCore.swift; sourceTree = "<group>"; };
 		D0A8B9C120BC9AC500D4C301 /* Environment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = SOURCE_ROOT; };
-		D0B218CF201F6491004684FC /* VerticalPageController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerticalPageController.swift; sourceTree = "<group>"; };
 		D0B69D252043632D00AEA01B /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
 		D0B86C64202FC09200CCB3F7 /* ViewFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewFunctions.swift; sourceTree = "<group>"; };
 		D0BAD734204228F700406E70 /* ViewComposite.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewComposite.swift; sourceTree = "<group>"; };
@@ -253,6 +253,8 @@
 		D0CBE3F9211F94BA00A661F0 /* GridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridView.swift; sourceTree = "<group>"; };
 		D0CBE3FB211F9EA500A661F0 /* Singalong.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Singalong.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0CBE3FE211F9EA500A661F0 /* Geo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Geo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D0D5612A212DDA500059874B /* QuadDriver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuadDriver.swift; sourceTree = "<group>"; };
+		D0D5612C212DE1EE0059874B /* Array+PreviousNext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+PreviousNext.swift"; sourceTree = "<group>"; };
 		D0D6808120CEB0EF0074E97D /* ViewMaps.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewMaps.swift; sourceTree = "<group>"; };
 		D0DA9BB82039E1C60019F6EE /* TexturedView+SKSpriteNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TexturedView+SKSpriteNode.swift"; sourceTree = "<group>"; };
 		D0DA9BBA203A666A0019F6EE /* PrimitiveFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrimitiveFunctions.swift; sourceTree = "<group>"; };
@@ -413,6 +415,7 @@
 			children = (
 				D0AEF45D2013A6FC005F761B /* Deploy App */,
 				D09C3C42206B32370053EE2A /* App.swift */,
+				D07C56B8211E74F50073D7A7 /* App+FreeFunctions.swift */,
 				D0A8B9C120BC9AC500D4C301 /* Environment.swift */,
 				D0DAFC0E2118F634003F552A /* 3DExchange.swift */,
 				D0DAFC102118F737003F552A /* Items.json */,
@@ -429,8 +432,8 @@
 				D0A6EDF720745DE600C644F0 /* SelectionCore.swift */,
 				D03267942082DE8D00BBF563 /* GraphicsCore.swift */,
 				D06560422127974B00E2B880 /* PageController.swift */,
-				D0B218CF201F6491004684FC /* VerticalPageController.swift */,
-				D07C56B8211E74F50073D7A7 /* HorizontalPageController.swift */,
+				D0D5612A212DDA500059874B /* QuadDriver.swift */,
+				D0D5612C212DE1EE0059874B /* Array+PreviousNext.swift */,
 				D0CBE3F0211F36A300A661F0 /* New Quad Page */,
 				D0F58CE6210E146F00AACC8F /* Graph To Cricket to Modular+Scaffolding */,
 				D03E03F520125DF8002D47F3 /* BlackCricket */,
@@ -988,6 +991,7 @@
 				D0F58D1A210E207300AACC8F /* ViewComposite.swift in Sources */,
 				D0F58D11210E207300AACC8F /* HandlesViewCore.swift in Sources */,
 				D0F58D12210E207300AACC8F /* RectIndex.swift in Sources */,
+				D0D5612D212DE1EE0059874B /* Array+PreviousNext.swift in Sources */,
 				D0F58D0A210E207300AACC8F /* TypedNotifications.swift in Sources */,
 				D0F58D0D210E207300AACC8F /* SpriteDriver.swift in Sources */,
 				D0F58D14210E207300AACC8F /* TensionedPoint.swift in Sources */,
@@ -995,15 +999,15 @@
 				D0F58D03210E202A00AACC8F /* Sprite2DView.swift in Sources */,
 				D0CBE3FA211F94BA00A661F0 /* GridView.swift in Sources */,
 				D0FD710321172BD700B27092 /* SimpleBarButtonViewContoller.swift in Sources */,
+				D0D5612B212DDA500059874B /* QuadDriver.swift in Sources */,
 				D0F58D01210E202900AACC8F /* Scaff2D.swift in Sources */,
 				D0CBE3F8211F91FD00A661F0 /* ScrollableViewController.swift in Sources */,
-				D0F58D18210E207300AACC8F /* VerticalPageController.swift in Sources */,
 				D0F58D09210E207300AACC8F /* ViewController.swift in Sources */,
 				D0F58D10210E207300AACC8F /* HandlesView.swift in Sources */,
 				D0F58D07210E207300AACC8F /* Environment.swift in Sources */,
 				D0CBE3F7211F91FD00A661F0 /* BViewController.swift in Sources */,
 				D0F58D0C210E207300AACC8F /* ViewDiagramDriver.swift in Sources */,
-				D07C56B9211E74F50073D7A7 /* HorizontalPageController.swift in Sources */,
+				D07C56B9211E74F50073D7A7 /* App+FreeFunctions.swift in Sources */,
 				D0F58D16210E207300AACC8F /* SelectionCore.swift in Sources */,
 				D0DAFC0F2118F634003F552A /* 3DExchange.swift in Sources */,
 				D0656045212797DD00E2B880 /* PageController.swift in Sources */,
