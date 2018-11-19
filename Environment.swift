@@ -11,6 +11,7 @@ import Singalong
 import Graphe
 
 let createScaffolding = CGSize3.init >>> createGrid >>> ScaffGraph.init
+let createScaffolding2 = createScaffolding >>> SimpleGraphItem.init
 
 extension ScaffGraph
 {
@@ -43,7 +44,7 @@ struct Item<Content> : Equatable {
   
   let content: Content
   let id: String
-  let name: String
+  var name: String
 }
 
 
@@ -125,6 +126,18 @@ extension ItemList where T == ScaffGraph {
   }()
 }
 
+extension ItemList where T == SimpleGraphItem {
+  static var mock : ItemList<SimpleGraphItem> = {
+    var list = ItemList([
+      Item(content: (100,100,450) |> createScaffolding2, id: "Mock0", name: "First Graph"),
+      Item(content: (1000,1000,100) |> createScaffolding2, id: "Mock1", name: "Second Graph"),
+      Item(content: (500,1000,1000) |> createScaffolding2, id: "Mock2", name: "Third Graph")])
+    list.addOrReplace(item: Item(content: (500,300,1000) |> createScaffolding2, id: "Mock3", name: "Force Graph"))
+    
+    return list
+  }()
+}
+
 enum Result<Value, Error> {
   case success(Value)
   case error(Error)
@@ -134,7 +147,7 @@ enum Result<Value, Error> {
 struct FileIO {
   var persistenceURL : URL? = getPersistenceURL()
   var load = loadProgression
-  var loadFromBundle = _loadFromBundle
+  var loadFromBundle = _loadFromBundleSimple
   var loadFromDocuments = _loadFromDocuments
   var save = saveItems
 }
@@ -148,7 +161,7 @@ enum LoadError : Error {
 
 
 
-func loadProgression() -> Result<ItemList<ScaffGraph>, LoadError>{
+func loadProgression() -> Result<ItemList<SimpleGraphItem>, LoadError>{
   
   let documentsResult = Current.file.loadFromDocuments()
   if case .success = documentsResult {
@@ -181,7 +194,24 @@ func _loadFromBundle() -> Result<ItemList<ScaffGraph>, LoadError>{
   }
 }
 
-func _loadFromDocuments() -> Result<ItemList<ScaffGraph>, LoadError>{
+func _loadFromBundleSimple() -> Result<ItemList<SimpleGraphItem>, LoadError>{
+  
+  guard let url = Bundle.main.url(forResource: "Items", withExtension: "json") else {
+    return .error( LoadError.badURL )
+  }
+  guard let data = try? Data(contentsOf: url) else {
+    return .error( LoadError.noData )
+  }
+  do {
+    let decoder = JSONDecoder()
+    let jsonData = try decoder.decode(ItemList<SimpleGraphItem>.self, from: data)
+    return .success(jsonData)
+  } catch  {
+    return .error( .noJson )
+  }
+}
+
+func _loadFromDocuments() -> Result<ItemList<SimpleGraphItem>, LoadError>{
   
   
   
@@ -193,14 +223,14 @@ func _loadFromDocuments() -> Result<ItemList<ScaffGraph>, LoadError>{
   }
   do {
     let decoder = JSONDecoder()
-    let jsonData = try decoder.decode(ItemList<ScaffGraph>.self, from: data)
+    let jsonData = try decoder.decode(ItemList<SimpleGraphItem>.self, from: data)
     return .success(jsonData)
   } catch  {
     return .error( .noJson )
   }
 }
 
-func saveItems(item: ItemList<ScaffGraph>) {
+func saveItems(item: ItemList<SimpleGraphItem>) {
   let encoder = JSONEncoder()
   encoder.outputFormatting = .prettyPrinted
   let data = try! encoder.encode(item)
@@ -264,7 +294,7 @@ extension EditingViews {
 struct Environment {
   
   var file = FileIO()
-  var model : ItemList<ScaffGraph> = ItemList([])
+  var model : ItemList<SimpleGraphItem> = ItemList([])
   var screen = UIScreen.main.bounds
   var viewMaps = EditingViews()
 }

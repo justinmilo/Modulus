@@ -10,6 +10,147 @@ import UIKit
 import Singalong
 import Graphe
 import Volume
+@testable import FormsCopy
+
+typealias Length = Measurement<UnitLength>
+
+func feet(_ len: Length) -> (Int, Length) {
+  let feetLen = len.converted(to: .feet)
+  let roundedDown = feetLen.value.rounded(.down)
+  return  (Int( roundedDown ), Length(value: feetLen.value - roundedDown, unit: .feet))
+}
+
+func inches(_ len: Length) -> (Int, Length) {
+  let inchLen = len.converted(to: .inches)
+  let roundedDown = inchLen.value.rounded(.down)
+  return  (Int( roundedDown ), Length(value: inchLen.value - roundedDown, unit: .inches))
+}
+
+func inchesFraction(_ len: Length) -> ((Int, Int), Length) {
+  let base = 8.0
+  let inchLen = len.converted(to: .inches)
+  let rounded = (inchLen.value*base).rounded()
+  return  ( (Int( rounded ), Int( base )) , Length(value: inchLen.value - rounded/base, unit: .inches))
+}
+
+func gcd(_ a:Int, _ b:Int) -> Int {
+  func mod(_ a: Int, _ b: Int) -> Int {
+    return a - b * abs( a/b )
+  }
+  if b == 0 { return a }
+  else {
+    return gcd(b, mod(a, b) )
+  }
+}
+
+func simplify( numerator:Int, denominator:Int)  -> (Int, Int)? {
+  if numerator == 0 { return nil }
+  else {
+    let divsor = gcd(numerator, denominator)
+    return (numerator/divsor, denominator/divsor)
+  }
+}
+
+let imperialFormatter : (Measurement<UnitLength>) -> String = {
+  let ft = feet($0)
+  let i = inches(ft.1)
+  let fr = inchesFraction(i.1)
+  let sim = simplify(numerator: fr.0.0, denominator: fr.0.1)
+  let simS = sim.map { return " \($0.0)/\($0.1)" }
+  return "\(ft.0)'-\(i.0)\(simS ?? "")\""
+}
+
+let metricFormatter : (Measurement<UnitLength>) -> String = {
+  let meters = $0.converted(to: .meters)
+  return "\( String(format: "%.2f", meters.value) ) m"
+}
+
+
+
+
+struct SimpleGraphItem {
+  var name : String?
+  var typeName : String {
+    return name ?? "Untitled"
+  }
+  var edges : [Edge]
+  var positions : GraphPositions
+  var width : Measurement<UnitLength> {
+    return (positions.pX.max()! |> Double.init, .centimeters) |> Measurement<UnitLength>.init(value:unit:)
+  }
+  var depth : Measurement<UnitLength> {
+    return (positions.pY.max()! |> Double.init, .centimeters) |> Measurement<UnitLength>.init(value:unit:)
+  }
+  var height : Measurement<UnitLength> {
+    return (positions.pZ.max()! |> Double.init, .centimeters) |> Measurement<UnitLength>.init(value:unit:)
+  }
+  var ledgers : Int {
+    return edges.filtered(by: isLedger).count
+  }
+  var diags : Int {
+    return edges.filtered(by: isDiag).count
+  }
+  var collars : Int {
+    return edges.filtered(by: isPoint).count
+  }
+  var standards : Int {
+    return edges.filtered(by: isVertical).count
+  }
+}
+
+extension SimpleGraphItem : Codable { }
+extension ScaffGraph {
+  convenience init(item: SimpleGraphItem) {
+    self.init(grid: item.positions, edges: item.edges)
+  }
+}
+
+
+
+extension SimpleGraphItem {
+  init( name: String, graph: ScaffGraph) {
+    self.name = name
+    self.edges = graph.edges
+    self.positions = graph.grid
+  }
+  init( graph: ScaffGraph) {
+    self.name = nil
+    self.edges = graph.edges
+    self.positions = graph.grid
+  }
+}
+
+let writ : WritableKeyPath<Item<SimpleGraphItem>, String> = \Item.name
+let field : Element<FormCell, Item<SimpleGraphItem>> = nestedTextField(title: "Name", keyPath: writ)
+let newForm : Form<Item<SimpleGraphItem>> = sections([
+  section([
+          nestedTextField(title: "Name", keyPath: \.name)
+    ])
+  ])
+
+let colorsForm: Form<Item<SimpleGraphItem>> =
+  sections([
+    section([
+     nestedTextField(title: "Name", keyPath: \.name)
+     ]),
+    section([
+      labelCell(title: "Ledgers", label:  intLabel(keyPath: \.content.ledgers), leftAligned: false),
+      labelCell(title: "Diags", label:  intLabel(keyPath: \.content.diags), leftAligned: false),
+      labelCell(title: "Collars", label:  intLabel(keyPath: \.content.collars), leftAligned: false),
+      labelCell(title: "Standards", label:  intLabel(keyPath: \.content.standards), leftAligned: false)
+      ]),
+    section([
+      labelCell(title: "Width", label:  dimLabel(keyPath: \.content.width, formatter: metricFormatter), leftAligned: false),
+      labelCell(title: "Depth", label:  dimLabel(keyPath: \.content.depth, formatter: metricFormatter), leftAligned: false),
+      labelCell(title: "Height", label:  dimLabel(keyPath: \.content.height, formatter: metricFormatter), leftAligned: false),
+      ]),
+    section([
+      labelCell(title: "Width", label:  dimLabel(keyPath: \.content.width, formatter: imperialFormatter), leftAligned: false),
+      labelCell(title: "Depth", label:  dimLabel(keyPath: \.content.depth, formatter: imperialFormatter), leftAligned: false),
+      labelCell(title: "Height", label:  dimLabel(keyPath: \.content.height, formatter: imperialFormatter), leftAligned: false),
+
+      ]),
+    ])
 
 public class App {
   public init() {
@@ -22,6 +163,10 @@ public class App {
     return nav
   }
   
+  var editViewController : EditViewController<Item<SimpleGraphItem>, UITableViewCell>?
+  var inputTextField : UITextField?
+
+  
   lazy var loadEntryTable : UINavigationController  = {
     let load = Current.file.load()
     
@@ -29,12 +174,17 @@ public class App {
     case let .success(value):
       
       Current.model = value
+    case let .error(error):
+      Current.model = ItemList.mock
+    }
+      
       
       let edit = EditViewController(
         config: EditViewContConfiguration(
-          initialValue: value.contents)
-        { (anItem:Item<ScaffGraph> , cell: UITableViewCell) -> UITableViewCell in
+          initialValue: Current.model.contents)
+        { (anItem:Item<SimpleGraphItem> , cell: UITableViewCell) -> UITableViewCell in
           cell.textLabel?.text = anItem.name
+          cell.accessoryType = .detailDisclosureButton
           return cell
         }
       )
@@ -42,14 +192,45 @@ public class App {
         self.currentNavigator = GraphNavigator(id: cell.id)
         self.loadEntryTable.pushViewController(self.currentNavigator.vc, animated: true)
       }
-      edit.title = "Meccano"
+      edit.didSelectAccessory = { (item, cell) in
+        let driver = FormDriver(initial: cell, build: colorsForm)
+        driver.formViewController.navigationItem.largeTitleDisplayMode = .never
+        self.loadEntryTable.pushViewController(driver.formViewController, animated: true)
+        
+      }
+      edit.topRightBarButton = BarButtonConfiguration(type: .system(.add)) {
+        func addTextField(_ textField: UITextField!){
+          // add the text field and make the result global
+          textField.placeholder = "Definition"
+          self.inputTextField = textField
+        }
+        
+        let listNamePrompt = UIAlertController(title: "Name your list", message: nil, preferredStyle: UIAlertController.Style.alert)
+        listNamePrompt.addTextField(configurationHandler: addTextField)
+        listNamePrompt.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler: ({ (ui:UIAlertAction) -> Void in
+          
+        })))
+        listNamePrompt.addAction(UIAlertAction(title: "Create", style: UIAlertAction.Style.default, handler: ({ (ui:UIAlertAction) -> Void in
+          let text = self.inputTextField?.text ?? "Default"
+          print(text)
+          let new : Item<SimpleGraphItem> = Item(content: (200,200,200) |> createScaffolding2, id: text, name: text)
+          Current.model.addOrReplace(item: new)
+          Current.file.save(Current.model)
+          edit.undoHistory.currentValue = Current.model.contents
+        })))
+        
+        self.rootController.present(listNamePrompt, animated: true, completion: nil)
+      }
+      edit.title = "Deploy" // Moditive
+      // Formosis // Formicate, Formite, Formate, Form Morph, UnitForm, Formunit
+      // Morpho, massing, Meccano, mechanized, modulus, Moduform, Modju, Mojuform, Majuform
+      // Modulo
+      self.editViewController = edit
       let nav = UINavigationController(rootViewController: edit)
       styleNav(nav)
       return nav
-    case let .error(error):
-      print(error, "DUDE")
-      fatalError()
-    }
+    
+    
   
     
   }()
@@ -58,86 +239,6 @@ public class App {
 
 
 
-public class GraphNavigator {
-  init(id: String) {
-    self.id = id
-  }
-  
-  var graph : ScaffGraph {
-    get {
-      return Current.model.getItem(id: id)!.content
-    }
-  }
-  
-  lazy var vc: UIViewController = quadVC
-  typealias ViewMap = EditingViews.ViewMap
-
-  lazy var mockCreator : (ViewMap)->UIViewController =
-    curry(mockControllerFromMap)(self)
-  lazy var mockInternalNavFunc : (ViewMap)->UIViewController =
-    curry(mockControllerFromMap)(self)
-      >>> embedInNav
-      >>> inToOut(styleNav)
-  
-  
-  lazy var mock : UIViewController =  mockCreator(Current.viewMaps.front) |> addNavBarItem
-  lazy var mockInternalNav : UIViewController = mockInternalNavFunc(Current.viewMaps.front) |> addNavBarItem
-  lazy var quadDriver : QuadDriver =
-    { ($0, self.graph) }
-      >>> curry(controllerFromMap)(self)
-      >>> inToOut(addBarSafely)
-      |> createPageController
-  lazy var quadVC : UIViewController = quadDriver.group |> addNavBarItem
-  lazy var quadNavs : QuadDriver  =
-    { ($0, self.graph) }
-      >>> curry(controllerFromMap)(self)
-      >>> inToOut(addBarSafely)
-      >>> embedInNav
-      >>> inToOut(styleNav)
-      |> createPageController
-
-  func addNavBarItem<ReturnVC:UIViewController>(vc :ReturnVC ) -> ReturnVC {
-    vc.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "3D", style: UIBarButtonItem.Style.plain , target: self, action: #selector(GraphNavigator.present3D))
-    return vc
-  }
-  
-  @objc func save() {
-    Current.file.save(Current.model)
-  }
-  
-  
-  let id : String
-  @objc func present3D() {
-    
-    if let item = Current.model.getItem(id: id) {
-      Current.model.addOrReplace(item: item )
-    }
-    
-    let scaffProvider = Current.model.getItem(id: id)!.content |> provider
-    let newVC = CADViewController(grid: scaffProvider)
-    
-    let ulN = UINavigationController(rootViewController: newVC)
-    ulN.navigationBar.prefersLargeTitles = false
-    newVC.navigationItem.rightBarButtonItem = UIBarButtonItem(
-      title: "Dismiss",
-      style: UIBarButtonItem.Style.plain ,
-      target: self,
-      action: #selector(GraphNavigator.dismiss3D)
-    )
-    
-    
-    self.vc.present(ulN, animated: true, completion: nil)
-  }
-  
-  
-  
-  @objc func dismiss3D() {
-    self.vc.dismiss(animated: true, completion: nil)
-  }
-  
-  
-  
-}
 
 
 

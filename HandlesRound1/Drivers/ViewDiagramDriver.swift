@@ -60,7 +60,7 @@ class ViewDriver : Driver  {
     self.assemblyView.frame.origin = origin
   }
   
-  var graph : ScaffGraph { return Current.model.getItem(id: self.id)!.content }
+  var graph : ScaffGraph { return Current.model.getItem(id: self.id)!.content |> ScaffGraph.init}
   
   /// Handler for Selection Size Changed
    func layout(size: CGSize) {

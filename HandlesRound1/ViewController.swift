@@ -35,38 +35,38 @@ class ViewController : UIViewController, SpriteDriverDelegate
     Current.file.save(Current.model)
   }
   
-//  override func loadView() {
-//    self.view = GrippedViewHandles(frame: UIScreen.main.bounds)
-//  }
+  var viewport : CanvasViewport!
   var driver : SpriteDriver
   var driverLayout : PositionedLayout<IssuedLayout<LayoutToDriver<SpriteDriver>>>
-  var scale : CGFloat {
-    didSet {
-      postNotification(note: scaleChangeNotification, value: scale)
-    }
-  }
+  var scaleObserver : NotificationObserver!
+  var scale: CGFloat = 1.0
   
   init(driver: SpriteDriver)
   {
     self.driver = driver
-    self.scale = driver.scale
     self.driverLayout = PositionedLayout(
       child: IssuedLayout(child: LayoutToDriver( child: driver )),
       ofSize: CGSize.zero,
       aligned: (.center, .center))
     super.init(nibName: nil, bundle: nil)
     self.driver.delgate = self
+    scaleObserver = NotificationObserver(
+      notification: scaleChangeNotification,
+      block: { [weak self] in
+        self?.driver.scale = $0
+        self?.viewport.scale = $0
+        self?.scale = $0
+        print("      ------    SCALE CHANGED TO ", $0, " ------ ")
+    })
   }
   required init?(coder aDecoder: NSCoder) {
     fatalError("Init with coder not implemented")
   }
   
-  var viewport : CanvasViewport!
   
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
     
-    self.viewport.scale = self.scale
     self.driver.bind(to: viewport.canvas.frame)
     let bestFit = driver.size
     
@@ -159,7 +159,8 @@ class ViewController : UIViewController, SpriteDriverDelegate
 
       
       self.interimScale = nil
-      self.scale = scale
+      //Model scale is changed here by firing a notification to all listening viewcontrollers
+      postNotification(note: scaleChangeNotification, value: scale)
       
       let bestFit = self.viewport.selection.size |> self.driver.build
       self.driverLayout.size = bestFit

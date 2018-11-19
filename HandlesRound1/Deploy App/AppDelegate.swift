@@ -9,7 +9,7 @@
 import UIKit
 import Modular
 
-
+import Diagrams
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -26,7 +26,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
       
       self.app = App()
       self.window?.rootViewController = app!.rootController
-      
         return true
     }
 

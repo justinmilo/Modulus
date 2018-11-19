@@ -47,6 +47,7 @@ public struct EditViewContConfiguration<A, Cell: UITableViewCell> {
     let navTitle : String
     
     let configure : (A, Cell) -> Cell
+
 }
 extension EditViewContConfiguration
 {
@@ -93,13 +94,16 @@ public class EditViewController<A : Equatable, Cell: UITableViewCell> : SimpleBa
             itemsUpdated(undoHistory.currentValue)
         }
     }
-    var items :[A]  { get { return undoHistory.currentValue } }
-    var itemsUpdated : ([A]) -> ()  = { _ in }
-    var configure : (A, Cell) -> Cell
-    var didSelect : (Int,A) -> () = { _, _ in }
+  var items :[A]  { get { return undoHistory.currentValue } }
+  var itemsUpdated : ([A]) -> ()  = { _ in }
+  var configure : (A, Cell) -> Cell
+  var didSelect : (Int,A) -> () = { _, _ in }
+  var didSelectAccessory : (Int,A) -> ()  = { _, _ in }
+
   var didDelete : (Int, A) -> () = { _, _ in }
     
-    var didSelectWhileEditing : ((Int,A) -> ())?
+  var didSelectWhileEditing : ((Int,A) -> ())?
+  var didSelectAccessoryWhileEditing : ((Int,A) -> ())?
     
     // SHAKE TO UNDO
     override public func viewDidAppear(_ animated: Bool) {
@@ -186,6 +190,11 @@ public class EditViewController<A : Equatable, Cell: UITableViewCell> : SimpleBa
         let item = items[(indexPath as NSIndexPath).row]
         isEditing ? didSelectWhileEditing?((indexPath as NSIndexPath).row,item) : didSelect((indexPath as NSIndexPath).row,item)
     }
+  
+  public override func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
+    let item = items[(indexPath as NSIndexPath).row]
+    isEditing ? didSelectAccessoryWhileEditing?((indexPath as NSIndexPath).row,item) : didSelectAccessory((indexPath as NSIndexPath).row,item)
+  }
     
     override public func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         return [
@@ -212,6 +221,8 @@ public class EditViewController<A : Equatable, Cell: UITableViewCell> : SimpleBa
         self.undoHistory.currentValue = withMovedItems
         
     }
+  
+  
 }
 
 // Alternative Workaround
