@@ -69,10 +69,6 @@ let metricFormatter : (Measurement<UnitLength>) -> String = {
 
 
 struct SimpleGraphItem {
-  var name : String?
-  var typeName : String {
-    return name ?? "Untitled"
-  }
   var edges : [Edge]
   var positions : GraphPositions
   var width : Measurement<UnitLength> {
@@ -105,28 +101,26 @@ extension ScaffGraph {
   }
 }
 
-
-
 extension SimpleGraphItem {
-  init( name: String, graph: ScaffGraph) {
-    self.name = name
-    self.edges = graph.edges
-    self.positions = graph.grid
-  }
   init( graph: ScaffGraph) {
-    self.name = nil
     self.edges = graph.edges
     self.positions = graph.grid
   }
 }
 
-let writ : WritableKeyPath<Item<SimpleGraphItem>, String> = \Item.name
-let field : Element<FormCell, Item<SimpleGraphItem>> = nestedTextField(title: "Name", keyPath: writ)
-let newForm : Form<Item<SimpleGraphItem>> = sections([
-  section([
-          nestedTextField(title: "Name", keyPath: \.name)
-    ])
-  ])
+extension ScaffGraph {
+  var ledgers : Int {
+  return edges.filtered(by: isLedger).count
+}
+}
+
+let graphForm: Form<Item<ScaffGraph>> =
+  sections([
+    section([
+      nestedTextField(title: "Name", keyPath: \.name),
+      labelCell(title: "Ledgers", label:  intLabel(keyPath: \.content.ledgers), leftAligned: false),
+      ]),
+])
 
 let colorsForm: Form<Item<SimpleGraphItem>> =
   sections([

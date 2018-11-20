@@ -97,55 +97,37 @@ class ViewController : UIViewController, SpriteDriverDelegate
       // as a side note it also ignores alignment but this
       // doesnt matter in this case since we are probabbly already snug
       self.driver.layout(origin: self.viewport.selection.origin)
-      self.logViewport()
-      print("End-Canas Changed End")
     }
     viewport.selectionOriginChanged = { [weak self] _ in
       guard let self = self else { return }
-      print("Beg-selection origin changed")
       self.driverLayout.layout(in: self.viewport.selection) /// should be VPCoord
-      print("End-selection origin changed")
 
     }
     viewport.selectionSizeChanged = { [weak self] _ in
       guard let self = self else { return }
-      print("Beg-selection size changed")
 
       let bestFit = (self.viewport.selection.size, self.interimScale ?? self.scale) |> self.driver.build
       self.driverLayout.size = bestFit
       self.driverLayout.layout(in: self.viewport.selection)
-      print("End-selection size changed")
 
     }
     viewport.didBeginEdit = {
-      print("Beg-did begin edit")
 
-      self.logViewport()
       //self.map.isHidden = false
-      print("End-did begin edit")
     }
     viewport.didEndEdit = {
-      print("Beg-did end edit")
       Current.file.save(Current.model)
-      self.logViewport()
       self.viewport.animateSelection(to:  self.driverLayout.child.issuedRect! )
-      print("End-did end edit")
     }
     viewport.didBeginPan = {
-      print("Beg-Did begin pan")
-      self.logViewport()
-      print("End-Did begin pan")
     }
     viewport.didBeginZoom = {
-      print("did begin zoom")
 
       // viewports scale is reset at each didEndZoom call
       // driver.scale needs to store the cumulative scale
       //print("before zoom begins - scale",  self.driver.scale)
-      print("before zoom begins - selection",  self.viewport.selection)
     }
     viewport.zooming = { scale in
-      print("zooming")
 
       //self.driver.set(scale: scale)
       
@@ -153,9 +135,7 @@ class ViewController : UIViewController, SpriteDriverDelegate
       self.interimScale = scale
     }
     viewport.didEndZoom = { scale in
-      print("Beg-Did End Zoom")
 
-      self.logViewport()
 
       
       self.interimScale = nil
@@ -166,14 +146,12 @@ class ViewController : UIViewController, SpriteDriverDelegate
       self.driverLayout.size = bestFit
       self.driverLayout.layout(in: self.viewport.selection)
       
-      print("End-Did End ZOom")
 
     }
   
   }
   var interimScale : CGFloat?
   override func viewDidLayoutSubviews() {
-    print("view did layout subviews")
     super.viewDidLayoutSubviews()
   }
   

@@ -42,7 +42,7 @@ let nameHash : ( Scaff2D)  -> String = {
   let length = CGSegment(p1:scaff.start, p2:scaff.end).length
   let box = scaff.start + scaff.end
   let text = "\(length),\(box.size.height/box.size.width)-" + ((scaff.part |> descriptionScaff) + (scaff.view |> descriptionDrawing)) + (descriptionDiag(scaff) ?? "")
-  print(text)
+  //print(text)
   return text
 }
 

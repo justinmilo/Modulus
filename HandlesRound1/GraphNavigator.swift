@@ -17,15 +17,12 @@ import Volume
 public class GraphNavigator {
   init(id: String) {
     self.id = id
+    let simple = Current.model.getItem(id: id)!.content
+    graph = ScaffGraph(grid: simple.positions , edges: simple.edges)
   }
-  
-  var graph : ScaffGraph {
-    get {
-      let simple = Current.model.getItem(id: id)!.content
-      return ScaffGraph(grid: simple.positions , edges: simple.edges)
-    }
-  }
-  
+  /// graph is *the* ScaffGraph for all the Nav's VC's
+  /// set at init. Graph is a refernce object shared by all instances of the graph editing viewcontrollers
+  let graph : ScaffGraph
   
   var scale : CGFloat = 1.0 {
     didSet {
@@ -75,9 +72,7 @@ public class GraphNavigator {
   
   @objc func presentInfo() {
     let cell = Current.model.getItem(id: self.id)!
-    //let simpleItem = SimpleGraphItem(name: cell.name, graph: cell.content)
-    var simple = cell
-    let driver = FormDriver(initial: simple, build: colorsForm)
+    let driver = FormDriver(initial: cell, build: colorsForm)
     driver.formViewController.navigationItem.largeTitleDisplayMode = .never
     let nav = embedInNav(driver.formViewController)
     nav.navigationBar.prefersLargeTitles = false

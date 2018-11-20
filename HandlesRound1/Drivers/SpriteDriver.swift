@@ -51,16 +51,11 @@ class SpriteDriver : Driver {
   var _previousOrigin = (ui:CGPoint.zero, sprite:CGPoint.zero)
   
   func layout(origin: CGPoint) {
-    print("#Beg-Layout Origin")
     let heightVector = unitY * (self.graph |> self.editingView.size).height * self.scale
     
-    print("given origin", origin)
-    print("new origin", uiPointToSprite(origin)  - heightVector )
     self._previousOrigin = (origin, uiPointToSprite(origin)  - heightVector )
     
     self.twoDView.mainNode.position = uiPointToSprite(origin)  - heightVector
-    print("#End-Layout Origin")
-
   }
   
   var _previousSize = CGSize.zero
@@ -68,7 +63,6 @@ class SpriteDriver : Driver {
   ///
   /// Checks if newSize should be redrawn
   func layout(size: CGSize) {
-    print("#Beg-Layout Size")
 
     // Create New Model &  // Find Orirgin
     // Setting up our interior vie)
@@ -79,7 +73,6 @@ class SpriteDriver : Driver {
       //self.twoDView.draw(newRect)
     }
     self._previousSize = size
-    print("#End-Layout Size")
   }
   
   private func _layout(size: CGSize)
@@ -97,14 +90,10 @@ class SpriteDriver : Driver {
   }
   
   func build(for viewportSize: CGSize) -> CGSize {
-    print("#Beg-Build Simple")
     return self.build(for:viewportSize, atScale: self.scale)
-    print("#End-Build Simple")
-
   }
   
   func build(for viewportSize: CGSize, atScale scale: CGFloat) -> CGSize {
-    print("#Beg-Build Scale")
 
     let modelspaceSize_input = viewportSize / scale
     let roundedModelSize = modelspaceSize_input.rounded(places: 5)
@@ -113,7 +102,6 @@ class SpriteDriver : Driver {
     (self.graph.grid, self.graph.edges) = self.editingView.build(s3, self.graph.edges)
     let modelSpaceSize_output =  self.graph |> self.editingView.size
     return modelSpaceSize_output * twoDView.scale
-    print("#End-Build Scale")
 
   }
   
@@ -126,10 +114,8 @@ class SpriteDriver : Driver {
   var initialFrame : CGRect
   
   func bind(to uiRect: CGRect) {
-    print("#Beg-Bind")
     self.uiPointToSprite = translateToCGPointInSKCoordinates(from: uiRect, to: twoDView.frame)
     self.uiRectToSprite = translateToCGRectInSKCoordinates(from: uiRect, to: twoDView.frame)
-    print("#End-Bind")
   }
   
   

@@ -73,10 +73,10 @@ class PageController: UIPageViewController, UIPageViewControllerDataSource, UIPa
     
     
     guard completed else { return}
-    guard let first =  pageViewController.viewControllers?.first, let safeFirst = first as? UIViewController else { return }
+    guard let first =  pageViewController.viewControllers?.first  else { return }
     guard let pgVC = pageViewController as? PageController else { return }
 
-    self.newDelegate?.didTransition(to: safeFirst, within: pgVC)
+    self.newDelegate?.didTransition(to: first, within: pgVC)
     
     self.title = first.title
   }
@@ -86,7 +86,6 @@ class PageController: UIPageViewController, UIPageViewControllerDataSource, UIPa
 
 extension PageController : PageControllerDelegate {
   func didTransition(to viewController: UIViewController, within pageController: PageController) {
-    print(viewController.title)
     self.newDelegate?.didTransition(to: viewController, within: pageController)
     self.title = viewController.title
   }

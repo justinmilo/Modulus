@@ -235,10 +235,9 @@ func saveItems(item: ItemList<SimpleGraphItem>) {
   encoder.outputFormatting = .prettyPrinted
   let data = try! encoder.encode(item)
   do {
-    print ( Current.file.persistenceURL)
     if let url = Current.file.persistenceURL {
-    
-       try data.write(to: url)
+      try data.write(to: url)
+      print("Saved")
     }else {
       fatalError()
     }
