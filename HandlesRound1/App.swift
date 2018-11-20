@@ -68,17 +68,15 @@ let metricFormatter : (Measurement<UnitLength>) -> String = {
 
 
 
-struct SimpleGraphItem {
-  var edges : [Edge]
-  var positions : GraphPositions
+extension ScaffGraph {
   var width : Measurement<UnitLength> {
-    return (positions.pX.max()! |> Double.init, .centimeters) |> Measurement<UnitLength>.init(value:unit:)
+    return (grid.pX.max()! |> Double.init, .centimeters) |> Measurement<UnitLength>.init(value:unit:)
   }
   var depth : Measurement<UnitLength> {
-    return (positions.pY.max()! |> Double.init, .centimeters) |> Measurement<UnitLength>.init(value:unit:)
+    return (grid.pY.max()! |> Double.init, .centimeters) |> Measurement<UnitLength>.init(value:unit:)
   }
   var height : Measurement<UnitLength> {
-    return (positions.pZ.max()! |> Double.init, .centimeters) |> Measurement<UnitLength>.init(value:unit:)
+    return (grid.pZ.max()! |> Double.init, .centimeters) |> Measurement<UnitLength>.init(value:unit:)
   }
   var ledgers : Int {
     return edges.filtered(by: isLedger).count
@@ -94,25 +92,7 @@ struct SimpleGraphItem {
   }
 }
 
-extension SimpleGraphItem : Codable { }
-extension ScaffGraph {
-  convenience init(item: SimpleGraphItem) {
-    self.init(grid: item.positions, edges: item.edges)
-  }
-}
 
-extension SimpleGraphItem {
-  init( graph: ScaffGraph) {
-    self.edges = graph.edges
-    self.positions = graph.grid
-  }
-}
-
-extension ScaffGraph {
-  var ledgers : Int {
-  return edges.filtered(by: isLedger).count
-}
-}
 
 let graphForm: Form<Item<ScaffGraph>> =
   sections([
@@ -122,7 +102,7 @@ let graphForm: Form<Item<ScaffGraph>> =
       ]),
 ])
 
-let colorsForm: Form<Item<SimpleGraphItem>> =
+let colorsForm: Form<Item<ScaffGraph>> =
   sections([
     section([
      nestedTextField(title: "Name", keyPath: \.name)
@@ -157,7 +137,7 @@ public class App {
     return nav
   }
   
-  var editViewController : EditViewController<Item<SimpleGraphItem>, UITableViewCell>?
+  var editViewController : EditViewController<Item<ScaffGraph>, UITableViewCell>?
   var inputTextField : UITextField?
 
   
@@ -176,7 +156,7 @@ public class App {
       let edit = EditViewController(
         config: EditViewContConfiguration(
           initialValue: Current.model.contents)
-        { (anItem:Item<SimpleGraphItem> , cell: UITableViewCell) -> UITableViewCell in
+        { (anItem:Item<ScaffGraph> , cell: UITableViewCell) -> UITableViewCell in
           cell.textLabel?.text = anItem.name
           cell.accessoryType = .detailDisclosureButton
           return cell
@@ -207,7 +187,7 @@ public class App {
         listNamePrompt.addAction(UIAlertAction(title: "Create", style: UIAlertAction.Style.default, handler: ({ (ui:UIAlertAction) -> Void in
           let text = self.inputTextField?.text ?? "Default"
           print(text)
-          let new : Item<SimpleGraphItem> = Item(content: (200,200,200) |> createScaffolding2, id: text, name: text)
+          let new : Item<ScaffGraph> = Item(content: (200,200,200) |> createScaffolding, id: text, name: text)
           Current.model.addOrReplace(item: new)
           Current.file.save(Current.model)
           edit.undoHistory.currentValue = Current.model.contents

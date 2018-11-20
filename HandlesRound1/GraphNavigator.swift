@@ -17,8 +17,7 @@ import Volume
 public class GraphNavigator {
   init(id: String) {
     self.id = id
-    let simple = Current.model.getItem(id: id)!.content
-    graph = ScaffGraph(grid: simple.positions , edges: simple.edges)
+    graph = Current.model.getItem(id: id)!.content
   }
   /// graph is *the* ScaffGraph for all the Nav's VC's
   /// set at init. Graph is a refernce object shared by all instances of the graph editing viewcontrollers
@@ -92,7 +91,7 @@ public class GraphNavigator {
       Current.model.addOrReplace(item: item )
     }
     
-    let scaffProvider = Current.model.getItem(id: id)!.content |> ScaffGraph.init |> provider
+    let scaffProvider = Current.model.getItem(id: id)!.content |> provider
     let newVC = CADViewController(grid: scaffProvider)
     
     let ulN = UINavigationController(rootViewController: newVC)
