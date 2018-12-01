@@ -13,7 +13,7 @@ import BlackCricket
 typealias ViewComposite = (ScaffGraph) -> [Geometry]
 
 let front1 : ViewComposite = { $0.frontEdgesNoZeros } >>> modelToTexturesElev
-let frontDim : ViewComposite = { $0.grid } >>> graphToNonuniformFront >>> dimensons
+let frontDim : ViewComposite = { $0.grid } >>> graphToNonuniformFront >>> dimensions
 
 let frontEdges : (ScaffGraph) -> [C2Edge] = { ($0.grid, $0.edges) |> frontSection().parse }
 let sideEdges : (ScaffGraph) -> [C2Edge] = { ($0.grid, $0.edges) |> sideSection().parse }
@@ -47,7 +47,7 @@ let outerDimensions =
 let frontOuterDimPlus : ViewComposite =
   frontEdges >>> removedStandards >>> outerDimensions
 let side1 : ViewComposite = { $0.sideEdgesNoZeros} >>> modelToTexturesElev
-let sideDim : ViewComposite = { $0.grid } >>> graphToNonuniformSide >>> dimensons
+let sideDim : ViewComposite = { $0.grid } >>> graphToNonuniformSide >>> dimensions
 let sideDoubleDim : ViewComposite = sideEdges >>> removedStandards >>> outerDimensions
 let frontGraph : (ScaffGraph) -> GraphPositionsOrdered2D =  { $0.grid } >>> graphToFrontGraph2D
 let overallDimensions = graphToCorners >>> borders >>> dimension(40)

@@ -25,7 +25,7 @@ func addBarSafely<T:UIViewController>(to viewController: T) {
   
   let tagID = 5000
   
-  if let view = viewController.view?.subviews.first(where: {$0.tag == tagID}){
+  if viewController.view?.subviews.first(where: {$0.tag == tagID}) != nil {
     return
   }
   
@@ -49,27 +49,21 @@ func embedInNav(_ vc: UIViewController)-> UINavigationController {
   return ulN
 }
 
-#warning("Move to Singalong")
-func inToOut<A>( _ f: @escaping (A)->Void) -> (A)->A {
-  return { a in
-    f(a)
-    return a
-  }
-}
 public func zflip<A,C>(_ t: @escaping (A)->()->C ) -> (A)->(C) {
   return zurry(flip(t))
 }
 
 
-func controllerFromMap(target: Any, _ vm: EditingViews.ViewMap, graph: ScaffGraph) -> UIViewController {
-  let driver = SpriteDriver(mapping: vm.viewMap, graph: graph, scale: 1.0)
+func controllerFromMap(target: Any, _ vm: EditingViews.LabeledViewMap, graph: Item<ScaffGraph>) -> UIViewController {
+  let driver = SpriteDriver(mapping: vm.viewMap, graph: graph.content, scale: 1.0)
+  driver.id = graph.id
   let vc : ViewController = ViewController(driver: driver)
   vc.title = vm.label
   vc.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "3D", style: UIBarButtonItem.Style.plain , target: target, action: #selector(GraphNavigator.present3D))
   return vc
 }
 
-func mockControllerFromMap(target: Any, _ vm: EditingViews.ViewMap) -> UIViewController {
+func mockControllerFromMap(target: Any, _ vm: EditingViews.LabeledViewMap) -> UIViewController {
   let vc = UIViewController()
   vc.view.backgroundColor = .red
   vc.title = vm.label
@@ -77,7 +71,7 @@ func mockControllerFromMap(target: Any, _ vm: EditingViews.ViewMap) -> UIViewCon
   return vc
 }
 
-func createPageController(func1 : (EditingViews.ViewMap)->UIViewController )->QuadDriver{
+func createPageController(func1 : (EditingViews.LabeledViewMap)->UIViewController )->QuadDriver{
   let top = [Current.viewMaps.plan, Current.viewMaps.rotatedPlan].map(func1)
   let bottom = [Current.viewMaps.front, Current.viewMaps.side].map(func1)
   

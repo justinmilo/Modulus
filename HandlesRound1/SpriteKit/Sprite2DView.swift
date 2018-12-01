@@ -28,17 +28,16 @@ extension Float {
 /// Geometry View
 class Sprite2DView : SKView {
   
-  var scale : CGFloat = 1.0
-  {
+  var mainNode : SKNode
+  var cache : [SKSpriteNode] = []
+  var scale : CGFloat = 1.0 {
     didSet {
       self.mainNode.xScale = scale
       self.mainNode.yScale = scale
     }
   }
-  var mainNode : SKNode
   
-  override init(frame: CGRect)
-  {
+  override init(frame: CGRect) {
     mainNode = SKNode()
     super.init(frame: frame)
     
@@ -49,9 +48,7 @@ class Sprite2DView : SKView {
     self.ignoresSiblingOrder = true
   }
   
-  required init?(coder aDecoder: NSCoder) {
-    fatalError()
-  }
+  required init?(coder aDecoder: NSCoder) { fatalError() }
   
   func redraw(_ g:[Geometry]) {
     self.mainNode.removeAllChildren()
@@ -61,6 +58,23 @@ class Sprite2DView : SKView {
     }
   }
   
+  // SceneKit Handlering...
+  // put on the canvas!!
+  func addChildR<T>(_ node: T) {
+    if let representable = node as? SKRepresentable {
+      representable.asNode |> mainNode.addChild
+    }
+    else if let line = node as? Scaff2D {
+      let newNode = createScaff2DNode(item: line, cache: &self.cache)
+      if let n = newNode {
+        n |> mainNode.addChild
+      }
+    }
+    else { fatalError()}
+  }
+}
+
+extension Sprite2DView {
   func addTempRect( rect: CGRect, color: UIColor) {
     let globalLabel = SKShapeNode(rect: rect )
     globalLabel.fillColor = color
@@ -73,58 +87,6 @@ class Sprite2DView : SKView {
       print("End and Fade Out")
     })
   }
-  
-  // SceneKit Handlering...
-  
-  //var scene : SKScene
-  
-  // put on the canvas!!
-  func addChildR<T>(_ node: T) {
-    if let representable = node as? SKRepresentable {
-      representable.asNode |> mainNode.addChild
-    }
-    
-    else if let line = node as? Scaff2D {
-      
-      let newNode = createScaff2DNode(item: line, cache: &self.cache)
-      if let n = newNode {
-        //n |> scalePosition(scale)
-        n |> mainNode.addChild
-      }
-      
-    }
-    
-    
-    
-    else { fatalError()}
-    
-    
-    
-    
-    
-  }
-  
-  var cache : [SKSpriteNode] = []
-  
-  // ...SceneKit Handlering
-  
-  
-  
-  // Viewcontroller Functions
-  
- 
-  
-  
-  /*
-   createNameHash
-   if in cache
-     deploy Cached
-   else
-     create Node
-     cache node
- */
-  
-  
   
 }
 

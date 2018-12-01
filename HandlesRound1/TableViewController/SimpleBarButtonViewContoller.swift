@@ -27,7 +27,7 @@ public class SimpleBarButtonViewController : UITableViewController {
         {
         didSet{
             guard let toolBarButtons = toolBarButtons else { return }
-            let barItems = toolBarButtons.flatMap { return button(from:$0)}
+            let barItems = toolBarButtons.compactMap { return button(from:$0)}
             self.setToolbarItems(barItems, animated: false)
         }
     }

@@ -90,16 +90,16 @@ func grabFromCacheOrCreate(name:String,
     return (aCopy, cache)
   }
   else {
-    return addToCache(name: name, imageGen: imageGen, cache: cache)
+    return addToCache(name: name, imageGen: imageGen(), cache: cache)
   }
 }
 
 func addToCache(name:String,
-                imageGen: @escaping ()->UIImage,
+                imageGen: UIImage,
                 cache: [SKSpriteNode])
   -> (SKSpriteNode, [SKSpriteNode]) {
   var tmpCache = cache
-  let image = imageGen()
+  let image = imageGen
   let node = SKSpriteNode(texture: SKTexture(image:image))
   tmpCache.append(node)
   node.name = name

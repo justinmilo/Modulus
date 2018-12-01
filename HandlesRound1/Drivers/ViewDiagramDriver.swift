@@ -95,7 +95,10 @@ class ViewDriver : Driver  {
     
     print("size from main driver - delivr",  roundedScaledSize)
     let s3 =  roundedScaledSize |> self.editingView.size3(self.graph)
-    (self.graph.grid, self.graph.edges) = self.editingView.build(s3, self.graph.edges)
+    (self.graph.grid, self.graph.edges) = self.editingView.build(
+      Array(Current.model.getItem(id: self.id)!.sizePreferences.map{CGFloat($0.length.converted(to: .centimeters).value)}),
+      s3,
+      self.graph.edges)
     let adjSize = self.graph |> self.editingView.size
     print("size from main driver - scaled",  adjSize)
     print("size from main driver - return",  adjSize  * scale)

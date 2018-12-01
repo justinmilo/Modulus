@@ -165,10 +165,10 @@ let dimensioning: (PointCollection, CGFloat ) -> [Label] =
   let oLeft = centers(between: leftC).map(moveByVectorCurried).map{ $0(unitX * -(on * d)) }.map(pointToLabel).map(swapRotation)
   
   
-  let overallDimes : [Label] = zip(oTop, distance(between: topC)).map(helperJoin) +
-    zip(oRight, distance(between: rightC)).map(helperJoin) +
-    zip(oBottom, distance(between: bottomC)).map(helperJoin) +
-    zip(oLeft, distance(between: leftC)).map(helperJoin)
+  let overallDimes : [Label] = zip(oTop, distance(between: topC)).map(setLabel) +
+    zip(oRight, distance(between: rightC)).map(setLabel) +
+    zip(oBottom, distance(between: bottomC)).map(setLabel) +
+    zip(oLeft, distance(between: leftC)).map(setLabel)
   
   return overallDimes
   
@@ -192,8 +192,7 @@ let vectorToOrthogonal : (CGVector) -> Orthogonal? = { return $0.dx == 0.0 ? .ve
 let orthToString : (Orthogonal) -> String = { return $0 == .horizontal ? "horizontal" : "vertical" }
 let lineStr = lineToSegment >>> segmentToString
 
-#warning("spelling")
-public func dimensons(m: NonuniformModel2D) -> [Geometry] {
+public func dimensions(m: NonuniformModel2D) -> [Geometry] {
   let mids = (m |> nonuniformToPoints, 40) |> pointCollectionToDimLabel
   return mids
 }

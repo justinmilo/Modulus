@@ -35,7 +35,7 @@ public enum EditOperation {
 ///
 /// - seealso: `Changeset.editDistance`.
 // T.Iterator.Element: Equatable, Collection.Index.Distance == Int
-public struct Changeset<T: Collection> where T.Iterator.Element : Equatable, T.IndexDistance == Int  {
+public struct Changeset<T: Collection> where T.Iterator.Element : Equatable {
 	
 	/// The starting-point collection.
 	public let origin: T

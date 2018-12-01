@@ -82,7 +82,7 @@ class ViewController : UIViewController, SpriteDriverDelegate
     viewport = CanvasViewport(frame: UIScreen.main.bounds, element: self.driver.content)
     self.view = viewport
     
-    self.view.backgroundColor = self.driver.twoDView.scene?.backgroundColor
+    self.view.backgroundColor = self.driver.spriteView.scene?.backgroundColor
     
     viewport.canvasChanged = { [weak self] newSize in
       guard let self = self else { return }

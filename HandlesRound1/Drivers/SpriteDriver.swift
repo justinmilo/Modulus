@@ -24,7 +24,15 @@ class SpriteDriver : Driver {
   var scaleObserver : NotificationObserver!
   var scale: CGFloat
   var graph : ScaffGraph
+  var id: String?
   weak var delgate : SpriteDriverDelegate?
+  var editingView : GraphEditingView
+  var loadedViews : [GraphEditingView]
+  var spriteView : Sprite2DView
+  var content : UIView { return self.spriteView }
+  
+  // Eventually dependency injected
+  var initialFrame : CGRect
   
   public init(mapping: [GraphEditingView], graph: ScaffGraph, scale: CGFloat ) {
     self.graph = graph
@@ -32,18 +40,18 @@ class SpriteDriver : Driver {
     loadedViews = mapping
     initialFrame = Current.screen
     
-    twoDView = Sprite2DView(frame:initialFrame )
-    twoDView.scene?.scaleMode = .resizeFill
+    spriteView = Sprite2DView(frame:initialFrame )
+    spriteView.scene?.scaleMode = .resizeFill
     
     self.scale = scale
-    twoDView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(SpriteDriver.tap)))
+    spriteView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(SpriteDriver.tap)))
     
     
     scaleObserver = NotificationObserver(
       notification: scaleChangeNotification,
       block: { [weak self] in
         self?.scale = $0
-      self!.twoDView.scale = $0
+      self!.spriteView.scale = $0
         print("      ------    SCALE CHANGED TO ", $0, " ------ ")
     })
   }
@@ -55,7 +63,7 @@ class SpriteDriver : Driver {
     
     self._previousOrigin = (origin, uiPointToSprite(origin)  - heightVector )
     
-    self.twoDView.mainNode.position = uiPointToSprite(origin)  - heightVector
+    self.spriteView.mainNode.position = uiPointToSprite(origin)  - heightVector
   }
   
   var _previousSize = CGSize.zero
@@ -78,7 +86,7 @@ class SpriteDriver : Driver {
   private func _layout(size: CGSize)
   {
     let geom = self.graph |> self.editingView.composite
-    self.twoDView.redraw(geom)
+    self.spriteView.redraw(geom)
   }
   
   var _previousSetRect : CGRect { get { return CGRect(origin: _previousOrigin.ui, size:_previousSize) }}
@@ -99,23 +107,17 @@ class SpriteDriver : Driver {
     let roundedModelSize = modelspaceSize_input.rounded(places: 5)
     
     let s3 = roundedModelSize |> self.editingView.size3(self.graph)
-    (self.graph.grid, self.graph.edges) = self.editingView.build(s3, self.graph.edges)
+    (self.graph.grid, self.graph.edges) = self.editingView.build(
+      Array(Current.model.getItem(id: self.id!)!.sizePreferences.map{CGFloat($0.length.converted(to: .centimeters).value)}),
+      s3, self.graph.edges)
     let modelSpaceSize_output =  self.graph |> self.editingView.size
-    return modelSpaceSize_output * twoDView.scale
+    return modelSpaceSize_output * spriteView.scale
 
   }
   
-  var editingView : GraphEditingView
-  var loadedViews : [GraphEditingView]
-  var twoDView : Sprite2DView
-  var content : UIView { return self.twoDView }
-  
-  // Eventually dependency injected
-  var initialFrame : CGRect
-  
   func bind(to uiRect: CGRect) {
-    self.uiPointToSprite = translateToCGPointInSKCoordinates(from: uiRect, to: twoDView.frame)
-    self.uiRectToSprite = translateToCGRectInSKCoordinates(from: uiRect, to: twoDView.frame)
+    self.uiPointToSprite = translateToCGPointInSKCoordinates(from: uiRect, to: spriteView.frame)
+    self.uiRectToSprite = translateToCGRectInSKCoordinates(from: uiRect, to: spriteView.frame)
   }
   
   
@@ -123,9 +125,9 @@ class SpriteDriver : Driver {
   @objc func tap(g: UIGestureRecognizer) {
     // if insideTGyg
     if _previousSetRect.contains(
-      g.location(ofTouch: 0, in: self.twoDView)
+      g.location(ofTouch: 0, in: self.spriteView)
       ) {
-      highlightCell(touch: g.location(ofTouch: 0, in: self.twoDView))
+      highlightCell(touch: g.location(ofTouch: 0, in: self.spriteView))
       print("TOuch")
     }
     else {
@@ -184,7 +186,7 @@ class SpriteDriver : Driver {
     delgate?.didAddEdge()
     
     self._layout(size: _previousSize)
-    self.twoDView.addTempRect(rect: flippedRect, color: .white)
+    self.spriteView.addTempRect(rect: flippedRect, color: .white)
   }
   
   // MARK: ...TAP ITEMS

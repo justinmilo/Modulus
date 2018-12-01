@@ -14,7 +14,7 @@ import BlackCricket
 
 public struct GraphEditingView {
   /// takes a bounding box size, and any existing structure ([Edge]) to interprit a new ScaffGraph,a fully 3D structure
-  let build: (CGSize3, [Edge]) -> (GraphPositions, [Edge])
+  let build: ([CGFloat], CGSize3, [Edge]) -> (GraphPositions, [Edge])
   
   /// origin: in this editing view slice, the offset from the 0,0 corner of the bounding box
   let origin : (ScaffGraph) -> CGPoint
@@ -36,7 +36,7 @@ public struct GraphEditingView {
   
 }
 func graphViewGenerator(
-  build: @escaping (CGSize3, [Edge]) -> (GraphPositions, [Edge]),
+  build: @escaping ([CGFloat], CGSize3, [Edge]) -> (GraphPositions, [Edge]),
   origin : @escaping (ScaffGraph) -> CGPoint,
   size : @escaping (ScaffGraph) -> CGSize,
   size3 : @escaping (ScaffGraph) -> (CGSize) -> CGSize3,

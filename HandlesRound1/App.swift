@@ -12,59 +12,6 @@ import Graphe
 import Volume
 @testable import FormsCopy
 
-typealias Length = Measurement<UnitLength>
-
-func feet(_ len: Length) -> (Int, Length) {
-  let feetLen = len.converted(to: .feet)
-  let roundedDown = feetLen.value.rounded(.down)
-  return  (Int( roundedDown ), Length(value: feetLen.value - roundedDown, unit: .feet))
-}
-
-func inches(_ len: Length) -> (Int, Length) {
-  let inchLen = len.converted(to: .inches)
-  let roundedDown = inchLen.value.rounded(.down)
-  return  (Int( roundedDown ), Length(value: inchLen.value - roundedDown, unit: .inches))
-}
-
-func inchesFraction(_ len: Length) -> ((Int, Int), Length) {
-  let base = 8.0
-  let inchLen = len.converted(to: .inches)
-  let rounded = (inchLen.value*base).rounded()
-  return  ( (Int( rounded ), Int( base )) , Length(value: inchLen.value - rounded/base, unit: .inches))
-}
-
-func gcd(_ a:Int, _ b:Int) -> Int {
-  func mod(_ a: Int, _ b: Int) -> Int {
-    return a - b * abs( a/b )
-  }
-  if b == 0 { return a }
-  else {
-    return gcd(b, mod(a, b) )
-  }
-}
-
-func simplify( numerator:Int, denominator:Int)  -> (Int, Int)? {
-  if numerator == 0 { return nil }
-  else {
-    let divsor = gcd(numerator, denominator)
-    return (numerator/divsor, denominator/divsor)
-  }
-}
-
-let imperialFormatter : (Measurement<UnitLength>) -> String = {
-  let ft = feet($0)
-  let i = inches(ft.1)
-  let fr = inchesFraction(i.1)
-  let sim = simplify(numerator: fr.0.0, denominator: fr.0.1)
-  let simS = sim.map { return " \($0.0)/\($0.1)" }
-  return "\(ft.0)'-\(i.0)\(simS ?? "")\""
-}
-
-let metricFormatter : (Measurement<UnitLength>) -> String = {
-  let meters = $0.converted(to: .meters)
-  return "\( String(format: "%.2f", meters.value) ) m"
-}
-
 
 
 
@@ -94,13 +41,26 @@ extension ScaffGraph {
 
 
 
-let graphForm: Form<Item<ScaffGraph>> =
+
+
+let showPreviewForm: Form<Item<ScaffGraph>> =
   sections([
-    section([
-      nestedTextField(title: "Name", keyPath: \.name),
-      labelCell(title: "Ledgers", label:  intLabel(keyPath: \.content.ledgers), leftAligned: false),
-      ]),
-])
+    section(
+      ScaffoldingGridSizes.eventMetric.map { option in
+        optionSetCell(title: option.label, option: option, keyPath: \.sizePreferences)
+      }
+    ),
+    section(
+      ScaffoldingGridSizes.us.map { option in
+        optionSetCell(title: option.label, option: option, keyPath: \.sizePreferences)
+      })
+    ])
+
+let aSection : Element<Section, Item<ScaffGraph>> = section([
+detailTextCell(title: "Notification", keyPath: \.sizePreferences.text, form: showPreviewForm)
+], isVisible: \.isEnabled)
+
+
 
 let colorsForm: Form<Item<ScaffGraph>> =
   sections([
@@ -124,6 +84,10 @@ let colorsForm: Form<Item<ScaffGraph>> =
       labelCell(title: "Height", label:  dimLabel(keyPath: \.content.height, formatter: imperialFormatter), leftAligned: false),
 
       ]),
+    section([
+      detailTextCell(title: "Bay Sizes", keyPath: \.sizePreferences.text, form: showPreviewForm)
+      ], isVisible: \.isEnabled)
+    
     ])
 
 public class App {
@@ -169,6 +133,9 @@ public class App {
       edit.didSelectAccessory = { (item, cell) in
         let driver = FormDriver(initial: cell, build: colorsForm)
         driver.formViewController.navigationItem.largeTitleDisplayMode = .never
+        driver.didUpdate = {
+          Current.model.addOrReplace(item: $0)
+        }
         self.loadEntryTable.pushViewController(driver.formViewController, animated: true)
         
       }
@@ -179,7 +146,7 @@ public class App {
           self.inputTextField = textField
         }
         
-        let listNamePrompt = UIAlertController(title: "Name your list", message: nil, preferredStyle: UIAlertController.Style.alert)
+        let listNamePrompt = UIAlertController(title: "Name This Structure", message: nil, preferredStyle: UIAlertController.Style.alert)
         listNamePrompt.addTextField(configurationHandler: addTextField)
         listNamePrompt.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler: ({ (ui:UIAlertAction) -> Void in
           
@@ -187,7 +154,10 @@ public class App {
         listNamePrompt.addAction(UIAlertAction(title: "Create", style: UIAlertAction.Style.default, handler: ({ (ui:UIAlertAction) -> Void in
           let text = self.inputTextField?.text ?? "Default"
           print(text)
-          let new : Item<ScaffGraph> = Item(content: (200,200,200) |> createScaffolding, id: text, name: text)
+          let new : Item<ScaffGraph> = Item(
+            content: (Item.template.map{ s in CGFloat( s.length.converted(to:.centimeters).value) }, (200,200,200) |> CGSize3.init) |> createScaffoldingFrom,
+            id: text,
+            name: text)
           Current.model.addOrReplace(item: new)
           Current.file.save(Current.model)
           edit.undoHistory.currentValue = Current.model.contents

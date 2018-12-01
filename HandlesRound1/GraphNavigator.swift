@@ -30,7 +30,7 @@ public class GraphNavigator {
   }
   
   lazy var vc: UIViewController = quadVC
-  typealias ViewMap = EditingViews.ViewMap
+  typealias ViewMap = EditingViews.LabeledViewMap
   
   lazy var mock : UIViewController =
     Current.viewMaps.front
@@ -43,13 +43,13 @@ public class GraphNavigator {
       >>> inToOut(styleNav)
       >>> addNavBarItem
   lazy var quadDriver : QuadDriver =
-    { ($0, self.graph) }
+    { ($0,Current.model.getItem(id: self.id)!) }
       >>> curry(controllerFromMap)(self)
       >>> inToOut(addBarSafely)
       |> createPageController
   lazy var quadVC : UIViewController = quadDriver.group |> addNavBarItem
   lazy var quadNavs : QuadDriver  =
-    { ($0, self.graph) }
+    { ($0, Current.model.getItem(id: self.id)!) }
       >>> curry(controllerFromMap)(self)
       >>> inToOut(addBarSafely)
       >>> embedInNav
@@ -73,6 +73,9 @@ public class GraphNavigator {
     let cell = Current.model.getItem(id: self.id)!
     let driver = FormDriver(initial: cell, build: colorsForm)
     driver.formViewController.navigationItem.largeTitleDisplayMode = .never
+    driver.didUpdate = {
+      Current.model.addOrReplace(item: $0)
+    }
     let nav = embedInNav(driver.formViewController)
     nav.navigationBar.prefersLargeTitles = false
     driver.formViewController.navigationItem.rightBarButtonItem = UIBarButtonItem(

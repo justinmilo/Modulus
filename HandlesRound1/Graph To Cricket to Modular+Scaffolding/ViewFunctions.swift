@@ -41,7 +41,7 @@ let remove3rdDimPlan : (CGSize3) -> CGSize = {
 func bindSize( master: CGRect, size: CGSize, positions: (VerticalPosition, HorizontalPosition)) -> (CGRect)
 {
   // Find Orirgin
-  return master.withInsetRect( ofSize: size, hugging:  (positions.0.oposite, positions.1.oposite))
+  return master.withInsetRect( ofSize: size, hugging:  (positions.0.opposite, positions.1.oposite))
 }
 
 func centeredRect( master: CGRect, size: CGSize, positions: (VerticalPosition, HorizontalPosition)) -> (CGRect)

@@ -271,9 +271,15 @@ let redCirc = { pointToCircle2($0, #colorLiteral(red: 0.9254902005, green: 0.235
 let blueCirc = { pointToCircle2($0, #colorLiteral(red: 0.2196078449, green: 0.007843137719, blue: 0.5504655855, alpha: 1))}
 
 // Canvas
-func helperJoin(_ l: Label, _ s: CGFloat) -> Label {
+func setLabel(_ l: Label, _ s: CGFloat) -> Label {
   var l = l
   l.text = String(format: "%.1f", s)
+  return l
+}
+
+func setLabel(_ l: Label, _ s: String) -> Label {
+  var l = l
+  l.text = s
   return l
 }
 
@@ -319,16 +325,24 @@ func dimPoints<T: Geometry>(points:[[T]], offset d: CGFloat) -> [Label]
   let bottomM = centers(between: points[2]).map(moveByVectorCurried).map{ $0(unitY * (d*off)) }.map(pointToLabel)
   let rightM = centers(between: points[3]).map(moveByVectorCurried).map{ $0(unitX * (d*off)) }.map(pointToLabel).map(swapRotation)
   
+  let topStrings =  widths(between: points[0]).map(centimeters >>> imperialFormatter)
+  let leftStrings =  widths(between: points[1]).map(centimeters >>> imperialFormatter)
+  let bottomStrings =  widths(between: points[2]).map(centimeters >>> imperialFormatter)
+  let rightStrings =  widths(between: points[3]).map(centimeters >>> imperialFormatter)
+  
   let mids : [Label] =
-    zip(topM, widths(between: points[0])).map(helperJoin) +
-      zip(leftM, widths(between: points[1])).map(helperJoin) +
-      zip(bottomM, widths(between: points[2])).map(helperJoin) +
-      zip(rightM, widths(between:points[3])).map(helperJoin)
+    zip(topM, topStrings).map(setLabel) +
+      zip(leftM, leftStrings).map(setLabel) +
+      zip(bottomM, bottomStrings).map(setLabel) +
+      zip(rightM, rightStrings).map(setLabel)
   
   return mids
 
 }
 
+func centimeters(from cent: CGFloat)->Measurement<UnitLength> {
+  return Measurement(value: Double(cent), unit: .centimeters)
+}
 
 
 
@@ -343,10 +357,10 @@ func dimPoints2<T: Geometry>(points: [[T]], offset d: CGFloat) -> [Label]
 
   
   let mids : [Label] =
-    zip(topM, widths(between: points[0])).map(helperJoin) +
-      zip(rightM, widths(between: points[1])).map(helperJoin) +
-      zip(bottomM, widths(between: points[2])).map(helperJoin) +
-      zip(leftM, widths(between:points[3])).map(helperJoin)
+    zip(topM, widths(between: points[0])).map(setLabel) +
+      zip(rightM, widths(between: points[1])).map(setLabel) +
+      zip(bottomM, widths(between: points[2])).map(setLabel) +
+      zip(leftM, widths(between:points[3])).map(setLabel)
   
   return mids
   
@@ -358,7 +372,7 @@ func dimPoints( points: (CGPoint, CGPoint), direction: CGVector, transform: ((La
   let c = points |> center
   let o = (c, direction) |> move
   let l = o.position |> pointToLabel
-  let l2 = (l, d) |> helperJoin
+  let l2 = (l, d) |> setLabel
   let r = l2 |> (transform ?? { return $0})
   return r
 }
@@ -380,6 +394,11 @@ public func dimBottom(_ d: CGFloat) -> ([CGPoint]) -> [Label]
   return { return pairs(between: $0).map(dimStyle) }
 }
 public func dimLeft(_ d: CGFloat) -> ([CGPoint]) -> [Label]
+{
+  let dimStyle = { ($0, (unitX * -d), swapRotation ) |> dimPoints }
+  return { return pairs(between: $0).map(dimStyle) }
+}
+public func dimMLeft(_ d: CGFloat) -> ([CGPoint]) -> [Label]
 {
   let dimStyle = { ($0, (unitX * -d), swapRotation ) |> dimPoints }
   return { return pairs(between: $0).map(dimStyle) }

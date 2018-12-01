@@ -50,12 +50,6 @@ class QuadDriver : PageControllerDelegate {
       let index = lower.content.firstIndex(of: viewController)!
       upper.quitelySetViewController(upper.content[index])
     }
-    //
-    print("Lower", lower.content)
-    print("Upper", upper.content)
-    
-    print("viewController", viewController.title, "pageController", pageController.title, type)
-    
   }
   
 }
