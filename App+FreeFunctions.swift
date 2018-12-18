@@ -54,7 +54,7 @@ public func zflip<A,C>(_ t: @escaping (A)->()->C ) -> (A)->(C) {
 }
 
 
-func controllerFromMap(target: Any, _ vm: EditingViews.LabeledViewMap, graph: Item<ScaffGraph>) -> UIViewController {
+func controllerFromMap(target: Any, _ vm: (label:String, viewMap: [GraphEditingView]), graph: Item<ScaffGraph>) -> UIViewController {
   let driver = SpriteDriver(mapping: vm.viewMap, graph: graph.content, scale: 1.0)
   driver.id = graph.id
   let vc : ViewController = ViewController(driver: driver)
@@ -63,7 +63,7 @@ func controllerFromMap(target: Any, _ vm: EditingViews.LabeledViewMap, graph: It
   return vc
 }
 
-func mockControllerFromMap(target: Any, _ vm: EditingViews.LabeledViewMap) -> UIViewController {
+func mockControllerFromMap(target: Any, _ vm: (label:String, viewMap: [GraphEditingView]) ) -> UIViewController {
   let vc = UIViewController()
   vc.view.backgroundColor = .red
   vc.title = vm.label
@@ -71,14 +71,12 @@ func mockControllerFromMap(target: Any, _ vm: EditingViews.LabeledViewMap) -> UI
   return vc
 }
 
-func createPageController(func1 : (EditingViews.LabeledViewMap)->UIViewController )->QuadDriver{
+func createPageController(
+  func1 : ((String,[GraphEditingView]))->UIViewController)
+  -> QuadDriver {
   let top = [Current.viewMaps.plan, Current.viewMaps.rotatedPlan].map(func1)
   let bottom = [Current.viewMaps.front, Current.viewMaps.side].map(func1)
-  
-  let quadDriver = QuadDriver(upper: top, lower: bottom)
-  
-  let vc = quadDriver
-  return vc
+  return QuadDriver(upper: top, lower: bottom)
 }
 
 

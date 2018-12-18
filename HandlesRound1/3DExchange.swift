@@ -31,16 +31,14 @@ extension ScaffType.Axis {
   }
 }
 
-func graph_measure(_ cgFloat: CGFloat) -> Measurement<UnitLength>
-{
+func graph_measure(_ cgFloat: CGFloat) -> Measurement<UnitLength>{
   return Measurement(
     value: Double(cgFloat),
     unit: UnitLength.centimeters)
 }
 
 
-func members(graph: ScaffGraph) -> [ScaffMember]
-{
+func members(graph: ScaffGraph) -> [ScaffMember] {
   return graph.edges.flatMap { edge -> [ScaffMember] in
     
     switch edge.content {

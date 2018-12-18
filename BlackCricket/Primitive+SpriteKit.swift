@@ -16,16 +16,6 @@ public protocol SKRepresentable
   var asNode : SKNode { get }
 }
 
-extension ColoredLabel : SKRepresentable
-{
-  var asNode: SKNode {
-    let colr_trans = curry(changeFontColor)(self.color)
-    let newNode = createLableNode(self.asLabel)
-    newNode |> colr_trans
-    return newNode
-  }
-}
-
 
 func flip<A, C>(_ f: @escaping (A) -> () -> C)
   -> () -> (A) -> C {
@@ -61,12 +51,7 @@ extension Line : SKRepresentable
     return createLineShapeNode(self)
   }
 }
-extension StrokedLine : SKRepresentable
-{
-  var asNode: SKNode {
-    return createLineShapeNode(self.line)
-  }
-}
+
 extension LabeledPoint : SKRepresentable
 {
   var asNode: SKNode {
@@ -79,13 +64,6 @@ extension LabeledPoint : SKRepresentable
 
   }
 }
-extension TextureLine : SKRepresentable
-{
-  var asNode: SKNode {
-     fatalError()
-  }
-}
-
 
 
 

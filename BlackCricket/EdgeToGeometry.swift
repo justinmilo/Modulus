@@ -47,7 +47,7 @@ func originSwap (model: NonuniformModel2D, scale: CGFloat, bounds: CGRect) -> No
 
 func gridItemed(points: PointCollection, offset: CGFloat)-> [[Geometry]] {
   
-  let ghp = getHandlePoints(points: points, offset: offset)
+  let ghp = getHandleOvals(points: points, offset: offset)
   let flattendGHP = ghp.flatMap{$0}
   let handleLines = zip(points.boundaries, flattendGHP).map(Line.init)
   let mids = (points, offset) |> pointCollectionToDimLabel
@@ -57,12 +57,7 @@ func gridItemed(points: PointCollection, offset: CGFloat)-> [[Geometry]] {
   return gridItems
 }
 
-public func pointCollectionToDimLabel(points: PointCollection, offset: CGFloat)-> [Label] {
-  
-  let ghp = getHandlePoints(points: points, offset: offset)
-  let mids = dimPoints(points: ghp, offset: 40)
-  return mids
-}
+
 
 protocol BorderPoints{
   var top: [CGPoint] { get }
@@ -91,16 +86,6 @@ func addOffset<A>(a:A) -> (A, CGFloat)
 //  return ( (ps |> leftToRightToBorders).left, unitX * -80) |> offsetPoints
 //}
 
-
-
-func pointsToDimLabel(leftToRight: [[CGPoint]], offset: CGFloat)-> [Label] {
-  
-  let points = leftToRight |> leftToRightToBorders
-  
-  let ghp = getHandlePoints(points: points, offset: offset)
-  let mids = dimPoints(points: ghp, offset: 40)
-  return mids
-}
 
 public func leftToRightToBorders (ltR: [[CGPoint]]) -> BorderPointsImp
 {
@@ -192,10 +177,6 @@ let vectorToOrthogonal : (CGVector) -> Orthogonal? = { return $0.dx == 0.0 ? .ve
 let orthToString : (Orthogonal) -> String = { return $0 == .horizontal ? "horizontal" : "vertical" }
 let lineStr = lineToSegment >>> segmentToString
 
-public func dimensions(m: NonuniformModel2D) -> [Geometry] {
-  let mids = (m |> nonuniformToPoints, 40) |> pointCollectionToDimLabel
-  return mids
-}
 
 
 public func basic(m: NonuniformModel2D) -> [Geometry]{

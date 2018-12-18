@@ -43,8 +43,8 @@ extension ItemList where T == ScaffGraph {
   }()
 }
 
-extension EditingViews {
-  static var mock = EditingViews()
+extension StandardEditingViews {
+  static var mock = StandardEditingViews()
 }
 
 extension Environment {

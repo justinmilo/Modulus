@@ -48,12 +48,6 @@ func simplify( numerator:Int, denominator:Int)  -> (Int, Int)? {
   }
 }
 
-struct ArchViewModel {
-  var feet : Int
-  var inches : Int
-  var fraction : (Int, Int)
-}
-
 let imperialFormatter : (Measurement<UnitLength>) -> String = {
   let ft = feet($0)
   let i = inches(ft.1)

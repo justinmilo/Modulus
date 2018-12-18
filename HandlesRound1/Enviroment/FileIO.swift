@@ -26,7 +26,6 @@ enum LoadError : Error {
 }
 
 func loadProgression() -> Result<ItemList<ScaffGraph>, LoadError>{
-  
   let documentsResult = Current.file.loadFromDocuments()
   if case .success = documentsResult {
     return documentsResult

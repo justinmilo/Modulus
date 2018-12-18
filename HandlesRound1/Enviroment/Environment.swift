@@ -12,12 +12,11 @@ import Graphe
 
 
 
-struct EditingViews {
-  struct LabeledViewMap { let label: String; let viewMap: [GraphEditingView] }
-  var plan : LabeledViewMap = LabeledViewMap(label: "Plan View", viewMap: planMap)
-  var rotatedPlan : LabeledViewMap = LabeledViewMap(label: "Rotated Plan View", viewMap: planMapRotated)
-  var front : LabeledViewMap = LabeledViewMap(label: "Front View", viewMap: frontMap)
-  var side : LabeledViewMap = LabeledViewMap( label: "Side View", viewMap: sideMap)
+struct StandardEditingViews {
+  var plan  = (label: "Plan View", viewMap: planMap)
+  var rotatedPlan = (label: "Rotated Plan View", viewMap: planMapRotated)
+  var front = (label: "Front View", viewMap: frontMap)
+  var side = ( label: "Side View", viewMap: sideMap)
 }
 
 
@@ -26,7 +25,7 @@ struct Environment {
   var file = FileIO()
   var model : ItemList<ScaffGraph> = ItemList([])
   var screen = UIScreen.main.bounds
-  var viewMaps = EditingViews()
+  var viewMaps = StandardEditingViews()
 }
 
 

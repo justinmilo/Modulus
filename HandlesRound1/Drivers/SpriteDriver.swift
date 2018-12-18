@@ -23,7 +23,7 @@ class SpriteDriver : Driver {
   var uiRectToSprite : ((CGRect)->CGRect)!
   var scaleObserver : NotificationObserver!
   var scale: CGFloat
-  var graph : ScaffGraph
+  public var graph : ScaffGraph
   var id: String?
   weak var delgate : SpriteDriverDelegate?
   var editingView : GraphEditingView
@@ -107,9 +107,14 @@ class SpriteDriver : Driver {
     let roundedModelSize = modelspaceSize_input.rounded(places: 5)
     
     let s3 = roundedModelSize |> self.editingView.size3(self.graph)
+    print(Array(Current.model.getItem(id: self.id!)!.sizePreferences.map{CGFloat($0.length.converted(to: .centimeters).value)}))
+    print(s3)
+    print(self.graph.edges)
+
     (self.graph.grid, self.graph.edges) = self.editingView.build(
       Array(Current.model.getItem(id: self.id!)!.sizePreferences.map{CGFloat($0.length.converted(to: .centimeters).value)}),
       s3, self.graph.edges)
+    print(self.graph.grid)
     let modelSpaceSize_output =  self.graph |> self.editingView.size
     return modelSpaceSize_output * spriteView.scale
 

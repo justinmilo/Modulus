@@ -46,10 +46,6 @@ func pointToLabel(_ point: CGPoint)->Label
   return l
 }
 
-func pointToColoredLabel(color: UIColor, _ point: CGPoint)->ColoredLabel
-{
-  return ColoredLabel(text: "", position: point, color: color)
-}
 
 let pointStringToLabel : (CGPoint, String) -> Label = { Label.init(text: $1, position: $0, rotation: .h) }
 

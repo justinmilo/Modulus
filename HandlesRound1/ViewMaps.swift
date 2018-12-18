@@ -35,6 +35,7 @@ public struct GraphEditingView {
   let selectedCell : (PointIndex2D, GraphPositions, [Edge]) -> ([Edge])
   
 }
+
 func graphViewGenerator(
   build: @escaping ([CGFloat], CGSize3, [Edge]) -> (GraphPositions, [Edge]),
   origin : @escaping (ScaffGraph) -> CGPoint,
@@ -56,26 +57,10 @@ func graphViewGenerator(
   }
 }
 
-
-
 func opposite(b: Bool) -> Bool { return !b }
 
 let originZero: (ScaffGraph) -> CGPoint = { _ in return CGPoint(0,0)}
 let originFirstLedger: (ScaffGraph) -> CGPoint = { graph in return CGPoint(0, graph.boundsOfGrid.1)}
-
-let frontMap = graphViewGenerator(
-  build: overall,
-  origin: originZero,
-  size: sizeFromFullScaff,
-  size3: sizeFront,
-  composite: [front1,
-              front1 <> frontDim,
-              front1 <> frontDim <> frontOuterDimPlus,
-              front1 <> frontDim <> frontOuterDimPlus <> frontOverall >>> map(toGeometry),
-              { $0.frontEdgesNoZeros } >>> modelToLinework],
-  grid2D: frontPositionsOhneStandards,
-  selectedCell: bazFront)
-
 
 let planMap = graphViewGenerator(
   build: overall,
@@ -96,7 +81,18 @@ let planMapRotated = graphViewGenerator(
   grid2D: rotatedPlanPositions,
   selectedCell: bazTop)
 
-
+let frontMap = graphViewGenerator(
+  build: overall,
+  origin: originZero,
+  size: sizeFromFullScaff,
+  size3: sizeFront,
+  composite: [front1,
+              front1 <> frontDimImp,
+              front1 <> frontDim,
+              front1 <> frontDim <> frontOverall >>> map(toGeometry),
+              { $0.frontEdgesNoZeros } >>> modelToLinework],
+  grid2D: frontPositionsOhneStandards,
+  selectedCell: bazFront)
 
 let sideMap = graphViewGenerator(
   build: overall,

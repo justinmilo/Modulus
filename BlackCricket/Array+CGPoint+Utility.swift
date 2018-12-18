@@ -41,15 +41,9 @@ func segments<T>(array:[CGPoint], transform: (CGPoint, CGPoint) -> T) -> [T]
 }
 
 let lineCreate = { segments(array: $0, transform: Line.init) }
-let texturedLinesCreate = { segments(array: $0, transform: TextureLine.init) }
 
 extension Array where Element == CGPoint
 {
-  var texturedLines : [TextureLine]
-  {
-    return segments(connectedBy: TextureLine.init)
-  }
-  
   func segments<T>(connectedBy transform: (CGPoint, CGPoint) -> T) -> [T]
   {
     return zip(self, self.dropFirst()).map

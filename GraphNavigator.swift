@@ -30,7 +30,12 @@ public class GraphNavigator {
   }
   
   lazy var vc: UIViewController = quadVC
-  typealias ViewMap = EditingViews.LabeledViewMap
+  typealias ViewMap = (label: String, viewMap: [GraphEditingView])
+  
+  lazy var quadDriver222  =
+    { ($0,Current.model.getItem(id: self.id)!) }
+      >>> curry(controllerFromMap)(self)
+      >>> inToOut(addBarSafely)
   
   lazy var mock : UIViewController =
     Current.viewMaps.front
@@ -58,6 +63,7 @@ public class GraphNavigator {
   
   func addNavBarItem<ReturnVC:UIViewController>(vc :ReturnVC ) -> ReturnVC {
     vc.navigationItem.rightBarButtonItems = [
+      UIBarButtonItem(title: "AR", style: UIBarButtonItem.Style.plain , target: self, action: #selector(GraphNavigator.presentAR)),
       UIBarButtonItem(title: "3D", style: UIBarButtonItem.Style.plain , target: self, action: #selector(GraphNavigator.present3D)),
       UIBarButtonItem(title: "Info", style: UIBarButtonItem.Style.plain , target: self, action: #selector(GraphNavigator.presentInfo)),
     ]
@@ -100,6 +106,29 @@ public class GraphNavigator {
     let ulN = UINavigationController(rootViewController: newVC)
     ulN.navigationBar.prefersLargeTitles = false
     newVC.navigationItem.rightBarButtonItem = UIBarButtonItem(
+      title: "Dismiss",
+      style: UIBarButtonItem.Style.plain ,
+      target: self,
+      action: #selector(GraphNavigator.dismiss3D)
+    )
+    
+    
+    self.vc.present(ulN, animated: true, completion: nil)
+  }
+  
+  @objc func presentAR() {
+    
+    if let item = Current.model.getItem(id: id) {
+      Current.model.addOrReplace(item: item )
+    }
+    
+    let scaffProvider = Current.model.getItem(id: id)!.content |> provider
+    
+    let cadController = ARScnViewController(provider: scaffProvider)
+    
+    let ulN = UINavigationController(rootViewController: cadController)
+    ulN.navigationBar.prefersLargeTitles = false
+    cadController.navigationItem.rightBarButtonItem = UIBarButtonItem(
       title: "Dismiss",
       style: UIBarButtonItem.Style.plain ,
       target: self,

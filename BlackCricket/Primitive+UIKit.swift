@@ -13,15 +13,6 @@ protocol UIKitRepresentable
   var asView : UIView { get }
 }
 
-extension ColoredLabel : UIKitRepresentable
-{
-  var asView: UIView {
-    let uiLabel = UILabel(frame: self.position.asRect() )
-    uiLabel.attributedText = NSAttributedString(string: self.text, attributes: [NSAttributedString.Key.foregroundColor : self.color])
-    uiLabel.sizeToFit()
-    return uiLabel
-  }
-}
 
 
 extension Label : UIKitRepresentable {
