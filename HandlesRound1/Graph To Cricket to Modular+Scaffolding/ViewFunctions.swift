@@ -182,8 +182,6 @@ func graphToCorners(gp: GraphPositionsOrdered2D) -> Corners
   return (top: gp.y.last!, right: gp.x.last!, bottom: gp.y.first!, left: gp.x.first!)
 }
 
-let graphToNonuniform : (ScaffGraph) -> NonuniformModel2D = { $0.grid } >>> graphToNonuniformPlan
-
 let nonuniformToDimensions : (NonuniformModel2D) -> [Geometry] = (nonuniformToPoints) >>> pointCollectionToDimLabel >>> map(toGeometry)
 func rotateUniform(nu: NonuniformModel2D)-> NonuniformModel2D
 {

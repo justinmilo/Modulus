@@ -26,6 +26,7 @@
 		D06C66BE2198D8BF005D5F35 /* FormsCopy.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D06C66BD2198D8BF005D5F35 /* FormsCopy.framework */; };
 		D06C66BF2198D8DE005D5F35 /* FormsCopy.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D06C66BB2198D89E005D5F35 /* FormsCopy.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D06C66C12198DAD1005D5F35 /* FormsCopy.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D06C66C02198DAD1005D5F35 /* FormsCopy.framework */; };
+		D075D8BA21C9EB35003AC600 /* ViewMap-Grid2D.swift in Sources */ = {isa = PBXBuildFile; fileRef = D075D8B821C9EB35003AC600 /* ViewMap-Grid2D.swift */; };
 		D07C56B9211E74F50073D7A7 /* App+FreeFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07C56B8211E74F50073D7A7 /* App+FreeFunctions.swift */; };
 		D07E9C9321B43B1100ED8B6B /* Nonuniform+Edges&Points.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07E9C9221B43B1100ED8B6B /* Nonuniform+Edges&Points.swift */; };
 		D07E9C9521B43B9000ED8B6B /* Dimensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07E9C9421B43B9000ED8B6B /* Dimensions.swift */; };
@@ -244,6 +245,7 @@
 		D06C66BB2198D89E005D5F35 /* FormsCopy.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = FormsCopy.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D06C66BD2198D8BF005D5F35 /* FormsCopy.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = FormsCopy.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D06C66C02198DAD1005D5F35 /* FormsCopy.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = FormsCopy.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D075D8B821C9EB35003AC600 /* ViewMap-Grid2D.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewMap-Grid2D.swift"; sourceTree = "<group>"; };
 		D07C56B8211E74F50073D7A7 /* App+FreeFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "App+FreeFunctions.swift"; sourceTree = "<group>"; };
 		D07E9C9221B43B1100ED8B6B /* Nonuniform+Edges&Points.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Nonuniform+Edges&Points.swift"; sourceTree = "<group>"; };
 		D07E9C9421B43B9000ED8B6B /* Dimensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dimensions.swift; sourceTree = "<group>"; };
@@ -279,7 +281,6 @@
 		D0D21FB221A44037000FB885 /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
 		D0D5612A212DDA500059874B /* QuadDriver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuadDriver.swift; sourceTree = "<group>"; };
 		D0D5612C212DE1EE0059874B /* Array+PreviousNext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+PreviousNext.swift"; sourceTree = "<group>"; };
-		D0D5612E212DE4410059874B /* PlaygroundScrollabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaygroundScrollabel.swift; sourceTree = "<group>"; };
 		D0D6808120CEB0EF0074E97D /* ViewMaps.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewMaps.swift; sourceTree = "<group>"; };
 		D0DA9BB82039E1C60019F6EE /* TexturedView+SKSpriteNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TexturedView+SKSpriteNode.swift"; sourceTree = "<group>"; };
 		D0DA9BBA203A666A0019F6EE /* PrimitiveFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrimitiveFunctions.swift; sourceTree = "<group>"; };
@@ -598,13 +599,13 @@
 			isa = PBXGroup;
 			children = (
 				D0BAD734204228F700406E70 /* ViewComposite.swift */,
+				D075D8B821C9EB35003AC600 /* ViewMap-Grid2D.swift */,
 				D0B86C64202FC09200CCB3F7 /* ViewFunctions.swift */,
 				D05505F521A72262005BA9B4 /* C2Edge->Scaff2D.swift */,
 				D0F58CE4210E13F300AACC8F /* Scaff2D.swift */,
 				D05505F221A72074005BA9B4 /* Scaff2D->SKNode.swift */,
 				D0F58CE7210E14AC00AACC8F /* ModularAdapters.swift */,
 				D0DA9BB82039E1C60019F6EE /* TexturedView+SKSpriteNode.swift */,
-				D0D5612E212DE4410059874B /* PlaygroundScrollabel.swift */,
 			);
 			path = "Graph To Cricket to Modular+Scaffolding";
 			sourceTree = "<group>";
@@ -1035,6 +1036,7 @@
 				D0F58D14210E207300AACC8F /* TensionedPoint.swift in Sources */,
 				D02FCBC0212E08AD001BD55E /* GraphNavigator.swift in Sources */,
 				D0FD710521172C2600B27092 /* Changeset.swift in Sources */,
+				D075D8BA21C9EB35003AC600 /* ViewMap-Grid2D.swift in Sources */,
 				D0F58D03210E202A00AACC8F /* Sprite2DView.swift in Sources */,
 				D0FD710321172BD700B27092 /* SimpleBarButtonViewContoller.swift in Sources */,
 				D0D5612B212DDA500059874B /* QuadDriver.swift in Sources */,

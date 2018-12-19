@@ -23,7 +23,7 @@ public func dimensionsImperial(m: NonuniformModel2D) -> [Label] {
 
 // NonuniformModel2D -> [Label]
 public func dimensionsMetric(m: NonuniformModel2D) -> [Label] {
-  return dimPointsG(points: (m |> nonuniformToPoints) |> counterClockwise, offset: _dimOffset, formatter: { "\($0)" } )
+  return dimPointsG(points: (m |> nonuniformToPoints) |> counterClockwise, offset: _dimOffset, formatter: centimeters >>> metricFormatter )
 }
 
 // PointCollection -> [Label]

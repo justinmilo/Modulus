@@ -76,4 +76,4 @@ let metricFormatter : (Measurement<UnitLength>) -> String = {
 
 import Singalong
 public let floatImperialFormatter = centimeters >>> imperialFormatter
-public let floatCentimeterFormatter = { String(format: "%.1f", $0) }
+public let floatMetricFormatter = centimeters >>> metricFormatter
