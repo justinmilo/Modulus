@@ -36,7 +36,7 @@ extension ItemList where T == ScaffGraph {
       Item(content: (1000,1000,100) |> CGSize3.init |> curriedScaffoldingFrom(defaultSizes), id: "Mock1", name: "Four by Eight"),
       Item(content: (500,1000,1000) |> CGSize3.init |> curriedScaffoldingFrom(defaultSizes), id: "Mock2", name: "Third Graph")])
     list.addOrReplace(item: Item(content: (500,300,1000) |> CGSize3.init |> curriedScaffoldingFrom(defaultSizes), id: "Mock3", name: "Force Graph"))
-    print("Mock ", list.getItem(id: "Mock0")?.sizePreferences)
+    //print("Mock ", list.getItem(id: "Mock0")?.sizePreferences)
 
     
     return list

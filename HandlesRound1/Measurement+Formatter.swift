@@ -48,6 +48,11 @@ func simplify( numerator:Int, denominator:Int)  -> (Int, Int)? {
   }
 }
 
+// CGFloat -> Measurement
+func centimeters(from cent: CGFloat)->Measurement<UnitLength> {
+  return Measurement(value: Double(cent), unit: .centimeters)
+}
+
 let imperialFormatter : (Measurement<UnitLength>) -> String = {
   let ft = feet($0)
   let i = inches(ft.1)
@@ -68,3 +73,7 @@ let metricFormatter : (Measurement<UnitLength>) -> String = {
   let meters = $0.converted(to: .meters)
   return "\( String(format: "%.2f", meters.value) ) m"
 }
+
+import Singalong
+public let floatImperialFormatter = centimeters >>> imperialFormatter
+public let floatCentimeterFormatter = { String(format: "%.1f", $0) }

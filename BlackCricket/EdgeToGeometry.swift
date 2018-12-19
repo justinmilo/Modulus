@@ -47,10 +47,10 @@ func originSwap (model: NonuniformModel2D, scale: CGFloat, bounds: CGRect) -> No
 
 func gridItemed(points: PointCollection, offset: CGFloat)-> [[Geometry]] {
   
-  let ghp = getHandleOvals(points: points, offset: offset)
+  let ghp = getHandleOvals(points: BorderPoints(top: points.top, right: points.right, bottom: points.bottom, left: points.left), offset: offset)
   let flattendGHP = ghp.flatMap{$0}
   let handleLines = zip(points.boundaries, flattendGHP).map(Line.init)
-  let mids = (points, offset) |> pointCollectionToDimLabel
+  let mids = (points) |> pointCollectionToDimLabel
   // put in on screen when gameScene loads into View
   let gridItems : [[Geometry]] = [handleLines, flattendGHP, mids]
   
@@ -59,15 +59,7 @@ func gridItemed(points: PointCollection, offset: CGFloat)-> [[Geometry]] {
 
 
 
-protocol BorderPoints{
-  var top: [CGPoint] { get }
-  var left: [CGPoint] { get }
-  var right: [CGPoint] { get }
-  var bottom: [CGPoint] { get }
-}
-
-public struct BorderPointsImp : BorderPoints
-{
+public struct BorderPoints {
   public var top: [CGPoint]
   public var right: [CGPoint]
   public var bottom: [CGPoint]
@@ -87,9 +79,9 @@ func addOffset<A>(a:A) -> (A, CGFloat)
 //}
 
 
-public func leftToRightToBorders (ltR: [[CGPoint]]) -> BorderPointsImp
+public func leftToRightToBorders (ltR: [[CGPoint]]) -> BorderPoints
 {
-  return BorderPointsImp(top: ltR.last! ,
+  return BorderPoints(top: ltR.last! ,
                   right: ltR.map{ $0.last! },
                   bottom:  ltR.first!,
                   left: ltR.map{ $0.first! })
@@ -107,10 +99,10 @@ func reduceSmallest(a: CGFloat, b: CGFloat) -> CGFloat
 
 public typealias Corners = (top: CGFloat, right: CGFloat, bottom:  CGFloat, left: CGFloat)
 
-public func borders(from corners: Corners) -> BorderPointsImp
+public func borders(from corners: Corners) -> BorderPoints
 {
   let (top, right, bottom, left) = corners
-  return BorderPointsImp(top: [CGPoint(left, top ),
+  return BorderPoints(top: [CGPoint(left, top ),
                                CGPoint(right, top)],
                          right: [CGPoint(right, bottom ),
                                CGPoint(right, top)],
@@ -131,32 +123,6 @@ func leftToRightToBordersArray (ltR: [[CGPoint]]) -> [[CGPoint]]
     ltR.first!,
     ltR.map{ $0.first! }
   ]
-}
-
-
-let dimensioning: (PointCollection, CGFloat ) -> [Label] =
-{ (points,d) in
-  let top = points.top, bottom = points.bottom
-  let topC = [top.first!, top.last!],
-  rightC = [top.last!, bottom.last!],
-  bottomC = [bottom.first!, bottom.last!],
-  leftC = [top.first!, bottom.first!]
-  
-  let on : CGFloat = 1/3
-  
-  let oTop = centers(between: topC ).map(moveByVectorCurried).map{ $0(unitY * (on * d)) }.map(pointToLabel)
-  let oRight = centers(between: rightC).map(moveByVectorCurried).map{ $0(unitX * (on * d)) }.map(pointToLabel).map(swapRotation) // Fixme repeats above
-  let oBottom = centers(between: bottomC).map(moveByVectorCurried).map{ $0(unitY * -(on * d)) }.map(pointToLabel)
-  let oLeft = centers(between: leftC).map(moveByVectorCurried).map{ $0(unitX * -(on * d)) }.map(pointToLabel).map(swapRotation)
-  
-  
-  let overallDimes : [Label] = zip(oTop, distance(between: topC)).map(setLabel) +
-    zip(oRight, distance(between: rightC)).map(setLabel) +
-    zip(oBottom, distance(between: bottomC)).map(setLabel) +
-    zip(oLeft, distance(between: leftC)).map(setLabel)
-  
-  return overallDimes
-  
 }
 
 
@@ -182,7 +148,7 @@ let lineStr = lineToSegment >>> segmentToString
 public func basic(m: NonuniformModel2D) -> [Geometry]{
   let rectangles = (m.orderedPointsLeftToRight, m.orderedPointsUpToDown) |> rectangles2DFlat
   
-  let mids = (m |> nonuniformToPoints, 40) |> pointCollectionToDimLabel
+  let mids = (m |> nonuniformToPoints) |> pointCollectionToDimLabel
   let pnts = m |> nonuniformToPoints |> pointLabeled
   let rtrn : [Geometry] = rectangles as [Geometry] + mids as [Geometry] + pnts as [Geometry]
   return rtrn
@@ -229,10 +195,10 @@ func circlesSelectedItems(points: PointCollection) -> [Oval] {
 func formerReturn(m: NonuniformModel2D) -> [[Geometry]]{
   let rectangles = (m.orderedPointsLeftToRight, m.orderedPointsUpToDown) |> rectangles2DFlat
   let cornerOvals = m |> nonuniformToPoints |> corOv
-  let overallDimes = (m |> nonuniformToPoints, 40) |> dimensioning
+  let overallDimes = (m |> nonuniformToPoints) |> pointCollectionToDimLabel
   let boundingItems : [[Geometry]] = [ rectangles, cornerOvals, overallDimes]
   
-  let mids = (m |> nonuniformToPoints, 40) |> pointCollectionToDimLabel
+  let mids = (m |> nonuniformToPoints) |> pointCollectionToDimLabel
   let pnts = m |> nonuniformToPoints |> pointLabeled
   let gItems = (m |> nonuniformToPoints, 40) |> gridItemed
   let selectedItems1 = m |> nonuniformToPoints |> baySelected

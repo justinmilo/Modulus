@@ -67,7 +67,7 @@ let planMap = graphViewGenerator(
   origin: originZero,
   size: sizeFromPlanScaff,
   size3: sizePlan,
-  composite: [finalDimComp,
+  composite: [planComposite <> planDimensions,
               planGridsToDimensions],
   grid2D: planPositions,
   selectedCell: bazTop)
@@ -77,7 +77,7 @@ let planMapRotated = graphViewGenerator(
   origin: originZero,
   size: sizeFromRotatedPlanScaff,
   size3: sizePlanRotated,
-  composite: [rotatedFinalDimComp],
+  composite: [rotatedPlanGrid <> rotatedPlanDim],
   grid2D: rotatedPlanPositions,
   selectedCell: bazTop)
 
@@ -86,10 +86,11 @@ let frontMap = graphViewGenerator(
   origin: originZero,
   size: sizeFromFullScaff,
   size3: sizeFront,
-  composite: [front1,
-              front1 <> frontDimImp,
-              front1 <> frontDim,
-              front1 <> frontDim <> frontOverall >>> map(toGeometry),
+  composite: [frontComposite,
+              frontComposite <> frontDimImp,
+              frontComposite <> frontDimImp <> frontOverallImp >>> map(toGeometry),
+              frontComposite <> frontDim,
+              frontComposite <> frontDim <> frontOverall >>> map(toGeometry),
               { $0.frontEdgesNoZeros } >>> modelToLinework],
   grid2D: frontPositionsOhneStandards,
   selectedCell: bazFront)
@@ -99,8 +100,8 @@ let sideMap = graphViewGenerator(
   origin: originZero,
   size: sizeFromFullScaffSide,
   size3: sizeSide,
-  composite: [side1,
-              side1 <> sideDim,
-              side1 <> sideDim <> sideDoubleDim],
+  composite: [sideComposite,
+              sideComposite <> sideDim,
+              sideComposite <> sideDim <> sideDoubleDim],
   grid2D: sidePositionsOhneStandards,
   selectedCell: bazSide)

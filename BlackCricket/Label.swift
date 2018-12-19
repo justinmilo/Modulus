@@ -22,12 +22,7 @@ extension Label {
   public init(text: String) { self.text = text }
 }
 
-// Canvas
-func setLabel(_ l: Label, _ s: CGFloat) -> Label {
-  var l = l
-  l.text = String(format: "%.1f", s)
-  return l
-}
+
 
 func setLabel(_ l: Label, _ s: String) -> Label {
   var l = l

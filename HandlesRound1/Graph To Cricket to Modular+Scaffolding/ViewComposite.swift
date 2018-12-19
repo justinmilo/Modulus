@@ -12,9 +12,51 @@ import BlackCricket
 
 typealias ViewComposite = (ScaffGraph) -> [Geometry]
 
-let front1 : ViewComposite = { $0.frontEdgesNoZeros } >>> modelToTexturesElev
-let frontDim : ViewComposite = { $0.grid } >>> graphToNonuniformFront >>> dimensionsMetric
-let frontDimImp : ViewComposite = { $0.grid } >>> graphToNonuniformFront >>> dimensionsImperial
+
+let planGridsToDimensions : ViewComposite =
+  get(\ScaffGraph.grid)
+    >>> graphToNonuniformPlan
+    >>> basic
+
+let planComposite :  ViewComposite =
+  get(\ScaffGraph.planEdgesNoZeros)
+    >>> planEdgeToGeometry
+    >>> map(toGeometry)
+
+let planDimensions : ViewComposite =
+  graphToNonuniform
+    >>> nonuniformToDimensions
+
+
+let rotatedPlanGrid : ViewComposite =
+  get(\ScaffGraph.planEdgesNoZeros)
+    >>> rotateGroup
+    >>> planEdgeToGeometry
+    >>> map(toGeometry)
+
+let rotatedPlanDim : ViewComposite =
+  graphToNonuniform
+    >>> rotateUniform
+    >>> nonuniformToDimensions
+
+
+let frontComposite : ViewComposite =
+  get(\ScaffGraph.frontEdgesNoZeros)
+    >>> modelToTexturesElev
+
+let sideComposite : ViewComposite =
+  get(\ScaffGraph.sideEdgesNoZeros)
+    >>> modelToTexturesElev
+
+let frontDim : ViewComposite =
+  get(\.grid)
+    >>> graphToNonuniformFront
+    >>> dimensionsMetric
+
+let frontDimImp : ViewComposite =
+  get(\.grid)
+    >>> graphToNonuniformFront
+    >>> dimensionsImperial
 
 let frontEdges : (ScaffGraph) -> [C2Edge] = { ($0.grid, $0.edges) |> frontSection().parse }
 let sideEdges : (ScaffGraph) -> [C2Edge] = { ($0.grid, $0.edges) |> sideSection().parse }
@@ -43,15 +85,19 @@ let outerDimensions =
     >>> leftToRightDict
     >>> pointDictToArray
     >>> leftToRightToBorders
-    >>> { return ($0.left |> dimLeft(30.0)) + ($0.right |> dimRight(30.0)) }
+    >>> { return
+      ($0.left |> dimLeft(30.0, formatter: floatImperialFormatter)) +
+        ($0.right |> dimRight(30.0, formatter: floatImperialFormatter)) }
     >>> { $0.map{ $0 as Geometry} }
 let frontOuterDimPlus : ViewComposite =
   frontEdges >>> removedStandards >>> outerDimensions
-let side1 : ViewComposite = { $0.sideEdgesNoZeros} >>> modelToTexturesElev
+
 let sideDim : ViewComposite = { $0.grid } >>> graphToNonuniformSide >>> dimensionsMetric
 let sideDoubleDim : ViewComposite = sideEdges >>> removedStandards >>> outerDimensions
 let frontGraph : (ScaffGraph) -> GraphPositionsOrdered2D =  { $0.grid } >>> graphToFrontGraph2D
-let overallDimensions = graphToCorners >>> borders >>> dimension(30)
+let overallDimensions = graphToCorners >>> borders >>> dimension(30, formatter: floatCentimeterFormatter)
+let overallDimensionsImp = graphToCorners >>> borders >>> dimension(30, formatter: floatImperialFormatter)
 
-let frontFinal = front1 <> frontDim <> frontOuterDimPlus
+let frontFinal = frontComposite <> frontDim <> frontOuterDimPlus
 let frontOverall = frontGraph >>> overallDimensions
+let frontOverallImp = frontGraph >>> overallDimensionsImp

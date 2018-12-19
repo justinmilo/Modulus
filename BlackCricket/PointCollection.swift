@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct PointCollection : BorderPoints{
+public struct PointCollection {
   let all : [CGPoint]
   var boundaries : [CGPoint] { get { return top + right + bottom + left} }
   // sections
