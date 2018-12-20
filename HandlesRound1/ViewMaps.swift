@@ -87,7 +87,8 @@ let frontMap = graphViewGenerator(
   size: sizeFromFullScaff,
   size3: sizeFront,
   composite: [frontComposite,
-              frontComposite <> frontDimImp,
+              frontComposite
+                <> dimGraphBy(slice: graphToFrontGraph2D, formatter: floatImperialFormatter),
               frontComposite <> frontDimImp <> frontOuterDimImp >>> map(toGeometry),
               frontComposite <> frontDim,
               frontComposite <> frontDim <> frontOuterDimensions >>> map(toGeometry),

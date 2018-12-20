@@ -162,6 +162,9 @@ struct GraphPositionsOrdered2D
 func graphToFrontGraph2D(gp: GraphPositions) -> (GraphPositionsOrdered2D) {
   return GraphPositionsOrdered2D(x: gp.pX, y: gp.pZ)
 }
+func graphToSideGraph2D(gp: GraphPositions) -> (GraphPositionsOrdered2D) {
+  return GraphPositionsOrdered2D(x: gp.pY, y: gp.pZ)
+}
 func graphToCorners(gp: GraphPositionsOrdered2D) -> Corners {
   return (top: gp.y.last!, right: gp.x.last!, bottom: gp.y.first!, left: gp.x.first!)
 }

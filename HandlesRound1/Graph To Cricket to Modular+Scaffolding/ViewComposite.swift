@@ -60,24 +60,22 @@ let sideComposite : ViewComposite =
 
 let frontDim : ViewComposite =
   get(\.grid)
-    >>> graphToNonuniformFront
-    >>> dimensionsMetric
+    >>> graphToFrontGraph2D
+    >>> borders
+    >>> dimension(13.3, formatter: floatMetricFormatter)
 
-//let frontDimImp : ViewComposite =
-//  get(\.grid)
-//    >>> graphToNonuniformFront
-//    >>> dimensionsImperial
 
 let frontDimImp : ViewComposite =
-  get(\ScaffGraph.grid)
+  get(\.grid)
     >>> graphToFrontGraph2D
     >>> borders
     >>> dimension(13.3, formatter: floatImperialFormatter)
 
 let sideDim : ViewComposite =
   get(\.grid)
-    >>> graphToNonuniformSide
-    >>> dimensionsMetric
+    >>> graphToSideGraph2D
+    >>> borders
+    >>> dimension(13.3, formatter: floatMetricFormatter)
 
 let frontOuterDimensions =
   get(\ScaffGraph.grid)
@@ -92,3 +90,12 @@ let frontOuterDimImp =
     >>> graphToCorners
     >>> borders
     >>> dimension(30, formatter: floatImperialFormatter)
+
+func dimGraphBy(
+  slice: @escaping (GraphPositions) -> (GraphPositionsOrdered2D),
+  formatter: @escaping DimFormat) -> ViewComposite {
+  return get(\.grid)
+    >>> slice
+    >>> borders
+    >>> dimension(13.3, formatter: formatter)
+}
