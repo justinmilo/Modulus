@@ -10,15 +10,20 @@ import Singalong
 import Graphe
 import BlackCricket
 
-typealias ViewComposite = (ScaffGraph) -> [Geometry]
+/*
+ 
+ 
+ NonuniformModel2D
+ */
 
+typealias ViewComposite = (ScaffGraph) -> [Geometry]
 
 let planLinework : ViewComposite =
   get(\ScaffGraph.grid)
     >>> graphToNonuniformPlan
     >>> basic
 
-let planComposite :  ViewComposite =
+let planComposite : ViewComposite =
   get(\ScaffGraph.planEdgesNoZeros)
     >>> planEdgeToGeometry
     >>> map(toGeometry)
@@ -26,7 +31,9 @@ let planComposite :  ViewComposite =
 let planDimensions : ViewComposite =
   get(\.grid)
     >>> graphToNonuniformPlan
-    >>> nonuniformToDimensions
+    >>> nonuniformToPoints
+    >>> pointCollectionToDimLabel
+    >>> map(toGeometry)
 
 
 let rotatedPlanGrid : ViewComposite =
@@ -39,7 +46,9 @@ let rotatedPlanDim : ViewComposite =
   get(\.grid)
     >>> graphToNonuniformPlan
     >>> rotateUniform
-    >>> nonuniformToDimensions
+    >>> nonuniformToPoints
+    >>> pointCollectionToDimLabel
+    >>> map(toGeometry)
 
 let frontComposite : ViewComposite =
   get(\.frontEdgesNoZeros)
@@ -54,34 +63,32 @@ let frontDim : ViewComposite =
     >>> graphToNonuniformFront
     >>> dimensionsMetric
 
+//let frontDimImp : ViewComposite =
+//  get(\.grid)
+//    >>> graphToNonuniformFront
+//    >>> dimensionsImperial
+
 let frontDimImp : ViewComposite =
-  get(\.grid)
-    >>> graphToNonuniformFront
-    >>> dimensionsImperial
+  get(\ScaffGraph.grid)
+    >>> graphToFrontGraph2D
+    >>> borders
+    >>> dimension(13.3, formatter: floatImperialFormatter)
 
 let sideDim : ViewComposite =
   get(\.grid)
     >>> graphToNonuniformSide
     >>> dimensionsMetric
 
-let outerDimensions =
-  graphToCorners
+let frontOuterDimensions =
+  get(\ScaffGraph.grid)
+    >>> graphToFrontGraph2D
+    >>> graphToCorners
     >>> borders
     >>> dimension(30, formatter: floatMetricFormatter)
 
-let overallDimensionsImp =
-  graphToCorners
+let frontOuterDimImp =
+  get(\ScaffGraph.grid)
+    >>> graphToFrontGraph2D
+    >>> graphToCorners
     >>> borders
     >>> dimension(30, formatter: floatImperialFormatter)
-
-let frontGraph : (ScaffGraph) -> GraphPositionsOrdered2D =
-  get(\.grid)
-    >>> graphToFrontGraph2D
-
-let frontOuterDimensions =
-  frontGraph
-    >>> outerDimensions
-
-let frontOuterDimImp =
-  frontGraph
-    >>> overallDimensionsImp

@@ -13,19 +13,10 @@ import GrippableView
 import Graphe
 import BlackCricket
 
-func log<A>(_ loggableItem: A) -> A
-{
+func log<A>(_ loggableItem: A) -> A {
   print(loggableItem)
   return loggableItem
 }
-
-func logDescription<A>(_ loggableItem: A, description: (A)->String) -> A
-{
-  print(description(loggableItem))
-  return loggableItem
-}
-
-
 
 let remove3rdDim : (CGSize3) -> CGSize = {
   return CGSize(width: $0.width, height:  $0.elev)
@@ -105,15 +96,19 @@ func flip( size: CGSize) -> CGSize
 
 
 // 2D Dim Plan grid stuff ...
-func graphToNonuniformPlan(gp: GraphPositions) -> NonuniformModel2D
-{
+func graphToNonuniformPlan(gp: GraphPositions) -> NonuniformModel2D {
   return NonuniformModel2D(origin: CGPoint.zero, rowSizes: Grid(gp.pY |> posToSeg), colSizes: Grid(gp.pX |> posToSeg))
 }
-let graphToPlanDimGeometry = graphToNonuniformPlan >>> basic
+
+func graphToNonuniformFront(gp: GraphPositions) -> NonuniformModel2D {
+  return NonuniformModel2D(origin: CGPoint.zero, rowSizes: Grid(gp.pZ |> posToSeg), colSizes: Grid(gp.pX |> posToSeg))
+}
+func graphToNonuniformSide(gp: GraphPositions) -> NonuniformModel2D {
+  return NonuniformModel2D(origin: CGPoint.zero, rowSizes: Grid(gp.pZ |> posToSeg), colSizes: Grid(gp.pY |> posToSeg))
+}
 
 
-func edgesToPoints(edges: [C2Edge]) -> [CGPoint]
-{
+func edgesToPoints(edges: [C2Edge]) -> [CGPoint] {
   
   let cgPoints = edges.flatMap {
     c2Edge -> [CGPoint] in
@@ -122,8 +117,7 @@ func edgesToPoints(edges: [C2Edge]) -> [CGPoint]
   return cgPoints
 }
 
- func removeDup<A : Equatable> (edges: [A]) -> [A]
-{
+ func removeDup<A : Equatable> (edges: [A]) -> [A] {
   return edges.reduce([])
   {
     res, next in
@@ -132,8 +126,7 @@ func edgesToPoints(edges: [C2Edge]) -> [CGPoint]
   }
 }
 
- func leftToRightDict(points: [CGPoint]) -> [CGFloat : [CGFloat]]
-{
+func leftToRightDict(points: [CGPoint]) -> [CGFloat : [CGFloat]] {
   let yOrientedDict : [CGFloat : [CGFloat] ] = [ :]
   let pointDict = points.reduce(yOrientedDict) {
     (res, next) in
@@ -155,14 +148,7 @@ func pointDictToArray( dict: [CGFloat : [CGFloat]] ) -> [[CGPoint]]
   }
 }
 
-func graphToNonuniformFront(gp: GraphPositions) -> NonuniformModel2D
-{
-    return NonuniformModel2D(origin: CGPoint.zero, rowSizes: Grid(gp.pZ |> posToSeg), colSizes: Grid(gp.pX |> posToSeg))
-}
-func graphToNonuniformSide(gp: GraphPositions) -> NonuniformModel2D
-{
-  return NonuniformModel2D(origin: CGPoint.zero, rowSizes: Grid(gp.pZ |> posToSeg), colSizes: Grid(gp.pY |> posToSeg))
-}
+
 struct GraphPositionsOrdered2D
 {
   let x: [CGFloat]
@@ -173,18 +159,42 @@ struct GraphPositionsOrdered2D
   }
 }
 
-func graphToFrontGraph2D(gp: GraphPositions) -> (GraphPositionsOrdered2D)
-{
+func graphToFrontGraph2D(gp: GraphPositions) -> (GraphPositionsOrdered2D) {
   return GraphPositionsOrdered2D(x: gp.pX, y: gp.pZ)
 }
-func graphToCorners(gp: GraphPositionsOrdered2D) -> Corners
-{
+func graphToCorners(gp: GraphPositionsOrdered2D) -> Corners {
   return (top: gp.y.last!, right: gp.x.last!, bottom: gp.y.first!, left: gp.x.first!)
 }
 
-let nonuniformToDimensions : (NonuniformModel2D) -> [Geometry] = (nonuniformToPoints) >>> pointCollectionToDimLabel >>> map(toGeometry)
-func rotateUniform(nu: NonuniformModel2D)-> NonuniformModel2D
-{
+func rotateUniform(nu: NonuniformModel2D)-> NonuniformModel2D {
   return NonuniformModel2D(origin: nu.origin, rowSizes: nu.colSizes, colSizes: nu.rowSizes)
+}
+
+func borders(from positions: GraphPositionsOrdered2D) -> BorderPoints {
+  let firstX =   positions.x.map{ CGPoint(x: $0, y: positions.y.first!) }
+  let right =  positions.y.map{ CGPoint(x: positions.x.last!, y:$0)  }
+  let lastX =  positions.x.map{ CGPoint(x: $0, y: positions.y.last!) }
+  let left =  positions.y.map{ CGPoint(x: positions.x.first!, y:$0)  }
+  return BorderPoints(
+    top: lastX,
+    right: right,
+    bottom: firstX,
+    left: left
+  )
+}
+
+public typealias Corners = (top: CGFloat, right: CGFloat, bottom:  CGFloat, left: CGFloat)
+
+public func borders(from corners: Corners) -> BorderPoints {
+  let (top, right, bottom, left) = corners
+  return BorderPoints(top: [CGPoint(left, top ),
+                            CGPoint(right, top)],
+                      right: [CGPoint(right, bottom ),
+                              CGPoint(right, top)],
+                      bottom: [CGPoint( left, bottom  ),
+                               CGPoint( right, bottom)],
+                      left: [CGPoint(left, bottom ),
+                             CGPoint( left, top)]
+  )
 }
 

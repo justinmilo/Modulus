@@ -64,8 +64,19 @@ public struct BorderPoints {
   public var right: [CGPoint]
   public var bottom: [CGPoint]
   public var left: [CGPoint]
+  
+  public init(top: [CGPoint],
+              right: [CGPoint],
+              bottom: [CGPoint],
+              left: [CGPoint]
+  )
+  {
+    self.top = top
+    self.right = right
+    self.bottom = bottom
+    self.left = left
+  }
 }
-
 
 func addOffset<A>(a:A) -> (A, CGFloat)
 {
@@ -97,21 +108,7 @@ func reduceSmallest(a: CGFloat, b: CGFloat) -> CGFloat
   return a < b ? a : b
 }
 
-public typealias Corners = (top: CGFloat, right: CGFloat, bottom:  CGFloat, left: CGFloat)
 
-public func borders(from corners: Corners) -> BorderPoints
-{
-  let (top, right, bottom, left) = corners
-  return BorderPoints(top: [CGPoint(left, top ),
-                               CGPoint(right, top)],
-                         right: [CGPoint(right, bottom ),
-                               CGPoint(right, top)],
-                         bottom: [CGPoint( left, bottom  ),
-                               CGPoint( right, bottom)],
-                         left: [CGPoint(left, bottom ),
-                               CGPoint( left, top)]
-  )
-}
 
 
 
