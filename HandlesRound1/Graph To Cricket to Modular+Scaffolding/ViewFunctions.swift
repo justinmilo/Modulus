@@ -149,8 +149,7 @@ func pointDictToArray( dict: [CGFloat : [CGFloat]] ) -> [[CGPoint]]
 }
 
 
-struct GraphPositionsOrdered2D
-{
+struct PositionsOrdered2D {
   let x: [CGFloat]
   let y: [CGFloat]
   init (x: [CGFloat], y: [CGFloat]) {
@@ -159,13 +158,13 @@ struct GraphPositionsOrdered2D
   }
 }
 
-func graphToFrontGraph2D(gp: GraphPositions) -> (GraphPositionsOrdered2D) {
-  return GraphPositionsOrdered2D(x: gp.pX, y: gp.pZ)
+func front(gp: GraphPositions) -> (PositionsOrdered2D) {
+  return PositionsOrdered2D(x: gp.pX, y: gp.pZ)
 }
-func graphToSideGraph2D(gp: GraphPositions) -> (GraphPositionsOrdered2D) {
-  return GraphPositionsOrdered2D(x: gp.pY, y: gp.pZ)
+func side(gp: GraphPositions) -> (PositionsOrdered2D) {
+  return PositionsOrdered2D(x: gp.pY, y: gp.pZ)
 }
-func graphToCorners(gp: GraphPositionsOrdered2D) -> Corners {
+func graphToCorners(gp: PositionsOrdered2D) -> Corners {
   return (top: gp.y.last!, right: gp.x.last!, bottom: gp.y.first!, left: gp.x.first!)
 }
 
@@ -173,7 +172,7 @@ func rotateUniform(nu: NonuniformModel2D)-> NonuniformModel2D {
   return NonuniformModel2D(origin: nu.origin, rowSizes: nu.colSizes, colSizes: nu.rowSizes)
 }
 
-func borders(from positions: GraphPositionsOrdered2D) -> BorderPoints {
+func boundedBy(from positions: PositionsOrdered2D) -> BorderPoints {
   let firstX =   positions.x.map{ CGPoint(x: $0, y: positions.y.first!) }
   let right =  positions.y.map{ CGPoint(x: positions.x.last!, y:$0)  }
   let lastX =  positions.x.map{ CGPoint(x: $0, y: positions.y.last!) }

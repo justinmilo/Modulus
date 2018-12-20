@@ -24,15 +24,8 @@ let planLinework : ViewComposite =
     >>> basic
 
 let planComposite : ViewComposite =
-  get(\ScaffGraph.planEdgesNoZeros)
+  get(\.planEdgesNoZeros)
     >>> planEdgeToGeometry
-    >>> map(toGeometry)
-
-let planDimensions : ViewComposite =
-  get(\.grid)
-    >>> graphToNonuniformPlan
-    >>> nonuniformToPoints
-    >>> pointCollectionToDimLabel
     >>> map(toGeometry)
 
 
@@ -40,6 +33,25 @@ let rotatedPlanGrid : ViewComposite =
   get(\ScaffGraph.planEdgesNoZeros)
     >>> rotateGroup
     >>> planEdgeToGeometry
+    >>> map(toGeometry)
+
+
+
+let frontComposite : ViewComposite =
+  get(\.frontEdgesNoZeros)
+    >>> modelToTexturesElev
+
+let sideComposite : ViewComposite =
+  get(\.sideEdgesNoZeros)
+    >>> modelToTexturesElev
+
+// Dimension Composites
+
+let planDimensions : ViewComposite =
+  get(\.grid)
+    >>> graphToNonuniformPlan
+    >>> nonuniformToPoints
+    >>> pointCollectionToDimLabel
     >>> map(toGeometry)
 
 let rotatedPlanDim : ViewComposite =
@@ -50,52 +62,62 @@ let rotatedPlanDim : ViewComposite =
     >>> pointCollectionToDimLabel
     >>> map(toGeometry)
 
-let frontComposite : ViewComposite =
-  get(\.frontEdgesNoZeros)
-    >>> modelToTexturesElev
-
-let sideComposite : ViewComposite =
-  get(\.sideEdgesNoZeros)
-    >>> modelToTexturesElev
 
 let frontDim : ViewComposite =
   get(\.grid)
-    >>> graphToFrontGraph2D
-    >>> borders
+    >>> front
+    >>> boundedBy
     >>> dimension(13.3, formatter: floatMetricFormatter)
-
 
 let frontDimImp : ViewComposite =
   get(\.grid)
-    >>> graphToFrontGraph2D
-    >>> borders
+    >>> front
+    >>> boundedBy
     >>> dimension(13.3, formatter: floatImperialFormatter)
 
 let sideDim : ViewComposite =
   get(\.grid)
-    >>> graphToSideGraph2D
-    >>> borders
+    >>> side
+    >>> boundedBy
     >>> dimension(13.3, formatter: floatMetricFormatter)
 
 let frontOuterDimensions =
   get(\ScaffGraph.grid)
-    >>> graphToFrontGraph2D
+    >>> front
     >>> graphToCorners
     >>> borders
     >>> dimension(30, formatter: floatMetricFormatter)
 
 let frontOuterDimImp =
   get(\ScaffGraph.grid)
-    >>> graphToFrontGraph2D
+    >>> front
     >>> graphToCorners
     >>> borders
     >>> dimension(30, formatter: floatImperialFormatter)
 
 func dimGraphBy(
-  slice: @escaping (GraphPositions) -> (GraphPositionsOrdered2D),
+  slice: @escaping (GraphPositions) -> (PositionsOrdered2D),
   formatter: @escaping DimFormat) -> ViewComposite {
   return get(\.grid)
     >>> slice
-    >>> borders
+    >>> boundedBy
     >>> dimension(13.3, formatter: formatter)
 }
+
+let innerDim : (@escaping (CGFloat) -> String) -> (PositionsOrdered2D)->[Label] = {
+  boundedBy
+  >>> dimension(13.3, formatter: $0)
+}
+
+let outerDim =
+    graphToCorners
+    >>> borders
+    >>> dimension(30, formatter: floatMetricFormatter)
+
+let graphFrontGrid =
+  get(\ScaffGraph.grid)
+    >>> front
+
+let graphSideGrid =
+  get(\ScaffGraph.grid)
+    >>> side

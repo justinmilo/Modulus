@@ -88,11 +88,15 @@ let frontMap = graphViewGenerator(
   size3: sizeFront,
   composite: [frontComposite,
               frontComposite
-                <> dimGraphBy(slice: graphToFrontGraph2D, formatter: floatImperialFormatter),
-              frontComposite <> frontDimImp <> frontOuterDimImp >>> map(toGeometry),
+                <> graphFrontGrid
+                >>> innerDim(floatMetricFormatter),
+              frontComposite
+                <> graphFrontGrid
+                >>> (innerDim(floatMetricFormatter) <> outerDim),
+              frontComposite <> frontDimImp <> frontOuterDimImp,
               frontComposite <> frontDim,
-              frontComposite <> frontDim <> frontOuterDimensions >>> map(toGeometry),
-              { $0.frontEdgesNoZeros } >>> modelToLinework],
+              frontComposite <> frontDim <> frontOuterDimensions,
+              get(\.frontEdgesNoZeros) >>> modelToLinework],
   grid2D: frontPositionsOhneStandards,
   selectedCell: bazFront)
 
@@ -102,7 +106,8 @@ let sideMap = graphViewGenerator(
   size: sizeFromFullScaffSide,
   size3: sizeSide,
   composite: [sideComposite,
-              sideComposite <> sideDim,
+              sideComposite <> graphSideGrid >>> innerDim(floatMetricFormatter),
+              sideComposite <> graphSideGrid >>> (innerDim(floatMetricFormatter) <> outerDim),
               sideComposite <> sideDim],
   grid2D: sidePositionsOhneStandards,
   selectedCell: bazSide)
