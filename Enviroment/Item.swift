@@ -10,6 +10,8 @@ import Foundation
 import Graphe
 import Singalong
 
+
+
 struct ScaffoldingGridSizes : Codable { let label: String; let length: Length }
 extension ScaffoldingGridSizes {
   var centimeters : CGFloat {  get  {  return CGFloat(length.converted(to: .centimeters).value)}  }
@@ -73,7 +75,7 @@ struct Item<Content> : Equatable {
   var name: String
   var sizePreferences: Set<ScaffoldingGridSizes> = []
   var isEnabled: Bool = true
-  
+  var thumbnailFileName : String?
   
 }
 extension Item where Content : ScaffGraph {
@@ -82,7 +84,7 @@ extension Item where Content : ScaffGraph {
 
 extension Item {
   init(content: Content, id: String, name: String) {
-    self.init(content: content, id: id, name: name, sizePreferences: Set(ScaffoldingGridSizes.mock), isEnabled: true)
+    self.init(content: content, id: id, name: name, sizePreferences: Set(ScaffoldingGridSizes.mock), isEnabled: true, thumbnailFileName: nil)
   }
 }
 

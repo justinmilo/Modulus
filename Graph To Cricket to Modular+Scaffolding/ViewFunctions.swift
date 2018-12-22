@@ -158,6 +158,12 @@ struct PositionsOrdered2D {
   }
 }
 
+func plan(gp: GraphPositions) -> (PositionsOrdered2D) {
+  return PositionsOrdered2D(x: gp.pX, y: gp.pY)
+}
+func rotatedPlan(gp: GraphPositions) -> (PositionsOrdered2D) {
+  return PositionsOrdered2D(x: gp.pY, y: gp.pX)
+}
 func front(gp: GraphPositions) -> (PositionsOrdered2D) {
   return PositionsOrdered2D(x: gp.pX, y: gp.pZ)
 }

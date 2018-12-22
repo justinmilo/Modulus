@@ -90,6 +90,27 @@ let colorsForm: Form<Item<ScaffGraph>> =
     
     ])
 
+func createCell(anItem:Item<ScaffGraph> , cell: UITableViewCell) -> UITableViewCell {
+    if let fileName = anItem.thumbnailFileName {
+      switch Current.thumbnails.imageFromCacheName(fileName) {
+      case let .success(img):
+        cell.imageView?.image = img
+
+      default:
+        break
+      }
+      
+      //let imageView = UIImageView(image: image)
+      //imageView.frame = CGRect(x: 0, y: 0, width: 100, height: 100)
+      //cell.contentView.addSubview(imageView)
+
+    }
+  cell.textLabel?.text = anItem.name
+  cell.accessoryType = .detailDisclosureButton
+  return cell
+  }
+
+
 public class App {
   public init() {
   }
@@ -118,14 +139,9 @@ public class App {
       
       
       let edit = EditViewController(
-        config: EditViewContConfiguration(
-          initialValue: Current.model.contents)
-        { (anItem:Item<ScaffGraph> , cell: UITableViewCell) -> UITableViewCell in
-          cell.textLabel?.text = anItem.name
-          cell.accessoryType = .detailDisclosureButton
-          return cell
-        }
-      )
+        config: EditViewContConfiguration( initialValue: Current.model.contents, configure: createCell)
+        )
+    edit.tableView.rowHeight = 106
       edit.didSelect = { (item, cell) in
         self.currentNavigator = GraphNavigator(id: cell.id)
         self.loadEntryTable.pushViewController(self.currentNavigator.vc, animated: true)

@@ -29,14 +29,14 @@ protocol Driver {
   mutating func bind(to uiRect: CGRect)
 }
 
-class ViewController : UIViewController, SpriteDriverDelegate
+public class ViewController : UIViewController, SpriteDriverDelegate
 {
   func didAddEdge() {
     Current.file.save(Current.model)
   }
   
   var viewport : CanvasViewport!
-  var driver : SpriteDriver
+  public var driver : SpriteDriver
   var driverLayout : PositionedLayout<IssuedLayout<LayoutToDriver<SpriteDriver>>>
   var scaleObserver : NotificationObserver!
   var scale: CGFloat = 1.0
@@ -64,7 +64,7 @@ class ViewController : UIViewController, SpriteDriverDelegate
   }
   
   
-  override func viewWillAppear(_ animated: Bool) {
+  override public func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
     
     self.driver.bind(to: viewport.canvas.frame)
@@ -78,7 +78,7 @@ class ViewController : UIViewController, SpriteDriverDelegate
   }
   
   //var booley = true
-  override func loadView() {
+  override public func loadView() {
     viewport = CanvasViewport(frame: UIScreen.main.bounds, element: self.driver.content)
     self.view = viewport
     
@@ -116,6 +116,23 @@ class ViewController : UIViewController, SpriteDriverDelegate
       //self.map.isHidden = false
     }
     viewport.didEndEdit = {
+      // Save Image to Cache...
+      guard  let id = self.driver.id else {
+        fatalError("Can't write becuase no ID)")
+      }
+      guard var item = Current.model.getItem(id: id) else { fatalError(" NO Item for this ID") }
+      
+      let img = image(with:self.view)!
+      let urlRes = Current.thumbnails.addToCache(img, item.thumbnailFileName)
+      print(urlRes)
+      guard case let .success(url) = urlRes else {
+        fatalError("Can't write becuase \(urlRes)")
+      }
+      
+      item.thumbnailFileName = url
+      Current.model.addOrReplace(item: item)
+      // ...End Save Image
+      
       Current.file.save(Current.model)
       self.viewport.animateSelection(to:  self.driverLayout.child.issuedRect! )
     }
@@ -151,7 +168,7 @@ class ViewController : UIViewController, SpriteDriverDelegate
   
   }
   var interimScale : CGFloat?
-  override func viewDidLayoutSubviews() {
+  override public func viewDidLayoutSubviews() {
     super.viewDidLayoutSubviews()
   }
   

@@ -12,6 +12,17 @@ import Singalong
 import Volume
 @testable import FormsCopy
 
+func image(with view: UIView) -> UIImage? {
+  UIGraphicsBeginImageContextWithOptions(view.bounds.size, view.isOpaque, 0.0)
+  defer { UIGraphicsEndImageContext() }
+  // Captures SpriteKit content!
+  
+    //newView.layer.render(in: context)
+    view.drawHierarchy(in: view.bounds, afterScreenUpdates: true)
+    let image = UIGraphicsGetImageFromCurrentImageContext()
+    return image
+  
+}
 
 
 public class GraphNavigator {
@@ -32,34 +43,12 @@ public class GraphNavigator {
   lazy var vc: UIViewController = quadVC
   typealias ViewMap = (label: String, viewMap: [GraphEditingView])
   
-  lazy var quadDriver222  =
-    { ($0,Current.model.getItem(id: self.id)!) }
-      >>> curry(controllerFromMap)(self)
-      >>> inToOut(addBarSafely)
-  
-  lazy var mock : UIViewController =
-    Current.viewMaps.front
-      |>  curry(mockControllerFromMap)(self)
-      >>> addNavBarItem
-  lazy var mockInternalNav : UIViewController =
-    Current.viewMaps.front
-      |> curry(mockControllerFromMap)(self)
-      >>> embedInNav
-      >>> inToOut(styleNav)
-      >>> addNavBarItem
   lazy var quadDriver : QuadDriver =
     { ($0,Current.model.getItem(id: self.id)!) }
       >>> curry(controllerFromMap)(self)
       >>> inToOut(addBarSafely)
       |> createPageController
   lazy var quadVC : UIViewController = quadDriver.group |> addNavBarItem
-  lazy var quadNavs : QuadDriver  =
-    { ($0, Current.model.getItem(id: self.id)!) }
-      >>> curry(controllerFromMap)(self)
-      >>> inToOut(addBarSafely)
-      >>> embedInNav
-      >>> inToOut(styleNav)
-      |> createPageController
   
   func addNavBarItem<ReturnVC:UIViewController>(vc :ReturnVC ) -> ReturnVC {
     vc.navigationItem.rightBarButtonItems = [
@@ -72,6 +61,7 @@ public class GraphNavigator {
   }
   
   @objc func save() {
+    
     Current.file.save(Current.model)
   }
   

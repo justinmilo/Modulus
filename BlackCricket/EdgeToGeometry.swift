@@ -50,9 +50,8 @@ func gridItemed(points: PointCollection, offset: CGFloat)-> [[Geometry]] {
   let ghp = getHandleOvals(points: BorderPoints(top: points.top, right: points.right, bottom: points.bottom, left: points.left), offset: offset)
   let flattendGHP = ghp.flatMap{$0}
   let handleLines = zip(points.boundaries, flattendGHP).map(Line.init)
-  let mids = (points) |> pointCollectionToDimLabel
   // put in on screen when gameScene loads into View
-  let gridItems : [[Geometry]] = [handleLines, flattendGHP, mids]
+  let gridItems : [[Geometry]] = [handleLines, flattendGHP]
   
   return gridItems
 }
@@ -145,9 +144,8 @@ let lineStr = lineToSegment >>> segmentToString
 public func basic(m: NonuniformModel2D) -> [Geometry]{
   let rectangles = (m.orderedPointsLeftToRight, m.orderedPointsUpToDown) |> rectangles2DFlat
   
-  let mids = (m |> nonuniformToPoints) |> pointCollectionToDimLabel
   let pnts = m |> nonuniformToPoints |> pointLabeled
-  let rtrn : [Geometry] = rectangles as [Geometry] + mids as [Geometry] + pnts as [Geometry]
+  let rtrn : [Geometry] = rectangles as [Geometry]  + pnts as [Geometry]
   return rtrn
 }
 
@@ -185,24 +183,6 @@ func circlesSelectedItems(points: PointCollection) -> [Oval] {
     return circles
   }
   return []
-}
-
-
-
-func formerReturn(m: NonuniformModel2D) -> [[Geometry]]{
-  let rectangles = (m.orderedPointsLeftToRight, m.orderedPointsUpToDown) |> rectangles2DFlat
-  let cornerOvals = m |> nonuniformToPoints |> corOv
-  let overallDimes = (m |> nonuniformToPoints) |> pointCollectionToDimLabel
-  let boundingItems : [[Geometry]] = [ rectangles, cornerOvals, overallDimes]
-  
-  let mids = (m |> nonuniformToPoints) |> pointCollectionToDimLabel
-  let pnts = m |> nonuniformToPoints |> pointLabeled
-  let gItems = (m |> nonuniformToPoints, 40) |> gridItemed
-  let selectedItems1 = m |> nonuniformToPoints |> baySelected
-  let selectedItems : [[Geometry]] = [selectedItems1, rectangles]
-  let rtrn : [[Geometry]] = [rectangles, mids, pnts] +
-    gItems + boundingItems + selectedItems
-  return rtrn
 }
 
 

@@ -26,7 +26,7 @@ extension Float {
 
 // Used to be view controller
 /// Geometry View
-class Sprite2DView : SKView {
+public class Sprite2DView : SKView {
   
   var mainNode : SKNode
   var cache : [SKSpriteNode] = []

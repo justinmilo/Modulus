@@ -12,58 +12,6 @@ import Geo
 
 
 public typealias DimFormat = (CGFloat) -> String
-let _dimOffset : CGFloat = -20.0
-
-// NonuniformModel2D -> [Label]
-public func dimensionsImperial(m: NonuniformModel2D) -> [Label] {
-  return dimPointsG(points: (m |> nonuniformToPoints) |> counterClockwise,
-                    offset: _dimOffset,
-                    formatter: (centimeters >>> imperialFormatter) )
-}
-
-// NonuniformModel2D -> [Label]
-public func dimensionsMetric(m: NonuniformModel2D) -> [Label] {
-  return dimPointsG(points: (m |> nonuniformToPoints) |> counterClockwise, offset: _dimOffset, formatter: centimeters >>> metricFormatter )
-}
-
-// PointCollection -> [Label]
-public func pointCollectionToDimLabel(points: PointCollection)-> [Label] {
-  return dimPointsG(points: points |> counterClockwise, offset: _dimOffset, formatter: (centimeters >>> imperialFormatter))
-}
-
-// PointCollection -> [[CGPoint]]
-func counterClockwise(points: PointCollection) -> [[CGPoint]] {
-  return [points.top, points.left, points.bottom, points.right]
-}
-
-
-//Fixme functionassumesimp implementation
-/// [[Geometry]], Offset, Formatter -> [Label]
-/// points : ordered counterclockwise
-func dimPointsG<T: Geometry>(points:[[T]], offset d: CGFloat, formatter: DimFormat) -> [Label]{
-  // convert handle points to dim points
-  // convert handle points to dim points
-  let off : CGFloat = 2/3
-  let topM = centers(between: points[0]).map(moveByVectorCurried).map{ $0(unitY * (-off * d)) }.map(pointToLabel) // Fixme repeats below
-  let leftM = centers(between: points[1]).map(moveByVectorCurried).map{ $0(unitX * (-d * off)) }.map(pointToLabel >>> swapRotation)
-  let bottomM = centers(between: points[2]).map(moveByVectorCurried).map{ $0(unitY * (d*off)) }.map(pointToLabel)
-  let rightM = centers(between: points[3]).map(moveByVectorCurried).map{ $0(unitX * (d*off)) }.map(pointToLabel >>> swapRotation)
-  
-  let topStrings =  widths(between: points[0]).map(formatter)
-  let leftStrings =  widths(between: points[1]).map(formatter)
-  let bottomStrings =  widths(between: points[2]).map(formatter)
-  let rightStrings =  widths(between: points[3]).map(formatter)
-  
-  let mids : [Label] =
-    zip(topM, topStrings).map(setLabel) +
-      zip(leftM, leftStrings).map(setLabel) +
-      zip(bottomM, bottomStrings).map(setLabel) +
-      zip(rightM, rightStrings).map(setLabel)
-  
-  return mids
-  
-}
-
 
 
 /// CGPoint, CGVector -> Label

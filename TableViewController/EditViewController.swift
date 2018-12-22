@@ -63,37 +63,37 @@ extension EditViewContConfiguration
 public class EditViewController<A : Equatable, Cell: UITableViewCell> : SimpleBarButtonViewController
 {
     
-    var undoHistory : UndoHistory<A> {
-        didSet {
-            let set = Changeset<[A]>(source: oldValue.currentValue, target: undoHistory.currentValue)
-            
-            tableView.beginUpdates()
-            for edit in set.edits
-            {
-                let ip = IndexPath(row:edit.destination, section:0)
-                
-                switch edit.operation
-                {
-                case .deletion:
-                    print("UHDS-Deletion")
-                    tableView.deleteRows(at: [ip], with: UITableView.RowAnimation.none)
-                  didDelete(ip.row, oldValue.currentValue[ip.row])
-                case .insertion:
-                    print("UHDS-insertion")
-                    tableView.insertRows(at: [ip], with: UITableView.RowAnimation.left)
-                case let .move(origin: origin):
-                    print("UHDS-Move")
-                    tableView.moveRow(at:  IndexPath(row: origin, section: 0), to:ip)
-                case .substitution:
-                    print("UHDS-Substituion")
-                    tableView.reloadRows(at: [ip], with: UITableView.RowAnimation.left)
-                }
-            }
-            tableView.endUpdates()
-            //tableView.reloadData()
-            itemsUpdated(undoHistory.currentValue)
+  var undoHistory : UndoHistory<A> {
+    didSet {
+      let set = Changeset<[A]>(source: oldValue.currentValue, target: undoHistory.currentValue)
+      
+      tableView.beginUpdates()
+      for edit in set.edits
+      {
+        let ip = IndexPath(row:edit.destination, section:0)
+        
+        switch edit.operation
+        {
+        case .deletion:
+          print("UHDS-Deletion")
+          tableView.deleteRows(at: [ip], with: UITableView.RowAnimation.none)
+          didDelete(ip.row, oldValue.currentValue[ip.row])
+        case .insertion:
+          print("UHDS-insertion")
+          tableView.insertRows(at: [ip], with: UITableView.RowAnimation.left)
+        case let .move(origin: origin):
+          print("UHDS-Move")
+          tableView.moveRow(at:  IndexPath(row: origin, section: 0), to:ip)
+        case .substitution:
+          print("UHDS-Substituion")
+          tableView.reloadRows(at: [ip], with: UITableView.RowAnimation.left)
         }
+      }
+      tableView.endUpdates()
+      //tableView.reloadData()
+      itemsUpdated(undoHistory.currentValue)
     }
+  }
   var items :[A]  { get { return undoHistory.currentValue } }
   var itemsUpdated : ([A]) -> ()  = { _ in }
   var configure : (A, Cell) -> Cell
@@ -115,7 +115,8 @@ public class EditViewController<A : Equatable, Cell: UITableViewCell> : SimpleBa
     
     override public func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-        
+      
+      self.tableView.reloadData()
         // Workaround. clearsSelectionOnViewWillAppear is unreliable for user-driven (swipe) VC dismiss
         let selectedRowIndexPath = self.tableView.indexPathForSelectedRow
         if ((selectedRowIndexPath) != nil) {

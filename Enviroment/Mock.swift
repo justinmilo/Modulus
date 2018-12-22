@@ -50,6 +50,7 @@ extension StandardEditingViews {
 extension Environment {
   static var mock = Environment(
     file: .mock,
+    thumbnails: ThumbnailIO(),
     model: .mock,
     screen: CGRect(0,0,300, 600),
     viewMaps: .mock)

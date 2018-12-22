@@ -17,7 +17,7 @@ protocol SpriteDriverDelegate : class {
   func didAddEdge()
 }
 
-class SpriteDriver : Driver {
+public class SpriteDriver : Driver {
   
   var uiPointToSprite : ((CGPoint)->CGPoint)!
   var uiRectToSprite : ((CGRect)->CGRect)!
@@ -28,7 +28,7 @@ class SpriteDriver : Driver {
   weak var delgate : SpriteDriverDelegate?
   var editingView : GraphEditingView
   var loadedViews : [GraphEditingView]
-  var spriteView : Sprite2DView
+  public var spriteView : Sprite2DView
   var content : UIView { return self.spriteView }
   
   // Eventually dependency injected
