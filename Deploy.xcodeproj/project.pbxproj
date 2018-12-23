@@ -110,6 +110,7 @@
 		D0FD71012117275400B27092 /* EditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0FD70FF2117260000B27092 /* EditViewController.swift */; };
 		D0FD710321172BD700B27092 /* SimpleBarButtonViewContoller.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0FD710221172BD700B27092 /* SimpleBarButtonViewContoller.swift */; };
 		D0FD710521172C2600B27092 /* Changeset.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0FD710421172C2600B27092 /* Changeset.swift */; };
+		D0FEB54C21CDE5A3009FA0E8 /* UIView+Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0FEB54B21CDE5A3009FA0E8 /* UIView+Image.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -296,6 +297,7 @@
 		D0FD70FF2117260000B27092 /* EditViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditViewController.swift; sourceTree = "<group>"; };
 		D0FD710221172BD700B27092 /* SimpleBarButtonViewContoller.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SimpleBarButtonViewContoller.swift; sourceTree = "<group>"; };
 		D0FD710421172C2600B27092 /* Changeset.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Changeset.swift; sourceTree = "<group>"; };
+		D0FEB54B21CDE5A3009FA0E8 /* UIView+Image.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Image.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -419,6 +421,7 @@
 			isa = PBXGroup;
 			children = (
 				D0AFDD7321A3CDB5004EB657 /* Measurement+Formatter.swift */,
+				D0FEB54B21CDE5A3009FA0E8 /* UIView+Image.swift */,
 				D0DAFC0E2118F634003F552A /* 3DExchange.swift */,
 				D033F42420F426270026E1C4 /* TypedNotifications.swift */,
 				D025BF3F210E6C6500083117 /* Media.xcassets */,
@@ -1029,6 +1032,7 @@
 				D0D21FB421A44037000FB885 /* Item.swift in Sources */,
 				D0F58D06210E207300AACC8F /* App.swift in Sources */,
 				D0F58D08210E207300AACC8F /* ViewMaps.swift in Sources */,
+				D0FEB54C21CDE5A3009FA0E8 /* UIView+Image.swift in Sources */,
 				D0F58D0E210E207300AACC8F /* IssuedLayout.swift in Sources */,
 				D0F58D04210E202A00AACC8F /* TexturedView+SKSpriteNode.swift in Sources */,
 				D02391A921CC1116002C4F4A /* Environment.swift in Sources */,

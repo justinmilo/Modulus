@@ -56,7 +56,6 @@ class ViewDriver : Driver  {
   
   /// move the origin
   func layout(origin: CGPoint) {
-    print("LAYOUT ORIGIN", origin.x)
     self.assemblyView.frame.origin = origin
   }
   
@@ -66,7 +65,6 @@ class ViewDriver : Driver  {
    func layout(size: CGSize) {
     
     
-    print("LAYOUT SIZE", size, "LAYOUT Scale," , scale, "Basic size", size * scale)
 
     let artwork = self.graph
       |> get(\ScaffGraph.planEdgesNoZeros)
@@ -86,22 +84,16 @@ class ViewDriver : Driver  {
   }
   
   func build(for size: CGSize) -> CGSize {
-    print("size from main driver - given",  size)
-    print("size from main driver - scale",  scale)
-    print("size from main driver - pre-delivr",  size * (1/scale))
 
     let scaledSize = (size * (1/scale))
     let roundedScaledSize = CGSize(width: scaledSize.width.rounded(places: 5), height: scaledSize.height.rounded(places: 5))
     
-    print("size from main driver - delivr",  roundedScaledSize)
     let s3 =  roundedScaledSize |> self.editingView.size3(self.graph)
     (self.graph.grid, self.graph.edges) = self.editingView.build(
       Array(Current.model.getItem(id: self.id)!.sizePreferences.map{CGFloat($0.length.converted(to: .centimeters).value)}),
       s3,
       self.graph.edges)
     let adjSize = self.graph |> self.editingView.size
-    print("size from main driver - scaled",  adjSize)
-    print("size from main driver - return",  adjSize  * scale)
     return (self.graph |> self.editingView.size) * scale
   }
   

@@ -208,12 +208,10 @@ public class EditViewController<A : Equatable, Cell: UITableViewCell> : SimpleBa
     
     
     override public func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        print("\(indexPath), canMove: true")
         return true
     }
     
     override public func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        print("IS MOVING")
         
         var withMovedItems = self.items
         let itemToMove = self.items[(sourceIndexPath as NSIndexPath).row]

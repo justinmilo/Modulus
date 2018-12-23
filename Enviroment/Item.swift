@@ -78,6 +78,22 @@ struct Item<Content> : Equatable {
   var thumbnailFileName : String?
   
 }
+
+extension Set where Element == ScaffoldingGridSizes {
+  var mostlyMetric : Bool {
+    let metricItems = self.filter({ (size) -> Bool in
+      return ScaffoldingGridSizes.eventMetric.contains(size)
+    })
+    let impItems = self.filter({ (size) -> Bool in
+      return ScaffoldingGridSizes.us.contains(size)
+    })
+    return metricItems.count >= impItems.count
+  }
+  
+}
+
+
+
 extension Item where Content : ScaffGraph {
   static var template : [ScaffoldingGridSizes] {  get { return [ScaffoldingGridSizes._50, ScaffoldingGridSizes._150] } }
 }

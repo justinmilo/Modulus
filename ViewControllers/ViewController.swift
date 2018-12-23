@@ -31,9 +31,7 @@ protocol Driver {
 
 public class ViewController : UIViewController, SpriteDriverDelegate
 {
-  func didAddEdge() {
-    Current.file.save(Current.model)
-  }
+  
   
   var viewport : CanvasViewport!
   public var driver : SpriteDriver
@@ -77,6 +75,46 @@ public class ViewController : UIViewController, SpriteDriverDelegate
     self.driverLayout.layout(in: self.viewport.selection)
   }
   
+  func saveSnapshot(view: UIView) {
+    // Save Image to Cache...
+    guard  let id = self.driver.id else {
+      fatalError("Can't write becuase no ID)")
+    }
+    guard let item = Current.model.getItem(id: id) else {
+      fatalError(" NO Item for this ID")
+    }
+    let img = image(with:view)!
+    //let img = image(with:self.view)!
+    let newSize = CGSize(width: view.bounds.width,  height: view.bounds.height)
+    
+    DispatchQueue.global(qos: .background).async {
+      let cropped = cropToBounds(image: img, width: newSize.width, height:newSize
+        .height)
+      
+      let urlRes = Current.thumbnails.addToCache(cropped, item.thumbnailFileName)
+      print(urlRes)
+      guard case let .success(url) = urlRes else {
+        fatalError("Can't write becuase \(urlRes)")
+      }
+      DispatchQueue.main.async {
+        
+        guard var item = Current.model.getItem(id: id) else {
+          fatalError(" NO Item for this ID")
+        }
+        
+        item.thumbnailFileName = url
+        Current.model.addOrReplace(item: item)
+      }
+      // ...End Save Image
+    }
+  }
+  
+  func didAddEdge() {
+    self.saveSnapshot(view: self.view)
+
+    Current.file.save(Current.model)
+  }
+  
   //var booley = true
   override public func loadView() {
     viewport = CanvasViewport(frame: UIScreen.main.bounds, element: self.driver.content)
@@ -115,23 +153,17 @@ public class ViewController : UIViewController, SpriteDriverDelegate
 
       //self.map.isHidden = false
     }
+    viewport.animationFinished = {
+      Current.file.save(Current.model)
+    }
     viewport.didEndEdit = {
-      // Save Image to Cache...
-      guard  let id = self.driver.id else {
-        fatalError("Can't write becuase no ID)")
-      }
-      guard var item = Current.model.getItem(id: id) else { fatalError(" NO Item for this ID") }
       
-      let img = image(with:self.view)!
-      let urlRes = Current.thumbnails.addToCache(img, item.thumbnailFileName)
-      print(urlRes)
-      guard case let .success(url) = urlRes else {
-        fatalError("Can't write becuase \(urlRes)")
-      }
+      self.saveSnapshot(view: self.view)
+
       
-      item.thumbnailFileName = url
-      Current.model.addOrReplace(item: item)
-      // ...End Save Image
+      
+      
+      
       
       Current.file.save(Current.model)
       self.viewport.animateSelection(to:  self.driverLayout.child.issuedRect! )

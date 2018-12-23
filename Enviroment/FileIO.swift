@@ -26,7 +26,6 @@ func getCacheURL(dirName:String) -> (String) -> URL?{
         try FileManager.default.createDirectory(at: folderURL, withIntermediateDirectories: false, attributes: nil)
       }
       let fileURL = folderURL.appendingPathComponent($0)
-      print(fileURL)
       return fileURL
     }
     catch let error {
@@ -36,11 +35,9 @@ func getCacheURL(dirName:String) -> (String) -> URL?{
 }
 
 func _loadFromCache(lastPathComponent: String) -> Result<UIImage, LoadError>{
-  print("Loading from the last compenent", lastPathComponent)
   
   let cacheUrl = Current.thumbnails.generateCacheURL(lastPathComponent)
     
-  print("loading from the generated URL", cacheUrl ?? "NONE" )
   
   guard let url = cacheUrl else {
     return .error( LoadError.badURL )
@@ -53,7 +50,6 @@ func _loadFromCache(lastPathComponent: String) -> Result<UIImage, LoadError>{
     return .success(image)
     }
   catch let err {
-      print(err)
       return .error(.noData)
     }
   
@@ -70,17 +66,18 @@ func _addToCache(image: UIImage, previousName: String?) -> Result<String, LoadEr
 }
 
 func _writeToCache(image: UIImage, url: URL?) -> Result<String, LoadError> {
-  guard let newURL = url?.appendingPathExtension("png") else {
+  guard var newURL = url else {
     return .error (.badURL)
+  }
+  if newURL.pathExtension != "png" {
+    newURL.appendPathExtension("png")
   }
   guard let data = image.pngData() else {
     return .error( .noData )
   }
   do {
-    print(newURL)
     try data.write(to: newURL, options: .atomic)
   } catch let error {
-    print(error)
     return .error( .couldntWrite)
   }
   return .success(newURL.lastPathComponent)
@@ -110,7 +107,6 @@ func getDocumentsURL() -> URL?{
   do {
     let documentDirectory = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor:nil, create:false)
     let fileURL = documentDirectory.appendingPathComponent("Items.json")
-    print(fileURL)
     return fileURL
   }
   catch {
@@ -175,12 +171,10 @@ func saveItems(item: ItemList<ScaffGraph>) {
   do {
     if let url = Current.file.persistenceURL {
       try data.write(to: url)
-      print("Saved")
     }else {
       fatalError()
     }
   } catch {
-    print ( error)
     fatalError()
   }
 }

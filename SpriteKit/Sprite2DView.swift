@@ -84,7 +84,7 @@ extension Sprite2DView {
       .fadeAlpha(to: 0.3, duration: 0.2),
       .fadeAlpha(to: 0.0,duration: 0.4)])
     globalLabel.run(fadeInOut, completion: {
-      print("End and Fade Out")
+
     })
   }
   

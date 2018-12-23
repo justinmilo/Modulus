@@ -30,7 +30,6 @@ let standardStack = curriedScaffoldingFrom(defaultSizes)
 
 extension ItemList where T == ScaffGraph {
   static var mock : ItemList<ScaffGraph> = {
-    print("Mock", defaultSizes)
     var list = ItemList([
       Item(content: (100,100,450) |> CGSize3.init |> curriedScaffoldingFrom(defaultSizes), id: "Mock0", name: "None Graph"),
       Item(content: (1000,1000,100) |> CGSize3.init |> curriedScaffoldingFrom(defaultSizes), id: "Mock1", name: "Four by Eight"),

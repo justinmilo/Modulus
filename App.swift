@@ -90,22 +90,32 @@ let colorsForm: Form<Item<ScaffGraph>> =
     
     ])
 
-func createCell(anItem:Item<ScaffGraph> , cell: UITableViewCell) -> UITableViewCell {
+final class Cell : UITableViewCell {
+  override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+    super.init(style: .subtitle, reuseIdentifier: reuseIdentifier)
+  }
+  
+  required init?(coder aDecoder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
+}
+
+func createCell(anItem:Item<ScaffGraph> , cell: Cell) -> Cell {
     if let fileName = anItem.thumbnailFileName {
       switch Current.thumbnails.imageFromCacheName(fileName) {
       case let .success(img):
         cell.imageView?.image = img
+        cell.imageView?.frame = CGRect(x: -30, y: 0, width: 106, height: 106)
 
       default:
         break
       }
-      
-      //let imageView = UIImageView(image: image)
-      //imageView.frame = CGRect(x: 0, y: 0, width: 100, height: 100)
-      //cell.contentView.addSubview(imageView)
+
 
     }
   cell.textLabel?.text = anItem.name
+  let formatter = anItem.sizePreferences.mostlyMetric ? metricFormatter : imperialFormatter
+  cell.detailTextLabel?.text = "\(anItem.content.width |> formatter) x \(anItem.content.depth |> formatter) x \(anItem.content.height |> formatter)"
   cell.accessoryType = .detailDisclosureButton
   return cell
   }
@@ -122,7 +132,7 @@ public class App {
     return nav
   }
   
-  var editViewController : EditViewController<Item<ScaffGraph>, UITableViewCell>?
+  var editViewController : EditViewController<Item<ScaffGraph>, Cell>?
   var inputTextField : UITextField?
 
   
@@ -136,19 +146,19 @@ public class App {
     case let .error(error):
       Current.model = ItemList.mock
     }
-      
-      
-      let edit = EditViewController(
-        config: EditViewContConfiguration( initialValue: Current.model.contents, configure: createCell)
-        )
-    edit.tableView.rowHeight = 106
-      edit.didSelect = { (item, cell) in
-        self.currentNavigator = GraphNavigator(id: cell.id)
-        self.loadEntryTable.pushViewController(self.currentNavigator.vc, animated: true)
-      }
-      edit.didSelectAccessory = { (item, cell) in
-        let driver = FormDriver(initial: cell, build: colorsForm)
-        driver.formViewController.navigationItem.largeTitleDisplayMode = .never
+    
+    
+    let edit = EditViewController(
+      config: EditViewContConfiguration( initialValue: Current.model.contents, configure: createCell)
+    )
+    edit.tableView.rowHeight = 88
+    edit.didSelect = { (item, cell) in
+      self.currentNavigator = GraphNavigator(id: cell.id)
+      self.loadEntryTable.pushViewController(self.currentNavigator.vc, animated: true)
+    }
+    edit.didSelectAccessory = { (item, cell) in
+      let driver = FormDriver(initial: cell, build: colorsForm)
+      driver.formViewController.navigationItem.largeTitleDisplayMode = .never
         driver.didUpdate = {
           Current.model.addOrReplace(item: $0)
         }
@@ -169,7 +179,6 @@ public class App {
         })))
         listNamePrompt.addAction(UIAlertAction(title: "Create", style: UIAlertAction.Style.default, handler: ({ (ui:UIAlertAction) -> Void in
           let text = self.inputTextField?.text ?? "Default"
-          print(text)
           let new : Item<ScaffGraph> = Item(
             content: (Item.template.map{ s in CGFloat( s.length.converted(to:.centimeters).value) }, (200,200,200) |> CGSize3.init) |> createScaffoldingFrom,
             id: text,

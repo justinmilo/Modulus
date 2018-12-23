@@ -126,7 +126,6 @@ func createScaff2DNode (item: Scaff2D, cache: inout [SKSpriteNode]) -> SKNode?
     else {
       let node = convertDynamicLedger(item: item, imageGenny: ledgerLongitudinalImage, cache: &cache)
       node.setScale( twometer/3)
-      print(node.xScale)
       node.position = (item.start + item.end).center + unitY * -2 + unitX * 1
       return node
     }

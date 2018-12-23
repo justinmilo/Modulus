@@ -12,18 +12,6 @@ import Singalong
 import Volume
 @testable import FormsCopy
 
-func image(with view: UIView) -> UIImage? {
-  UIGraphicsBeginImageContextWithOptions(view.bounds.size, view.isOpaque, 0.0)
-  defer { UIGraphicsEndImageContext() }
-  // Captures SpriteKit content!
-  
-    //newView.layer.render(in: context)
-    view.drawHierarchy(in: view.bounds, afterScreenUpdates: true)
-    let image = UIGraphicsGetImageFromCurrentImageContext()
-    return image
-  
-}
-
 
 public class GraphNavigator {
   init(id: String) {
@@ -40,28 +28,40 @@ public class GraphNavigator {
     }
   }
   
-  lazy var vc: UIViewController = quadVC
-  typealias ViewMap = (label: String, viewMap: [GraphEditingView])
+  lazy var vc: UIViewController = quadVC.group
   
-  lazy var quadDriver : QuadDriver =
+  lazy var func1 : ((label: String, viewMap: [GraphEditingView])) -> ViewController  =
     { ($0,Current.model.getItem(id: self.id)!) }
       >>> curry(controllerFromMap)(self)
-      >>> inToOut(addBarSafely)
-      |> createPageController
-  lazy var quadVC : UIViewController = quadDriver.group |> addNavBarItem
+
+  lazy var planVC : ViewController = {
+    return Current.viewMaps.plan |> func1
+  }()
+  lazy var rotatedVC : ViewController = {
+    return Current.viewMaps.rotatedPlan |> func1
+  }()
+  lazy var frontVC : ViewController = {
+    return Current.viewMaps.front |> func1
+  }()
+  lazy var sideVC : ViewController = {
+    return Current.viewMaps.side |> func1
+  }()
   
-  func addNavBarItem<ReturnVC:UIViewController>(vc :ReturnVC ) -> ReturnVC {
+  lazy var quadVC : QuadDriver = {
+    let aQD = QuadDriver(upper: [planVC, rotatedVC], lower: [frontVC, sideVC])
+    aQD.group |> self.addNavBarItem
+    return aQD
+  }()
+  
+  func addNavBarItem(vc :UIViewController ) {
     vc.navigationItem.rightBarButtonItems = [
       UIBarButtonItem(title: "AR", style: UIBarButtonItem.Style.plain , target: self, action: #selector(GraphNavigator.presentAR)),
       UIBarButtonItem(title: "3D", style: UIBarButtonItem.Style.plain , target: self, action: #selector(GraphNavigator.present3D)),
       UIBarButtonItem(title: "Info", style: UIBarButtonItem.Style.plain , target: self, action: #selector(GraphNavigator.presentInfo)),
     ]
-    
-    return vc
   }
   
   @objc func save() {
-    
     Current.file.save(Current.model)
   }
   
@@ -71,6 +71,7 @@ public class GraphNavigator {
     driver.formViewController.navigationItem.largeTitleDisplayMode = .never
     driver.didUpdate = {
       Current.model.addOrReplace(item: $0)
+      Current.file.save(Current.model)
     }
     let nav = embedInNav(driver.formViewController)
     nav.navigationBar.prefersLargeTitles = false
@@ -85,7 +86,6 @@ public class GraphNavigator {
   
   let id : String
   @objc func present3D() {
-    
     if let item = Current.model.getItem(id: id) {
       Current.model.addOrReplace(item: item )
     }
@@ -102,18 +102,15 @@ public class GraphNavigator {
       action: #selector(GraphNavigator.dismiss3D)
     )
     
-    
     self.vc.present(ulN, animated: true, completion: nil)
   }
   
   @objc func presentAR() {
-    
     if let item = Current.model.getItem(id: id) {
       Current.model.addOrReplace(item: item )
     }
     
     let scaffProvider = Current.model.getItem(id: id)!.content |> provider
-    
     let cadController = ARScnViewController(provider: scaffProvider)
     
     let ulN = UINavigationController(rootViewController: cadController)
