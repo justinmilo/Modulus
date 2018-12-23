@@ -65,6 +65,8 @@ public class EditViewController<A : Equatable, Cell: UITableViewCell> : SimpleBa
     
   var undoHistory : UndoHistory<A> {
     didSet {
+      print("DID SET UNDO HISTORY")
+
       let set = Changeset<[A]>(source: oldValue.currentValue, target: undoHistory.currentValue)
       
       tableView.beginUpdates()
@@ -99,6 +101,7 @@ public class EditViewController<A : Equatable, Cell: UITableViewCell> : SimpleBa
   var configure : (A, Cell) -> Cell
   var didSelect : (Int,A) -> () = { _, _ in }
   var didSelectAccessory : (Int,A) -> ()  = { _, _ in }
+  var willAppear : ()->() = { }
 
   var didDelete : (Int, A) -> () = { _, _ in }
     
@@ -107,30 +110,34 @@ public class EditViewController<A : Equatable, Cell: UITableViewCell> : SimpleBa
     
     // SHAKE TO UNDO
     override public func viewDidAppear(_ animated: Bool) {
-        
+      print("List View Did Appear")
+
         becomeFirstResponder()
         super.viewDidAppear(animated)
         
     }
     
-    override public func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(true)
-      
-      self.tableView.reloadData()
-        // Workaround. clearsSelectionOnViewWillAppear is unreliable for user-driven (swipe) VC dismiss
-        let selectedRowIndexPath = self.tableView.indexPathForSelectedRow
-        if ((selectedRowIndexPath) != nil) {
-            self.tableView.deselectRow(at: selectedRowIndexPath!, animated: true)
-          self.transitionCoordinator?.notifyWhenInteractionChanges{
-            context in
-            if (context.isCancelled) {
-              self.tableView.selectRow(at: selectedRowIndexPath, animated: false, scrollPosition: UITableView.ScrollPosition.none)
-            }
-          }
+  override public func viewWillAppear(_ animated: Bool) {
+    print("List View Will Appear")
+    
+    willAppear()
+    super.viewWillAppear(true)
+    
+    // Workaround. clearsSelectionOnViewWillAppear is unreliable for user-driven (swipe) VC dismiss
+    let selectedRowIndexPath = self.tableView.indexPathForSelectedRow
+    if ((selectedRowIndexPath) != nil) {
+      self.tableView.deselectRow(at: selectedRowIndexPath!, animated: true)
+      self.transitionCoordinator?.notifyWhenInteractionChanges{
+        context in
+        if (context.isCancelled) {
+          self.tableView.selectRow(at: selectedRowIndexPath, animated: false, scrollPosition: UITableView.ScrollPosition.none)
         }
+      }
     }
+  }
     
     override public func viewWillDisappear(_ animated: Bool) {
+      print("List View Will Disappear")
         super.viewWillDisappear(animated)
         resignFirstResponder()
     }
@@ -153,16 +160,13 @@ public class EditViewController<A : Equatable, Cell: UITableViewCell> : SimpleBa
 
 
     
-    override public var isEditing : Bool
-    {
+    override public var isEditing : Bool {
         didSet {
             self.tableView.setEditing(isEditing, animated: true)
         }
     }
-    
-    
-    public init (config: EditViewContConfiguration<A, Cell>)
-    {
+  
+    public init (config: EditViewContConfiguration<A, Cell>) {
         undoHistory = UndoHistory(config.initialValue)
         configure = config.configure
         super.init(style: config.style)

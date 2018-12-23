@@ -106,13 +106,12 @@ func createCell(anItem:Item<ScaffGraph> , cell: Cell) -> Cell {
       case let .success(img):
         cell.imageView?.image = img
         cell.imageView?.frame = CGRect(x: -30, y: 0, width: 106, height: 106)
-
       default:
         break
       }
-
-
     }
+  
+  print("*____Creating a cell____")
   cell.textLabel?.text = anItem.name
   let formatter = anItem.sizePreferences.mostlyMetric ? metricFormatter : imperialFormatter
   cell.detailTextLabel?.text = "\(anItem.content.width |> formatter) x \(anItem.content.depth |> formatter) x \(anItem.content.height |> formatter)"
@@ -141,16 +140,20 @@ public class App {
     
     switch load {
     case let .success(value):
-      
       Current.model = value
     case let .error(error):
       Current.model = ItemList.mock
     }
     
-    
     let edit = EditViewController(
       config: EditViewContConfiguration( initialValue: Current.model.contents, configure: createCell)
     )
+    edit.willAppear = {
+      print("WEILLLLLLLLLLL" )
+      let a = Current.model.contents
+      edit.undoHistory.currentValue = Current.model.contents
+      
+    }
     edit.tableView.rowHeight = 88
     edit.didSelect = { (item, cell) in
       self.currentNavigator = GraphNavigator(id: cell.id)
@@ -190,7 +193,7 @@ public class App {
         
         self.rootController.present(listNamePrompt, animated: true, completion: nil)
       }
-      edit.title = "Deploy"
+      edit.title = "Modulo"
     // Moditive
       // Formosis // Formicate, Formite, Formate, Form Morph, UnitForm, Formunit
       // Morpho, massing, Meccano, mechanized, modulus, Moduform, Modju, Mojuform, Majuform
@@ -199,11 +202,8 @@ public class App {
       let nav = UINavigationController(rootViewController: edit)
       styleNav(nav)
       return nav
-    
-    
-  
-    
   }()
+  
   var currentNavigator : GraphNavigator!
 }
 

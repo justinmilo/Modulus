@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct ItemList<T> {
+struct ItemList<T:Equatable> {
   init<S:Sequence> (_ s: S) where S.Element == Item<T> {
     self.store = zip(0...,s).reduce([:]) { (res, next) in
       let (seqIndex, item) = next

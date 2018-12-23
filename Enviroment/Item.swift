@@ -64,11 +64,8 @@ extension ScaffoldingGridSizes {
   ]
 }
 
-struct Item<Content> : Equatable {
+struct Item<Content:Equatable> : Equatable {
   typealias ID = String
-  static func == (lhs: Item<Content>, rhs: Item<Content>) -> Bool {
-    return lhs.id == rhs.id
-  }
   
   let content: Content
   let id: String
