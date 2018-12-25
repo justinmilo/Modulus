@@ -111,7 +111,6 @@ func createCell(anItem:Item<ScaffGraph> , cell: Cell) -> Cell {
       }
     }
   
-  print("*____Creating a cell____")
   cell.textLabel?.text = anItem.name
   let formatter = anItem.sizePreferences.mostlyMetric ? metricFormatter : imperialFormatter
   cell.detailTextLabel?.text = "\(anItem.content.width |> formatter) x \(anItem.content.depth |> formatter) x \(anItem.content.height |> formatter)"
@@ -149,7 +148,6 @@ public class App {
       config: EditViewContConfiguration( initialValue: Current.model.contents, configure: createCell)
     )
     edit.willAppear = {
-      print("WEILLLLLLLLLLL" )
       let a = Current.model.contents
       edit.undoHistory.currentValue = Current.model.contents
       
@@ -193,7 +191,7 @@ public class App {
         
         self.rootController.present(listNamePrompt, animated: true, completion: nil)
       }
-      edit.title = "Modulo"
+      edit.title = "Morpho"
     // Moditive
       // Formosis // Formicate, Formite, Formate, Form Morph, UnitForm, Formunit
       // Morpho, massing, Meccano, mechanized, modulus, Moduform, Modju, Mojuform, Majuform
