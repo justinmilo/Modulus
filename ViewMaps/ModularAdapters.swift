@@ -11,7 +11,7 @@ import BlackCricket
 import Graphe
 import Geo
 
-func modelToLinework ( edges: [C2Edge] ) -> [Geometry]
+func modelToLinework ( edges: [C2Edge] ) -> Composite
 {
   let lines : [Geometry] = edges.map { edge in
     return Line(start: edge.p1, end: edge.p2)
@@ -23,7 +23,7 @@ func modelToLinework ( edges: [C2Edge] ) -> [Geometry]
     return Label(text: edge.content.rawValue, position: (edge.p1 + edge.p2).center + vector, rotation: direction)
   }
   
-  let labelsSecondPass : [Geometry] = labels.reduce([])
+  let labelsSecondPass : [Label] = labels.reduce([])
   {
     (res, geo) -> [Label] in
     
@@ -46,6 +46,9 @@ func modelToLinework ( edges: [C2Edge] ) -> [Geometry]
   /// Move to orign
   
   
-  
-  return (lines + labelsSecondPass)
+  return Composite(
+    geometry : lines,
+   operators : [],
+   labels : labelsSecondPass
+  )
 }

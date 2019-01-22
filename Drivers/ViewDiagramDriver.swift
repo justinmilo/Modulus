@@ -62,17 +62,14 @@ class ViewDriver : Driver  {
   var graph : ScaffGraph { return Current.model.getItem(id: self.id)!.content }
   
   /// Handler for Selection Size Changed
-   func layout(size: CGSize) {
-    
-    
-
+  func layout(size: CGSize) {
     let artwork = self.graph
       |> get(\ScaffGraph.planEdgesNoZeros)
       >>> modelToLinework
+      >>> get(\.geometry)
       >>> filter()
       >>> reduceDuplicates
 
-  
     let original = Diagram(elements:artwork)
     let scaledDiagram = original.scaled(by: scale) /// Stupid
 

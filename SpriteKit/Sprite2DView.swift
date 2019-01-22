@@ -29,6 +29,7 @@ extension Float {
 public class Sprite2DView : SKView {
   
   var mainNode : SKNode
+  var operatingNodes : [OKNode] = []
   var cache : [SKSpriteNode] = []
   var scale : CGFloat = 1.0 {
     didSet {
@@ -48,30 +49,53 @@ public class Sprite2DView : SKView {
     self.ignoresSiblingOrder = true
   }
   
+  public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+    let touch = touches.first!
+    for myNode in operatingNodes {
+      if myNode.contains(touch.location(in: self.mainNode)) {
+        print("touched")
+      }
+    }
+  }
+  
+  
   required init?(coder aDecoder: NSCoder) { fatalError() }
   
-  func redraw(_ g:[Geometry]) {
+  func redraw(_ g:Composite) {
     self.mainNode.removeAllChildren()
+    self.operatingNodes.removeAll()
     
-    for item in g {
-      self.addChildR(item)
+    for geo in g.geometry {
+      self.addChildR(geo)
+    }
+    for label in g.labels {
+      self.addChildR(label)
+    }
+    for ops in g.operators {
+      self.addChildR(ops)
+      self.operatingNodes.append(ops.asNode)
     }
   }
   
   // SceneKit Handlering...
   // put on the canvas!!
-  func addChildR<T>(_ node: T) {
-    if let representable = node as? SKRepresentable {
-      representable.asNode |> mainNode.addChild
-    }
-    else if let line = node as? Scaff2D {
-      let newNode = createScaff2DNode(item: line, cache: &self.cache)
-      if let n = newNode {
-        n |> mainNode.addChild
+  func addChildR<T>(_ erased: T) {
+    switch erased {
+    
+    case let someRep as SKRepresentable:
+      mainNode.addChild(someRep.asNode)
+    case let someRep as OKRepresentable:
+      mainNode.addChild(someRep.asNode)
+    
+    case let line as Scaff2D:
+      if let n = createScaff2DNode(item: line, cache: &self.cache) {
+        mainNode.addChild(n)
       }
+    default:
+      fatalError()
     }
-    else { fatalError()}
   }
+  
 }
 
 extension Sprite2DView {

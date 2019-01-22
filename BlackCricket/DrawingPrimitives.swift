@@ -24,20 +24,10 @@ enum BorderCase {
   case top, left, right, bottom
 }
 
-
-
-
-
-
-
-
 struct LabeledPoint : Geometry {
   var position : CGPoint
   var label : String
 }
-
-
-
 
 
 // Extensions
@@ -62,13 +52,7 @@ extension CGRect : Geometry {
 
 
 
-
-
-
 import Geo
-
-
-
 
 
 extension Array
@@ -88,13 +72,11 @@ let redCirc = { pointToCircle2($0, #colorLiteral(red: 0.9254902005, green: 0.235
 let blueCirc = { pointToCircle2($0, #colorLiteral(red: 0.2196078449, green: 0.007843137719, blue: 0.5504655855, alpha: 1))}
 
 
-
 func offsetPoints( points: [CGPoint], offset d: CGVector) -> [Geometry]
 {
   let a =  LongestList(points, [d] ).map(move)
   return a
 }
-
 
 
 func getHandleOvals(points: BorderPoints, offset d: CGFloat)->[[Oval]] {

@@ -49,6 +49,21 @@ func pointToLabel(_ point: CGPoint)->Label
 
 let pointStringToLabel : (CGPoint, String) -> Label = { Label.init(text: $1, position: $0, rotation: .h) }
 
+
+public func move(point: CGPoint, vector: CGVector)->CGPoint {
+  return point + vector
+}
+
+public let vectorMove = flip(curry(move(point:vector:)))
+
+public func yMove(by float: CGFloat)->(CGPoint)->CGPoint {
+  return { $0  + unitY * float }
+}
+public func xMove(by float: CGFloat)->(CGPoint)->CGPoint {
+  return { $0 + unitX * float }
+}
+
+
 func move(item:Geometry, vector: CGVector)->Geometry
 {
   var items = item
@@ -69,20 +84,18 @@ func moveByVector2<T : Geometry >(_ initialNode: T, _ vector:CGVector) -> (T, CG
   return (newNode, vector)
 }
 
-public func moveByVector<T: Geometry> (initialNode: T, vector: CGVector) -> T
-{ return moveByVector2(initialNode, vector).0 }
+public func moveByVector<T: Geometry> (initialNode: T, vector: CGVector) -> T {
+  return moveByVector2(initialNode, vector).0
+}
 
-func moveByVectorCurried<T: Geometry> (initialNode: T) -> (CGVector) -> T
-{
+func moveByVectorCurried<T: Geometry> (initialNode: T) -> (CGVector) -> T {
   return { moveByVector(initialNode: initialNode, vector: $0) }
 }
 
-func move<T: Geometry> (by vector: CGVector) -> (T) -> T
-{
+func move<T: Geometry> (by vector: CGVector) -> (T) -> T {
   return { moveByVector(initialNode: $0, vector: vector) }
 }
-func moveGeneric<T: Geometry> (by vector: CGVector) -> (T) -> T
-{
+func moveGeneric<T: Geometry> (by vector: CGVector) -> (T) -> T {
   return { moveByVector(initialNode: $0, vector: vector) }
 }
 

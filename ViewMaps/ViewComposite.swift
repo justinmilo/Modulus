@@ -16,23 +16,61 @@ import BlackCricket
  NonuniformModel2D
  */
 
-typealias ViewComposite = (ScaffGraph) -> [Geometry]
+struct Composite {
+  var geometry : [Geometry]
+  var operators : [OvalResponder]
+  var labels : [Label]
+}
+
+extension Composite {
+  init(geometry: [Geometry]) {
+    self.geometry = geometry
+    self.operators = []
+    self.labels = []
+
+  }
+  init(operators: [OvalResponder]) {
+    self.geometry = []
+    self.operators = operators
+    self.labels = []
+  }
+  init(labels: [Label]) {
+    self.geometry = []
+    self.operators = []
+    self.labels = labels
+  }
+}
+
+extension Composite : Semigroup {
+  static func <>(lhs: Composite, rhs: Composite) -> Composite {
+    return Composite(
+      geometry: lhs.geometry + rhs.geometry,
+      operators: lhs.operators + rhs.operators,
+      labels: lhs.labels + rhs.labels
+    )
+  }
+}
+
+typealias ViewComposite = (ScaffGraph) -> Composite
 
 let planLinework : ViewComposite =
   get(\ScaffGraph.grid)
     >>> graphToNonuniformPlan
     >>> basic
+    >>> Composite.init(geometry:)
 
 let rotatedPlanLinework : ViewComposite =
   get(\ScaffGraph.grid)
     >>> graphToNonuniformPlan
     >>> rotateUniform
     >>> basic
+    >>> Composite.init(geometry:)
 
 let planComposite : ViewComposite =
   get(\.planEdgesNoZeros)
     >>> planEdgeToGeometry
     >>> map(toGeometry)
+    >>> Composite.init(geometry:)
 
 
 let rotatedPlanComposite : ViewComposite =
@@ -40,26 +78,31 @@ let rotatedPlanComposite : ViewComposite =
     >>> rotateGroup
     >>> planEdgeToGeometry
     >>> map(toGeometry)
+    >>> Composite.init(geometry:)
 
 let frontComposite : ViewComposite =
   get(\.frontEdgesNoZeros)
     >>> modelToTexturesElev
+    >>> Composite.init(geometry:)
 
 let sideComposite : ViewComposite =
   get(\.sideEdgesNoZeros)
     >>> modelToTexturesElev
+    >>> Composite.init(geometry:)
 
 // Dimension Composites
 
-let innerDim : (@escaping (CGFloat) -> String) -> (PositionsOrdered2D)->[Label] = {
+let innerDim : (@escaping (CGFloat) -> String) -> (PositionsOrdered2D)->Composite = {
   boundedBy
   >>> dimension(13.3, formatter: $0)
+  >>> Composite.init(labels:)
 }
 
-let outerDim : (@escaping (CGFloat) -> String) -> (PositionsOrdered2D)->[Label] = {
+let outerDim : (@escaping (CGFloat) -> String) -> (PositionsOrdered2D)->Composite = {
     graphToCorners
     >>> borders
     >>> dimension(30, formatter: $0)
+      >>> Composite.init(labels:)
 }
 
 let frontGrid =

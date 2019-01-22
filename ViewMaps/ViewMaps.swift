@@ -26,7 +26,7 @@ public struct GraphEditingView {
   
   /// From Graph to Geometry at (0,0)
   /// Geometry bounds is not necisarily the same as the size, which is a bounding box
-  let composite : (ScaffGraph) -> [Geometry]
+  let composite : (ScaffGraph) -> Composite
   
   /// related to the entire composite
   let grid2D : (ScaffGraph) -> GraphPositions2DSorted
@@ -41,7 +41,7 @@ func graphViewGenerator(
   origin : @escaping (ScaffGraph) -> CGPoint,
   size : @escaping (ScaffGraph) -> CGSize,
   size3 : @escaping (ScaffGraph) -> (CGSize) -> CGSize3,
-  composite : [(ScaffGraph) -> [Geometry]],
+  composite : [(ScaffGraph) -> Composite],
   grid2D : @escaping (ScaffGraph) -> GraphPositions2DSorted,
   selectedCell :  @escaping (PointIndex2D, GraphPositions, [Edge]) -> ([Edge])
   )-> [GraphEditingView]
@@ -68,9 +68,19 @@ let planMap = graphViewGenerator(
   size: sizeFromPlanScaff,
   size3: sizePlan,
   composite: [
-              planComposite <> planGrid >>> (innerDim(meterFormat) <> outerDim(meterFormat)),
-              planComposite <> planGrid >>> innerDim(archFormat),
-              planComposite <> planGrid >>> (innerDim(archFormat) <> outerDim(archFormat)),
+              planComposite
+                <> planGrid
+                >>> everyPositionButon
+                <> planGrid
+                >>> (innerDim(meterFormat)
+                  <> outerDim(meterFormat)),
+              planComposite
+                <> planGrid
+                >>> innerDim(archFormat),
+              planComposite
+                <> planGrid
+                >>> (innerDim(archFormat)
+                  <> outerDim(archFormat)),
               planLinework],
   grid2D: planPositions,
   selectedCell: bazTop)

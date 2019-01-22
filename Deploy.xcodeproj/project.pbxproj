@@ -31,6 +31,7 @@
 		D07E9C9321B43B1100ED8B6B /* Nonuniform+Edges&Points.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07E9C9221B43B1100ED8B6B /* Nonuniform+Edges&Points.swift */; };
 		D07E9C9521B43B9000ED8B6B /* Dimensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07E9C9421B43B9000ED8B6B /* Dimensions.swift */; };
 		D08C7B5821AF5436004385FE /* Measurement+Formatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0AFDD7321A3CDB5004EB657 /* Measurement+Formatter.swift */; };
+		D08F2AC321D2EB130080F052 /* CompositeButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = D08F2AC221D2EB130080F052 /* CompositeButtons.swift */; };
 		D0915FAB208901DD0067C02A /* GraphicsCoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0915FAA208901DD0067C02A /* GraphicsCoreTests.swift */; };
 		D0915FCF2089027C0067C02A /* GraphicsCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03267942082DE8D00BBF563 /* GraphicsCore.swift */; };
 		D09F3675210D0C4200D38F4C /* BlackCricket.h in Headers */ = {isa = PBXBuildFile; fileRef = D09F3673210D0C4200D38F4C /* BlackCricket.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -53,8 +54,6 @@
 		D0B5423F21B2ED2C00518809 /* Geometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B5423B21B2E4E200518809 /* Geometry.swift */; };
 		D0B5424121B2EE1E00518809 /* Line.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B5424021B2EE1E00518809 /* Line.swift */; };
 		D0B5424321B2F3FB00518809 /* Oval.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B5424221B2F3FB00518809 /* Oval.swift */; };
-		D0B5424521B2FA4B00518809 /* LongestList.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B5424421B2FA4B00518809 /* LongestList.swift */; };
-		D0B5424721B2FA8400518809 /* EveryList.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B5424621B2FA8400518809 /* EveryList.swift */; };
 		D0B69D262043632D00AEA01B /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = D0B69D252043632D00AEA01B /* GameScene.sks */; };
 		D0CBE3F6211F90CB00A661F0 /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0CBE3F5211F90CB00A661F0 /* App.swift */; };
 		D0CBE402211F9EB100A661F0 /* Modular.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0F58CF4210E201200AACC8F /* Modular.framework */; };
@@ -244,6 +243,7 @@
 		D07E9C9221B43B1100ED8B6B /* Nonuniform+Edges&Points.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Nonuniform+Edges&Points.swift"; sourceTree = "<group>"; };
 		D07E9C9421B43B9000ED8B6B /* Dimensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dimensions.swift; sourceTree = "<group>"; };
 		D08A6F92202AA58E00EF9E68 /* EdgeToGeometry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EdgeToGeometry.swift; sourceTree = "<group>"; };
+		D08F2AC221D2EB130080F052 /* CompositeButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompositeButtons.swift; sourceTree = "<group>"; };
 		D0915FA8208901DD0067C02A /* GraphicsCoreTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GraphicsCoreTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0915FAA208901DD0067C02A /* GraphicsCoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphicsCoreTests.swift; sourceTree = "<group>"; };
 		D0915FAC208901DD0067C02A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -264,8 +264,6 @@
 		D0B5423D21B2EC8300518809 /* Label.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Label.swift; sourceTree = "<group>"; };
 		D0B5424021B2EE1E00518809 /* Line.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Line.swift; sourceTree = "<group>"; };
 		D0B5424221B2F3FB00518809 /* Oval.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Oval.swift; sourceTree = "<group>"; };
-		D0B5424421B2FA4B00518809 /* LongestList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LongestList.swift; sourceTree = "<group>"; };
-		D0B5424621B2FA8400518809 /* EveryList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EveryList.swift; sourceTree = "<group>"; };
 		D0B69D252043632D00AEA01B /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
 		D0B86C64202FC09200CCB3F7 /* ViewFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewFunctions.swift; sourceTree = "<group>"; };
 		D0BAD734204228F700406E70 /* ViewComposite.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewComposite.swift; sourceTree = "<group>"; };
@@ -456,11 +454,9 @@
 			isa = PBXGroup;
 			children = (
 				D0B5423B21B2E4E200518809 /* Geometry.swift */,
-				D0B5424421B2FA4B00518809 /* LongestList.swift */,
 				D03E03FB20125DF8002D47F3 /* DrawingPrimitives.swift */,
 				D07E9C9421B43B9000ED8B6B /* Dimensions.swift */,
 				D0B5424021B2EE1E00518809 /* Line.swift */,
-				D0B5424621B2FA8400518809 /* EveryList.swift */,
 				D0B5424221B2F3FB00518809 /* Oval.swift */,
 				D0B5423D21B2EC8300518809 /* Label.swift */,
 				D0B5423921B2E0E500518809 /* PointCollection.swift */,
@@ -590,6 +586,7 @@
 				D05505F221A72074005BA9B4 /* Scaff2D->SKNode.swift */,
 				D0F58CE7210E14AC00AACC8F /* ModularAdapters.swift */,
 				D0DA9BB82039E1C60019F6EE /* TexturedView+SKSpriteNode.swift */,
+				D08F2AC221D2EB130080F052 /* CompositeButtons.swift */,
 			);
 			path = ViewMaps;
 			sourceTree = "<group>";
@@ -981,7 +978,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				D0F58CE9210E197600AACC8F /* UIKit+Grasshopper.swift in Sources */,
-				D0B5424721B2FA8400518809 /* EveryList.swift in Sources */,
 				D09F367F210D0DB200D38F4C /* DrawingPrimitives.swift in Sources */,
 				D0B5423E21B2EC8300518809 /* Label.swift in Sources */,
 				D0B5424321B2F3FB00518809 /* Oval.swift in Sources */,
@@ -992,7 +988,6 @@
 				D08C7B5821AF5436004385FE /* Measurement+Formatter.swift in Sources */,
 				D0B5423821B2DF1600518809 /* EdgeCollection.swift in Sources */,
 				D0B5424121B2EE1E00518809 /* Line.swift in Sources */,
-				D0B5424521B2FA4B00518809 /* LongestList.swift in Sources */,
 				D09F3680210D0E1700D38F4C /* PrimitiveFunctions.swift in Sources */,
 				D0B5423A21B2E0E500518809 /* PointCollection.swift in Sources */,
 				D09F367E210D0C8D00D38F4C /* EdgeToGeometry.swift in Sources */,
@@ -1024,6 +1019,7 @@
 				D0B1BC3A21A6F90C00991F16 /* Result.swift in Sources */,
 				D05505F621A72262005BA9B4 /* C2Edge->Scaff2D.swift in Sources */,
 				D0F58D0C210E207300AACC8F /* ViewDiagramDriver.swift in Sources */,
+				D08F2AC321D2EB130080F052 /* CompositeButtons.swift in Sources */,
 				D0B1BC4121A7092400991F16 /* ItemList.swift in Sources */,
 				D07C56B9211E74F50073D7A7 /* App+FreeFunctions.swift in Sources */,
 				D0F58D16210E207300AACC8F /* SelectionCore.swift in Sources */,
