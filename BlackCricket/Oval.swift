@@ -17,7 +17,7 @@ public struct Oval : Geometry {
 }
 
 public extension Oval {
-  public init(size: CGSize, position: CGPoint) {
+  init(size: CGSize, position: CGPoint) {
     ellipseOf = size
     self.position = position
   }

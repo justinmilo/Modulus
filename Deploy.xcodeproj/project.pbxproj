@@ -113,6 +113,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		21BCBD422380947100644B14 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D00069C8200BD08300E8D5F3 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D09F3670210D0C4200D38F4C;
+			remoteInfo = BlackCricket;
+		};
 		D00069E5200BD08300E8D5F3 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = D00069C8200BD08300E8D5F3 /* Project object */;
@@ -773,6 +780,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				21BCBD432380947100644B14 /* PBXTargetDependency */,
 			);
 			name = Modular;
 			productName = Modular;
@@ -1044,6 +1052,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		21BCBD432380947100644B14 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D09F3670210D0C4200D38F4C /* BlackCricket */;
+			targetProxy = 21BCBD422380947100644B14 /* PBXContainerItemProxy */;
+		};
 		D00069E6200BD08300E8D5F3 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = D00069CF200BD08300E8D5F3 /* Deploy */;
@@ -1453,7 +1466,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.sound.sands.mac.BlackCricket;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -1479,7 +1492,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.sound.sands.mac.BlackCricket;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -1506,7 +1519,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.sound.sands.mac.Modular;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -1532,7 +1545,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.sound.sands.mac.Modular;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
