@@ -103,7 +103,7 @@ extension Item {
 
 extension Set where Element == ScaffoldingGridSizes {
   var text : String {
-    let values = self.map{$0.length.value}.sorted().map(String.init)
+    let values = self.map{$0.length.value}.sorted().map{String($0)}
     return values.dropFirst().reduce(values.first ?? "None") {
       return $0 + ", " + $1
     }

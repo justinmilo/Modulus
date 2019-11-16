@@ -15,7 +15,7 @@ public typealias DimFormat = (CGFloat) -> String
 
 
 /// CGPoint, CGVector -> Label
-func dimPoints( points: (CGPoint, CGPoint), direction: CGVector, formatter: DimFormat )-> Label {
+func dimPoints( points: (CGPoint, CGPoint), direction: CGVector, formatter: @escaping DimFormat )-> Label {
   let d = points |> distanceBetween |> formatter
   let c = points |> center
   let o = (c, direction) |> move

@@ -66,7 +66,7 @@ class ViewDriver : Driver  {
     let artwork = self.graph
       |> get(\ScaffGraph.planEdgesNoZeros)
       >>> modelToLinework
-      >>> get(\.geometry)
+      >>> get(\Composite.geometry)
       >>> filter()
       >>> reduceDuplicates
 
