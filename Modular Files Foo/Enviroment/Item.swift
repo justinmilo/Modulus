@@ -19,6 +19,9 @@ extension ScaffoldingGridSizes {
 
 extension ScaffoldingGridSizes : Hashable {
   var hashValue : Int { return label.hashValue }
+//  func hash(into hasher: inout Hasher) {
+//    hasher.combine(label.hashValue)
+//  }
 }
 
 extension ScaffoldingGridSizes {

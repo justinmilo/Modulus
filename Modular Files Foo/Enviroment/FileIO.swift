@@ -49,7 +49,7 @@ func _loadFromCache(lastPathComponent: String) -> Result<UIImage, LoadError>{
     }
     return .success(image)
     }
-  catch let err {
+  catch {
       return .error(.noData)
     }
   
@@ -77,7 +77,7 @@ func _writeToCache(image: UIImage, url: URL?) -> Result<String, LoadError> {
   }
   do {
     try data.write(to: newURL, options: .atomic)
-  } catch let error {
+  } catch {
     return .error( .couldntWrite)
   }
   return .success(newURL.lastPathComponent)

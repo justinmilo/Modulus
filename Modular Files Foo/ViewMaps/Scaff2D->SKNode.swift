@@ -17,6 +17,7 @@ import Geo
 
 let twometer : CGFloat = 2.00/1.6476
 
+//TODO - FixMe If there are no images to load the whole program crashes
 private func firstHalf( item: Scaff2D, cache : inout [SKSpriteNode]) -> SKSpriteNode? {
   let name = nameHash(item)
   let copy = copyFromCache(name: name, cache: cache)
@@ -26,8 +27,8 @@ private func firstHalf( item: Scaff2D, cache : inout [SKSpriteNode]) -> SKSprite
     let length = CGSegment(p1:item.start, p2:item.end).length
     let path = (length, item.part, item.view) |> imageName
     let bundle = Bundle(for: ViewController.self)
+    //TODO - FixMe If there are no images to load the whole program crashes
     guard let apath = path, let aImage = UIImage(named: apath, in: bundle, compatibleWith: nil) else {
-      //ffatalError("no Image")
       return nil
     }
     return aImage
@@ -102,6 +103,8 @@ func createScaff2DNode (item: Scaff2D, cache: inout [SKSpriteNode]) -> SKNode?
        (.standard,  .plan),
        (.diag, .plan):
     
+    //TODO - FixMe If there are no images to load the whole program crashes
+    // Because the program loads a standard in convertDynamicLedger
     let node : SKNode
     if let ledgerNode = firstHalf(item: item, cache: &cache) {
       node = ledgerNode

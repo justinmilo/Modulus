@@ -90,7 +90,7 @@ class ViewDriver : Driver  {
       Array(Current.model.getItem(id: self.id)!.sizePreferences.map{CGFloat($0.length.converted(to: .centimeters).value)}),
       s3,
       self.graph.edges)
-    let adjSize = self.graph |> self.editingView.size
+    let _ = self.graph |> self.editingView.size
     return (self.graph |> self.editingView.size) * scale
   }
   

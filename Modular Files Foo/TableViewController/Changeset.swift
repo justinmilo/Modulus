@@ -166,14 +166,14 @@ private func moveFromEdits<T>(_ edits: [Edit<T>], deletionOrInsertion edit: Edit
 	switch edit.operation {
 	
 	case .deletion:
-		if let insertionIndex = edits.index(where: { (earlierEdit) -> Bool in
+    if let insertionIndex = edits.firstIndex(where: { (earlierEdit) -> Bool in
 			if case .insertion = earlierEdit.operation , earlierEdit.value == edit.value { return true } else { return false }
 		}) {
 			return (Edit(.move(origin: edit.destination), value: edit.value, destination: edits[insertionIndex].destination), insertionIndex)
 		}
 	
 	case .insertion:
-		if let deletionIndex = edits.index(where: { (earlierEdit) -> Bool in
+    if let deletionIndex = edits.firstIndex(where: { (earlierEdit) -> Bool in
 			if case .deletion = earlierEdit.operation , earlierEdit.value == edit.value { return true } else { return false }
 		}) {
 			return (Edit(.move(origin: edits[deletionIndex].destination), value: edit.value, destination: edit.destination), deletionIndex)
