@@ -55,7 +55,6 @@
 		D0B5423A21B2E0E500518809 /* PointCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B5423921B2E0E500518809 /* PointCollection.swift */; };
 		D0B5423C21B2E4E200518809 /* Geometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B5423B21B2E4E200518809 /* Geometry.swift */; };
 		D0B5423E21B2EC8300518809 /* Label.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B5423D21B2EC8300518809 /* Label.swift */; };
-		D0B5423F21B2ED2C00518809 /* Geometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B5423B21B2E4E200518809 /* Geometry.swift */; };
 		D0B5424121B2EE1E00518809 /* Line.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B5424021B2EE1E00518809 /* Line.swift */; };
 		D0B5424321B2F3FB00518809 /* Oval.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B5424221B2F3FB00518809 /* Oval.swift */; };
 		D0B69D262043632D00AEA01B /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = D0B69D252043632D00AEA01B /* GameScene.sks */; };
@@ -384,9 +383,13 @@
 			children = (
 				D0FD710621172C2A00B27092 /* TableViewController */,
 				D0D21FB521A44056000FB885 /* Enviroment */,
+				D07BAE5A20DAFA8E00E4A3A5 /* Drivers */,
+				D0B69D2420435F3900AEA01B /* SpriteKit */,
 				D09C3C42206B32370053EE2A /* App.swift */,
 				D02FCBBF212E08AD001BD55E /* GraphNavigator.swift */,
 				D07C56B8211E74F50073D7A7 /* App+FreeFunctions.swift */,
+				D052B3FA211F2CE8008DD455 /* QuadPage */,
+				D02391B821CC13B4002C4F4A /* ViewControllers */,
 				D0F58CE6210E146F00AACC8F /* ViewMaps */,
 				21BCBD4C23819E3700644B14 /* Modular Files */,
 				21BCBD4A23819DF700644B14 /* Misc Utilities Mine */,
@@ -458,15 +461,11 @@
 				21BCBD652381A0F800644B14 /* Info.plist */,
 				21BCBD4923819CA400644B14 /* Modular Files Foo */,
 				D0AEF45D2013A6FC005F761B /* Deploy App */,
-				D07BAE5A20DAFA8E00E4A3A5 /* Drivers */,
-				D0B69D2420435F3900AEA01B /* SpriteKit */,
 				D03E03F520125DF8002D47F3 /* BlackCricket */,
-				D02391B821CC13B4002C4F4A /* ViewControllers */,
 				D0326761207FFE3800BBF563 /* HandlesCoreTests */,
 				D0915FA9208901DD0067C02A /* GraphicsCoreTests */,
 				D09F3672210D0C4200D38F4C /* BlackCricket */,
 				D0F58CF5210E201200AACC8F /* Modular */,
-				D052B3FA211F2CE8008DD455 /* QuadPage */,
 				D00069D1200BD08300E8D5F3 /* Products */,
 				D03E03D920124DB8002D47F3 /* Testing.swift */,
 				D0F3326921336DF6009BBDD9 /* Frameworks */,
@@ -973,7 +972,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D0B5423F21B2ED2C00518809 /* Geometry.swift in Sources */,
 				D00069D4200BD08300E8D5F3 /* AppDelegate.swift in Sources */,
 				D03E03DA20124DB8002D47F3 /* Testing.swift in Sources */,
 			);
