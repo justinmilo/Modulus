@@ -21,7 +21,7 @@ extension Point3 {
     return (x: Double(x), y: Double(y), z: Double(z))
   }
 }
-extension ScaffType.Axis {
+extension Volume.ScaffType.Axis {
   init (_ axis: Axis)
   {
     switch axis{

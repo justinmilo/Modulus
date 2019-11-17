@@ -14,7 +14,7 @@ import BlackCricket
 
 public struct GraphEditingView {
   /// takes a bounding box size, and any existing structure ([Edge]) to interprit a new ScaffGraph,a fully 3D structure
-  let build: ([CGFloat], CGSize3, [Edge]) -> (GraphPositions, [Edge])
+  let build: ([CGFloat], CGSize3, [ScaffEdge]) -> (GraphPositions, [ScaffEdge])
   
   /// origin: in this editing view slice, the offset from the 0,0 corner of the bounding box
   let origin : (ScaffGraph) -> CGPoint
@@ -32,18 +32,18 @@ public struct GraphEditingView {
   let grid2D : (ScaffGraph) -> GraphPositions2DSorted
   
   /// if point index in 2D give new 3D edges
-  let selectedCell : (PointIndex2D, GraphPositions, [Edge]) -> ([Edge])
+  let selectedCell : (PointIndex2D, GraphPositions, [ScaffEdge]) -> ([ScaffEdge])
   
 }
 
 func graphViewGenerator(
-  build: @escaping ([CGFloat], CGSize3, [Edge]) -> (GraphPositions, [Edge]),
+  build: @escaping ([CGFloat], CGSize3, [ScaffEdge]) -> (GraphPositions, [ScaffEdge]),
   origin : @escaping (ScaffGraph) -> CGPoint,
   size : @escaping (ScaffGraph) -> CGSize,
   size3 : @escaping (ScaffGraph) -> (CGSize) -> CGSize3,
   composite : [(ScaffGraph) -> Composite],
   grid2D : @escaping (ScaffGraph) -> GraphPositions2DSorted,
-  selectedCell :  @escaping (PointIndex2D, GraphPositions, [Edge]) -> ([Edge])
+  selectedCell :  @escaping (PointIndex2D, GraphPositions, [ScaffEdge]) -> ([ScaffEdge])
   )-> [GraphEditingView]
 {
   return composite.map {

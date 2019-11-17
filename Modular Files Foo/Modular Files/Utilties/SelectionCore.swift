@@ -10,10 +10,12 @@ import Foundation
 import Singalong
 import Graphe
 
-typealias SelectionArgs = (PointIndex2D, GraphPositions, [Edge])
+
+#warning("Should this be in Modular?")
+typealias SelectionArgs = (PointIndex2D, GraphPositions, [ScaffEdge])
 
 
-typealias SelectionSignature = (PointIndex2D, GraphPositions, [Edge]) -> [Edge]
+typealias SelectionSignature = (PointIndex2D, GraphPositions, [ScaffEdge]) -> [ScaffEdge]
 
 // Handle the 2D to 3D conversion
 let mapFrontIndicesUpTo : (PointIndex2D, Int) -> [PointIndex] =
@@ -41,13 +43,13 @@ let mapSideIndicesUpTo : (PointIndex2D, Int) -> [PointIndex] =
 
 func diagFromBayFactory(_ t:@escaping (BayIndex2D)-> (PointIndex2D, PointIndex2D),
                         _ u:@escaping (PointIndex2D) -> [PointIndex]
-  ) -> (BayIndex2D) -> [Edge]
+  ) -> (BayIndex2D) -> [ScaffEdge]
 {
   return {
     bayIndex in
     let (p1x, p2x) = t(bayIndex)
     let items = zip(p1x |> u, p2x |> u).map{
-      return Edge(content: .diag, p1: $0.0, p2: $0.1)
+      return ScaffEdge(content: .diag, p1: $0.0, p2: $0.1)
     }
     return items
   }
@@ -58,27 +60,27 @@ let side2DPointToAll3DPoint : (GraphPositions) -> (PointIndex2D) -> ([PointIndex
 let top2DPointToAll3DPoint : (GraphPositions) -> (PointIndex2D) -> ([PointIndex]) = { $0.pZ.count } >>> flip(curry(mapPlanIndicesUpTo))
 
 
-func filterFrontDiagsWithBayIndex(edges: [Edge], bayIndex:BayIndex2D )->[Edge]
+func filterFrontDiagsWithBayIndex(edges: [ScaffEdge], bayIndex:BayIndex2D )->[ScaffEdge]
 {
   return edges.filtered(by: (xBay(bayIndex.x) && zBay(bayIndex.y)) && (edgeXDiagUp || edgeXDiagDown))
 }
-func sidefilterDiagsWithBayIndex(edges: [Edge], bayIndex:BayIndex2D )->[Edge]
+func sidefilterDiagsWithBayIndex(edges: [ScaffEdge], bayIndex:BayIndex2D )->[ScaffEdge]
 {
   return edges.filtered(by: (yBay(bayIndex.x) && zBay(bayIndex.y)) && (edgeYDiagUp || edgeYDiagDown))
 }
-func topfilterDiagsWithBayIndex(edges: [Edge], bayIndex:BayIndex2D )->[Edge]
+func topfilterDiagsWithBayIndex(edges: [ScaffEdge], bayIndex:BayIndex2D )->[ScaffEdge]
 {
   return edges.filtered(by: (xBay(bayIndex.x) && yBay(bayIndex.y)) && (edgePlanDiagUp || edgePlanDiagDown))
 }
 
 
-func bazAll(filterDiags : @escaping ([Edge],BayIndex2D )->[Edge],
+func bazAll(filterDiags : @escaping ([ScaffEdge],BayIndex2D )->[ScaffEdge],
             populate:  @escaping ((GraphPositions) -> (PointIndex2D) -> [PointIndex]),
-            test1:  functionS<Edge, Bool>,
-            test2:  functionS<Edge, Bool>) ->
+            test1:  functionS<ScaffEdge, Bool>,
+            test2:  functionS<ScaffEdge, Bool>) ->
   (PointIndex2D,
   GraphPositions,
-  [Edge]) -> [Edge] {
+  [ScaffEdge]) -> [ScaffEdge] {
     
     return { index, positions, edges in
       // bind for all pY.Count

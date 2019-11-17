@@ -12,11 +12,11 @@ import Singalong
 
 extension ScaffGraph {
   convenience init() {
-    let initial = CGSize3(width: 300, depth: 100, elev: 400) |> createGrid
+    let initial = CGSize3(width: 300, depth: 100, elev: 400) |> createNusGrid
     self.init(grid: initial.0, edges: initial.1)
   }
   
-  static var mock : ScaffGraph = CGSize3(width: 300, depth: 100, elev: 400) |> createGrid >>> ScaffGraph.init
+  static var mock : ScaffGraph = CGSize3(width: 300, depth: 100, elev: 400) |> createNusGrid >>> ScaffGraph.init
 }
 
 extension Item where Content == ScaffGraph {
