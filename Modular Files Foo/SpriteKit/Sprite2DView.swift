@@ -46,6 +46,7 @@ public class Sprite2DView : SKView {
     let aScene = SKScene(size: frame.size)
     aScene.addChild(mainNode)
     self.presentScene(aScene)
+    self.scene?.scaleMode = .resizeFill
     self.ignoresSiblingOrder = true
   }
   

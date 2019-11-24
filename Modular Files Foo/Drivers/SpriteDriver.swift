@@ -41,7 +41,6 @@ public class SpriteDriver : Driver {
     initialFrame = Current.screen
     
     spriteView = Sprite2DView(frame:initialFrame )
-    spriteView.scene?.scaleMode = .resizeFill
     
     self.scale = scale
     spriteView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(SpriteDriver.tap)))
@@ -58,6 +57,8 @@ public class SpriteDriver : Driver {
   var _previousOrigin = (ui:CGPoint.zero, sprite:CGPoint.zero)
   
   func layout(origin: CGPoint) {
+    
+    // ICAN : Pass *Holder* into editingView.size Function
     let heightVector = unitY * (self.graph |> self.editingView.size).height * self.scale
     
     self._previousOrigin = (origin, uiPointToSprite(origin)  - heightVector )
@@ -84,6 +85,7 @@ public class SpriteDriver : Driver {
   
   private func _layout(size: CGSize)
   {
+    // ICAN : Pass *Holder* into editingView.composite Function to get a Composite Struct back
     let geom = self.graph |> self.editingView.composite
     self.spriteView.redraw(geom)
   }
@@ -92,6 +94,7 @@ public class SpriteDriver : Driver {
   
   var size : CGSize {
     get {
+      // ICAN : Pass *Holder* into editingView.size Function to get a CGSize back
       return (self.graph |> self.editingView.size) * self.scale
     }
   }
@@ -105,12 +108,16 @@ public class SpriteDriver : Driver {
     let modelspaceSize_input = viewportSize / scale
     let roundedModelSize = modelspaceSize_input.rounded(places: 5)
     
+    // ICAN : Pass *Holder* into editingView.size3 Function to get a func from Size to Size3
     let s3 = roundedModelSize |> self.editingView.size3(self.graph)
 
+    // ICAN : set *Holder* grid and edgs from editingView.build Function
+    // IAM : Depends on Current.model and self.id sizePreferences
     (self.graph.grid, self.graph.edges) = self.editingView.build(
       Array(Current.model.getItem(id: self.id!)!.sizePreferences.map{CGFloat($0.length.converted(to: .centimeters).value)}),
       s3, self.graph.edges)
 
+    //                           ICAN : Pass *Holder* into editingView.size Function to get a CGSize back
     let modelSpaceSize_output =  self.graph |> self.editingView.size
     return modelSpaceSize_output * spriteView.scale
 
@@ -157,6 +164,7 @@ public class SpriteDriver : Driver {
     let p = (tS, rectS) |> viewSpaceToModelSpace
     let scaledP = p * 1/scale
     // Properly models concern
+    // ICAN : Pass *Holder* into editingView.grid2D Function to get Graph Positions 2D Sorted back
     let editBoundaries = self.graph |> editingView.grid2D ///
     let toGridIndices = editBoundaries |> curry(pointToGridIndices) >>>  handleTupleOptionWith
     
