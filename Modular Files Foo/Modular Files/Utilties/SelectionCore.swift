@@ -62,15 +62,15 @@ let top2DPointToAll3DPoint : (GraphPositions) -> (PointIndex2D) -> ([PointIndex]
 
 func filterFrontDiagsWithBayIndex(edges: [ScaffEdge], bayIndex:BayIndex2D )->[ScaffEdge]
 {
-  return edges.filtered(by: (xBay(bayIndex.x) && zBay(bayIndex.y)) && (edgeXDiagUp || edgeXDiagDown))
+  return edges.filtered(by: (xBay(xI: bayIndex.x) && zBay(zI: bayIndex.y)) && (ScaffEdge.edgeXDiagUp || ScaffEdge.edgeXDiagDown))
 }
 func sidefilterDiagsWithBayIndex(edges: [ScaffEdge], bayIndex:BayIndex2D )->[ScaffEdge]
 {
-  return edges.filtered(by: (yBay(bayIndex.x) && zBay(bayIndex.y)) && (edgeYDiagUp || edgeYDiagDown))
+  return edges.filtered(by: (yBay(yI: bayIndex.x) && zBay(zI: bayIndex.y)) && (ScaffEdge.edgeYDiagUp || ScaffEdge.edgeYDiagDown))
 }
 func topfilterDiagsWithBayIndex(edges: [ScaffEdge], bayIndex:BayIndex2D )->[ScaffEdge]
 {
-  return edges.filtered(by: (xBay(bayIndex.x) && yBay(bayIndex.y)) && (edgePlanDiagUp || edgePlanDiagDown))
+  return edges.filtered(by: (xBay(xI: bayIndex.x) && yBay(yI: bayIndex.y)) && (ScaffEdge.edgePlanDiagUp || ScaffEdge.edgePlanDiagDown))
 }
 
 
@@ -111,16 +111,16 @@ func bazAll(filterDiags : @escaping ([ScaffEdge],BayIndex2D )->[ScaffEdge],
 
 let bazFront = bazAll(filterDiags: filterFrontDiagsWithBayIndex,
                       populate: front2DPointToAll3DPoint,
-                      test1: edgeXDiagUp,
-                      test2: edgeXDiagDown)
+                      test1: Edge.edgeXDiagUp,
+                      test2: Edge.edgeXDiagDown)
 let bazSide = bazAll(filterDiags: sidefilterDiagsWithBayIndex,
                      populate: side2DPointToAll3DPoint,
-                     test1: edgeYDiagUp,
-                     test2: edgeYDiagDown)
+                     test1: Edge.edgeYDiagUp,
+                     test2: Edge.edgeYDiagDown)
 let bazTop = bazAll(filterDiags: topfilterDiagsWithBayIndex,
                     populate: top2DPointToAll3DPoint,
-                    test1: edgePlanDiagUp,
-                    test2: edgePlanDiagDown)
+                    test1: Edge.edgePlanDiagUp,
+                    test2: Edge.edgePlanDiagDown)
 
 
 
