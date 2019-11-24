@@ -11,7 +11,7 @@ import BlackCricket
 import Graphe
 import Geo
 
-func modelToLinework ( edges: [C2Edge] ) -> Composite
+func modelToLinework ( edges: [C2Edge<ScaffType>] ) -> Composite
 {
   let lines : [Geometry] = edges.map { edge in
     return Line(start: edge.p1, end: edge.p2)
@@ -23,25 +23,7 @@ func modelToLinework ( edges: [C2Edge] ) -> Composite
     return Label(text: edge.content.rawValue, position: (edge.p1 + edge.p2).center + vector, rotation: direction)
   }
   
-  let labelsSecondPass : [Label] = labels.reduce([])
-  {
-    (res, geo) -> [Label] in
-    
-    if res.contains(where: {
-      
-      let r = CGRect.around($0.position, size: CGSize(40,40))
-      return r.contains(geo.position)
-      
-    })
-    {
-      var new = geo
-      new.position = new.position + CGVector(dx: 15, dy: 15)
-      return res + [new]
-    }
-    
-    return res + [geo]
-  }
-  
+  let labelsSecondPass : [Label] = labels.secondPassLayout()
   
   /// Move to orign
   
