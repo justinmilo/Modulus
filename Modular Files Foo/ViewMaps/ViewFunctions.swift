@@ -81,8 +81,8 @@ let originFromFullScaff : (ScaffGraph, CGRect, CGFloat) -> CGPoint =
 }
 
 
-let rotateGroup : ([C2Edge]) -> [C2Edge] = { $0.map(rotate) }
-func rotate( edge: C2Edge) -> C2Edge {
+let rotateGroup : ([C2Edge<ScaffType>]) -> [C2Edge<ScaffType>] = { $0.map(rotate) }
+func rotate( edge: C2Edge<ScaffType>) -> C2Edge<ScaffType> {
   return C2Edge(content: edge.content, p1: edge.p1 |> flip, p2: edge.p2 |> flip )
 }
 func flip( point: CGPoint) -> CGPoint
@@ -108,7 +108,7 @@ func graphToNonuniformSide(gp: GraphPositions) -> NonuniformModel2D {
 }
 
 
-func edgesToPoints(edges: [C2Edge]) -> [CGPoint] {
+func edgesToPoints(edges: [C2Edge<ScaffType>]) -> [CGPoint] {
   
   let cgPoints = edges.flatMap {
     c2Edge -> [CGPoint] in

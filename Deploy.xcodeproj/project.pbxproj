@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		214A084E2383A85E0016FE80 /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213B4FBC23839EEF00E87F5A /* File.swift */; };
+		214C6EC32385A91C00A07140 /* SwiftUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214C6EC22385A91C00A07140 /* SwiftUIView.swift */; };
 		21BCBD4B23819DF700644B14 /* Misc Utilities Mine in Resources */ = {isa = PBXBuildFile; fileRef = 21BCBD4A23819DF700644B14 /* Misc Utilities Mine */; };
 		21BCBD5023819E9800644B14 /* GraphicsCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21BCBD4F23819E3700644B14 /* GraphicsCore.swift */; };
 		21BCBD5223819F3800644B14 /* 3DExchange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21BCBD5123819F3800644B14 /* 3DExchange.swift */; };
@@ -203,6 +205,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		213B4FBC23839EEF00E87F5A /* File.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
+		214C6EC22385A91C00A07140 /* SwiftUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SwiftUIView.swift; path = ../ScrollViewGrower/SwiftUIView.swift; sourceTree = "<group>"; };
 		21BCBD4A23819DF700644B14 /* Misc Utilities Mine */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "Misc Utilities Mine"; sourceTree = "<group>"; };
 		21BCBD4E23819E3700644B14 /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
 		21BCBD4F23819E3700644B14 /* GraphicsCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphicsCore.swift; sourceTree = "<group>"; };
@@ -384,12 +388,11 @@
 				D0FD710621172C2A00B27092 /* TableViewController */,
 				D0D21FB521A44056000FB885 /* Enviroment */,
 				D07BAE5A20DAFA8E00E4A3A5 /* Drivers */,
+				D02391B821CC13B4002C4F4A /* ViewControllers */,
 				D0B69D2420435F3900AEA01B /* SpriteKit */,
 				D09C3C42206B32370053EE2A /* App.swift */,
 				D02FCBBF212E08AD001BD55E /* GraphNavigator.swift */,
 				D07C56B8211E74F50073D7A7 /* App+FreeFunctions.swift */,
-				D052B3FA211F2CE8008DD455 /* QuadPage */,
-				D02391B821CC13B4002C4F4A /* ViewControllers */,
 				D0F58CE6210E146F00AACC8F /* ViewMaps */,
 				21BCBD4C23819E3700644B14 /* Modular Files */,
 				21BCBD4A23819DF700644B14 /* Misc Utilities Mine */,
@@ -458,9 +461,12 @@
 		D00069C7200BD08300E8D5F3 = {
 			isa = PBXGroup;
 			children = (
+				214C6EC22385A91C00A07140 /* SwiftUIView.swift */,
 				21BCBD652381A0F800644B14 /* Info.plist */,
+				213B4FBC23839EEF00E87F5A /* File.swift */,
 				21BCBD4923819CA400644B14 /* Modular Files Foo */,
 				D0AEF45D2013A6FC005F761B /* Deploy App */,
+				D052B3FA211F2CE8008DD455 /* QuadPage */,
 				D03E03F520125DF8002D47F3 /* BlackCricket */,
 				D0326761207FFE3800BBF563 /* HandlesCoreTests */,
 				D0915FA9208901DD0067C02A /* GraphicsCoreTests */,
@@ -1054,6 +1060,7 @@
 				D075D8BA21C9EB35003AC600 /* ViewMap-Grid2D.swift in Sources */,
 				21BCBD6223819F8600644B14 /* TypedNotifications.swift in Sources */,
 				D0F58D03210E202A00AACC8F /* Sprite2DView.swift in Sources */,
+				214A084E2383A85E0016FE80 /* File.swift in Sources */,
 				21BCBD6423819F8900644B14 /* UIView+Image.swift in Sources */,
 				D0FD710321172BD700B27092 /* SimpleBarButtonViewContoller.swift in Sources */,
 				D0D5612B212DDA500059874B /* QuadDriver.swift in Sources */,
@@ -1077,6 +1084,7 @@
 				D0F58D04210E202A00AACC8F /* TexturedView+SKSpriteNode.swift in Sources */,
 				D02391A921CC1116002C4F4A /* Environment.swift in Sources */,
 				D0B1BC3F21A6F9FB00991F16 /* Mock.swift in Sources */,
+				214C6EC32385A91C00A07140 /* SwiftUIView.swift in Sources */,
 				D0F58D0B210E207300AACC8F /* LayoutToDriver.swift in Sources */,
 				D0F58D00210E202900AACC8F /* ViewFunctions.swift in Sources */,
 				21BCBD6023819F8400644B14 /* SelectionCore.swift in Sources */,
@@ -1200,7 +1208,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -1253,7 +1261,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
@@ -1272,7 +1280,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = V69QAU95S7;
 				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.sound.HandlesRound.Draw.UIKit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1293,7 +1301,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = V69QAU95S7;
 				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.sound.HandlesRound.Draw.UIKit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1549,7 +1557,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = Modular/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				PRODUCT_BUNDLE_IDENTIFIER = com.sound.sands.mac.Modular;
@@ -1576,7 +1584,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = Modular/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.sound.sands.mac.Modular;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
