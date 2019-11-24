@@ -11,7 +11,7 @@ import Singalong
 import Geo
 
 
-let planEdgeToGeometry : ([C2Edge]) -> [Scaff2D] = { edges in
+let planEdgeToGeometry : ([C2Edge<ScaffType>]) -> [Scaff2D] = { edges in
   return edges.map { edge in
     switch edge.content
     {
@@ -27,7 +27,7 @@ let planEdgeToGeometry : ([C2Edge]) -> [Scaff2D] = { edges in
   }
 }
 
-func modelToTexturesElev ( edges: [C2Edge] ) -> [Scaff2D]
+func modelToTexturesElev ( edges: [C2Edge<ScaffType>] ) -> [Scaff2D]
 {
   let horizontals = edges.filter{ $0.content == .ledger}.map
   {
