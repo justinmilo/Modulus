@@ -1,55 +1,12 @@
 //
-//  ViewComposite.swift
-//  HandlesRound1
+//  ScaffGraphComposite.swift
+//  Modular
 //
-//  Created by Justin Smith on 2/24/18.
-//  Copyright © 2018 Justin Smith. All rights reserved.
+//  Created by Justin Smith Nussli on 11/24/19.
+//  Copyright © 2019 Justin Smith. All rights reserved.
 //
-import CoreGraphics
-import Singalong
-import Graphe
-import BlackCricket
 
-/*
- 
- 
- NonuniformModel2D
- */
-
-struct Composite {
-  var geometry : [Geometry]
-  var operators : [OvalResponder]
-  var labels : [Label]
-}
-
-extension Composite {
-  init(geometry: [Geometry]) {
-    self.geometry = geometry
-    self.operators = []
-    self.labels = []
-
-  }
-  init(operators: [OvalResponder]) {
-    self.geometry = []
-    self.operators = operators
-    self.labels = []
-  }
-  init(labels: [Label]) {
-    self.geometry = []
-    self.operators = []
-    self.labels = labels
-  }
-}
-
-extension Composite : Semigroup {
-  static func <>(lhs: Composite, rhs: Composite) -> Composite {
-    return Composite(
-      geometry: lhs.geometry + rhs.geometry,
-      operators: lhs.operators + rhs.operators,
-      labels: lhs.labels + rhs.labels
-    )
-  }
-}
+import Foundation
 
 typealias ViewComposite = (ScaffGraph) -> Composite
 

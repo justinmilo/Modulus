@@ -89,7 +89,10 @@ public class GraphNavigator {
     if let item = Current.model.getItem(id: id) {
       Current.model.addOrReplace(item: item )
     }
-    
+    //ICAN : AScaffProvider is linked by Graph |> Provider func however....
+    //ICANTSHOULD : Graph -> CADGeneric3DGunkInput
+    //ICANTSHOULD : ARSCNVIEWCONTROLLER should take (ScnNodes) and any other needed info
+    //ICANTSHOULD : provider func should be provided by the map
     let scaffProvider = Current.model.getItem(id: id)!.content |> provider
     let newVC = CADViewController(grid: scaffProvider)
     
@@ -110,6 +113,10 @@ public class GraphNavigator {
       Current.model.addOrReplace(item: item )
     }
     
+    //ICAN : AScaffProvider is linked by Graph |> Provider func however....
+    //ICANTSHOULD : Graph -> CADGeneric3DGunkInput
+    //ICANTSHOULD : ARSCNVIEWCONTROLLER should take (ScnNodes) and any other needed info
+    //ICANTSHOULD : provider func should be provided by the map
     let scaffProvider = Current.model.getItem(id: id)!.content |> provider
     let cadController = ARScnViewController(provider: scaffProvider)
     

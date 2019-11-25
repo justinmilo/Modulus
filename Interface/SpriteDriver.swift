@@ -10,31 +10,47 @@ import CoreGraphics
 import Singalong
 import Layout
 import Geo
-import Graphe
+import GrapheNaked
 import BlackCricket
 
 protocol SpriteDriverDelegate : class {
   func didAddEdge()
 }
 
-public class SpriteDriver : Driver {
+struct Environment {
+  var screen = UIScreen.main.bounds
+}
+
+var Current = Environment()
+
+let scaleChangeNotification : Notification<CGFloat> = Notification(name: "Scale Changed")
+
+public protocol GraphHolder : class {
+  associatedtype Content : Codable
+  var edges : [Edge<Content>] { get set }
+  var grid : GraphPositions { get set }
+  
+}
+
+public class SpriteDriver<Content:Codable,Holder:GraphHolder> : Driver {
+  public typealias Mapping = GenericEditingView<Content, Holder>
   
   var uiPointToSprite : ((CGPoint)->CGPoint)!
   var uiRectToSprite : ((CGRect)->CGRect)!
   var scaleObserver : NotificationObserver!
   var scale: CGFloat
-  public var graph : ScaffGraph
+  public var graph : Holder
   var id: String?
   weak var delgate : SpriteDriverDelegate?
-  var editingView : GraphEditingView
-  var loadedViews : [GraphEditingView]
+  var editingView : Mapping
+  var loadedViews : [Mapping]
   public var spriteView : Sprite2DView
   var content : UIView { return self.spriteView }
   
   // Eventually dependency injected
   var initialFrame : CGRect
   
-  public init(mapping: [GraphEditingView], graph: ScaffGraph, scale: CGFloat ) {
+  public init(mapping: [Mapping], graph: Holder, scale: CGFloat ) {
     self.graph = graph
     editingView = mapping[0]
     loadedViews = mapping
@@ -166,7 +182,9 @@ public class SpriteDriver : Driver {
     // Properly models concern
     // ICAN : Pass *Holder* into editingView.grid2D Function to get Graph Positions 2D Sorted back
     let editBoundaries = self.graph |> editingView.grid2D ///
-    let toGridIndices = editBoundaries |> curry(pointToGridIndices) >>>  handleTupleOptionWith
+    let curried = curry(pointToGridIndices)
+    let handledCurried = curried >>>  handleTupleOptionWith
+    let toGridIndices = handledCurried(editBoundaries)
     
     // Get Model Indices
     let indices = (scaledP |> toGridIndices)
