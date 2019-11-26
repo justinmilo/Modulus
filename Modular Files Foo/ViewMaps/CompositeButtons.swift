@@ -33,20 +33,3 @@ func responderF(_ pt: CGPoint) -> ScaffGraph {
   return ScaffGraph()
 }
 
-func explode(border: BorderPoints) -> [OvalResponder] {
-  let mids = segments >>> midpoints
-  
-  let topPoints : [CGPoint] = mids(border.top) |> map(50 |> yMove)
-  let rightPoints =  combo( border.right |> mids, [unitX * 50], with: moveByVector)
-  let bottomPoints = combo( border.bottom |> mids, [unitY * -50], with: moveByVector)
-  let leftPoints = combo( border.left |> mids, [unitX * -50], with: moveByVector)
-  
-  let newPoints = topPoints + rightPoints + bottomPoints + leftPoints
-  let ovals = combo(
-    [CGSize(width: 50, height: 50)],
-    newPoints,
-    [responderF],
-    with: OvalResponder.init
-  )
-  return ovals
-}
