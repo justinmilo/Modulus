@@ -7,11 +7,11 @@
 //
 
 import Foundation
-import Graphe
+import GrapheNaked
 import Singalong
 import BlackCricket
 
-
+/*
 public struct GraphEditingView {
   /// takes a bounding box size, and any existing structure ([Edge]) to interprit a new ScaffGraph,a fully 3D structure
   let build: ([CGFloat], CGSize3, [ScaffEdge]) -> (GraphPositions, [ScaffEdge])
@@ -34,7 +34,9 @@ public struct GraphEditingView {
   /// if point index in 2D give new 3D edges
   let selectedCell : (PointIndex2D, GraphPositions, [ScaffEdge]) -> ([ScaffEdge])
   
-}
+}*/
+import Interface
+typealias GraphEditingView = GenericEditingView<ScaffGraph>
 
 func graphViewGenerator(
   build: @escaping ([CGFloat], CGSize3, [ScaffEdge]) -> (GraphPositions, [ScaffEdge]),
@@ -43,7 +45,8 @@ func graphViewGenerator(
   size3 : @escaping (ScaffGraph) -> (CGSize) -> CGSize3,
   composite : [(ScaffGraph) -> Composite],
   grid2D : @escaping (ScaffGraph) -> GraphPositions2DSorted,
-  selectedCell :  @escaping (PointIndex2D, GraphPositions, [ScaffEdge]) -> ([ScaffEdge])
+  selectedCell :  @escaping (PointIndex2D, GraphPositions, [ScaffEdge]) -> ([ScaffEdge]),
+  sizePreferences : @escaping (ScaffGraph) -> [CGFloat]
   )-> [GraphEditingView]
 {
   return composite.map {
@@ -53,7 +56,8 @@ func graphViewGenerator(
                       size3: size3,
                       composite: $0,
                       grid2D: grid2D,
-                      selectedCell: selectedCell)
+                      selectedCell: selectedCell,
+                      sizePreferences: sizePreferences)
   }
 }
 
@@ -70,8 +74,6 @@ let planMap = graphViewGenerator(
   composite: [
               planComposite
                 <> planGrid
-                >>> everyPositionButon
-                <> planGrid
                 >>> (innerDim(meterFormat)
                   <> outerDim(meterFormat)),
               planComposite
@@ -83,7 +85,9 @@ let planMap = graphViewGenerator(
                   <> outerDim(archFormat)),
               planLinework],
   grid2D: planPositions,
-  selectedCell: bazTop)
+  selectedCell: bazTop,
+    sizePreferences: currentY
+  )
 
 let planMapRotated = graphViewGenerator(
   build: overall,
@@ -98,7 +102,9 @@ let planMapRotated = graphViewGenerator(
      rotatedPlanLinework]
   ,
   grid2D: rotatedPlanPositions,
-  selectedCell: bazTop)
+  selectedCell: bazTop,
+    sizePreferences: currentY
+  )
 
 let frontMap = graphViewGenerator(
   build: overall,
@@ -115,7 +121,9 @@ let frontMap = graphViewGenerator(
               
               get(\.frontEdgesNoZeros) >>> modelToLinework],
   grid2D: frontPositionsOhneStandards,
-  selectedCell: bazFront)
+  selectedCell: bazFront,
+    sizePreferences: currentY
+  )
 
 let sideMap = graphViewGenerator(
   build: overall,
@@ -130,4 +138,12 @@ let sideMap = graphViewGenerator(
               
               ],
   grid2D: sidePositionsOhneStandards,
-  selectedCell: bazSide)
+  selectedCell: bazSide,
+  sizePreferences: currentY
+)
+
+
+func currentY(graph: ScaffGraph) -> [CGFloat] {
+  return Current.model.getItem(id: graph.id)!.sizePreferences.map{CGFloat($0.length.converted(to: .centimeters).value)}
+
+}

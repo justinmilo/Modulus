@@ -11,9 +11,9 @@ import CoreGraphics
 import GrapheNaked
 import BlackCricket
 
-public struct GenericEditingView<Content, Holder> where Content:Codable {
+public struct GenericEditingView<Holder : GraphHolder> {
   /// takes a bounding box size, and any existing structure ([Edge]) to interprit a new ScaffGraph,a fully 3D structure
-  let build: ([CGFloat], CGSize3, [Edge<Content>]) -> (GraphPositions, [Edge<Content>])
+  let build: ([CGFloat], CGSize3, [Edge<Holder.Content>]) -> (GraphPositions, [Edge<Holder.Content>])
   
   /// origin: in this editing view slice, the offset from the 0,0 corner of the bounding box
   let origin : (Holder) -> CGPoint
@@ -31,7 +31,28 @@ public struct GenericEditingView<Content, Holder> where Content:Codable {
   let grid2D : (Holder) -> GraphPositions2DSorted
   
   /// if point index in 2D give new 3D edges
-  let selectedCell : (PointIndex2D, GraphPositions, [Holder]) -> ([Edge<Content>])
+  let selectedCell : (PointIndex2D, GraphPositions, [Edge<Holder.Content>]) -> ([Edge<Holder.Content>])
   
   let sizePreferences : (Holder) -> [CGFloat]
+  
+  public init(
+    build: @escaping ([CGFloat], CGSize3, [Edge<Holder.Content>]) -> (GraphPositions, [Edge<Holder.Content>]),
+    origin : @escaping (Holder) -> CGPoint,
+    size : @escaping (Holder) -> CGSize,
+    size3 : @escaping (Holder) -> (CGSize) -> CGSize3,
+    composite : @escaping (Holder) -> Composite,
+    grid2D : @escaping (Holder) -> GraphPositions2DSorted,
+    selectedCell : @escaping (PointIndex2D, GraphPositions, [Edge<Holder.Content>]) -> ([Edge<Holder.Content>]),
+    sizePreferences : @escaping (Holder) -> [CGFloat]
+  ) {
+    
+    self.build = build
+    self.origin = origin
+    self.size  = size
+    self.size3 = size3
+    self.composite = composite
+    self.grid2D = grid2D
+    self.selectedCell = selectedCell
+    self.sizePreferences = sizePreferences
+  }
 }

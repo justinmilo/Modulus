@@ -17,23 +17,18 @@ protocol SpriteDriverDelegate : class {
   func didAddEdge()
 }
 
-struct Environment {
-  var screen = UIScreen.main.bounds
-}
-
-var Current = Environment()
-
 let scaleChangeNotification : Notification<CGFloat> = Notification(name: "Scale Changed")
 
 public protocol GraphHolder : class {
   associatedtype Content : Codable
+  var id : String { get }
   var edges : [Edge<Content>] { get set }
   var grid : GraphPositions { get set }
   
 }
 
-public class SpriteDriver<Content:Codable,Holder:GraphHolder> : Driver {
-  public typealias Mapping = GenericEditingView<Content, Holder>
+class SpriteDriver<Holder:GraphHolder> : Driver {
+  public typealias Mapping = GenericEditingView<Holder>
   
   var uiPointToSprite : ((CGPoint)->CGPoint)!
   var uiRectToSprite : ((CGRect)->CGRect)!
@@ -50,11 +45,11 @@ public class SpriteDriver<Content:Codable,Holder:GraphHolder> : Driver {
   // Eventually dependency injected
   var initialFrame : CGRect
   
-  public init(mapping: [Mapping], graph: Holder, scale: CGFloat ) {
+  public init(mapping: [Mapping], graph: Holder, scale: CGFloat, screenSize: CGRect  ) {
     self.graph = graph
     editingView = mapping[0]
     loadedViews = mapping
-    initialFrame = Current.screen
+    initialFrame = screenSize
     
     spriteView = Sprite2DView(frame:initialFrame )
     
@@ -128,9 +123,7 @@ public class SpriteDriver<Content:Codable,Holder:GraphHolder> : Driver {
     let s3 = roundedModelSize |> self.editingView.size3(self.graph)
 
     // ICAN : set *Holder* grid and edgs from editingView.build Function
-    // IAM : Depends on Current.model and self.id sizePreferences
-    (self.graph.grid, self.graph.edges) = self.editingView.build(
-      Array(Current.model.getItem(id: self.id!)!.sizePreferences.map{CGFloat($0.length.converted(to: .centimeters).value)}),
+    (self.graph.grid, self.graph.edges) = self.editingView.build( self.editingView.sizePreferences( self.graph ),
       s3, self.graph.edges)
 
     //                           ICAN : Pass *Holder* into editingView.size Function to get a CGSize back

@@ -8,7 +8,6 @@
 import CoreGraphics
 import Singalong
 import GrapheNaked
-import BlackCricket
 
 /*
  
@@ -19,9 +18,14 @@ import BlackCricket
 public struct Composite {
   public var geometry : [Geometry]
   public var labels : [Label]
+  public init(geometry: [Geometry], labels: [Label]) {
+    self.geometry = geometry
+    self.labels = labels
+  }
 }
 
 public extension Composite {
+  
   init(geometry: [Geometry]) {
     self.geometry = geometry
     self.labels = []

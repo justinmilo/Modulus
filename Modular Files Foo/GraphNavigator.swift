@@ -7,10 +7,11 @@
 //
 
 import Foundation
-import Graphe
+import GrapheNaked
 import Singalong
 import Volume
 @testable import FormsCopy
+import Interface
 
 
 public class GraphNavigator {

@@ -8,7 +8,7 @@
 
 import Foundation
 import Singalong
-import Graphe
+import GrapheNaked
 
 
 
@@ -32,4 +32,5 @@ struct Environment {
 
 var Current = Environment()
 
-let scaleChangeNotification : Notification<CGFloat> = Notification(name: "Scale Changed")
+import Interface
+let scaleChangeNotification : Interface.Notification<CGFloat> = Interface.Notification(name: "Scale Changed")

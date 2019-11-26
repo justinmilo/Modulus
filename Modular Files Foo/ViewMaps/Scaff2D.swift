@@ -6,7 +6,7 @@
 //  Copyright © 2018 Justin Smith. All rights reserved.
 //
 
-import Graphe
+import GrapheNaked
 import BlackCricket
 import Singalong
 import Geo
@@ -52,10 +52,14 @@ extension Scaff2D : CustomStringConvertible {
   }
 }
 
-// Used to be view controller
+import Interface
+import SpriteKit
+extension Scaff2D : CacheRepresentable {
+  func node(pool: inout [SKSpriteNode]) -> SKNode? {
+    return createScaff2DNode(item: self, cache: &pool)
+  }
 
-
-
+}
 
 
 

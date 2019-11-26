@@ -10,7 +10,7 @@ import CoreGraphics
 import Singalong
 import Geo
 import GrippableView
-import Graphe
+import GrapheNaked
 import BlackCricket
 
 func log<A>(_ loggableItem: A) -> A {

@@ -2,7 +2,7 @@ import UIKit
 import Singalong
 import BlackCricket
 import SpriteKit
-@testable import Graphe
+@testable import GrapheNaked
 import Geo
 
 extension Array where Element == Label {
@@ -76,48 +76,4 @@ func tentNodes(tentParts: [C2Edge<TentParts>]) -> [SKNode] {
   return tentParts.map(lines) + labelsSecondPassNodes + jointNodes
 
   
-}
-
-func kitView(nodes: [SKNode]) -> Sprite2DView {
-  let s2DV = Sprite2DView(frame: CGSize(500, 500).asRect())
-  s2DV.scale = 1/2
-
-  nodes.forEach {
-    s2DV.mainNode.addChild($0)
-  }
-  return s2DV
-}
-
-
-
-public func quadView() -> UIViewController {
-
-  let size = CGSize3(width:500, depth:1000, elev:450)
-  let (pos, edges) = createTentGridFromEaveHeiht(with:size)
-
-  let plan2D : [C2Edge<TentParts>] = cedges(graph: pos, edges: edges) |> plan
-  let plan2DR : [C2Edge<TentParts>] = cedges(graph: pos, edges: edges) |> plan
-  let front2D : [C2Edge<TentParts>] = cedges(graph: pos, edges: edges) |> front
-  let side2D : [C2Edge<TentParts>] = cedges(graph: pos, edges: edges) |> side
-
-  func controller(_ view: UIView, _ titled : String)->UIViewController{
-    let vc = UIViewController()
-    vc.view = view
-     vc.title = titled
-    let colors : [UIColor] = [.white, .gray, .yellow, .blue, .green, .lightGray]
-    return  vc
-  }
-  
-  let one = controller( plan2D |> tentNodes >>> kitView , "Top")
-  let two = controller( plan2DR |> tentNodes >>> kitView , "Top")
-  let three = controller( front2D |> tentNodes >>> kitView, "Top")
-  let four = controller(  side2D |> tentNodes >>> kitView, "Right")
-
-  let delegate = QuadDriver(upper: [one, two], lower: [three, four])
-
-  let a = embedInNav(delegate.group)
-
-  return a
-
-
 }

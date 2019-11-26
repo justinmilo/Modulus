@@ -6,7 +6,7 @@
 //  Copyright © 2018 Justin Smith. All rights reserved.
 //
 
-import Graphe
+import GrapheNaked
 import Singalong
 import Geo
 

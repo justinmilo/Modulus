@@ -8,7 +8,7 @@
 
 import Foundation
 import BlackCricket
-import Graphe
+import GrapheNaked
 import Geo
 
 func modelToLinework ( edges: [C2Edge<ScaffType>] ) -> Composite
@@ -30,7 +30,6 @@ func modelToLinework ( edges: [C2Edge<ScaffType>] ) -> Composite
   
   return Composite(
     geometry : lines,
-   operators : [],
    labels : labelsSecondPass
   )
 }

@@ -10,7 +10,7 @@ import Foundation
 
 import SpriteKit
 import Make2D
-import Graphe
+import GrapheNaked
 import BlackCricket
 import Singalong
 import Geo
@@ -26,7 +26,7 @@ private func firstHalf( item: Scaff2D, cache : inout [SKSpriteNode]) -> SKSprite
   let imageGenny :()->UIImage? = {
     let length = CGSegment(p1:item.start, p2:item.end).length
     let path = (length, item.part, item.view) |> imageName
-    let bundle = Bundle(for: ViewController.self)
+    let bundle = Bundle(for: App.self)
     //TODO - FixMe If there are no images to load the whole program crashes
     guard let apath = path, let aImage = UIImage(named: apath, in: bundle, compatibleWith: nil) else {
       return nil

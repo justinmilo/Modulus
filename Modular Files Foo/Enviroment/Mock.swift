@@ -7,16 +7,20 @@
 //
 
 import Foundation
-import Graphe
+import GrapheNaked
 import Singalong
 
 extension ScaffGraph {
   convenience init() {
     let initial = CGSize3(width: 300, depth: 100, elev: 400) |> createNusGrid
-    self.init(grid: initial.0, edges: initial.1)
+    self.init(id:"Mock", grid: initial.0, edges: initial.1)
   }
   
-  static var mock : ScaffGraph = CGSize3(width: 300, depth: 100, elev: 400) |> createNusGrid >>> ScaffGraph.init
+  convenience init(grid:GraphPositions, edges:[ScaffEdge]) {
+     self.init(id:"Mock", grid: grid, edges: edges)
+  }
+  
+  static var mock : ScaffGraph = CGSize3(width: 300, depth: 100, elev: 400) |> createNusGrid >>> curry(ScaffGraph.init)("Mock")
 }
 
 extension Item where Content == ScaffGraph {
@@ -35,6 +39,8 @@ extension ItemList where T == ScaffGraph {
       Item(content: (1000,1000,100) |> CGSize3.init |> curriedScaffoldingFrom(defaultSizes), id: "Mock1", name: "Four by Eight"),
       Item(content: (500,1000,1000) |> CGSize3.init |> curriedScaffoldingFrom(defaultSizes), id: "Mock2", name: "Third Graph")])
     list.addOrReplace(item: Item(content: (500,300,1000) |> CGSize3.init |> curriedScaffoldingFrom(defaultSizes), id: "Mock3", name: "Force Graph"))
+    
+    addIDToScaffGraph(itemList: &list)
     //print("Mock ", list.getItem(id: "Mock0")?.sizePreferences)
 
     

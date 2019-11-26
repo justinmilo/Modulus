@@ -11,26 +11,6 @@ import CoreGraphics
 
 
 
-public func edges(in rect: CGRect) -> [CGPoint]
-{
-  return  [rect.topCenter,
-           rect.centerRight,
-           rect.bottomCenter,
-           rect.centerLeft]
-}
-
-
-// return edges from top left clockwise
-func corners(of rect: CGRect)-> [CGPoint]
-{
-  return [rect.topLeft, rect.topRight, rect.bottomRight, rect.bottomLeft]
-}
-// return edges from top center clockwise
-func edgeCenters(of rect: CGRect)->[CGPoint]
-{
-  return [rect.topCenter, rect.centerRight, rect.bottomCenter, rect.centerLeft]
-}
-
 
 func segments<T>(array:[CGPoint], transform: (CGPoint, CGPoint) -> T) -> [T]
 {

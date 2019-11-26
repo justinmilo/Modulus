@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import Graphe
+import GrapheNaked
 
 
 struct ThumbnailIO {
@@ -88,7 +88,6 @@ typealias TypResult = Result<ItemList<ScaffGraph>, LoadError>
 struct FileIO {
   var persistenceURL : URL? = getDocumentsURL()
   var load : () -> TypResult = loadProgression
-  var loadFromBundle : () -> TypResult = _loadFromBundle
   var loadFromDocuments : () -> TypResult = _loadFromDocuments
   var save : (ItemList<ScaffGraph>) -> () = saveItems
 }
@@ -119,34 +118,25 @@ func loadProgression() -> Result<ItemList<ScaffGraph>, LoadError>{
   if case .success = documentsResult {
     return documentsResult
   }
-  let bundleResult = Current.file.loadFromBundle()
-  if case let .success(itemList) = bundleResult {
-    Current.file.save(itemList)
-    return documentsResult
-  }
   
-  return bundleResult
+  
+  return documentsResult
 }
 
-func _loadFromBundle() -> Result<ItemList<ScaffGraph>, LoadError>{
-  
-  guard let url = Bundle.main.url(forResource: "Items", withExtension: "json") else {
-    return .error( LoadError.badURL )
-  }
-  guard let data = try? Data(contentsOf: url) else {
-    return .error( LoadError.noData )
-  }
-  do {
-    let decoder = JSONDecoder()
-    let jsonData = try decoder.decode(ItemList<ScaffGraph>.self, from: data)
-    return .success(jsonData)
-  } catch  {
-    return .error( .noJson )
+
+
+func addIDToScaffGraph(itemList : inout ItemList<ScaffGraph>) {
+  for (offset, element) in itemList.contents.enumerated() {
+    let scaffGraph = itemList.contents[offset].content
+    print("was", scaffGraph.id, "will be", element.id)
+    scaffGraph.id = element.id
+    itemList.addOrReplace(item: Item(content: scaffGraph, id: element.id, name: element.name, sizePreferences: element.sizePreferences, isEnabled: element.isEnabled, thumbnailFileName: element.thumbnailFileName))
   }
 }
 
 func _loadFromDocuments() -> Result<ItemList<ScaffGraph>, LoadError>{
   
+  print("Loading from Load Documents")
   
   
   guard let url = Current.file.persistenceURL else {
@@ -156,8 +146,14 @@ func _loadFromDocuments() -> Result<ItemList<ScaffGraph>, LoadError>{
     return .error( LoadError.noData )
   }
   do {
+    print("Loading from Load Documents DOOOO")
+
     let decoder = JSONDecoder()
-    let jsonData = try decoder.decode(ItemList<ScaffGraph>.self, from: data)
+    var jsonData = try decoder.decode(ItemList<ScaffGraph>.self, from: data)
+    #warning("Begin Should remove crutch")
+    addIDToScaffGraph(itemList: &jsonData)
+    #warning("Begin Should remove crutch")
+    
     return .success(jsonData)
   } catch  {
     return .error( .noJson )
@@ -183,7 +179,6 @@ extension FileIO {
   
   static var mock : FileIO = FileIO(persistenceURL: getDocumentsURL(),
                                     load: { .success(.mock) },
-                                    loadFromBundle: {.success(.mock)},
                                     loadFromDocuments: {.success(.mock)},
                                     save: {
                                       let encoder = JSONEncoder()

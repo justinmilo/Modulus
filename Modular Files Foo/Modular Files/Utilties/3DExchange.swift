@@ -8,7 +8,7 @@
 
 import Foundation
 import Volume
-import Graphe
+import GrapheNaked
 import Singalong
 
 struct AScaffProvider : ScaffProvider {
@@ -25,8 +25,8 @@ extension Volume.ScaffType.Axis {
   init (_ axis: Axis)
   {
     switch axis{
-    case .y : self = ScaffType.Axis.y
-    case .x : self = ScaffType.Axis.x
+    case .y : self = Volume.ScaffType.Axis.y
+    case .x : self = Volume.ScaffType.Axis.x
     }
   }
 }
@@ -51,10 +51,10 @@ func members(graph: ScaffGraph) -> [ScaffMember] {
       let seg3 = (graph.grid, edge) |> segment3
       guard let axis = seg3|>axis, let run = (seg3|>run) else { return [] }
       return [ScaffMember(
-        type: ScaffType.diag(
+        type: Volume.ScaffType.diag(
           run: graph_measure(run),
           rise: graph_measure(seg3|>rise),
-          axis: ScaffType.Axis( axis )
+          axis: Volume.ScaffType.Axis( axis )
         ),
         position: edge.p1.toPoint3(graph.grid).asDoubleTuple
         )]
@@ -68,7 +68,7 @@ func members(graph: ScaffGraph) -> [ScaffMember] {
       return [ScaffMember(
         type: .ledger(
           size: graph_measure((seg3|>run)!),
-          axis: ScaffType.Axis( (seg3|>axis)! ) ),
+          axis: Volume.ScaffType.Axis( (seg3|>axis)! ) ),
         position: edge.p1.toPoint3(graph.grid).asDoubleTuple)]
     case .standardGroup:
       let seg3 = (graph.grid, edge) |> segment3

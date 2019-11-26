@@ -8,7 +8,7 @@
 
 import Foundation
 import Singalong
-import Graphe
+import GrapheNaked
 
 
 #warning("Should this be in Modular?")

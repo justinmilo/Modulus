@@ -12,10 +12,37 @@ import GrippableView
 import Singalong
 import Layout
 import Make2D
+import ComposableArchitecture
 
+public enum InterfaceAction<Holder:GraphHolder> {
+  case saveData
+  case addOrReplace(Holder)
+  // case getItem
+  //case getThumbmnailURL
+  //case setThumbmnailURL
+  case thumbnailsAddToCache(UIImage, String?)
+}
 
+public struct StateModel<Holder:GraphHolder> {
+//  var screenSize : CGSize
+//  var holder : Holder
+  public var thumbnailFileName : String?
+  
+  public init( thumbnailFileName : String?) {
+    self.thumbnailFileName = thumbnailFileName
+  }
+}
 
-
+public func interfaceReducer<Holder:GraphHolder>(state: inout StateModel<Holder>, action: InterfaceAction<Holder>) -> [Effect<InterfaceAction<Holder>>] {
+  switch action {
+  case let .thumbnailsAddToCache(image, str):
+    return []
+  case .saveData:
+    return []
+  case let .addOrReplace(holder):
+    return []
+  }
+}
 // centerAnchor
 // Scrolled Anchor / Eventual Anchor Location
 func contentSizeFrom (offsetFromCenter: CGVector, itemSize: CGSize, viewPortSize: CGSize) -> CGSize
@@ -31,19 +58,21 @@ protocol Driver {
   mutating func bind(to uiRect: CGRect)
 }
 
-public class ViewController : UIViewController, SpriteDriverDelegate
+public class ViewController<Holder:GraphHolder> : UIViewController, SpriteDriverDelegate
 {
   
   
   var viewport : CanvasViewport!
-  public var driver : SpriteDriver
-  var driverLayout : PositionedLayout<IssuedLayout<LayoutToDriver<SpriteDriver>>>
+  var driver : SpriteDriver<Holder>
+  var driverLayout : PositionedLayout<IssuedLayout<LayoutToDriver<SpriteDriver<Holder>>>>
   var scaleObserver : NotificationObserver!
   var scale: CGFloat = 1.0
+  let store: Store<StateModel<Holder>, InterfaceAction<Holder>>
   
-  init(driver: SpriteDriver)
+  public init(mapping: [ GenericEditingView<Holder>], graph: Holder, scale: CGFloat, screenSize: CGRect, store: Store<StateModel<Holder>, InterfaceAction<Holder>> )
   {
-    self.driver = driver
+    self.store = store
+    self.driver = SpriteDriver(mapping: mapping, graph: graph, scale: scale, screenSize: screenSize)
     self.driverLayout = PositionedLayout(
       child: IssuedLayout(child: LayoutToDriver( child: driver )),
       ofSize: CGSize.zero,
@@ -79,12 +108,7 @@ public class ViewController : UIViewController, SpriteDriverDelegate
   
   func saveSnapshot(view: UIView) {
     // Save Image to Cache...
-    guard  let id = self.driver.id else {
-      fatalError("Can't write becuase no ID)")
-    }
-    guard let item = Current.model.getItem(id: id) else {
-      fatalError(" NO Item for this ID")
-    }
+
     let img = image(with:view)!
     //let img = image(with:self.view)!
     let newSize = CGSize(width: view.bounds.width,  height: view.bounds.height)
@@ -93,28 +117,18 @@ public class ViewController : UIViewController, SpriteDriverDelegate
       let cropped = cropToBounds(image: img, width: newSize.width, height:newSize
         .height)
       
-      let urlRes = Current.thumbnails.addToCache(cropped, item.thumbnailFileName)
-      print(urlRes)
-      guard case let .success(url) = urlRes else {
-        fatalError("Can't write becuase \(urlRes)")
+      self.store.send(.thumbnailsAddToCache(cropped, self.store.value.thumbnailFileName))
+      //let urlRes = Current.thumbnails.addToCache(cropped, item.thumbnailFileName)
+      
       }
-      DispatchQueue.main.async {
-        
-        guard var item = Current.model.getItem(id: id) else {
-          fatalError(" NO Item for this ID")
-        }
-        
-        item.thumbnailFileName = url
-        Current.model.addOrReplace(item: item)
-      }
-      // ...End Save Image
-    }
+    // ...End Save Image
   }
+  
   
   func didAddEdge() {
     self.saveSnapshot(view: self.view)
 
-    Current.file.save(Current.model)
+    self.store.send(.saveData)
   }
   
   //var booley = true
@@ -156,18 +170,14 @@ public class ViewController : UIViewController, SpriteDriverDelegate
       //self.map.isHidden = false
     }
     viewport.animationFinished = {
-      Current.file.save(Current.model)
+      self.store.send(.saveData)
     }
     viewport.didEndEdit = {
       
       self.saveSnapshot(view: self.view)
 
+      self.store.send(.saveData)
       
-      
-      
-      
-      
-      Current.file.save(Current.model)
       self.viewport.animateSelection(to:  self.driverLayout.child.issuedRect! )
     }
     viewport.didBeginPan = {

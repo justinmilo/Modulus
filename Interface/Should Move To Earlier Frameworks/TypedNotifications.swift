@@ -13,11 +13,15 @@ class Box<T> {
   init(_ value: T) { self.unbox = value }
 }
 
-struct Notification<A> {
-  let name: String
+public struct Notification<A> {
+  public let name: String
+  public init(name: String) {
+    self.name = name
+  }
 }
 
-func postNotification<A>(note: Notification<A>, value: A) {
+
+public func postNotification<A>(note: Notification<A>, value: A) {
   let userInfo = ["value": Box(value)]
   NotificationCenter.default.post(
     name: NSNotification.Name(rawValue:note.name),
