@@ -10,26 +10,10 @@ import SpriteKit
 import Singalong
 import Geo
 
-import Graphe
-public class OKNode : SKShapeNode {
-  var f : (CGPoint) -> ScaffGraph
-  init(ellipseOf: CGSize, f: @escaping (CGPoint) -> ScaffGraph) {
-    self.f = f
-    super.init()
-    self.path = CGPath(ellipseIn: ellipseOf.asRect().offsetBy(dx: -ellipseOf.width/2, dy: -ellipseOf.height/2), transform: nil)
-    
-  }
-  
-  required init?(coder aDecoder: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
-  }
-}
+import GrapheNaked
 
 public protocol SKRepresentable{
   var asNode : SKNode { get }
-}
-public protocol OKRepresentable{
-  var asNode : OKNode { get }
 }
 
 
@@ -54,15 +38,6 @@ extension Oval : SKRepresentable {
   }
 }
 
-extension OvalResponder : OKRepresentable {
-  public var asNode: OKNode {
-    let node = OKNode(ellipseOf: self.ellipseOf, f: self.f)
-    node.fillColor = self.fillColor
-    node.lineWidth = 0.0
-    node.position = position
-    return node
-  }
-}
 
 extension Label : SKRepresentable
 {

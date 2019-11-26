@@ -23,16 +23,3 @@ public extension Oval {
   }
 }
 
-import Graphe
-public struct OvalResponder : Geometry {
-  var ellipseOf: CGSize
-  var lineWidth = 1.0
-  var fillColor : UIColor = .blue
-  var f : (CGPoint) -> ScaffGraph
-  public var position : CGPoint = CGPoint.zero
-  public init(ellipseOf: CGSize, position: CGPoint, f: @escaping (CGPoint) -> ScaffGraph) {
-    self.ellipseOf = ellipseOf
-    self.position = position
-    self.f = f
-  }
-}

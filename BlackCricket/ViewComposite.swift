@@ -7,7 +7,7 @@
 //
 import CoreGraphics
 import Singalong
-import Graphe
+import GrapheNaked
 import BlackCricket
 
 /*
@@ -18,25 +18,17 @@ import BlackCricket
 
 public struct Composite {
   public var geometry : [Geometry]
-  public var operators : [OvalResponder]
   public var labels : [Label]
 }
 
 public extension Composite {
   init(geometry: [Geometry]) {
     self.geometry = geometry
-    self.operators = []
     self.labels = []
 
   }
-  init(operators: [OvalResponder]) {
-    self.geometry = []
-    self.operators = operators
-    self.labels = []
-  }
   init(labels: [Label]) {
     self.geometry = []
-    self.operators = []
     self.labels = labels
   }
 }
@@ -46,7 +38,6 @@ extension Composite : Semigroup {
   public static func <>(lhs: Composite, rhs: Composite) -> Composite {
     return Composite(
       geometry: lhs.geometry + rhs.geometry,
-      operators: lhs.operators + rhs.operators,
       labels: lhs.labels + rhs.labels
     )
   }
