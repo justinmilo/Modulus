@@ -23,9 +23,9 @@ func midpoints(from segments: [CGSegment])-> [CGPoint]{
 }
 
 
-let everyPositionButon : (PositionsOrdered2D) -> Composite = boundedBy >>> explode >>> Composite.init(operators:)
 
-import Graphe
+
+import GrapheNaked
 struct RandoStruct {
   var foo: String
 }
