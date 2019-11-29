@@ -16,53 +16,7 @@ import Singalong
 import Geo
 import GrapheNaked
 import Interface
-
-struct AppState {
-  var interfaceState : StateModel<ScaffGraph>
-}
-
-enum AppAction {
-  case interfaceAction(InterfaceAction<ScaffGraph>)
-  
-  var interfaceAction: InterfaceAction<ScaffGraph>? {
-    get {
-      guard case let .interfaceAction(value) = self else { return nil }
-      return value
-    }
-    set {
-      guard case .interfaceAction = self, let newValue = newValue else { return }
-      self = .interfaceAction(newValue)
-    }
-  }
-}
-
 import ComposableArchitecture
-let appReducer =  combine(
-  pullback(interfaceReducer, value: \AppState.interfaceState, action: \AppAction.interfaceAction)
-)
-
-let finalAppReducer = appReducer |> logging >>> savingReducer
-
-func savingReducer(
-  _ reducer: @escaping Reducer<AppState, AppAction>
-) -> Reducer<AppState, AppAction> {
-  return { state, action in
-  switch action {
-    
-  case let .interfaceAction(intAction):
-    switch intAction {
-      
-    case .saveData:
-      return []
-    case .addOrReplace(_):
-      return []
-    case .thumbnailsAddToCache(_, _):
-      return []
-    }
-
-    }
-}
-}
 
 func styleNav(_ ulN: UINavigationController) {
   ulN.navigationBar.prefersLargeTitles = true
@@ -91,10 +45,9 @@ func addBarSafely<T:UIViewController>(to viewController: T) {
   copy.tag = tagID
   viewController.view?.addSubview( copy )
 }
-func controllerFromMap(target: Any, _ vm: (label:String, viewMap: [GraphEditingView]), graph: Item<ScaffGraph>) -> ViewController<ScaffGraph> {
+func controllerFromMap(store:Store<AppState, AppAction>, target: Any, _ vm: (label:String, viewMap: [GraphEditingView]), graph: Item<ScaffGraph>) -> ViewController<ScaffGraph> {
 
-  let store = Store(initialValue:
-  AppState(interfaceState: StateModel(thumbnailFileName: nil)), reducer: finalAppReducer)
+  
   let vc = ViewController(mapping: vm.viewMap, graph: graph.content, scale: 1.0, screenSize: Current.screen, store:
     store.view (
     value:{$0.interfaceState},

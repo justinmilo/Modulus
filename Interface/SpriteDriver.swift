@@ -41,11 +41,12 @@ class SpriteDriver<Holder:GraphHolder> : Driver {
   var loadedViews : [Mapping]
   public var spriteView : Sprite2DView
   var content : UIView { return self.spriteView }
+  var sizePreferences: [CGFloat]
   
   // Eventually dependency injected
   var initialFrame : CGRect
   
-  public init(mapping: [Mapping], graph: Holder, scale: CGFloat, screenSize: CGRect  ) {
+  public init(mapping: [Mapping], graph: Holder, scale: CGFloat, screenSize: CGRect, sizePreferences:[CGFloat]  ) {
     self.graph = graph
     editingView = mapping[0]
     loadedViews = mapping
@@ -54,6 +55,7 @@ class SpriteDriver<Holder:GraphHolder> : Driver {
     spriteView = Sprite2DView(frame:initialFrame )
     
     self.scale = scale
+    self.sizePreferences = sizePreferences
     spriteView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(SpriteDriver.tap)))
     
     
@@ -123,7 +125,7 @@ class SpriteDriver<Holder:GraphHolder> : Driver {
     let s3 = roundedModelSize |> self.editingView.size3(self.graph)
 
     // ICAN : set *Holder* grid and edgs from editingView.build Function
-    (self.graph.grid, self.graph.edges) = self.editingView.build( self.editingView.sizePreferences( self.graph ),
+    (self.graph.grid, self.graph.edges) = self.editingView.build( self.sizePreferences,
       s3, self.graph.edges)
 
     //                           ICAN : Pass *Holder* into editingView.size Function to get a CGSize back

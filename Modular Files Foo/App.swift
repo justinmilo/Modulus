@@ -118,6 +118,95 @@ func createCell(anItem:Item<ScaffGraph> , cell: Cell) -> Cell {
   return cell
   }
 
+import ComposableArchitecture
+import Interface
+
+
+
+struct AppState {
+  var interfaceState : InterfaceState<ScaffGraph>
+  var items : ItemList<ScaffGraph>
+}
+
+enum AppAction {
+  case itemSelected(Item<ScaffGraph>)
+  
+  case addOrReplace(Item<ScaffGraph>)
+  
+  case setItems(ItemList<ScaffGraph>)
+  
+  case interfaceAction(InterfaceAction<ScaffGraph>)
+  
+  var interfaceAction: InterfaceAction<ScaffGraph>? {
+    get {
+      guard case let .interfaceAction(value) = self else { return nil }
+      return value
+    }
+    set {
+      guard case .interfaceAction = self, let newValue = newValue else { return }
+      self = .interfaceAction(newValue)
+    }
+  }
+}
+
+let appReducer =  combine(
+  pullback(interfaceReducer, value: \AppState.interfaceState, action: \AppAction.interfaceAction)
+)
+
+let finalAppReducer = appReducer |> savingReducer >>> logging
+
+func savingReducer(
+  _ reducer: @escaping Reducer<AppState, AppAction>
+) -> Reducer<AppState, AppAction> {
+  return { state, action in
+  switch action {
+  case let .itemSelected(item):
+    state.interfaceState.sizePreferences = item.sizePreferences.map{CGFloat($0.length.converted(to: .centimeters).value)}
+    return []
+  case let .addOrReplace(item):
+    state.items.addOrReplace(item: item)
+    return []
+    
+  case let .setItems(itemList):
+    print("WHat")
+    state.items = itemList
+    return []
+    
+  case let .interfaceAction(intfAction):
+    switch intfAction {
+    case .saveData:
+      let itemsCopy = state.items
+      return [Effect{_ in
+        Current.file.save(itemsCopy)
+        }
+      ]
+    case let .addOrReplace(graph):
+      let item = state.items.getItem(id: graph.id)!
+      let newItem = Item(content: graph, id: item.id, name: item.name, sizePreferences: item.sizePreferences, isEnabled: item.isEnabled, thumbnailFileName: item.thumbnailFileName)
+      state.items.addOrReplace(item: newItem)
+      return []
+      
+    case let .thumbnailsAddToCache(img, str, id):
+      let item = state.items.getItem(id: id)!
+      
+      
+      return [Effect{ callback in
+        let urlResult = Current.thumbnails.addToCache(img, str)
+        switch urlResult {
+        case let .success(str):
+          let newItem = Item(content: item.content, id: item.id, name: item.name, sizePreferences: item.sizePreferences, isEnabled: item.isEnabled, thumbnailFileName: str)
+          callback(.addOrReplace(newItem))
+        default:
+          return
+        }
+      }]
+    }
+
+  
+    }
+}
+}
+
 
 public class App {
   public init() {
@@ -125,10 +214,13 @@ public class App {
   
   public lazy var rootController: UIViewController = loadEntryTable
   public lazy var mock : ()->(UIViewController) = {
-    let nav = embedInNav(GraphNavigator(id: "Mock0").vc)
+    let nav = embedInNav(GraphNavigator(id: "Mock0", store: self.store).vc)
     styleNav(nav)
     return nav
   }
+  
+  var store: Store<AppState,AppAction> = Store(initialValue:
+    AppState(interfaceState: InterfaceState(thumbnailFileName: nil, sizePreferences: []), items: ItemList([])), reducer: finalAppReducer)
   
   var editViewController : EditViewController<Item<ScaffGraph>, Cell>?
   var inputTextField : UITextField?
@@ -139,67 +231,69 @@ public class App {
     
     switch load {
     case let .success(value):
-      Current.model = value
+      self.store.send(.setItems(value))
     case let .error(error):
-      Current.model = ItemList.mock
+       self.store.send(.setItems(ItemList.mock))
     }
-    
+            
     let edit = EditViewController(
-      config: EditViewContConfiguration( initialValue: Current.model.contents, configure: createCell)
+      config: EditViewContConfiguration( initialValue: self.store.value.items.contents, configure: createCell)
     )
     edit.willAppear = {
-      let a = Current.model.contents
-      edit.undoHistory.currentValue = Current.model.contents
-      
+      let a = self.store.value.items.contents
+      edit.undoHistory.currentValue = self.store.value.items.contents
     }
     edit.tableView.rowHeight = 88
     edit.didSelect = { (item, cell) in
-      self.currentNavigator = GraphNavigator(id: cell.id)
+      self.store.send(.itemSelected(cell))
+      self.currentNavigator = GraphNavigator(id: cell.id, store: self.store)
       self.loadEntryTable.pushViewController(self.currentNavigator.vc, animated: true)
     }
     edit.didSelectAccessory = { (item, cell) in
       let driver = FormDriver(initial: cell, build: colorsForm)
       driver.formViewController.navigationItem.largeTitleDisplayMode = .never
         driver.didUpdate = {
-          Current.model.addOrReplace(item: $0)
+          self.store.send(.addOrReplace($0))
+          //Current.model.addOrReplace(item: $0)
         }
         self.loadEntryTable.pushViewController(driver.formViewController, animated: true)
         
       }
-      edit.topRightBarButton = BarButtonConfiguration(type: .system(.add)) {
-        func addTextField(_ textField: UITextField!){
-          // add the text field and make the result global
-          textField.placeholder = "Definition"
-          self.inputTextField = textField
-        }
-        
-        let listNamePrompt = UIAlertController(title: "Name This Structure", message: nil, preferredStyle: UIAlertController.Style.alert)
-        listNamePrompt.addTextField(configurationHandler: addTextField)
-        listNamePrompt.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler: ({ (ui:UIAlertAction) -> Void in
-          
-        })))
-        listNamePrompt.addAction(UIAlertAction(title: "Create", style: UIAlertAction.Style.default, handler: ({ (ui:UIAlertAction) -> Void in
-          let text = self.inputTextField?.text ?? "Default"
-          let new : Item<ScaffGraph> = Item(
-            content: (Item.template.map{ s in CGFloat( s.length.converted(to:.centimeters).value) }, (200,200,200) |> CGSize3.init) |> createScaffoldingFrom,
-            id: text,
-            name: text)
-          Current.model.addOrReplace(item: new)
-          Current.file.save(Current.model)
-          edit.undoHistory.currentValue = Current.model.contents
-        })))
-        
-        self.rootController.present(listNamePrompt, animated: true, completion: nil)
+    edit.topRightBarButton = BarButtonConfiguration(type: .system(.add)) {
+      func addTextField(_ textField: UITextField!){
+        // add the text field and make the result global
+        textField.placeholder = "Definition"
+        self.inputTextField = textField
       }
-      edit.title = "Morpho"
+      
+      let listNamePrompt = UIAlertController(title: "Name This Structure", message: nil, preferredStyle: UIAlertController.Style.alert)
+      listNamePrompt.addTextField(configurationHandler: addTextField)
+      listNamePrompt.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler: ({ (ui:UIAlertAction) -> Void in
+        
+      })))
+      listNamePrompt.addAction(UIAlertAction(title: "Create", style: UIAlertAction.Style.default, handler: ({ (ui:UIAlertAction) -> Void in
+        let text = self.inputTextField?.text ?? "Default"
+        var new : Item<ScaffGraph> = Item(
+          content: (Item.template.map{ s in CGFloat( s.length.converted(to:.centimeters).value) }, (200,200,200) |> CGSize3.init) |> createScaffoldingFrom,
+          id: text,
+          name: text)
+        new.content.id = text
+        self.store.send(.addOrReplace(new))
+        self.store.send(.interfaceAction(.saveData))
+        edit.undoHistory.currentValue = self.store.value.items.contents
+      })))
+      
+      self.rootController.present(listNamePrompt, animated: true, completion: nil)
+    }
+    edit.title = "Morpho"
     // Moditive
-      // Formosis // Formicate, Formite, Formate, Form Morph, UnitForm, Formunit
-      // Morpho, massing, Meccano, mechanized, modulus, Moduform, Modju, Mojuform, Majuform
-      // Modulo
-      self.editViewController = edit
-      let nav = UINavigationController(rootViewController: edit)
-      styleNav(nav)
-      return nav
+    // Formosis // Formicate, Formite, Formate, Form Morph, UnitForm, Formunit
+    // Morpho, massing, Meccano, mechanized, modulus, Moduform, Modju, Mojuform, Majuform
+    // Modulo
+    self.editViewController = edit
+    let nav = UINavigationController(rootViewController: edit)
+    styleNav(nav)
+    return nav
   }()
   
   var currentNavigator : GraphNavigator!

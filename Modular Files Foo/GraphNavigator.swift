@@ -12,17 +12,23 @@ import Singalong
 import Volume
 @testable import FormsCopy
 import Interface
+import ComposableArchitecture
+
+
+
+
+
 
 
 public class GraphNavigator {
-  init(id: String) {
+  init(id: String, store: Store<AppState, AppAction>) {
     self.id = id
-    graph = Current.model.getItem(id: id)!.content
+    self.store = store
   }
   /// graph is *the* ScaffGraph for all the Nav's VC's
   /// set at init. Graph is a refernce object shared by all instances of the graph editing viewcontrollers
-  let graph : ScaffGraph
   
+  let store : Store<AppState, AppAction>
   var scale : CGFloat = 1.0 {
     didSet {
       postNotification(note: scaleChangeNotification, value: scale)
@@ -32,8 +38,8 @@ public class GraphNavigator {
   lazy var vc: UIViewController = quadVC.group
   
   lazy var func1 : ((label: String, viewMap: [GraphEditingView])) -> ViewController  =
-    { ($0,Current.model.getItem(id: self.id)!) }
-      >>> curry(controllerFromMap)(self)
+    { ($0,self.store.value.items.getItem(id: self.id)!) }
+      >>> curry(curry(controllerFromMap)(store))(self)
 
   lazy var planVC : ViewController = {
     return Current.viewMaps.plan |> func1
@@ -63,16 +69,16 @@ public class GraphNavigator {
   }
   
   @objc func save() {
-    Current.file.save(Current.model)
+    store.send(.interfaceAction(.saveData))
   }
   
   @objc func presentInfo() {
-    let cell = Current.model.getItem(id: self.id)!
+    let cell = self.store.value.items.getItem(id: self.id)!
     let driver = FormDriver(initial: cell, build: colorsForm)
     driver.formViewController.navigationItem.largeTitleDisplayMode = .never
     driver.didUpdate = {
-      Current.model.addOrReplace(item: $0)
-      Current.file.save(Current.model)
+      self.store.send(.addOrReplace($0))
+      self.store.send(.interfaceAction(.saveData))
     }
     let nav = embedInNav(driver.formViewController)
     nav.navigationBar.prefersLargeTitles = false
@@ -87,14 +93,14 @@ public class GraphNavigator {
   
   let id : String
   @objc func present3D() {
-    if let item = Current.model.getItem(id: id) {
-      Current.model.addOrReplace(item: item )
+    if let item = self.store.value.items.getItem(id: id) {
+      self.store.send(.addOrReplace(item))
     }
     //ICAN : AScaffProvider is linked by Graph |> Provider func however....
     //ICANTSHOULD : Graph -> CADGeneric3DGunkInput
     //ICANTSHOULD : ARSCNVIEWCONTROLLER should take (ScnNodes) and any other needed info
     //ICANTSHOULD : provider func should be provided by the map
-    let scaffProvider = Current.model.getItem(id: id)!.content |> provider
+    let scaffProvider = self.store.value.items.getItem(id: id)!.content |> provider
     let newVC = CADViewController(grid: scaffProvider)
     
     let ulN = UINavigationController(rootViewController: newVC)
@@ -110,15 +116,15 @@ public class GraphNavigator {
   }
   
   @objc func presentAR() {
-    if let item = Current.model.getItem(id: id) {
-      Current.model.addOrReplace(item: item )
+    if let item = self.store.value.items.getItem(id: id) {
+      self.store.send(.addOrReplace(item))
     }
     
     //ICAN : AScaffProvider is linked by Graph |> Provider func however....
     //ICANTSHOULD : Graph -> CADGeneric3DGunkInput
     //ICANTSHOULD : ARSCNVIEWCONTROLLER should take (ScnNodes) and any other needed info
     //ICANTSHOULD : provider func should be provided by the map
-    let scaffProvider = Current.model.getItem(id: id)!.content |> provider
+    let scaffProvider = self.store.value.items.getItem(id: id)!.content |> provider
     let cadController = ARScnViewController(provider: scaffProvider)
     
     let ulN = UINavigationController(rootViewController: cadController)

@@ -63,7 +63,9 @@ extension ScaffGraph
     return self.sideEdges |> reduceZeros
   }
 }
-extension ScaffGraph {
+
+import Interface
+extension GraphHolder {
   
   public var bounds: CGSize3 {
     return self.grid |> posToSize

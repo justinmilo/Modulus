@@ -45,8 +45,7 @@ func graphViewGenerator(
   size3 : @escaping (ScaffGraph) -> (CGSize) -> CGSize3,
   composite : [(ScaffGraph) -> Composite],
   grid2D : @escaping (ScaffGraph) -> GraphPositions2DSorted,
-  selectedCell :  @escaping (PointIndex2D, GraphPositions, [ScaffEdge]) -> ([ScaffEdge]),
-  sizePreferences : @escaping (ScaffGraph) -> [CGFloat]
+  selectedCell :  @escaping (PointIndex2D, GraphPositions, [ScaffEdge]) -> ([ScaffEdge])
   )-> [GraphEditingView]
 {
   return composite.map {
@@ -56,14 +55,13 @@ func graphViewGenerator(
                       size3: size3,
                       composite: $0,
                       grid2D: grid2D,
-                      selectedCell: selectedCell,
-                      sizePreferences: sizePreferences)
+                      selectedCell: selectedCell)
   }
 }
 
 func opposite(b: Bool) -> Bool { return !b }
+let originZero : (Any) -> CGPoint = { _ in return CGPoint(0,0)}
 
-let originZero: (ScaffGraph) -> CGPoint = { _ in return CGPoint(0,0)}
 let originFirstLedger: (ScaffGraph) -> CGPoint = { graph in return CGPoint(0, graph.boundsOfGrid.1)}
 
 let planMap = graphViewGenerator(
@@ -85,9 +83,8 @@ let planMap = graphViewGenerator(
                   <> outerDim(archFormat)),
               planLinework],
   grid2D: planPositions,
-  selectedCell: bazTop,
-    sizePreferences: currentY
-  )
+  selectedCell: bazTop
+)
 
 let planMapRotated = graphViewGenerator(
   build: overall,
@@ -102,9 +99,8 @@ let planMapRotated = graphViewGenerator(
      rotatedPlanLinework]
   ,
   grid2D: rotatedPlanPositions,
-  selectedCell: bazTop,
-    sizePreferences: currentY
-  )
+  selectedCell: bazTop
+)
 
 let frontMap = graphViewGenerator(
   build: overall,
@@ -121,9 +117,8 @@ let frontMap = graphViewGenerator(
               
               get(\.frontEdgesNoZeros) >>> modelToLinework],
   grid2D: frontPositionsOhneStandards,
-  selectedCell: bazFront,
-    sizePreferences: currentY
-  )
+  selectedCell: bazFront
+)
 
 let sideMap = graphViewGenerator(
   build: overall,
@@ -138,12 +133,11 @@ let sideMap = graphViewGenerator(
               
               ],
   grid2D: sidePositionsOhneStandards,
-  selectedCell: bazSide,
-  sizePreferences: currentY
+  selectedCell: bazSide
 )
 
 
-func currentY(graph: ScaffGraph) -> [CGFloat] {
-  return Current.model.getItem(id: graph.id)!.sizePreferences.map{CGFloat($0.length.converted(to: .centimeters).value)}
-
-}
+//func currentY(graph: ScaffGraph) -> [CGFloat] {
+//  return Current.model.getItem(id: graph.id)!.sizePreferences.map{CGFloat($0.length.converted(to: .centimeters).value)}
+//
+//}

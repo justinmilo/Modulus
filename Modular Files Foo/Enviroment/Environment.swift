@@ -24,7 +24,7 @@ struct StandardEditingViews {
 struct Environment {
   var file = FileIO()
   var thumbnails = ThumbnailIO()
-  var model : ItemList<ScaffGraph> = ItemList([])
+  //var model : ItemList<ScaffGraph> = ItemList([])
   var screen = UIScreen.main.bounds
   var viewMaps = StandardEditingViews()
 }

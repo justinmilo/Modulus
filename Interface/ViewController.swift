@@ -20,22 +20,24 @@ public enum InterfaceAction<Holder:GraphHolder> {
   // case getItem
   //case getThumbmnailURL
   //case setThumbmnailURL
-  case thumbnailsAddToCache(UIImage, String?)
+  case thumbnailsAddToCache(UIImage, url: String?, id: String)
 }
 
-public struct StateModel<Holder:GraphHolder> {
+public struct InterfaceState<Holder:GraphHolder> {
 //  var screenSize : CGSize
 //  var holder : Holder
   public var thumbnailFileName : String?
   
-  public init( thumbnailFileName : String?) {
+  public init( thumbnailFileName : String?, sizePreferences: [CGFloat] ) {
     self.thumbnailFileName = thumbnailFileName
+    self.sizePreferences = sizePreferences
   }
+  public var sizePreferences : [CGFloat]
 }
 
-public func interfaceReducer<Holder:GraphHolder>(state: inout StateModel<Holder>, action: InterfaceAction<Holder>) -> [Effect<InterfaceAction<Holder>>] {
+public func interfaceReducer<Holder:GraphHolder>(state: inout InterfaceState<Holder>, action: InterfaceAction<Holder>) -> [Effect<InterfaceAction<Holder>>] {
   switch action {
-  case let .thumbnailsAddToCache(image, str):
+  case let .thumbnailsAddToCache(image, str, url):
     return []
   case .saveData:
     return []
@@ -67,12 +69,12 @@ public class ViewController<Holder:GraphHolder> : UIViewController, SpriteDriver
   var driverLayout : PositionedLayout<IssuedLayout<LayoutToDriver<SpriteDriver<Holder>>>>
   var scaleObserver : NotificationObserver!
   var scale: CGFloat = 1.0
-  let store: Store<StateModel<Holder>, InterfaceAction<Holder>>
+  let store: Store<InterfaceState<Holder>, InterfaceAction<Holder>>
   
-  public init(mapping: [ GenericEditingView<Holder>], graph: Holder, scale: CGFloat, screenSize: CGRect, store: Store<StateModel<Holder>, InterfaceAction<Holder>> )
+  public init(mapping: [ GenericEditingView<Holder>], graph: Holder, scale: CGFloat, screenSize: CGRect, store: Store<InterfaceState<Holder>, InterfaceAction<Holder>> )
   {
     self.store = store
-    self.driver = SpriteDriver(mapping: mapping, graph: graph, scale: scale, screenSize: screenSize)
+    self.driver = SpriteDriver(mapping: mapping, graph: graph, scale: scale, screenSize: screenSize, sizePreferences: self.store.value.sizePreferences)
     self.driverLayout = PositionedLayout(
       child: IssuedLayout(child: LayoutToDriver( child: driver )),
       ofSize: CGSize.zero,
@@ -117,7 +119,7 @@ public class ViewController<Holder:GraphHolder> : UIViewController, SpriteDriver
       let cropped = cropToBounds(image: img, width: newSize.width, height:newSize
         .height)
       
-      self.store.send(.thumbnailsAddToCache(cropped, self.store.value.thumbnailFileName))
+      self.store.send(.thumbnailsAddToCache(cropped, url: self.store.value.thumbnailFileName, id: self.driver.graph.id))
       //let urlRes = Current.thumbnails.addToCache(cropped, item.thumbnailFileName)
       
       }

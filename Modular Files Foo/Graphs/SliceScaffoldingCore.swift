@@ -10,6 +10,7 @@ import Foundation
 import Singalong
 import GrapheNaked
 
+
 public let sizeFront : (ScaffGraph) -> (CGSize) -> CGSize3 = {graph in { CGSize3(width: $0.width, depth: graph.bounds.depth, elev: $0.height) } }
 public let sizeSide : (ScaffGraph) -> (CGSize) -> CGSize3 = {graph in { CGSize3(width: graph.bounds.width, depth: $0.width , elev: $0.height) } }
 // graph is passed passed by reference here ...

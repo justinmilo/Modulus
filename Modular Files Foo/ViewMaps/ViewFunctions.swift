@@ -18,7 +18,7 @@ func log<A>(_ loggableItem: A) -> A {
   return loggableItem
 }
 
-let remove3rdDim : (CGSize3) -> CGSize = {
+let remove3rdDimFront : (CGSize3) -> CGSize = {
   return CGSize(width: $0.width, height:  $0.elev)
 }
 let remove3rdDimSide : (CGSize3) -> CGSize = {
@@ -47,8 +47,8 @@ func centeredRect( master: CGRect, size: CGSize, positions: (VerticalPosition, H
 
 let sizeFromPlanScaff : (ScaffGraph) -> CGSize = { $0.bounds } >>> remove3rdDimPlan
 let sizeFromRotatedPlanScaff : (ScaffGraph) -> CGSize = { $0.bounds } >>> remove3rdDimPlan >>> flip
-let sizeFromGridScaff : (ScaffGraph) -> CGSize = { $0.boundsOfGrid.0 } >>> remove3rdDim
-let sizeFromFullScaff : (ScaffGraph) -> CGSize = { $0.bounds } >>> remove3rdDim
+let sizeFromGridScaff : (ScaffGraph) -> CGSize = { $0.boundsOfGrid.0 } >>> remove3rdDimFront
+let sizeFromFullScaff : (ScaffGraph) -> CGSize = { $0.bounds } >>> remove3rdDimFront
 let sizeFromFullScaffSide : (ScaffGraph) -> CGSize = { $0.bounds } >>> remove3rdDimSide
 
 let schematicSize : (ScaffGraph) -> CGSize3 = {
@@ -56,7 +56,7 @@ let schematicSize : (ScaffGraph) -> CGSize3 = {
           depth: CGFloat($0.grid.pY.count * 100),
           elev: CGFloat($0.grid.pZ.count * 100))
 }
-let sizeSchematicFront : (ScaffGraph) -> CGSize = schematicSize >>> remove3rdDim
+let sizeSchematicFront : (ScaffGraph) -> CGSize = schematicSize >>> remove3rdDimFront
 
 
 
@@ -81,8 +81,8 @@ let originFromFullScaff : (ScaffGraph, CGRect, CGFloat) -> CGPoint =
 }
 
 
-let rotateGroup : ([C2Edge<ScaffType>]) -> [C2Edge<ScaffType>] = { $0.map(rotate) }
-func rotate( edge: C2Edge<ScaffType>) -> C2Edge<ScaffType> {
+func rotateGroup<T>(_ a: [C2Edge<T>]) -> [C2Edge<T>]{ a.map(rotate) }
+func rotate<A>( edge: C2Edge<A>) -> C2Edge<A> {
   return C2Edge(content: edge.content, p1: edge.p1 |> flip, p2: edge.p2 |> flip )
 }
 func flip( point: CGPoint) -> CGPoint

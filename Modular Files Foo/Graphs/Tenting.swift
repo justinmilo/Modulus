@@ -45,16 +45,7 @@ public struct TentStructure {
   var eave :  CGFloat // Eave
 }
 
-#warning("Not Used Yet")
 @testable import GrapheNaked
-public func createTentGridFromEaveHeiht(with bounding: CGSize3) -> (TentStructure) {
-  return TentStructure(
-    gable: bounding.width/2,
-    bays: ([500], bounding.depth) |> maximumRepeated,
-    eave: bounding.elev
-  )
-}
-
 
 
 public func createTentGridFromEaveHeiht(with bounding: CGSize3) -> (GraphPositions, [Edge<TentParts>]) {

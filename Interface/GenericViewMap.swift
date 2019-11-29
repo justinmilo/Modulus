@@ -33,7 +33,6 @@ public struct GenericEditingView<Holder : GraphHolder> {
   /// if point index in 2D give new 3D edges
   let selectedCell : (PointIndex2D, GraphPositions, [Edge<Holder.Content>]) -> ([Edge<Holder.Content>])
   
-  let sizePreferences : (Holder) -> [CGFloat]
   
   public init(
     build: @escaping ([CGFloat], CGSize3, [Edge<Holder.Content>]) -> (GraphPositions, [Edge<Holder.Content>]),
@@ -42,8 +41,7 @@ public struct GenericEditingView<Holder : GraphHolder> {
     size3 : @escaping (Holder) -> (CGSize) -> CGSize3,
     composite : @escaping (Holder) -> Composite,
     grid2D : @escaping (Holder) -> GraphPositions2DSorted,
-    selectedCell : @escaping (PointIndex2D, GraphPositions, [Edge<Holder.Content>]) -> ([Edge<Holder.Content>]),
-    sizePreferences : @escaping (Holder) -> [CGFloat]
+    selectedCell : @escaping (PointIndex2D, GraphPositions, [Edge<Holder.Content>]) -> ([Edge<Holder.Content>])
   ) {
     
     self.build = build
@@ -53,6 +51,5 @@ public struct GenericEditingView<Holder : GraphHolder> {
     self.composite = composite
     self.grid2D = grid2D
     self.selectedCell = selectedCell
-    self.sizePreferences = sizePreferences
   }
 }

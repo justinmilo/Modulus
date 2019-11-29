@@ -81,7 +81,7 @@ func createOval(_ oval: Oval, position: CGPoint) -> SKShapeNode {
 
 func createLableNode(_ label: Label) -> SKLabelNode {
   let node = SKLabelNode(text: label.text)
-  node.fontName = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.medium).fontName
+  node.fontName = UIFont(name: "Helvetica", size: 14)?.fontName
   node.fontSize = 14// * scale
   node.zRotation = label.rotation == .h ? 0.0 : 0.5 * CGFloat.pi
   node.position = label.position
