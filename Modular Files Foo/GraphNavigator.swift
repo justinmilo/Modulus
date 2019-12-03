@@ -29,11 +29,6 @@ public class GraphNavigator {
   /// set at init. Graph is a refernce object shared by all instances of the graph editing viewcontrollers
   
   let store : Store<AppState, AppAction>
-  var scale : CGFloat = 1.0 {
-    didSet {
-      postNotification(note: scaleChangeNotification, value: scale)
-    }
-  }
   
   lazy var vc: UIViewController = quadVC.group
   

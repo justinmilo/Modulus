@@ -174,6 +174,12 @@ func savingReducer(
     
   case let .interfaceAction(intfAction):
     switch intfAction {
+    case .canvasAction(.selection(.changeSelection(_))),
+         .canvasAction(.selection(.zoomEndend(_))):
+      return []
+    case let .canvasAction(.handles(handlesAction)):
+      switch handlesAction{
+      }
     case .saveData:
       let itemsCopy = state.items
       return [Effect{_ in
@@ -186,12 +192,12 @@ func savingReducer(
       state.items.addOrReplace(item: newItem)
       return []
       
-    case let .thumbnailsAddToCache(img, str, id):
+    case let .thumbnailsAddToCache(img, id):
       let item = state.items.getItem(id: id)!
       
       
       return [Effect{ callback in
-        let urlResult = Current.thumbnails.addToCache(img, str)
+        let urlResult = Current.thumbnails.addToCache(img, nil)
         switch urlResult {
         case let .success(str):
           let newItem = Item(content: item.content, id: item.id, name: item.name, sizePreferences: item.sizePreferences, isEnabled: item.isEnabled, thumbnailFileName: str)
@@ -220,7 +226,12 @@ public class App {
   }
   
   var store: Store<AppState,AppAction> = Store(initialValue:
-    AppState(interfaceState: InterfaceState(thumbnailFileName: nil, sizePreferences: []), items: ItemList([])), reducer: finalAppReducer)
+    AppState(interfaceState: InterfaceState(
+                                            sizePreferences: [],
+                                            scale:1.0,
+                                            windowBounds: UIScreen.main.bounds,
+                                            selection: CGRect(50, 50, 100, 100)
+                                            ), items: ItemList([])), reducer: finalAppReducer)
   
   var editViewController : EditViewController<Item<ScaffGraph>, Cell>?
   var inputTextField : UITextField?

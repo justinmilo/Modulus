@@ -33,4 +33,3 @@ struct Environment {
 var Current = Environment()
 
 import Interface
-let scaleChangeNotification : Interface.Notification<CGFloat> = Interface.Notification(name: "Scale Changed")

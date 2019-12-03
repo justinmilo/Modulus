@@ -13,6 +13,73 @@ import Singalong
 import Layout
 import Make2D
 import ComposableArchitecture
+import GrapheNaked
+
+
+
+public struct PointIndex2 : Equatable {
+  public let xI, yI : Int
+  public init( xI: Int, yI: Int) {
+    (self.xI, self.yI) = (xI, yI)
+  }
+}
+
+public struct Edge2<Content> where Content : Codable {
+  public var content : Content
+  public var p1 : PointIndex2
+  public var p2 : PointIndex2
+  
+  public init( content: Content, p1: PointIndex2, p2: PointIndex2 ) {
+    self.content = content
+    self.p1 = p1
+    self.p2 = p2
+  }
+}
+
+public struct InterfaceState<Holder:GraphHolder> {
+//  var screenSize : CGSize
+//  var holder : Holder
+  //var positions2 : Position2D
+  //var edges2 : [Edge2<Holder.Content>]
+  
+  public var zoomState : ZoomState
+  public var windowBounds : CGRect
+  public var selection : CGRect
+  
+  public enum ZoomState {
+    case zooming(interimScale:CGFloat)
+    case scaled(CGFloat)
+  }
+  
+  public init(
+               sizePreferences: [CGFloat],
+               scale: CGFloat,
+               windowBounds: CGRect,
+               selection : CGRect
+    //, positions2: Position2D,
+    // edges2: [Edge2<Holder.Content>]
+  ) {
+    self.sizePreferences = sizePreferences
+    self.zoomState = ZoomState.scaled(scale)
+    self.windowBounds = windowBounds
+    self.selection = selection
+//    self.positions2 = positions2
+//    self.edges2 = edges2
+  }
+  public var sizePreferences : [CGFloat]
+}
+
+extension InterfaceState {
+  var canvasState : CanvasState {
+    get {
+      CanvasState(selection: self.selection, scale: self.scale)
+    }
+    set {
+      self.selection = newValue.selection
+      self.scale = newValue.scale
+    }
+  }
+}
 
 public enum InterfaceAction<Holder:GraphHolder> {
   case saveData
@@ -20,30 +87,37 @@ public enum InterfaceAction<Holder:GraphHolder> {
   // case getItem
   //case getThumbmnailURL
   //case setThumbmnailURL
-  case thumbnailsAddToCache(UIImage, url: String?, id: String)
+  case thumbnailsAddToCache(UIImage, id: String)
+  case canvasAction(CanvasAction)
+  
+  var canvasAction: CanvasAction? {
+    get {
+      guard case let .canvasAction(value) = self else { return nil }
+      return value
+    }
+    set {
+      guard case .canvasAction = self, let newValue = newValue else { return }
+      self = .canvasAction(newValue)
+    }
+  }
 }
 
-public struct InterfaceState<Holder:GraphHolder> {
-//  var screenSize : CGSize
-//  var holder : Holder
-  public var thumbnailFileName : String?
-  
-  public init( thumbnailFileName : String?, sizePreferences: [CGFloat] ) {
-    self.thumbnailFileName = thumbnailFileName
-    self.sizePreferences = sizePreferences
-  }
-  public var sizePreferences : [CGFloat]
-}
 
 public func interfaceReducer<Holder:GraphHolder>(state: inout InterfaceState<Holder>, action: InterfaceAction<Holder>) -> [Effect<InterfaceAction<Holder>>] {
-  switch action {
-  case let .thumbnailsAddToCache(image, str, url):
-    return []
-  case .saveData:
-    return []
-  case let .addOrReplace(holder):
-    return []
-  }
+  
+  let canvasPullback = pullback(canvasReducer, value: \InterfaceState<Holder>.canvasState, action: \InterfaceAction<Holder>.canvasAction)
+  
+//  switch action {
+//  case  .thumbnailsAddToCache:
+//    return []
+//  case .saveData:
+//    return []
+//  case .addOrReplace:
+//    return []
+//  case .canvasAction(_):
+//    return []
+//  }
+  return canvasPullback(&state, action)
 }
 // centerAnchor
 // Scrolled Anchor / Eventual Anchor Location
@@ -60,36 +134,40 @@ protocol Driver {
   mutating func bind(to uiRect: CGRect)
 }
 
-public class ViewController<Holder:GraphHolder> : UIViewController, SpriteDriverDelegate
-{
-  
-  
+public class ViewController<Holder:GraphHolder> : UIViewController, SpriteDriverDelegate {
   var viewport : CanvasViewport!
   var driver : SpriteDriver<Holder>
   var driverLayout : PositionedLayout<IssuedLayout<LayoutToDriver<SpriteDriver<Holder>>>>
-  var scaleObserver : NotificationObserver!
-  var scale: CGFloat = 1.0
   let store: Store<InterfaceState<Holder>, InterfaceAction<Holder>>
   
   public init(mapping: [ GenericEditingView<Holder>], graph: Holder, scale: CGFloat, screenSize: CGRect, store: Store<InterfaceState<Holder>, InterfaceAction<Holder>> )
   {
     self.store = store
-    self.driver = SpriteDriver(mapping: mapping, graph: graph, scale: scale, screenSize: screenSize, sizePreferences: self.store.value.sizePreferences)
+    self.driver = SpriteDriver(mapping: mapping, graph: graph, screenSize: screenSize, sizePreferences: self.store.value.sizePreferences, store: store)
     self.driverLayout = PositionedLayout(
       child: IssuedLayout(child: LayoutToDriver( child: driver )),
       ofSize: CGSize.zero,
       aligned: (.center, .center))
     super.init(nibName: nil, bundle: nil)
     self.driver.delgate = self
-    scaleObserver = NotificationObserver(
-      notification: scaleChangeNotification,
-      block: { [weak self] in
-        self?.driver.scale = $0
-        self?.viewport.scale = $0
-        self?.scale = $0
-        print("      ------    SCALE CHANGED TO ", $0, " ------ ")
-    })
-  }
+    store.subscribe{ [weak self]
+       newState in
+      
+      switch newState.zoomState {
+      case .scaled(let newScale):
+        let bestFit = self.store.value.selection.size |> self.driver.build
+        self.driverLayout.size = bestFit
+        self.driverLayout.layout(in: self.store.value.selection)
+        
+      case .zooming(interimScale: let interim):
+        self.interimScale = scale
+
+      }
+      
+        //self?.viewport.scale = newState.scale
+      }
+    }
+  
   required init?(coder aDecoder: NSCoder) {
     fatalError("Init with coder not implemented")
   }
@@ -105,7 +183,7 @@ public class ViewController<Holder:GraphHolder> : UIViewController, SpriteDriver
     let selection = CGRect.around(viewport.canvas.frame.center, size: bestFit)
     self.viewport.animateSelection(to: selection)
     
-    self.driverLayout.layout(in: self.viewport.selection)
+    self.driverLayout.layout(in: self.store.value.selection)
   }
   
   func saveSnapshot(view: UIView) {
@@ -119,7 +197,7 @@ public class ViewController<Holder:GraphHolder> : UIViewController, SpriteDriver
       let cropped = cropToBounds(image: img, width: newSize.width, height:newSize
         .height)
       
-      self.store.send(.thumbnailsAddToCache(cropped, url: self.store.value.thumbnailFileName, id: self.driver.graph.id))
+      self.store.send(.thumbnailsAddToCache(cropped, id: self.driver.graph.id))
       //let urlRes = Current.thumbnails.addToCache(cropped, item.thumbnailFileName)
       
       }
@@ -135,7 +213,12 @@ public class ViewController<Holder:GraphHolder> : UIViewController, SpriteDriver
   
   //var booley = true
   override public func loadView() {
-    viewport = CanvasViewport(frame: UIScreen.main.bounds, element: self.driver.content)
+    viewport = CanvasViewport(frame: store.value.windowBounds,
+                              element: self.driver.content,
+                              store:store.view(value: { $0.canvasState
+                              }, action: {
+                                .canvasAction($0)
+                              }))
     self.view = viewport
     
     self.view.backgroundColor = self.driver.spriteView.scene?.backgroundColor
@@ -152,19 +235,19 @@ public class ViewController<Holder:GraphHolder> : UIViewController, SpriteDriver
       // —functionality that is part of the self.alignedLayout stack—
       // as a side note it also ignores alignment but this
       // doesnt matter in this case since we are probabbly already snug
-      self.driver.layout(origin: self.viewport.selection.origin)
+      self.driver.layout(origin: self.store.value.selection.origin)
     }
     viewport.selectionOriginChanged = { [weak self] _ in
       guard let self = self else { return }
-      self.driverLayout.layout(in: self.viewport.selection) /// should be VPCoord
+      self.driverLayout.layout(in: self.store.value.selection) /// should be VPCoord
 
     }
     viewport.selectionSizeChanged = { [weak self] _ in
       guard let self = self else { return }
 
-      let bestFit = (self.viewport.selection.size, self.interimScale ?? self.scale) |> self.driver.build
+      let bestFit = (self.store.value.selection.size, self.interimScale ?? self.store.value.scale) |> self.driver.build
       self.driverLayout.size = bestFit
-      self.driverLayout.layout(in: self.viewport.selection)
+      self.driverLayout.layout(in: self.store.value.selection)
 
     }
     viewport.didBeginEdit = {
@@ -191,29 +274,17 @@ public class ViewController<Holder:GraphHolder> : UIViewController, SpriteDriver
       //print("before zoom begins - scale",  self.driver.scale)
     }
     viewport.zooming = { scale in
-
-      //self.driver.set(scale: scale)
-      
-      //Current.scale = scale
-      self.interimScale = scale
     }
     viewport.didEndZoom = { scale in
 
-
-      
       self.interimScale = nil
       //Model scale is changed here by firing a notification to all listening viewcontrollers
-      postNotification(note: scaleChangeNotification, value: scale)
+      //self.store.send(.zoomDidEnd(scale: scale))
       
-      let bestFit = self.viewport.selection.size |> self.driver.build
-      self.driverLayout.size = bestFit
-      self.driverLayout.layout(in: self.viewport.selection)
       
-
     }
   
   }
-  var interimScale : CGFloat?
   override public func viewDidLayoutSubviews() {
     super.viewDidLayoutSubviews()
   }
@@ -231,9 +302,9 @@ extension CanvasViewport {
   func logViewport ()
   {
     print("----------")
-    print("-ModelSpace Selection", self.selection.scaled(by: self.scale).rounded(places: 1))
-    print("-PaperSpace Selection", self.selection.rounded(places: 1))
-    print("-Scale", self.scale.rounded(places: 2))
+    //print("-ModelSpace Selection", self.selection.scaled(by: self.scale).rounded(places: 1))
+    //print("-PaperSpace Selection", self.selection.rounded(places: 1))
+    //print("-Scale", self.scale.rounded(places: 2))
     print("-Offset", self.offset.rounded(places: 1))
     print("-Canvas", self.canvas.frame.rounded(places: 1))
 
@@ -251,7 +322,7 @@ extension ViewController {
     
     
 
-    print("++++ ", self.viewport.selection.origin, " == ", self.driver._previousOrigin.0, " => ", self.viewport.selection.origin ==  self.driver._previousOrigin.0, " ++++" )
+    //print("++++ ", self.viewport.selection.origin, " == ", self.driver._previousOrigin.0, " => ", self.viewport.selection.origin ==  self.driver._previousOrigin.0, " ++++" )
     
     
     print("----------")

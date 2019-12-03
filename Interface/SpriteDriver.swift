@@ -12,12 +12,11 @@ import Layout
 import Geo
 import GrapheNaked
 import BlackCricket
+import ComposableArchitecture
 
 protocol SpriteDriverDelegate : class {
   func didAddEdge()
 }
-
-let scaleChangeNotification : Notification<CGFloat> = Notification(name: "Scale Changed")
 
 public protocol GraphHolder : class {
   associatedtype Content : Codable
@@ -32,8 +31,6 @@ class SpriteDriver<Holder:GraphHolder> : Driver {
   
   var uiPointToSprite : ((CGPoint)->CGPoint)!
   var uiRectToSprite : ((CGRect)->CGRect)!
-  var scaleObserver : NotificationObserver!
-  var scale: CGFloat
   public var graph : Holder
   var id: String?
   weak var delgate : SpriteDriverDelegate?
@@ -42,11 +39,13 @@ class SpriteDriver<Holder:GraphHolder> : Driver {
   public var spriteView : Sprite2DView
   var content : UIView { return self.spriteView }
   var sizePreferences: [CGFloat]
+  let store: Store<InterfaceState<Holder>, InterfaceAction<Holder>>
   
   // Eventually dependency injected
   var initialFrame : CGRect
   
-  public init(mapping: [Mapping], graph: Holder, scale: CGFloat, screenSize: CGRect, sizePreferences:[CGFloat]  ) {
+  public init(mapping: [Mapping], graph: Holder, screenSize: CGRect, sizePreferences:[CGFloat], store: Store<InterfaceState<Holder>, InterfaceAction<Holder>>) {
+    self.store = store
     self.graph = graph
     editingView = mapping[0]
     loadedViews = mapping
@@ -54,17 +53,12 @@ class SpriteDriver<Holder:GraphHolder> : Driver {
     
     spriteView = Sprite2DView(frame:initialFrame )
     
-    self.scale = scale
     self.sizePreferences = sizePreferences
     spriteView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(SpriteDriver.tap)))
     
-    
-    scaleObserver = NotificationObserver(
-      notification: scaleChangeNotification,
-      block: { [weak self] in
-        self?.scale = $0
-      self!.spriteView.scale = $0
-    })
+    store.subscribe{  [weak self] value in
+      self!.spriteView.scale = value.scale
+    }
   }
   
   var _previousOrigin = (ui:CGPoint.zero, sprite:CGPoint.zero)
@@ -72,7 +66,7 @@ class SpriteDriver<Holder:GraphHolder> : Driver {
   func layout(origin: CGPoint) {
     
     // ICAN : Pass *Holder* into editingView.size Function
-    let heightVector = unitY * (self.graph |> self.editingView.size).height * self.scale
+    let heightVector = unitY * (self.graph |> self.editingView.size).height * self.store.value.scale
     
     self._previousOrigin = (origin, uiPointToSprite(origin)  - heightVector )
     
@@ -108,12 +102,14 @@ class SpriteDriver<Holder:GraphHolder> : Driver {
   var size : CGSize {
     get {
       // ICAN : Pass *Holder* into editingView.size Function to get a CGSize back
-      return (self.graph |> self.editingView.size) * self.scale
+      return (self.graph |> self.editingView.size) * self.store.value.scale
+
     }
   }
   
   func build(for viewportSize: CGSize) -> CGSize {
-    return self.build(for:viewportSize, atScale: self.scale)
+    return self.build(for:viewportSize, atScale: self.store.value.scale
+)
   }
   
   func build(for viewportSize: CGSize, atScale scale: CGFloat) -> CGSize {
@@ -173,7 +169,8 @@ class SpriteDriver<Holder:GraphHolder> : Driver {
     let rectS = self._previousSetRect |> uiRectToSprite
     
     let p = (tS, rectS) |> viewSpaceToModelSpace
-    let scaledP = p * 1/scale
+    let scaledP = p * 1/self.store.value.scale
+
     // Properly models concern
     // ICAN : Pass *Holder* into editingView.grid2D Function to get Graph Positions 2D Sorted back
     let editBoundaries = self.graph |> editingView.grid2D ///
@@ -192,7 +189,7 @@ class SpriteDriver<Holder:GraphHolder> : Driver {
     // mRect is something like (0.0, 30.0, 100.0, 100.0)
     // (0.0, 0.0, 100.0, 30.0)
     
-    let scaledMRect = mRect.scaled(by: scale)
+    let scaledMRect = mRect.scaled(by: self.store.value.scale)
     
     let yToSprite = { self.uiPointToSprite!(CGPoint(0, $0)) }  >>> { return $0.y }
     

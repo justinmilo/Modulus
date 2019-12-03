@@ -48,7 +48,6 @@
 		21BCBD662381A3EB00644B14 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 21BCBD4E23819E3700644B14 /* Media.xcassets */; };
 		21D703B7238EB5AC005D5CBE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D703B6238EB5AC005D5CBE /* AppDelegate.swift */; };
 		21D703B9238EB5AC005D5CBE /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D703B8238EB5AC005D5CBE /* SceneDelegate.swift */; };
-		21D703BB238EB5AC005D5CBE /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D703BA238EB5AC005D5CBE /* ContentView.swift */; };
 		21D703BD238EB5AD005D5CBE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 21D703BC238EB5AD005D5CBE /* Assets.xcassets */; };
 		21D703C0238EB5AD005D5CBE /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 21D703BF238EB5AD005D5CBE /* Preview Assets.xcassets */; };
 		21D703C3238EB5AD005D5CBE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 21D703C1238EB5AD005D5CBE /* LaunchScreen.storyboard */; };
@@ -347,7 +346,6 @@
 		21D703B4238EB5AC005D5CBE /* TentApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TentApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		21D703B6238EB5AC005D5CBE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		21D703B8238EB5AC005D5CBE /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		21D703BA238EB5AC005D5CBE /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		21D703BC238EB5AD005D5CBE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		21D703BF238EB5AD005D5CBE /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		21D703C2238EB5AD005D5CBE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -661,7 +659,6 @@
 			children = (
 				21D703B6238EB5AC005D5CBE /* AppDelegate.swift */,
 				21D703B8238EB5AC005D5CBE /* SceneDelegate.swift */,
-				21D703BA238EB5AC005D5CBE /* ContentView.swift */,
 				21D703C8238EBCF9005D5CBE /* TentView.swift */,
 				21D703BC238EB5AD005D5CBE /* Assets.xcassets */,
 				21D703C1238EB5AD005D5CBE /* LaunchScreen.storyboard */,
@@ -1252,7 +1249,6 @@
 			files = (
 				21D703B7238EB5AC005D5CBE /* AppDelegate.swift in Sources */,
 				21D703B9238EB5AC005D5CBE /* SceneDelegate.swift in Sources */,
-				21D703BB238EB5AC005D5CBE /* ContentView.swift in Sources */,
 				21D703C9238EBCF9005D5CBE /* TentView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

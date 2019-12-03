@@ -263,8 +263,8 @@ let tentSideMap = GenericEditingView<TentGraph>(
 
 
 
-func tentVC(title: String, graph: TentGraph, tentMap:GenericEditingView<TentGraph>) -> ViewController<TentGraph> {
-  let store : Store<InterfaceState, InterfaceAction> = Store(initialValue: InterfaceState<TentGraph>(thumbnailFileName: nil, sizePreferences: []), reducer: interfaceReducer)
+func tentVC(store: Store<InterfaceState<TentGraph>, InterfaceAction<TentGraph>>, title: String, graph: TentGraph, tentMap:GenericEditingView<TentGraph>) -> ViewController<TentGraph> {
+  
 
   let vc = ViewController( mapping: [tentMap], graph: graph, scale: 1.0, screenSize: Current.screen, store:store)
   vc.title = title
