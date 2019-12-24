@@ -13,7 +13,7 @@ import Interface
 import ComposableArchitecture
 
 struct TentState {
-  var scale : CGFloat =  1.0
+  var scale : CGFloat { self.planState.scale }
   public var sizePreferences : [CGFloat] = [100.0]
   
   var planState: InterfaceState<TentGraph>
@@ -21,10 +21,12 @@ struct TentState {
   init () {
     planState = InterfaceState(
     sizePreferences: self.sizePreferences,
-    scale: self.scale,
+    scale: 1.0,
     windowBounds: UIScreen.main.bounds,
     selection: CGRect(50, 50, 300, 400))
   }
+  
+
   
   
 }
@@ -57,7 +59,7 @@ struct TentView : UIViewControllerRepresentable {
   let store : Store<TentState, TentAction> = Store(
     initialValue: TentState(),
     reducer:  tentReducer
-      // |> logging
+       |> logging
   )
   
   func makeUIViewController(context: UIViewControllerRepresentableContext<TentView>) -> UINavigationController {

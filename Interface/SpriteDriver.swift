@@ -108,8 +108,7 @@ class SpriteDriver<Holder:GraphHolder> : Driver {
   }
   
   func build(for viewportSize: CGSize) -> CGSize {
-    return self.build(for:viewportSize, atScale: self.store.value.scale
-)
+    return self.build(for:viewportSize, atScale: self.store.value.scale)
   }
   
   func build(for viewportSize: CGSize, atScale scale: CGFloat) -> CGSize {

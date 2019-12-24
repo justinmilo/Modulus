@@ -91,9 +91,11 @@ extension InterfaceState {
   public var scale : CGFloat  {
     switch self.canvasState.scroll.centered.setter {
     case .beginZoom,
-         .none: return self.canvasState.scroll.centered.currentScale
-    case .interimZoom: return  self.canvasState.scroll.centered.grow.read.rootContentTransform
-    case .finalZoom( _,  _,  _,  _, setterScale: let scale, _): return scale
+         .none:
+      return self.canvasState.scroll.centered.currentScale
+    case .interimZoom,
+         .finalZoom:
+      return  self.canvasState.scroll.centered.grow.read.rootContentTransform * self.canvasState.scroll.centered.currentScale
     }
   }
 }
@@ -126,8 +128,20 @@ public func interfaceReducer<Holder:GraphHolder>(state: inout InterfaceState<Hol
           return []
         case .addOrReplace:
           return []
-        case .canvasAction(_):
+        case .canvasAction(.handles(.handles(.top(.handle(.didLetGo))))),
+             .canvasAction(.handles(.handles(.bottom(.handle(.didLetGo))))),
+             .canvasAction(.handles(.handles(.left(.handle(.didLetGo))))),
+             .canvasAction(.handles(.handles(.right(.handle(.didLetGo))))):
+          
           return []
+        case .canvasAction(.handles(.handles(.top(.handle(.didMoveFinger(_)))))),
+             .canvasAction(.handles(.handles(.bottom(.handle(.didMoveFinger(_)))))),
+              .canvasAction(.handles(.handles(.left(.handle(.didMoveFinger(_)))))),
+              .canvasAction(.handles(.handles(.right(.handle(.didMoveFinger(_)))))):
+          
+          return [Effect{ callback in
+            callback(.)
+            }]
       }
   }
   )
@@ -203,9 +217,9 @@ public class ViewController<Holder:GraphHolder> : UIViewController, SpriteDriver
         self.driverLayout.layout(in: self.store.value.selection)
       }
       
-      }
-          
     }
+          
+  }
  
   
   required init?(coder aDecoder: NSCoder) {
