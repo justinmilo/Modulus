@@ -11,7 +11,7 @@
 		2111C855238B224D000485F1 /* Interface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2111C84E238B224D000485F1 /* Interface.framework */; };
 		2111C856238B224D000485F1 /* Interface.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2111C84E238B224D000485F1 /* Interface.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		2111C85B238B22B2000485F1 /* SpriteDriver.swift in Sources */ = {isa = PBXBuildFile; fileRef = D033E37520F238FA0026E1C4 /* SpriteDriver.swift */; };
-		2111C85C238B22E6000485F1 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D036097A20D5968100C11E79 /* ViewController.swift */; };
+		2111C85C238B22E6000485F1 /* Interface.swift in Sources */ = {isa = PBXBuildFile; fileRef = D036097A20D5968100C11E79 /* Interface.swift */; };
 		2111C85E238B2324000485F1 /* Layout.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2111C85D238B2324000485F1 /* Layout.framework */; };
 		2111C861238B2372000485F1 /* TypedNotifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21BCBD6123819F8600644B14 /* TypedNotifications.swift */; };
 		2111C862238B23B0000485F1 /* IssuedLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D033E37A20F2C6130026E1C4 /* IssuedLayout.swift */; };
@@ -26,8 +26,6 @@
 		213DC739238C93850062AA43 /* ComposableArchitecture.h in Headers */ = {isa = PBXBuildFile; fileRef = 213DC737238C93850062AA43 /* ComposableArchitecture.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		213DC73C238C93850062AA43 /* ComposableArchitecture.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 213DC735238C93850062AA43 /* ComposableArchitecture.framework */; };
 		213DC73D238C93850062AA43 /* ComposableArchitecture.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 213DC735238C93850062AA43 /* ComposableArchitecture.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		213DC743238C939F0062AA43 /* Effects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213DC741238C939F0062AA43 /* Effects.swift */; };
-		213DC744238C939F0062AA43 /* ComposableArchitecture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213DC742238C939F0062AA43 /* ComposableArchitecture.swift */; };
 		213DC745238C93AC0062AA43 /* ComposableArchitecture.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 213DC735238C93850062AA43 /* ComposableArchitecture.framework */; };
 		213DC753238CA9910062AA43 /* ScaffGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213DC74D238CA9900062AA43 /* ScaffGraph.swift */; };
 		213DC757238CA9910062AA43 /* EdgePredicates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213DC751238CA9900062AA43 /* EdgePredicates.swift */; };
@@ -35,10 +33,13 @@
 		213DC75E238CA9F90062AA43 /* SliceScaffoldingCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213DC75A238CA9F90062AA43 /* SliceScaffoldingCore.swift */; };
 		213DC75F238CA9F90062AA43 /* ScaffGraphCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213DC75B238CA9F90062AA43 /* ScaffGraphCore.swift */; };
 		213DC760238CA9F90062AA43 /* Tenting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213DC75C238CA9F90062AA43 /* Tenting.swift */; };
+		2147608123B2906C001C7FAD /* TentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2147608023B2906C001C7FAD /* TentView.swift */; };
 		214A084E2383A85E0016FE80 /* TentViewMaps.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213B4FBC23839EEF00E87F5A /* TentViewMaps.swift */; };
 		214C6EC32385A91C00A07140 /* SwiftUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214C6EC22385A91C00A07140 /* SwiftUIView.swift */; };
 		2166F9CE238CECC7008E0FF6 /* GrapheNaked.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2166F9CD238CECC7008E0FF6 /* GrapheNaked.framework */; };
 		2166F9CF238CECC7008E0FF6 /* GrapheNaked.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2166F9CD238CECC7008E0FF6 /* GrapheNaked.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		21B1E5E923986DB500737B78 /* Effects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B1E5E723986DB500737B78 /* Effects.swift */; };
+		21B1E5EA23986DB500737B78 /* ComposableArchitecture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B1E5E823986DB500737B78 /* ComposableArchitecture.swift */; };
 		21BCBD4B23819DF700644B14 /* Misc Utilities Mine in Resources */ = {isa = PBXBuildFile; fileRef = 21BCBD4A23819DF700644B14 /* Misc Utilities Mine */; };
 		21BCBD5223819F3800644B14 /* 3DExchange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21BCBD5123819F3800644B14 /* 3DExchange.swift */; };
 		21BCBD5423819F4200644B14 /* Array+PreviousNext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21BCBD5323819F4200644B14 /* Array+PreviousNext.swift */; };
@@ -51,7 +52,7 @@
 		21D703BD238EB5AD005D5CBE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 21D703BC238EB5AD005D5CBE /* Assets.xcassets */; };
 		21D703C0238EB5AD005D5CBE /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 21D703BF238EB5AD005D5CBE /* Preview Assets.xcassets */; };
 		21D703C3238EB5AD005D5CBE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 21D703C1238EB5AD005D5CBE /* LaunchScreen.storyboard */; };
-		21D703C9238EBCF9005D5CBE /* TentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D703C8238EBCF9005D5CBE /* TentView.swift */; };
+		21D703C9238EBCF9005D5CBE /* QuadTentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D703C8238EBCF9005D5CBE /* QuadTentView.swift */; };
 		21ECD6BD23909D4F00C83C06 /* Modular.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0F58CF4210E201200AACC8F /* Modular.framework */; };
 		21ECD6BE23909D4F00C83C06 /* Modular.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D0F58CF4210E201200AACC8F /* Modular.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		21ECD6C023909D5300C83C06 /* BlackCricket.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D09F3671210D0C4200D38F4C /* BlackCricket.framework */; };
@@ -320,16 +321,17 @@
 		213DC735238C93850062AA43 /* ComposableArchitecture.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ComposableArchitecture.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		213DC737238C93850062AA43 /* ComposableArchitecture.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ComposableArchitecture.h; sourceTree = "<group>"; };
 		213DC738238C93850062AA43 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		213DC741238C939F0062AA43 /* Effects.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Effects.swift; path = "../../../../../Documents/GitHub/episode-code-samples/0079-effectful-state-management-wtp/PrimeTime/ComposableArchitecture/Effects.swift"; sourceTree = "<group>"; };
-		213DC742238C939F0062AA43 /* ComposableArchitecture.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ComposableArchitecture.swift; path = "../../../../../Documents/GitHub/episode-code-samples/0079-effectful-state-management-wtp/PrimeTime/ComposableArchitecture/ComposableArchitecture.swift"; sourceTree = "<group>"; };
 		213DC74D238CA9900062AA43 /* ScaffGraph.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScaffGraph.swift; sourceTree = "<group>"; };
 		213DC751238CA9900062AA43 /* EdgePredicates.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EdgePredicates.swift; sourceTree = "<group>"; };
 		213DC759238CA9F90062AA43 /* Scaffolding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Scaffolding.swift; sourceTree = "<group>"; };
 		213DC75A238CA9F90062AA43 /* SliceScaffoldingCore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SliceScaffoldingCore.swift; sourceTree = "<group>"; };
 		213DC75B238CA9F90062AA43 /* ScaffGraphCore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScaffGraphCore.swift; sourceTree = "<group>"; };
 		213DC75C238CA9F90062AA43 /* Tenting.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tenting.swift; sourceTree = "<group>"; };
+		2147608023B2906C001C7FAD /* TentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TentView.swift; sourceTree = "<group>"; };
 		214C6EC22385A91C00A07140 /* SwiftUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SwiftUIView.swift; path = ../ScrollViewGrower/SwiftUIView.swift; sourceTree = "<group>"; };
 		2166F9CD238CECC7008E0FF6 /* GrapheNaked.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = GrapheNaked.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		21B1E5E723986DB500737B78 /* Effects.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Effects.swift; sourceTree = "<group>"; };
+		21B1E5E823986DB500737B78 /* ComposableArchitecture.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ComposableArchitecture.swift; sourceTree = "<group>"; };
 		21BCBD4A23819DF700644B14 /* Misc Utilities Mine */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "Misc Utilities Mine"; sourceTree = "<group>"; };
 		21BCBD4E23819E3700644B14 /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
 		21BCBD4F23819E3700644B14 /* GraphicsCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphicsCore.swift; sourceTree = "<group>"; };
@@ -350,7 +352,7 @@
 		21D703BF238EB5AD005D5CBE /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		21D703C2238EB5AD005D5CBE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		21D703C4238EB5AD005D5CBE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		21D703C8238EBCF9005D5CBE /* TentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TentView.swift; sourceTree = "<group>"; };
+		21D703C8238EBCF9005D5CBE /* QuadTentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuadTentView.swift; sourceTree = "<group>"; };
 		21ECD6D023909D7E00C83C06 /* Drawable.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Drawable.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D00069D0200BD08300E8D5F3 /* Deploy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Deploy.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D00069D3200BD08300E8D5F3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -363,7 +365,7 @@
 		D0326764207FFE3800BBF563 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D033E37520F238FA0026E1C4 /* SpriteDriver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpriteDriver.swift; sourceTree = "<group>"; };
 		D033E37A20F2C6130026E1C4 /* IssuedLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssuedLayout.swift; sourceTree = "<group>"; };
-		D036097A20D5968100C11E79 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		D036097A20D5968100C11E79 /* Interface.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Interface.swift; sourceTree = "<group>"; };
 		D0360A1A20D6DA9700C11E79 /* ViewDiagramDriver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewDiagramDriver.swift; sourceTree = "<group>"; };
 		D03E03D920124DB8002D47F3 /* Testing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Testing.swift; sourceTree = "<group>"; };
 		D03E03F720125DF8002D47F3 /* Sprite2DView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sprite2DView.swift; sourceTree = "<group>"; };
@@ -536,7 +538,7 @@
 				2111C863238B23B8000485F1 /* Should Move To Earlier Frameworks */,
 				D03E03F720125DF8002D47F3 /* Sprite2DView.swift */,
 				2111C86F238B26B5000485F1 /* GenericViewMap.swift */,
-				D036097A20D5968100C11E79 /* ViewController.swift */,
+				D036097A20D5968100C11E79 /* Interface.swift */,
 				D01A6E5920DD5C1F00250F32 /* LayoutToDriver.swift */,
 				D033E37520F238FA0026E1C4 /* SpriteDriver.swift */,
 				2111C850238B224D000485F1 /* Interface.h */,
@@ -559,9 +561,9 @@
 		213DC736238C93850062AA43 /* ComposableArchitecture */ = {
 			isa = PBXGroup;
 			children = (
+				21B1E5E823986DB500737B78 /* ComposableArchitecture.swift */,
+				21B1E5E723986DB500737B78 /* Effects.swift */,
 				213DC737238C93850062AA43 /* ComposableArchitecture.h */,
-				213DC742238C939F0062AA43 /* ComposableArchitecture.swift */,
-				213DC741238C939F0062AA43 /* Effects.swift */,
 				213DC738238C93850062AA43 /* Info.plist */,
 			);
 			path = ComposableArchitecture;
@@ -659,7 +661,8 @@
 			children = (
 				21D703B6238EB5AC005D5CBE /* AppDelegate.swift */,
 				21D703B8238EB5AC005D5CBE /* SceneDelegate.swift */,
-				21D703C8238EBCF9005D5CBE /* TentView.swift */,
+				21D703C8238EBCF9005D5CBE /* QuadTentView.swift */,
+				2147608023B2906C001C7FAD /* TentView.swift */,
 				21D703BC238EB5AD005D5CBE /* Assets.xcassets */,
 				21D703C1238EB5AD005D5CBE /* LaunchScreen.storyboard */,
 				21D703C4238EB5AD005D5CBE /* Info.plist */,
@@ -1225,7 +1228,7 @@
 				2111C862238B23B0000485F1 /* IssuedLayout.swift in Sources */,
 				2111C861238B2372000485F1 /* TypedNotifications.swift in Sources */,
 				2111C866238B24EB000485F1 /* Sprite2DView.swift in Sources */,
-				2111C85C238B22E6000485F1 /* ViewController.swift in Sources */,
+				2111C85C238B22E6000485F1 /* Interface.swift in Sources */,
 				2111C85B238B22B2000485F1 /* SpriteDriver.swift in Sources */,
 				2111C870238B26B5000485F1 /* GenericViewMap.swift in Sources */,
 				2111C865238B24B8000485F1 /* UIView+Image.swift in Sources */,
@@ -1238,8 +1241,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				213DC743238C939F0062AA43 /* Effects.swift in Sources */,
-				213DC744238C939F0062AA43 /* ComposableArchitecture.swift in Sources */,
+				21B1E5E923986DB500737B78 /* Effects.swift in Sources */,
+				21B1E5EA23986DB500737B78 /* ComposableArchitecture.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1249,7 +1252,8 @@
 			files = (
 				21D703B7238EB5AC005D5CBE /* AppDelegate.swift in Sources */,
 				21D703B9238EB5AC005D5CBE /* SceneDelegate.swift in Sources */,
-				21D703C9238EBCF9005D5CBE /* TentView.swift in Sources */,
+				2147608123B2906C001C7FAD /* TentView.swift in Sources */,
+				21D703C9238EBCF9005D5CBE /* QuadTentView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1565,6 +1569,7 @@
 		21D703C6238EB5AD005D5CBE /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_STYLE = Automatic;
@@ -1586,6 +1591,7 @@
 		21D703C7238EB5AD005D5CBE /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_STYLE = Automatic;

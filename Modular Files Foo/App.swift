@@ -174,12 +174,8 @@ func savingReducer(
     
   case let .interfaceAction(intfAction):
     switch intfAction {
-    case .canvasAction(.selection(.changeSelection(_))),
-         .canvasAction(.selection(.zoomEndend(_))):
-      return []
-    case let .canvasAction(.handles(handlesAction)):
-      switch handlesAction{
-      }
+    case .canvasAction: return []
+
     case .saveData:
       let itemsCopy = state.items
       return [Effect{_ in
