@@ -18,32 +18,26 @@ import GrapheNaked
 
 
 public struct InterfaceState<Holder:GraphHolder> {
-  public var windowBounds : CGRect
-  var selOriginChanged : Changed<CGPoint>
-  var selSizeChanged: Changed<CGSize>
+  public let windowBounds : CGRect
  
   public init(
     graph: Holder,
     mapping: [GenericEditingView<Holder>],
-               sizePreferences: [CGFloat],
-               scale : CGFloat,
-               windowBounds: CGRect,
-               selection : CGRect
+    sizePreferences: [CGFloat],
+    scale : CGFloat,
+    windowBounds: CGRect,
+    selection : CGRect
   ) {
     self.windowBounds = windowBounds
     self.canvasState = CanvasSelectionState(frame: windowBounds, rect: selection,
                                             handleBoundary: windowBounds
                                               .inset(by: UIEdgeInsets(top: 120, left: 40, bottom: 100, right: 40)))
-    selOriginChanged = Changed(selection.origin)
-    selSizeChanged = Changed(selection.size)
     self.spriteState =  SpriteState(scale : scale, sizePreferences: sizePreferences, boundingRect: selection, graph: graph, editingViews: mapping )
   }
 
   var spriteState : SpriteState<Holder>
   var canvasState : CanvasSelectionState {
     didSet {
-      selOriginChanged.update( self.selection.origin)
-      selSizeChanged.update( self.selection.size)
       spriteState.frame.update(self.selection)
     }
   }
