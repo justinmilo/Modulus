@@ -14,102 +14,64 @@ import GrapheNaked
 import BlackCricket
 import ComposableArchitecture
 
-protocol SpriteDriverDelegate : class {
-  func didAddEdge()
-}
 
-public protocol GraphHolder : class {
-  associatedtype Content : Codable
-  var id : String { get }
-  var edges : [Edge<Content>] { get set }
-  var grid : GraphPositions { get set }
-  
-}
 
-class SpriteDriver<Holder:GraphHolder> : Driver {
-  public typealias Mapping = GenericEditingView<Holder>
-  
-  var uiPointToSprite : ((CGPoint)->CGPoint)!
-  var uiRectToSprite : ((CGRect)->CGRect)!
-  public var graph : Holder
-  var id: String?
-  weak var delgate : SpriteDriverDelegate?
-  var editingView : Mapping
-  var loadedViews : [Mapping]
-  public var spriteView : Sprite2DView
-  var content : UIView { return self.spriteView }
-  var sizePreferences: [CGFloat]
-  let store: Store<InterfaceState<Holder>, InterfaceAction<Holder>>
-  
-  // Eventually dependency injected
-  var initialFrame : CGRect
-  
-  public init(mapping: [Mapping], graph: Holder, screenSize: CGRect, sizePreferences:[CGFloat], store: Store<InterfaceState<Holder>, InterfaceAction<Holder>>) {
-    self.store = store
-    self.graph = graph
-    editingView = mapping[0]
-    loadedViews = mapping
-    initialFrame = screenSize
-    
-    spriteView = Sprite2DView(frame:initialFrame )
-    
+
+struct SpriteState<Holder:GraphHolder> {
+  init(scale : CGFloat, sizePreferences: [CGFloat], boundingRect: CGRect, graph: Holder, editingViews: [GenericEditingView<Holder>] ){
+    self.scale = scale
     self.sizePreferences = sizePreferences
-    spriteView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(SpriteDriver.tap)))
-    
-    store.subscribe{  [weak self] value in
-      self!.spriteView.scale = value.scale
+    self.frame = Changed(boundingRect)
+    self.graph = graph
+    self.editingView = editingViews[0]
+    self.loadedViews = editingViews
+    let viewportSize = frame.value.size
+    let modelspaceSize_input = viewportSize / scale
+    let roundedModelSize = modelspaceSize_input.rounded(places: 5)
+    // ICAN : Pass *Holder* into editingView.size3 Function to get a func from Size to Size3
+    let s3 = roundedModelSize |> self.editingView.size3(self.graph)
+    // ICAN : set *Holder* grid and edgs from editingView.build Function
+    (self.graph.grid, self.graph.edges) = self.editingView.build( self.sizePreferences,
+      s3, self.graph.edges)
+    //                           ICAN : Pass *Holder* into editingView.size Function to get a CGSize back
+    let modelSpaceSize_output =  self.graph |> self.editingView.size
+    self.currentSize = modelSpaceSize_output * scale
+    self.layout = PositionedRect(ofSize: self.currentSize, aligned: (.center, .center), initialRect: boundingRect)
+    self.origin = Changed(boundingRect.origin)
+    self.size = Changed(boundingRect.size)
+  }
+  var scale : CGFloat
+  public var sizePreferences : [CGFloat]
+  public var frame : Changed<CGRect> {
+    didSet {
+      if let newFrame = frame.changed {
+        self.origin.update(newFrame.origin)
+        self.size.update(newFrame.size)
+      }
     }
   }
-  
-  var _previousOrigin = (ui:CGPoint.zero, sprite:CGPoint.zero)
-  
-  func layout(origin: CGPoint) {
-    
-    // ICAN : Pass *Holder* into editingView.size Function
-    let heightVector = unitY * (self.graph |> self.editingView.size).height * self.store.value.scale
-    
-    self._previousOrigin = (origin, uiPointToSprite(origin)  - heightVector )
-    
-    self.spriteView.mainNode.position = uiPointToSprite(origin)  - heightVector
-  }
-  
-  var _previousSize = CGSize.zero
-  /// Handler for Selection Size Changed
-  ///
-  /// Checks if newSize should be redrawn
-  func layout(size: CGSize) {
-
-    // Create New Model &  // Find Orirgin
-    // Setting up our interior vie)
-    
-    if size != _previousSize {
-      // Set & Redraw Geometry
-      self._layout(size: size)
-      //self.twoDView.draw(newRect)
-    }
-    self._previousSize = size
-  }
-  
-  private func _layout(size: CGSize)
-  {
-    // ICAN : Pass *Holder* into editingView.composite Function to get a Composite Struct back
-    let geom = self.graph |> self.editingView.composite
-    self.spriteView.redraw(geom)
-  }
-  
-  var _previousSetRect : CGRect { get { return CGRect(origin: _previousOrigin.ui, size:_previousSize) }}
-  
-  var size : CGSize {
-    get {
-      // ICAN : Pass *Holder* into editingView.size Function to get a CGSize back
-      return (self.graph |> self.editingView.size) * self.store.value.scale
-
+  fileprivate var origin: Changed<CGPoint> {
+    didSet {
+      if let _ = origin.changed {
+        layout.layout(in: self.frame.value)
+      }
     }
   }
-  
-  func build(for viewportSize: CGSize) -> CGSize {
-    return self.build(for:viewportSize, atScale: self.store.value.scale)
+  fileprivate var size : Changed<CGSize> {
+    didSet {
+      if let newSize = size.changed {
+        let bestFit = (newSize, self.scale) |> build
+        self.currentSize = bestFit
+        layout.container = self.currentSize
+        layout.layout(in: self.frame.value)
+      }
+    }
   }
+  let graph : Holder
+  private(set) var layout : PositionedRect
+  private(set) var currentSize : CGSize
+  let editingView : GenericEditingView<Holder>
+  let loadedViews : [GenericEditingView<Holder>]
   
   func build(for viewportSize: CGSize, atScale scale: CGFloat) -> CGSize {
 
@@ -125,9 +87,96 @@ class SpriteDriver<Holder:GraphHolder> : Driver {
 
     //                           ICAN : Pass *Holder* into editingView.size Function to get a CGSize back
     let modelSpaceSize_output =  self.graph |> self.editingView.size
-    return modelSpaceSize_output * spriteView.scale
-
+    return modelSpaceSize_output * scale
   }
+}
+
+protocol SpriteDriverDelegate : class {
+  func didAddEdge()
+}
+
+public protocol GraphHolder : class {
+  associatedtype Content : Codable
+  var id : String { get }
+  var edges : [Edge<Content>] { get set }
+  var grid : GraphPositions { get set }
+  
+}
+
+import Combine
+class SpriteDriver<Holder:GraphHolder> {
+  
+  var uiPointToSprite : ((CGPoint)->CGPoint)!
+  var uiRectToSprite : ((CGRect)->CGRect)!
+  var id: String?
+  weak var delgate : SpriteDriverDelegate?
+  public var spriteView : Sprite2DView
+  var content : UIView { return self.spriteView }
+  let store: Store<SpriteState<Holder>, Never>
+  var cancellable : AnyCancellable!
+  
+  // Eventually dependency injected
+  var initialFrame : CGRect
+  
+  public init(screenSize: CGRect, store: Store<SpriteState<Holder>, Never>) {
+    self.store = store
+    initialFrame = screenSize
+    
+    spriteView = Sprite2DView(frame:initialFrame )
+    
+    spriteView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(SpriteDriver.tap)))
+    
+ 
+    self.cancellable = store.$value.sink {
+      [weak self] state in
+      guard let self = self else { return }
+      self.spriteView.scale = state.scale
+      
+      if let origin = state.layout.origin.changed {
+        let heightVector = unitY * (self.store.value.graph |> state.editingView.size).height * self.store.value.scale
+        self._previousOrigin = (origin, self.uiPointToSprite(origin)  - heightVector )
+        self.spriteView.mainNode.position = self.uiPointToSprite(origin)  - heightVector
+      }
+      
+      if let size = state.layout.size.changed {
+        
+
+        // Create New Model &  // Find Orirgin
+        // Setting up our interior vie)
+        
+          // Set & Redraw Geometry
+          self._layout(size: size)
+        //self.twoDView.draw(newRect)
+      }
+    }
+    
+    
+    
+  }
+  
+  var _previousOrigin = (ui:CGPoint.zero, sprite:CGPoint.zero)
+  
+  var _previousSize = CGSize.zero
+  /// Handler for Selection Size Changed
+  ///
+  
+  private func _layout(size: CGSize)
+  {
+    // ICAN : Pass *Holder* into editingView.composite Function to get a Composite Struct back
+    let geom = self.store.value.graph |> self.store.value.editingView.composite
+    self.spriteView.redraw(geom)
+  }
+  
+  var _previousSetRect : CGRect { get { return CGRect(origin: _previousOrigin.ui, size:_previousSize) }}
+  
+  var size : CGSize {
+    get {
+      // ICAN : Pass *Holder* into editingView.size Function to get a CGSize back
+      return (self.store.value.graph |> self.store.value.editingView.size) * self.store.value.scale
+    }
+  }
+  
+  
   
   func bind(to uiRect: CGRect) {
     self.uiPointToSprite = translateToCGPointInSKCoordinates(from: uiRect, to: spriteView.frame)
@@ -152,11 +201,11 @@ class SpriteDriver<Holder:GraphHolder> : Driver {
   private var swapIndex = 0
   func changeCompositeStyle ()
   {
-    swapIndex = swapIndex+1 >= loadedViews.count ? 0 : swapIndex+1
-    self.editingView = loadedViews[swapIndex]
-    //      buildFromScratch()
-    self._layout(size: _previousSize)
-    
+//    swapIndex = swapIndex+1 >= loadedViews.count ? 0 : swapIndex+1
+//    self.editingView = loadedViews[swapIndex]
+//    //      buildFromScratch()
+//    self._layout(size: _previousSize)
+//
   }
   
   private var swapIndex2 = 0
@@ -172,7 +221,7 @@ class SpriteDriver<Holder:GraphHolder> : Driver {
 
     // Properly models concern
     // ICAN : Pass *Holder* into editingView.grid2D Function to get Graph Positions 2D Sorted back
-    let editBoundaries = self.graph |> editingView.grid2D ///
+    let editBoundaries = self.store.value.graph |> self.store.value.editingView.grid2D ///
     let curried = curry(pointToGridIndices)
     let handledCurried = curried >>>  handleTupleOptionWith
     let toGridIndices = handledCurried(editBoundaries)
@@ -200,7 +249,7 @@ class SpriteDriver<Holder:GraphHolder> : Driver {
     let flippedRect = (cellRectValue, y )  |> mirrorVertically
     // flipped rect is situated in sprite kit space
     
-    self.graph.edges = editingView.selectedCell(indices, self.graph.grid, self.graph.edges)
+    self.store.value.graph.edges = self.store.value.editingView.selectedCell(indices, self.store.value.graph.grid, self.store.value.graph.edges)
     delgate?.didAddEdge()
     
     self._layout(size: _previousSize)

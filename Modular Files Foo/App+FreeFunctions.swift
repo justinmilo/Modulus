@@ -47,8 +47,8 @@ func addBarSafely<T:UIViewController>(to viewController: T) {
 }
 func controllerFromMap(store:Store<AppState, AppAction>, target: Any, _ vm: (label:String, viewMap: [GraphEditingView]), graph: Item<ScaffGraph>) -> ViewController<ScaffGraph> {
 
-  
-  let vc = ViewController(mapping: vm.viewMap, graph: graph.content, scale: 1.0, screenSize: Current.screen, store:
+  //  let vc = ViewController(mapping: vm.viewMap, graph: graph.content, scale: 1.0, screenSize: Current.screen, store:
+  let vc = ViewController(scale: 1.0, screenSize: Current.screen, store:
     store.view (
     value:{$0.interfaceState},
     action: { .interfaceAction($0) }))

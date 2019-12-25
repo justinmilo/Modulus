@@ -266,7 +266,7 @@ let tentSideMap = GenericEditingView<TentGraph>(
 func tentVC(store: Store<InterfaceState<TentGraph>, InterfaceAction<TentGraph>>, title: String, graph: TentGraph, tentMap:GenericEditingView<TentGraph>) -> ViewController<TentGraph> {
   
 
-  let vc = ViewController( mapping: [tentMap], graph: graph, scale: 1.0, screenSize: Current.screen, store:store)
+  let vc = ViewController(scale: 1.0, screenSize: Current.screen, store:store)
   vc.title = title
   addBarSafely(to:vc)
   return vc

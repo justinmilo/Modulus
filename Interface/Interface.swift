@@ -10,74 +10,41 @@ import UIKit
 import Geo
 @testable import GrippableView
 import Singalong
-import Layout
 import Make2D
 import ComposableArchitecture
 import GrapheNaked
 
 
 
-public struct PointIndex2 : Equatable {
-  public let xI, yI : Int
-  public init( xI: Int, yI: Int) {
-    (self.xI, self.yI) = (xI, yI)
-  }
-}
-
-public struct Edge2<Content> where Content : Codable {
-  public var content : Content
-  public var p1 : PointIndex2
-  public var p2 : PointIndex2
-  
-  public init( content: Content, p1: PointIndex2, p2: PointIndex2 ) {
-    self.content = content
-    self.p1 = p1
-    self.p2 = p2
-  }
-}
-
-struct Changed<A: Equatable> {
-  private(set) var changed : A?
-  mutating func update(_ val: A) {
-    if previous != val
-    { changed = val }
-    else { changed = nil }
-    previous = val
-  }
-  private var previous: A
-  init(_ value: A) {
-    previous = value
-  }
-}
-
 
 public struct InterfaceState<Holder:GraphHolder> {
   public var windowBounds : CGRect
-  
-  
   var selOriginChanged : Changed<CGPoint>
   var selSizeChanged: Changed<CGSize>
-  
+ 
   public init(
+    graph: Holder,
+    mapping: [GenericEditingView<Holder>],
                sizePreferences: [CGFloat],
                scale : CGFloat,
                windowBounds: CGRect,
                selection : CGRect
   ) {
-    self.sizePreferences = sizePreferences
     self.windowBounds = windowBounds
     self.canvasState = CanvasSelectionState(frame: windowBounds, rect: selection,
                                             handleBoundary: windowBounds
                                               .inset(by: UIEdgeInsets(top: 120, left: 40, bottom: 100, right: 40)))
     selOriginChanged = Changed(selection.origin)
     selSizeChanged = Changed(selection.size)
+    self.spriteState =  SpriteState(scale : scale, sizePreferences: sizePreferences, boundingRect: selection, graph: graph, editingViews: mapping )
   }
-  public var sizePreferences : [CGFloat]
-  
+
+  var spriteState : SpriteState<Holder>
   var canvasState : CanvasSelectionState {
     didSet {
       selOriginChanged.update( self.selection.origin)
       selSizeChanged.update( self.selection.size)
+      spriteState.frame.update(self.selection)
     }
   }
 }
@@ -100,6 +67,10 @@ extension InterfaceState {
   }
 }
 
+extension InterfaceState {
+  public var sizePreferences : [CGFloat] { get { self.spriteState.sizePreferences } set { self.spriteState.sizePreferences = newValue} }
+}
+
 public enum InterfaceAction<Holder:GraphHolder> {
   case saveData
   case addOrReplace(Holder)
@@ -115,6 +86,7 @@ public enum InterfaceAction<Holder:GraphHolder> {
       self = .canvasAction(newValue)
     }
   }
+  case sprite
 }
 
 public func interfaceReducer<Holder:GraphHolder>(state: inout InterfaceState<Holder>, action: InterfaceAction<Holder>) -> [Effect<InterfaceAction<Holder>>] {
@@ -136,12 +108,51 @@ public func interfaceReducer<Holder:GraphHolder>(state: inout InterfaceState<Hol
           return []
         case .canvasAction(.handles(.handles(.top(.handle(.didMoveFinger(_)))))),
              .canvasAction(.handles(.handles(.bottom(.handle(.didMoveFinger(_)))))),
-              .canvasAction(.handles(.handles(.left(.handle(.didMoveFinger(_)))))),
-              .canvasAction(.handles(.handles(.right(.handle(.didMoveFinger(_)))))):
+             .canvasAction(.handles(.handles(.left(.handle(.didMoveFinger(_)))))),
+             .canvasAction(.handles(.handles(.right(.handle(.didMoveFinger(_)))))):
           
           return [Effect{ callback in
-            callback(.)
+           
             }]
+        case .canvasAction(.scroll(_)):
+          return []
+        case .canvasAction(.handles(.handles(.top(.timerUpdate)))):
+          return []
+        case .canvasAction(.handles(.handles(.top(.handle(.didPress(_)))))):
+          return []
+          
+        case .canvasAction(.handles(.handles(.top(.handle(.animationComplete))))):
+          return []
+          
+        case .canvasAction(.handles(.handles(.bottom(.timerUpdate)))):
+          return []
+          
+        case .canvasAction(.handles(.handles(.bottom(.handle(.didPress(_)))))):
+          return []
+          
+        case .canvasAction(.handles(.handles(.bottom(.handle(.animationComplete))))):
+          return []
+          
+        case .canvasAction(.handles(.handles(.left(.timerUpdate)))):
+          return []
+          
+        case .canvasAction(.handles(.handles(.left(.handle(.didPress(_)))))):
+          return []
+          
+        case .canvasAction(.handles(.handles(.left(.handle(.animationComplete))))):
+          return []
+          
+        case .canvasAction(.handles(.handles(.right(.timerUpdate)))):
+          return []
+          
+        case .canvasAction(.handles(.handles(.right(.handle(.didPress(_)))))):
+          return []
+          
+        case .canvasAction(.handles(.handles(.right(.handle(.animationComplete))))):
+          return []
+
+        case .sprite:
+          return []
       }
   }
   )
@@ -157,8 +168,6 @@ func contentSizeFrom (offsetFromCenter: CGVector, itemSize: CGSize, viewPortSize
 protocol Driver {
   var content : UIView { get }
   func build(for size: CGSize) -> CGSize
-  mutating func layout(origin: CGPoint)
-  mutating func layout(size: CGSize)
   mutating func bind(to uiRect: CGRect)
 }
 
@@ -166,18 +175,13 @@ import Combine
 public class ViewController<Holder:GraphHolder> : UIViewController, SpriteDriverDelegate {
   var viewport : CanvasViewport!
   var driver : SpriteDriver<Holder>
-  var driverLayout : PositionedLayout<IssuedLayout<LayoutToDriver<SpriteDriver<Holder>>>>
   let store: Store<InterfaceState<Holder>, InterfaceAction<Holder>>
   var cancellable : AnyCancellable!
   
-  public init(mapping: [ GenericEditingView<Holder>], graph: Holder, scale: CGFloat, screenSize: CGRect, store: Store<InterfaceState<Holder>, InterfaceAction<Holder>> )
+  public init(scale: CGFloat, screenSize: CGRect, store: Store<InterfaceState<Holder>, InterfaceAction<Holder>> )
   {
     self.store = store
-    self.driver = SpriteDriver(mapping: mapping, graph: graph, screenSize: screenSize, sizePreferences: self.store.value.sizePreferences, store: store)
-    self.driverLayout = PositionedLayout(
-      child: IssuedLayout(child: LayoutToDriver( child: driver )),
-      ofSize: CGSize.zero,
-      aligned: (.center, .center))
+    self.driver = SpriteDriver(screenSize: screenSize, store: store.view(value: {$0.spriteState}, action: { _ in .sprite }))
     super.init(nibName: nil, bundle: nil)
     self.driver.delgate = self
     self.cancellable = store.$value.sink{ [weak self]
@@ -206,16 +210,6 @@ public class ViewController<Holder:GraphHolder> : UIViewController, SpriteDriver
       // as a side note it also ignores alignment but this
       // doesnt matter in this case since we are probabbly already snug
 //      self.driver.layout(origin: newState.selection.origin)
-      
-      if let _ = newState.selOriginChanged.changed {
-        /// Selection Origin Changed
-        self.driverLayout.layout(in: newState.selection) /// should be VPCoord
-      }
-      if let _ = newState.selSizeChanged.changed {
-        let bestFit = (newState.selection.size, newState.scale) |> self.driver.build
-        self.driverLayout.size = bestFit
-        self.driverLayout.layout(in: self.store.value.selection)
-      }
       
     }
           
@@ -251,7 +245,7 @@ public class ViewController<Holder:GraphHolder> : UIViewController, SpriteDriver
       let cropped = cropToBounds(image: img, width: newSize.width, height:newSize
         .height)
       
-      self.store.send(.thumbnailsAddToCache(cropped, id: self.driver.graph.id))
+      self.store.send(.thumbnailsAddToCache(cropped, id: self.store.value.spriteState.graph.id))
       //let urlRes = Current.thumbnails.addToCache(cropped, item.thumbnailFileName)
       
       }

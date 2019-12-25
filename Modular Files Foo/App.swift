@@ -174,6 +174,7 @@ func savingReducer(
     
   case let .interfaceAction(intfAction):
     switch intfAction {
+    case .sprite : return []
     case .canvasAction: return []
 
     case .saveData:
@@ -223,11 +224,14 @@ public class App {
   
   var store: Store<AppState,AppAction> = Store(initialValue:
     AppState(interfaceState: InterfaceState(
-                                            sizePreferences: [],
-                                            scale:1.0,
-                                            windowBounds: UIScreen.main.bounds,
-                                            selection: CGRect(50, 50, 100, 100)
-                                            ), items: ItemList([])), reducer: finalAppReducer)
+      graph: ((Item.template.map{ s in CGFloat( s.length.converted(to:.centimeters).value) }, (200,200,200) |> CGSize3.init)) |> createScaffoldingFrom,
+              mapping: planMap,
+              sizePreferences: [],
+              scale:1.0,
+              windowBounds: UIScreen.main.bounds,
+              selection: CGRect(50, 50, 100, 100)),
+      items: ItemList([])),
+      reducer: finalAppReducer)
   
   var editViewController : EditViewController<Item<ScaffGraph>, Cell>?
   var inputTextField : UITextField?

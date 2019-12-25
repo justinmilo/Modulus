@@ -20,7 +20,8 @@ struct TentState {
   
   init () {
     planState = InterfaceState(
-    sizePreferences: self.sizePreferences,
+      graph: TentGraph(), mapping: [tentPlanMap],
+      sizePreferences: self.sizePreferences,
     scale: 1.0,
     windowBounds: UIScreen.main.bounds,
     selection: CGRect(50, 50, 300, 400))

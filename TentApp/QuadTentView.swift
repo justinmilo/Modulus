@@ -28,23 +28,24 @@ struct QuadState {
   var sideState: InterfaceState<TentGraph>
   
   init () {
+    let myGraph = TentGraph()
     planState = InterfaceState(
-    sizePreferences: self.sizePreferences,
+      graph: myGraph, mapping: [tentPlanMap], sizePreferences: self.sizePreferences,
     scale: self.scale,
     windowBounds: UIScreen.main.bounds,
     selection: selectionSizes.plan)
     rotatedPlanState = InterfaceState(
-    sizePreferences: self.sizePreferences,
+      graph: myGraph, mapping: [tentPlanMapRotated], sizePreferences: self.sizePreferences,
     scale: self.scale,
     windowBounds: UIScreen.main.bounds,
     selection: selectionSizes.rotated)
     frontState = InterfaceState(
-    sizePreferences: self.sizePreferences,
+      graph: myGraph, mapping: [tentFrontMap], sizePreferences: self.sizePreferences,
     scale: self.scale,
     windowBounds: UIScreen.main.bounds,
     selection: selectionSizes.front)
     sideState = InterfaceState(
-    sizePreferences: self.sizePreferences,
+      graph: myGraph, mapping: [tentSideMap], sizePreferences: self.sizePreferences,
     scale: self.scale,
     windowBounds: UIScreen.main.bounds,
     selection: selectionSizes.side)
