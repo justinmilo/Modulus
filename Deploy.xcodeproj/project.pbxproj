@@ -34,6 +34,11 @@
 		213DC75F238CA9F90062AA43 /* ScaffGraphCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213DC75B238CA9F90062AA43 /* ScaffGraphCore.swift */; };
 		213DC760238CA9F90062AA43 /* Tenting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213DC75C238CA9F90062AA43 /* Tenting.swift */; };
 		2147608123B2906C001C7FAD /* TentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2147608023B2906C001C7FAD /* TentView.swift */; };
+		2147608F23B6D58B001C7FAD /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2147608E23B6D58B001C7FAD /* ContentView.swift */; };
+		2147609123B6D5C7001C7FAD /* SpriteDriverViewUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2147609023B6D5C7001C7FAD /* SpriteDriverViewUI.swift */; };
+		2147609323B814D4001C7FAD /* SimpleSpriteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2147609223B814D3001C7FAD /* SimpleSpriteView.swift */; };
+		2147609723B94560001C7FAD /* TentAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2147609523B94507001C7FAD /* TentAppTests.swift */; };
+		2147609C23BD8183001C7FAD /* QuadTentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2147609B23BD817E001C7FAD /* QuadTentView.swift */; };
 		214A084E2383A85E0016FE80 /* TentViewMaps.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213B4FBC23839EEF00E87F5A /* TentViewMaps.swift */; };
 		214C6EC32385A91C00A07140 /* SwiftUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214C6EC22385A91C00A07140 /* SwiftUIView.swift */; };
 		2166F9CE238CECC7008E0FF6 /* GrapheNaked.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2166F9CD238CECC7008E0FF6 /* GrapheNaked.framework */; };
@@ -52,7 +57,6 @@
 		21D703BD238EB5AD005D5CBE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 21D703BC238EB5AD005D5CBE /* Assets.xcassets */; };
 		21D703C0238EB5AD005D5CBE /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 21D703BF238EB5AD005D5CBE /* Preview Assets.xcassets */; };
 		21D703C3238EB5AD005D5CBE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 21D703C1238EB5AD005D5CBE /* LaunchScreen.storyboard */; };
-		21D703C9238EBCF9005D5CBE /* QuadTentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D703C8238EBCF9005D5CBE /* QuadTentView.swift */; };
 		21ECD6BD23909D4F00C83C06 /* Modular.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0F58CF4210E201200AACC8F /* Modular.framework */; };
 		21ECD6BE23909D4F00C83C06 /* Modular.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D0F58CF4210E201200AACC8F /* Modular.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		21ECD6C023909D5300C83C06 /* BlackCricket.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D09F3671210D0C4200D38F4C /* BlackCricket.framework */; };
@@ -93,7 +97,6 @@
 		D052B406211F2CEA008DD455 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D052B404211F2CEA008DD455 /* LaunchScreen.storyboard */; };
 		D05505F421A72074005BA9B4 /* Scaff2D->SKNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05505F221A72074005BA9B4 /* Scaff2D->SKNode.swift */; };
 		D05505F621A72262005BA9B4 /* C2Edge->Scaff2D.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05505F521A72262005BA9B4 /* C2Edge->Scaff2D.swift */; };
-		D0656045212797DD00E2B880 /* PageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06560422127974B00E2B880 /* PageController.swift */; };
 		D06C66BE2198D8BF005D5F35 /* FormsCopy.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D06C66BD2198D8BF005D5F35 /* FormsCopy.framework */; };
 		D06C66BF2198D8DE005D5F35 /* FormsCopy.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D06C66BB2198D89E005D5F35 /* FormsCopy.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D06C66C12198DAD1005D5F35 /* FormsCopy.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D06C66C02198DAD1005D5F35 /* FormsCopy.framework */; };
@@ -318,6 +321,10 @@
 		2111C868238B2579000485F1 /* ScaffGraphComposite.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScaffGraphComposite.swift; sourceTree = "<group>"; };
 		2111C86F238B26B5000485F1 /* GenericViewMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericViewMap.swift; sourceTree = "<group>"; };
 		213B4FBC23839EEF00E87F5A /* TentViewMaps.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TentViewMaps.swift; sourceTree = "<group>"; };
+		213CF21423C54C6C00E4BEC1 /* ComposableArchitecture.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ComposableArchitecture.h; sourceTree = "<group>"; };
+		213CF21523C54C6C00E4BEC1 /* ComposableArchitecture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComposableArchitecture.swift; sourceTree = "<group>"; };
+		213CF21623C54C6C00E4BEC1 /* Effects.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Effects.swift; sourceTree = "<group>"; };
+		213CF21723C54C6C00E4BEC1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		213DC735238C93850062AA43 /* ComposableArchitecture.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ComposableArchitecture.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		213DC737238C93850062AA43 /* ComposableArchitecture.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ComposableArchitecture.h; sourceTree = "<group>"; };
 		213DC738238C93850062AA43 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -328,6 +335,11 @@
 		213DC75B238CA9F90062AA43 /* ScaffGraphCore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScaffGraphCore.swift; sourceTree = "<group>"; };
 		213DC75C238CA9F90062AA43 /* Tenting.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tenting.swift; sourceTree = "<group>"; };
 		2147608023B2906C001C7FAD /* TentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TentView.swift; sourceTree = "<group>"; };
+		2147608E23B6D58B001C7FAD /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		2147609023B6D5C7001C7FAD /* SpriteDriverViewUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpriteDriverViewUI.swift; sourceTree = "<group>"; };
+		2147609223B814D3001C7FAD /* SimpleSpriteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleSpriteView.swift; sourceTree = "<group>"; };
+		2147609523B94507001C7FAD /* TentAppTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TentAppTests.swift; sourceTree = "<group>"; };
+		2147609B23BD817E001C7FAD /* QuadTentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuadTentView.swift; sourceTree = "<group>"; };
 		214C6EC22385A91C00A07140 /* SwiftUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SwiftUIView.swift; path = ../ScrollViewGrower/SwiftUIView.swift; sourceTree = "<group>"; };
 		2166F9CD238CECC7008E0FF6 /* GrapheNaked.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = GrapheNaked.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		21B1E5E723986DB500737B78 /* Effects.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Effects.swift; sourceTree = "<group>"; };
@@ -352,7 +364,6 @@
 		21D703BF238EB5AD005D5CBE /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		21D703C2238EB5AD005D5CBE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		21D703C4238EB5AD005D5CBE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		21D703C8238EBCF9005D5CBE /* QuadTentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuadTentView.swift; sourceTree = "<group>"; };
 		21ECD6D023909D7E00C83C06 /* Drawable.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Drawable.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D00069D0200BD08300E8D5F3 /* Deploy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Deploy.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D00069D3200BD08300E8D5F3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -380,7 +391,6 @@
 		D052B407211F2CEA008DD455 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D05505F221A72074005BA9B4 /* Scaff2D->SKNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Scaff2D->SKNode.swift"; sourceTree = "<group>"; };
 		D05505F521A72262005BA9B4 /* C2Edge->Scaff2D.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "C2Edge->Scaff2D.swift"; sourceTree = "<group>"; };
-		D06560422127974B00E2B880 /* PageController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageController.swift; sourceTree = "<group>"; };
 		D06C66BB2198D89E005D5F35 /* FormsCopy.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = FormsCopy.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D06C66BD2198D8BF005D5F35 /* FormsCopy.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = FormsCopy.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D06C66C02198DAD1005D5F35 /* FormsCopy.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = FormsCopy.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -536,13 +546,14 @@
 			isa = PBXGroup;
 			children = (
 				2111C863238B23B8000485F1 /* Should Move To Earlier Frameworks */,
-				D03E03F720125DF8002D47F3 /* Sprite2DView.swift */,
 				2111C86F238B26B5000485F1 /* GenericViewMap.swift */,
-				D036097A20D5968100C11E79 /* Interface.swift */,
+				D03E03F720125DF8002D47F3 /* Sprite2DView.swift */,
 				D01A6E5920DD5C1F00250F32 /* LayoutToDriver.swift */,
 				D033E37520F238FA0026E1C4 /* SpriteDriver.swift */,
+				D036097A20D5968100C11E79 /* Interface.swift */,
 				2111C850238B224D000485F1 /* Interface.h */,
 				2111C851238B224D000485F1 /* Info.plist */,
+				213CF21323C54C6C00E4BEC1 /* ComposableArchitecture */,
 			);
 			path = Interface;
 			sourceTree = "<group>";
@@ -556,6 +567,17 @@
 				21BCBD6123819F8600644B14 /* TypedNotifications.swift */,
 			);
 			path = "Should Move To Earlier Frameworks";
+			sourceTree = "<group>";
+		};
+		213CF21323C54C6C00E4BEC1 /* ComposableArchitecture */ = {
+			isa = PBXGroup;
+			children = (
+				213CF21423C54C6C00E4BEC1 /* ComposableArchitecture.h */,
+				213CF21523C54C6C00E4BEC1 /* ComposableArchitecture.swift */,
+				213CF21623C54C6C00E4BEC1 /* Effects.swift */,
+				213CF21723C54C6C00E4BEC1 /* Info.plist */,
+			);
+			path = ComposableArchitecture;
 			sourceTree = "<group>";
 		};
 		213DC736238C93850062AA43 /* ComposableArchitecture */ = {
@@ -577,14 +599,24 @@
 				213DC75B238CA9F90062AA43 /* ScaffGraphCore.swift */,
 				213DC759238CA9F90062AA43 /* Scaffolding.swift */,
 				213DC75A238CA9F90062AA43 /* SliceScaffoldingCore.swift */,
-				213DC75C238CA9F90062AA43 /* Tenting.swift */,
 			);
 			path = Graphs;
+			sourceTree = "<group>";
+		};
+		2147609A23BD8124001C7FAD /* QuadTent */ = {
+			isa = PBXGroup;
+			children = (
+				213DC75C238CA9F90062AA43 /* Tenting.swift */,
+				213B4FBC23839EEF00E87F5A /* TentViewMaps.swift */,
+				2147609B23BD817E001C7FAD /* QuadTentView.swift */,
+			);
+			path = QuadTent;
 			sourceTree = "<group>";
 		};
 		21BCBD4923819CA400644B14 /* Modular Files Foo */ = {
 			isa = PBXGroup;
 			children = (
+				2147609A23BD8124001C7FAD /* QuadTent */,
 				213DC74A238CA9560062AA43 /* Graphs */,
 				D0FD710621172C2A00B27092 /* TableViewController */,
 				D0D21FB521A44056000FB885 /* Enviroment */,
@@ -661,8 +693,10 @@
 			children = (
 				21D703B6238EB5AC005D5CBE /* AppDelegate.swift */,
 				21D703B8238EB5AC005D5CBE /* SceneDelegate.swift */,
-				21D703C8238EBCF9005D5CBE /* QuadTentView.swift */,
+				2147608E23B6D58B001C7FAD /* ContentView.swift */,
 				2147608023B2906C001C7FAD /* TentView.swift */,
+				2147609023B6D5C7001C7FAD /* SpriteDriverViewUI.swift */,
+				2147609223B814D3001C7FAD /* SimpleSpriteView.swift */,
 				21D703BC238EB5AD005D5CBE /* Assets.xcassets */,
 				21D703C1238EB5AD005D5CBE /* LaunchScreen.storyboard */,
 				21D703C4238EB5AD005D5CBE /* Info.plist */,
@@ -719,7 +753,6 @@
 		D02391B821CC13B4002C4F4A /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				D06560422127974B00E2B880 /* PageController.swift */,
 				D0D5612A212DDA500059874B /* QuadDriver.swift */,
 			);
 			path = ViewControllers;
@@ -728,6 +761,7 @@
 		D0326761207FFE3800BBF563 /* HandlesCoreTests */ = {
 			isa = PBXGroup;
 			children = (
+				2147609523B94507001C7FAD /* TentAppTests.swift */,
 				D0326762207FFE3800BBF563 /* HandlesCoreTests.swift */,
 				D0326764207FFE3800BBF563 /* Info.plist */,
 			);
@@ -854,7 +888,6 @@
 			isa = PBXGroup;
 			children = (
 				2111C868238B2579000485F1 /* ScaffGraphComposite.swift */,
-				213B4FBC23839EEF00E87F5A /* TentViewMaps.swift */,
 				D0D6808120CEB0EF0074E97D /* ViewMaps.swift */,
 				D075D8B821C9EB35003AC600 /* ViewMap-Grid2D.swift */,
 				D0B86C64202FC09200CCB3F7 /* ViewFunctions.swift */,
@@ -1114,7 +1147,6 @@
 					D0915FA7208901DD0067C02A = {
 						CreatedOnToolsVersion = 9.4;
 						ProvisioningStyle = Automatic;
-						TestTargetID = D00069CF200BD08300E8D5F3;
 					};
 					D09F3670210D0C4200D38F4C = {
 						CreatedOnToolsVersion = 10.0;
@@ -1251,9 +1283,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				21D703B7238EB5AC005D5CBE /* AppDelegate.swift in Sources */,
+				2147609323B814D4001C7FAD /* SimpleSpriteView.swift in Sources */,
+				2147609123B6D5C7001C7FAD /* SpriteDriverViewUI.swift in Sources */,
+				2147608F23B6D58B001C7FAD /* ContentView.swift in Sources */,
 				21D703B9238EB5AC005D5CBE /* SceneDelegate.swift in Sources */,
 				2147608123B2906C001C7FAD /* TentView.swift in Sources */,
-				21D703C9238EBCF9005D5CBE /* QuadTentView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1280,6 +1314,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2147609723B94560001C7FAD /* TentAppTests.swift in Sources */,
 				D0915FAB208901DD0067C02A /* GraphicsCoreTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1320,6 +1355,7 @@
 				D075D8BA21C9EB35003AC600 /* ViewMap-Grid2D.swift in Sources */,
 				213DC760238CA9F90062AA43 /* Tenting.swift in Sources */,
 				213DC75F238CA9F90062AA43 /* ScaffGraphCore.swift in Sources */,
+				2147609C23BD8183001C7FAD /* QuadTentView.swift in Sources */,
 				214A084E2383A85E0016FE80 /* TentViewMaps.swift in Sources */,
 				D0FD710321172BD700B27092 /* SimpleBarButtonViewContoller.swift in Sources */,
 				D0D5612B212DDA500059874B /* QuadDriver.swift in Sources */,
@@ -1337,7 +1373,6 @@
 				D0B1BC4121A7092400991F16 /* ItemList.swift in Sources */,
 				213DC75E238CA9F90062AA43 /* SliceScaffoldingCore.swift in Sources */,
 				D07C56B9211E74F50073D7A7 /* App+FreeFunctions.swift in Sources */,
-				D0656045212797DD00E2B880 /* PageController.swift in Sources */,
 				D0D21FB421A44037000FB885 /* Item.swift in Sources */,
 				D0F58D06210E207300AACC8F /* App.swift in Sources */,
 				D0F58D08210E207300AACC8F /* ViewMaps.swift in Sources */,
@@ -1802,36 +1837,32 @@
 		D0915FB0208901DD0067C02A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = V69QAU95S7;
 				INFOPLIST_FILE = GraphicsCoreTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.sound.sands.GraphicsCoreTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Deploy.app/Deploy";
 			};
 			name = Debug;
 		};
 		D0915FB1208901DD0067C02A /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = V69QAU95S7;
 				INFOPLIST_FILE = GraphicsCoreTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.sound.sands.GraphicsCoreTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Deploy.app/Deploy";
 			};
 			name = Release;
 		};

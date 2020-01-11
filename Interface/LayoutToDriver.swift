@@ -12,27 +12,7 @@ import Layout
 import Layout
 import Geo
 
-/// Layout that generates layout from childs virtual size
-public struct PositionedRect
-{
-  public var aligned : (HorizontalPosition, VerticalPosition)
-  public var container: CGSize
-  
-  var origin : Changed<CGPoint>
-  var size : Changed<CGSize>
 
-  public init(ofSize size: CGSize, aligned:(HorizontalPosition, VerticalPosition), initialRect: CGRect ) {
-    self.aligned = aligned
-    self.container = size
-    self.size = Changed(initialRect.size)
-    self.origin = Changed(initialRect.origin)
-  }
-  mutating public func layout(in rect: CGRect) {
-    let newFrame = rect.withInsetRect(ofSize: container, hugging: aligned)
-    origin.update(newFrame.origin)
-    size.update(newFrame.size)
-  }
-}
 
 
 public struct PointIndex2 : Equatable {
@@ -54,17 +34,19 @@ public struct Edge2<Content> where Content : Codable {
   }
 }
 
-struct Changed<A: Equatable> {
+public struct Changed<A: Equatable> {
   private(set) var changed : A?
   var value: A { return previous }
   mutating func update(_ val: A) {
-    if previous != val
-    { changed = val }
+    // Update changed
+    if previous != val { changed = val }
     else { changed = nil }
+    // Update previous
     previous = val
   }
   private var previous: A
   init(_ value: A) {
     previous = value
+    changed = value
   }
 }

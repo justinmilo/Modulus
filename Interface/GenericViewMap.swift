@@ -13,25 +13,25 @@ import BlackCricket
 
 public struct GenericEditingView<Holder : GraphHolder> {
   /// takes a bounding box size, and any existing structure ([Edge]) to interprit a new ScaffGraph,a fully 3D structure
-  let build: ([CGFloat], CGSize3, [Edge<Holder.Content>]) -> (GraphPositions, [Edge<Holder.Content>])
+  public let build: ([CGFloat], CGSize3, [Edge<Holder.Content>]) -> (GraphPositions, [Edge<Holder.Content>])
   
   /// origin: in this editing view slice, the offset from the 0,0 corner of the bounding box
-  let origin : (Holder) -> CGPoint
+  public let origin : (Holder) -> CGPoint
   /// Related to the size of the bounding box
-  let size : (Holder) -> CGSize
+  public let size : (Holder) -> CGSize
   
   /// Translates this view's 2D rep to 3D boounding box based on the graph and view semantics
-  let size3 : (Holder) -> (CGSize) -> CGSize3
+  public let size3 : (Holder) -> (CGSize) -> CGSize3
   
   /// From Graph to Geometry at (0,0)
   /// Geometry bounds is not necisarily the same as the size, which is a bounding box
-  let composite : (Holder) -> Composite
+  public let composite : (Holder) -> Composite
   
   /// related to the entire composite
-  let grid2D : (Holder) -> GraphPositions2DSorted
+  public let grid2D : (Holder) -> GraphPositions2DSorted
   
   /// if point index in 2D give new 3D edges
-  let selectedCell : (PointIndex2D, GraphPositions, [Edge<Holder.Content>]) -> ([Edge<Holder.Content>])
+  public let selectedCell : (PointIndex2D, GraphPositions, [Edge<Holder.Content>]) -> ([Edge<Holder.Content>])
   
   
   public init(

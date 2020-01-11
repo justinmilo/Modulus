@@ -31,90 +31,86 @@ extension Array where Element == Label {
   
 }
 
-func tentLinesLabels(tentParts: [C2Edge<TentParts>]) -> Composite {
-  func lines(item: C2Edge<TentParts>) -> Line {
-     return Line(p1: item.p1, p2: item.p2)
-   }
-  let labels = tentParts.map { edge -> Label in
-    let direction : Label.Rotation = edge.content == TentParts.rafter ? .h : .v
-    let vector = direction == .h ? Geo.unitY * 10 : Geo.unitX * 10
-    return Label(text: edge.content.rawValue, position: (edge.p1 + edge.p2).center + vector, rotation: direction)
+typealias TentEdge2D = C2Edge<TentParts>
+let planLabel : (TentEdge2D)->Label = { (edge) -> Label in
+  let direction : Label.Rotation = edge.content == TentParts.rafter ? .h : .v
+  let vector = direction == .h ? Geo.unitY * 10 : Geo.unitX * -10
+  return Label(text: edge.content.rawValue, position: (edge.p1 + edge.p2).center + vector, rotation: direction)
+}
+let sideLabel : (TentEdge2D)->Label = { edge -> Label in
+  let direction : Label.Rotation = edge.content == TentParts.purlin ? .h : .v
+  let vector = direction == .h ? Geo.unitY * 10 : Geo.unitX * 10
+  return Label(text: edge.content.rawValue, position: (edge.p1 + edge.p2).center + vector, rotation: direction)
+}
+func lines(item: TentEdge2D) -> Line {
+   return Line(p1: item.p1, p2: item.p2)
+ }
+
+typealias TentEdges2D = [C2Edge<TentParts>]
+let planLabels : (TentEdges2D)->[Label] = { $0.map(planLabel).secondPassLayout() }
+let sideLabels : (TentEdges2D)->[Label] = { $0.map(sideLabel).secondPassLayout() }
+
+let joints :  (TentEdges2D)->[CGPoint] = { $0.reduce([]) { (res, edge) -> [CGPoint] in
+  var res = res
+  if !res.contains(edge.p1) {
+    res.append(edge.p1)
   }
-  let labelsSecondPassNodes = labels.secondPassLayout()
-  
-  let joints : [CGPoint] = tentParts.reduce([]){ (res, edge) -> [CGPoint] in
-    var res = res
-    if !res.contains(edge.p1) {
-      res.append(edge.p1)
-    }
-    if !res.contains(edge.p2) {
-      res.append(edge.p2)
-    }
-    return res
+  if !res.contains(edge.p2) {
+    res.append(edge.p2)
   }
-  let jointNodes : [Oval] = joints.map{
-    return Oval(size: CGSize(10,10), position: $0)
+  return res
   }
-  return Composite(geometry: tentParts.map(lines) + jointNodes, labels: labelsSecondPassNodes)
+}
+let jointNodes : ([CGPoint])->[Oval] = { $0.map{
+  return Oval(size: CGSize(10,10), position: $0)
+  }
 }
 
+let tentLinesLabelsPlan : (TentEdges2D) -> Composite =
+  planLabels
+    >>> Composite.init
+    <> (joints
+      >>> jointNodes)
+    >>> Composite.init
+    <> { $0 .map(lines) }
+    >>> Composite.init
 
-func tentNodes(tentParts: [C2Edge<TentParts>]) -> [SKNode] {
-  
-  func lines(item: C2Edge<TentParts>) -> SKShapeNode {
-    let cgPath = CGMutablePath()
-    cgPath.move(to: item.p1)
-    cgPath.addLine(to: item.p2)
-    
-    print(item.p1, item.p2)
-    let node = SKShapeNode(path: cgPath)
-    return node
-  }
-  
-  let labels = tentParts.map { edge -> Label in
-    let direction : Label.Rotation = edge.content == TentParts.rafter ? .h : .v
-    let vector = direction == .h ? Geo.unitY * 10 : Geo.unitX * 10
-    return Label(text: edge.content.rawValue, position: (edge.p1 + edge.p2).center + vector, rotation: direction)
-  }
-  let labelsSecondPassNodes = labels.secondPassLayout().map{ $0.asNode }
-  
-  let joints : [CGPoint] = tentParts.reduce([]){ (res, edge) -> [CGPoint] in
-    var res = res
-    if !res.contains(edge.p1) {
-      res.append(edge.p1)
-    }
-    if !res.contains(edge.p2) {
-      res.append(edge.p2)
-    }
-    return res
-  }
-  let jointNodes : [SKNode] = joints.map{
-    let shape = SKShapeNode(circleOfRadius: 10)
-    shape.position = $0
-    shape.fillColor = .gray
-    return shape
-  }
-  
-  return tentParts.map(lines) + labelsSecondPassNodes + jointNodes
+let tentLinesLabelsSide : (TentEdges2D) -> Composite =
+sideLabels
+  >>> Composite.init
+  <> (joints
+    >>> jointNodes)
+  >>> Composite.init
+  <> { $0 .map(lines) }
+  >>> Composite.init
 
-}
+
+
+
 
 import Interface
 import ComposableArchitecture
 
-class TentGraph : GraphHolder {
-  typealias Content = TentParts
-  var id : String
-  var edges : [Edge<Content>]
-  var grid : GraphPositions
+public class TentGraph : GraphHolder {
+  public typealias Content = TentParts
+  public var id : String
+  public var edges : [Edge<Content>]
+  public var grid : GraphPositions
   
-  init() {
-    let size = CGSize3(width:500, depth:1000, elev:450)
-    let (pos, edges) = createTentGridFromEaveHeiht(with:size)
+  public convenience init(width: CGFloat = 500, depth:CGFloat=1000, elev:CGFloat=450, id:String="MODEMOCK") {
+    let size = CGSize3(width:width, depth:depth, elev:elev)
+    let (pos, edges) = createTentGridFromRidgeHeight(with:size)
+    self.init(positions: pos, edges: edges, id: id)
+    self.edges = edges
+    self.grid = pos
+    self.id = id
+  }
+  public init(positions: GraphPositions, edges:[Edge<Content>], id:String="MODEMOCK") {
+    let (pos, edges) = (positions, edges)
     
     self.edges = edges
     self.grid = pos
-    self.id = "MODEMOCK"
+    self.id = id
   }
 }
 
@@ -152,34 +148,9 @@ let frontPositionsTent = frontEdgesTent >>> log >>> positionsInEdges
 let sidePositionsTent = sideEdgesTent >>> log >>> positionsInEdges
 
 let overallTent : ([CGFloat], CGSize3, [Edge<TentParts>]) -> (GraphPositions, [Edge<TentParts>]) = { _, size, _ in
-   createTentGridFromEaveHeiht(with:size)
+  createTentGridFromRidgeHeight(with:size)
 }
 
-
-let planLineworkTent : (TentGraph) -> Composite =
-get(\TentGraph.grid)
-  >>> graphToNonuniformPlan
-  >>> basic
-  >>> Composite.init(geometry:)
-
-let rotatedPlanLineworkTent : (TentGraph) -> Composite =
-get(\TentGraph.grid)
-  >>> graphToNonuniformPlan
-  >>> rotateUniform
-  >>> basic
-  >>> Composite.init(geometry:)
-
-let frontLineworkTent : (TentGraph) -> Composite =
-get(\TentGraph.grid)
-  >>> graphToNonuniformFront
-  >>> basic
-  >>> Composite.init(geometry:)
-
-let sideLineworkTent : (TentGraph) -> Composite =
-get(\TentGraph.grid)
-  >>> graphToNonuniformSide
-  >>> basic
-  >>> Composite.init(geometry:)
 
 let addTentHeight = { (size:CGSize) -> CGSize in
   let opposite = tan(18.0 * CGFloat.pi / 180) * size.width/2
@@ -193,21 +164,23 @@ let minusTentHeight = { (myFunc: @escaping (CGSize)->CGSize3) -> (CGSize)->CGSiz
   }
 }
 
-let tentPlanMap = GenericEditingView<TentGraph>(
-  build: overallTent,
+public let tentPlanMapF = { build in GenericEditingView<TentGraph>(
+  build: build,
   origin: originZero,
   size: { $0.bounds }
     >>> remove3rdDimPlan,
   size3: sizePlanTent,
   composite: plan2D
-    >>> tentLinesLabels
+    >>> tentLinesLabelsPlan
     <> get(\.grid)
     >>> plan
     >>> (innerDim(meterFormat)
       <> outerDim(meterFormat)),
   grid2D: planPositionsTent,
   selectedCell: { _, _, edges in return edges}
-)
+  )
+}
+let tentPlanMap = tentPlanMapF(overallTent)
 
 let tentPlanMapRotated = GenericEditingView<TentGraph>(
   build: overallTent,
@@ -218,7 +191,7 @@ let tentPlanMapRotated = GenericEditingView<TentGraph>(
   size3: { $0.bounds } >>> add3rdDimToRotatedPlan,
   composite: plan2D
     >>> rotateGroup
-    >>>  tentLinesLabels
+    >>>  tentLinesLabelsSide
     <> get(\.grid)
     >>> rotatedPlan
     >>> (innerDim(meterFormat)
@@ -232,12 +205,14 @@ let tentFrontMap = GenericEditingView<TentGraph>(
   origin: originZero,
   size: { $0.bounds }
     >>> remove3rdDimFront
-    >>> addTentHeight,
+    // >>> addTentHeight
+  ,
   size3: { $0.bounds }
     >>> add3rdDimToFront
-    >>> minusTentHeight,
+    //>>> minusTentHeight
+  ,
   composite: front2D
-    >>>  tentLinesLabels
+    >>>  tentLinesLabelsPlan
     <> get(\.grid)
     >>> front
     >>> (innerDim(meterFormat)
@@ -249,10 +224,12 @@ let tentFrontMap = GenericEditingView<TentGraph>(
 let tentSideMap = GenericEditingView<TentGraph>(
   build: overallTent,
   origin: originZero,
-  size: { $0.bounds } >>> remove3rdDimSide >>> addTentHeight,
-  size3: { $0.bounds } >>> size3Side  >>> minusTentHeight,
+  size: { $0.bounds } >>> remove3rdDimSide // >>> addTentHeight
+  ,
+  size3: { $0.bounds } >>> size3Side // >>> minusTentHeight
+  ,
   composite: side2D
-    >>> tentLinesLabels
+    >>> tentLinesLabelsSide
     <> get(\.grid)
     >>> side
     >>> (innerDim(meterFormat)
@@ -261,14 +238,14 @@ let tentSideMap = GenericEditingView<TentGraph>(
   selectedCell: { _, _, edges in return edges}
 )
 
-
-
-func tentVC(store: Store<InterfaceState<TentGraph>, InterfaceAction<TentGraph>>, title: String, graph: TentGraph, tentMap:GenericEditingView<TentGraph>) -> ViewController<TentGraph> {
-  
-
-  let vc = ViewController(scale: 1.0, screenSize: Current.screen, store:store)
+import Geo
+func tentVC(store: Store<InterfaceState<TentGraph>, InterfaceAction<TentGraph>>, title: String) -> InterfaceController<TentGraph> {
+  let vc = InterfaceController(store:store)
   vc.title = title
-  addBarSafely(to:vc)
+  let bottomBar = UIVisualEffectView(effect: UIBlurEffect(style:.dark))
+  vc.view.addSubview( bottomBar )
+  bottomBar.frame = vc.view.frame.bottomLeft + (vc.view.frame.bottomRight - Geo.unitY * 102)
+
   return vc
 }
 

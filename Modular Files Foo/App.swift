@@ -229,7 +229,7 @@ public class App {
               sizePreferences: [],
               scale:1.0,
               windowBounds: UIScreen.main.bounds,
-              selection: CGRect(50, 50, 100, 100)),
+              offset: CGPoint(50, 50)),
       items: ItemList([])),
       reducer: finalAppReducer)
   

@@ -32,25 +32,26 @@ public class GraphNavigator {
   
   lazy var vc: UIViewController = quadVC.group
   
-  lazy var func1 : ((label: String, viewMap: [GraphEditingView])) -> ViewController  =
+  lazy var func1 : ((label: String, viewMap: [GraphEditingView])) -> InterfaceController  =
     { ($0,self.store.value.items.getItem(id: self.id)!) }
       >>> curry(curry(controllerFromMap)(store))(self)
 
-  lazy var planVC : ViewController = {
+  lazy var planVC : InterfaceController = {
     return Current.viewMaps.plan |> func1
   }()
-  lazy var rotatedVC : ViewController = {
+  lazy var rotatedVC : InterfaceController = {
     return Current.viewMaps.rotatedPlan |> func1
   }()
-  lazy var frontVC : ViewController = {
+  lazy var frontVC : InterfaceController = {
     return Current.viewMaps.front |> func1
   }()
-  lazy var sideVC : ViewController = {
+  lazy var sideVC : InterfaceController = {
     return Current.viewMaps.side |> func1
   }()
   
-  lazy var quadVC : QuadDriver = {
-    let aQD = QuadDriver(upper: [planVC, rotatedVC], lower: [frontVC, sideVC])
+  lazy var quadVC : QuadDriverCA = {
+    
+    let aQD = QuadDriverCA(store: Store<PageState,PageAction>(initialValue: PageState(currentlyTop: true, currentlyLeft: true), reducer: pageReducer),upper:  [planVC, rotatedVC], lower: [frontVC, sideVC])
     aQD.group |> self.addNavBarItem
     return aQD
   }()

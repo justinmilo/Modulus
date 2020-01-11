@@ -7,6 +7,7 @@
 //
 
 import XCTest
+@testable import Interface
 
 class GraphicsCoreTests: XCTestCase {
     

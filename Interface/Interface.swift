@@ -18,45 +18,68 @@ import GrapheNaked
 
 
 public struct InterfaceState<Holder:GraphHolder> {
-  public let windowBounds : CGRect
- 
   public init(
     graph: Holder,
     mapping: [GenericEditingView<Holder>],
     sizePreferences: [CGFloat],
     scale : CGFloat,
     windowBounds: CGRect,
-    selection : CGRect
+    offset : CGPoint
   ) {
     self.windowBounds = windowBounds
-    self.canvasState = CanvasSelectionState(frame: windowBounds, rect: selection,
+    
+    self.spriteState =  SpriteState(screen: windowBounds,
+                                    scale : scale,
+                                    sizePreferences: sizePreferences,
+                                    graph: graph,
+                                    editingViews: mapping )
+    let currentSize = self.spriteState.viewSpaceSize
+    let selection = offset + currentSize
+    
+    self.canvasState = CanvasSelectionState(frame: windowBounds,
+                                            rect: selection,
                                             handleBoundary: windowBounds
                                               .inset(by: UIEdgeInsets(top: 120, left: 40, bottom: 100, right: 40)))
-    self.spriteState =  SpriteState(scale : scale, sizePreferences: sizePreferences, boundingRect: selection, graph: graph, editingViews: mapping )
+    
+    self.spriteState.spriteFrame = self.canvasFrame
+    self.spriteState.frame.update(self.selection)
   }
-
-  var spriteState : SpriteState<Holder>
-  var canvasState : CanvasSelectionState {
-    didSet {
-      spriteState.frame.update(self.selection)
-    }
-  }
+  public let windowBounds : CGRect
+  public var spriteState : SpriteState<Holder>
+  public var canvasState : CanvasSelectionState
 }
 
+/// Read only properties of InterfaceState
 extension InterfaceState {
-  var canvasFrame : CGRect { self.canvasState.scroll.centered.grow.read.rootContentFrame }
-  var canvasSize : CGSize { self.canvasState.scroll.canvasSize }
-  var canvasOffset : CGPoint { self.canvasState.scroll.canvasOffset }
-  public var selection : CGRect { self.canvasState.scroll.scrollAreaofInterest }
-  /// Either interim zooming scale or final scale
+  public var canvasFrame : CGRect { self.canvasState.canvasFrame }
+  public var canvasSize : CGSize { self.canvasState.scroll.canvasSize }
+  public var canvasOffset : CGPoint { self.canvasState.scroll.canvasOffset }
+}
+/// Read and Write properties
+extension InterfaceState {
   public var scale : CGFloat  {
-    switch self.canvasState.scroll.centered.setter {
-    case .beginZoom,
-         .none:
-      return self.canvasState.scroll.centered.currentScale
-    case .interimZoom,
-         .finalZoom:
-      return  self.canvasState.scroll.centered.grow.read.rootContentTransform * self.canvasState.scroll.centered.currentScale
+    get { self.canvasState.scale }
+    set {
+      self.canvasState.scale = newValue
+      self.spriteState.spriteFrame = self.canvasFrame
+      self.spriteState.scale = newValue
+      self.spriteState.frame.update(selection)
+    }
+  }
+  public var selection : CGRect {
+    get { self.canvasState.selection }
+    set {
+      self.canvasState.selection = newValue
+      self.spriteState.spriteFrame = self.canvasFrame
+      self.spriteState.frame.update(newValue)
+    }
+  }
+  public var selectionView : CGRect {
+    get { self.canvasState.selectionView }
+    set {
+      self.canvasState.selectionView = newValue
+      self.spriteState.spriteFrame = self.canvasFrame
+      self.spriteState.frame.update(selection)
     }
   }
 }
@@ -88,127 +111,96 @@ public func interfaceReducer<Holder:GraphHolder>(state: inout InterfaceState<Hol
     pullback(canvasSelectionReducer, value: \InterfaceState<Holder>.canvasState, action: \InterfaceAction<Holder>.canvasAction),
     { (state: inout InterfaceState<Holder>, action: InterfaceAction<Holder>) -> [Effect<InterfaceAction<Holder>>] in
         switch action {
-        case  .thumbnailsAddToCache:
-          return []
-        case .saveData:
-          return []
-        case .addOrReplace:
-          return []
+        case  .thumbnailsAddToCache,
+          .saveData,
+            .addOrReplace,
+            .canvasAction(.handles(.handles(.top(.timerUpdate)))),
+            .canvasAction(.handles(.handles(.top(.handle(.didPress(_)))))),
+            .canvasAction(.handles(.handles(.top(.handle(.animationComplete))))),
+            .canvasAction(.handles(.handles(.bottom(.timerUpdate)))),
+            .canvasAction(.handles(.handles(.bottom(.handle(.didPress(_)))))),
+            .canvasAction(.handles(.handles(.bottom(.handle(.animationComplete))))),
+            .canvasAction(.handles(.handles(.left(.timerUpdate)))),
+            .canvasAction(.handles(.handles(.left(.handle(.didPress(_)))))),
+            .canvasAction(.handles(.handles(.left(.handle(.animationComplete))))),
+            .canvasAction(.handles(.handles(.right(.timerUpdate)))),
+            .canvasAction(.handles(.handles(.right(.handle(.didPress(_)))))),
+            .canvasAction(.handles(.handles(.right(.handle(.animationComplete))))),
+            .canvasAction(.scroll(.scroll(.grow(.onZoomBegin)))),
+            .canvasAction(.scroll(.scroll(.grow(.onZoom)))),
+            .canvasAction(.scroll(.scroll(.grow(.onDragBegin)))),
+            .canvasAction(.scroll(.scroll(.grow(.onDrag)))),
+            .canvasAction(.scroll(.scroll(.grow(.onDragEnd)))),
+            .canvasAction(.scroll(.scroll(.grow(.onDecelerate)))),
+            .canvasAction(.scroll(.scroll(.grow(.onDecelerateEnd)))),
+            .sprite:
+              return []
         case .canvasAction(.handles(.handles(.top(.handle(.didLetGo))))),
              .canvasAction(.handles(.handles(.bottom(.handle(.didLetGo))))),
              .canvasAction(.handles(.handles(.left(.handle(.didLetGo))))),
              .canvasAction(.handles(.handles(.right(.handle(.didLetGo))))):
-          
+          state.canvasState.selection = state.spriteState.layoutFrame
           return []
         case .canvasAction(.handles(.handles(.top(.handle(.didMoveFinger(_)))))),
              .canvasAction(.handles(.handles(.bottom(.handle(.didMoveFinger(_)))))),
              .canvasAction(.handles(.handles(.left(.handle(.didMoveFinger(_)))))),
              .canvasAction(.handles(.handles(.right(.handle(.didMoveFinger(_)))))):
-          
-          return [Effect{ callback in
-           
-            }]
-        case .canvasAction(.scroll(_)):
+          state.spriteState.spriteFrame = state.canvasFrame
+          state.spriteState.frame.update(state.selection)
           return []
-        case .canvasAction(.handles(.handles(.top(.timerUpdate)))):
-          return []
-        case .canvasAction(.handles(.handles(.top(.handle(.didPress(_)))))):
-          return []
-          
-        case .canvasAction(.handles(.handles(.top(.handle(.animationComplete))))):
-          return []
-          
-        case .canvasAction(.handles(.handles(.bottom(.timerUpdate)))):
-          return []
-          
-        case .canvasAction(.handles(.handles(.bottom(.handle(.didPress(_)))))):
-          return []
-          
-        case .canvasAction(.handles(.handles(.bottom(.handle(.animationComplete))))):
-          return []
-          
-        case .canvasAction(.handles(.handles(.left(.timerUpdate)))):
-          return []
-          
-        case .canvasAction(.handles(.handles(.left(.handle(.didPress(_)))))):
-          return []
-          
-        case .canvasAction(.handles(.handles(.left(.handle(.animationComplete))))):
-          return []
-          
-        case .canvasAction(.handles(.handles(.right(.timerUpdate)))):
-          return []
-          
-        case .canvasAction(.handles(.handles(.right(.handle(.didPress(_)))))):
-          return []
-          
-        case .canvasAction(.handles(.handles(.right(.handle(.animationComplete))))):
-          return []
-
-        case .sprite:
+        case .canvasAction(.scroll(.scroll(.grow(.onZoomEnd)))):
+          state.spriteState.scale = state.scale
           return []
       }
-  }
+  },
+    { (state: inout InterfaceState<Holder>, action: InterfaceAction<Holder>) -> [Effect<InterfaceAction<Holder>>] in
+        switch action {
+        case  .canvasAction(.scroll(.scroll(.grow(.onZoomBegin)))),
+          .canvasAction(.scroll(.scroll(.grow(.onZoom)))),
+          .canvasAction(.scroll(.scroll(.grow(.onDragBegin)))),
+          .canvasAction(.scroll(.scroll(.grow(.onDrag)))),
+          .canvasAction(.scroll(.scroll(.grow(.onDecelerate)))):
+          break
+        case .canvasAction(.scroll(.scroll(.grow(.onZoomEnd)))):
+          state.canvasState.scroll.centered.clip()
+          state.spriteState.spriteFrame = state.canvasFrame
+          state.spriteState.frame.update(state.selection)
+          break
+        case .canvasAction(.scroll(.scroll(.grow(.onDragEnd(_, let willDecelerate))))):
+          if !willDecelerate {
+            state.canvasState.scroll.centered.clip()
+            state.spriteState.spriteFrame = state.canvasFrame
+            state.spriteState.frame.update(state.selection)
+          }
+          break
+        case .canvasAction(.scroll(.scroll(.grow(.onDecelerateEnd)))):
+          state.canvasState.scroll.centered.clip()
+          state.spriteState.spriteFrame = state.canvasFrame
+          state.spriteState.frame.update(state.selection)
+          break
+        default:
+          break
+        }
+        return []
+    }
   )
-  return reducer(&state, action)
-}
-// centerAnchor
-// Scrolled Anchor / Eventual Anchor Location
-func contentSizeFrom (offsetFromCenter: CGVector, itemSize: CGSize, viewPortSize: CGSize) -> CGSize
-{
-  return (viewPortSize / 2) + offsetFromCenter.asSize() + (itemSize / 2)
-}
-
-protocol Driver {
-  var content : UIView { get }
-  func build(for size: CGSize) -> CGSize
-  mutating func bind(to uiRect: CGRect)
+  let effects = reducer(&state, action)
+  return effects
 }
 
 import Combine
-public class ViewController<Holder:GraphHolder> : UIViewController, SpriteDriverDelegate {
+public class InterfaceController<Holder:GraphHolder> : UIViewController, SpriteDriverDelegate {
   var viewport : CanvasViewport!
   var driver : SpriteDriver<Holder>
-  let store: Store<InterfaceState<Holder>, InterfaceAction<Holder>>
-  var cancellable : AnyCancellable!
+  public let store: Store<InterfaceState<Holder>, InterfaceAction<Holder>>
+  private var cancellable : AnyCancellable!
   
-  public init(scale: CGFloat, screenSize: CGRect, store: Store<InterfaceState<Holder>, InterfaceAction<Holder>> )
-  {
+  public init(store: Store<InterfaceState<Holder>, InterfaceAction<Holder>> ){
     self.store = store
-    self.driver = SpriteDriver(screenSize: screenSize, store: store.view(value: {$0.spriteState}, action: { _ in .sprite }))
+    self.driver = SpriteDriver(store: store.view(value: {$0.spriteState}, action: { _ in .sprite }))
     super.init(nibName: nil, bundle: nil)
     self.driver.delgate = self
-    self.cancellable = store.$value.sink{ [weak self]
-       newState in
-      guard let self = self else { return }
-      
-//      switch newState.zoomState {
-//      case .scaled(let newScale):
-//        let bestFit = newState.selection.size |> self.driver.build
-//        self.driverLayout.size = bestFit
-//        self.driverLayout.layout(in: self.store.value.selection)
-//
-//      case .zooming(interimScale: let interim): break
-//        //self.interimScale = scale
-//
-//      }
-      
-      
-      /// viewport.canvasChanged = { [weak self] newSize in
-      //self.navigationController?.navigationBar.backgroundColor = self.booley ? #colorLiteral(red: 1, green: 0.1492801309, blue: 0, alpha: 1) : #colorLiteral(red: 0.3954176307, green: 0.8185744882, blue: 0.6274910569, alpha: 1); self.booley = !self.booley
-      self.driver.bind(to: newState.canvasFrame) /// Potentially not VPCoord
-      // Now that the updated canvas is bound we want to
-      // *Force* a layout at the selection's origin
-      // This ignores whether the selection origin changed or not
-      // —functionality that is part of the self.alignedLayout stack—
-      // as a side note it also ignores alignment but this
-      // doesnt matter in this case since we are probabbly already snug
-//      self.driver.layout(origin: newState.selection.origin)
-      
-    }
-          
   }
- 
   
   required init?(coder aDecoder: NSCoder) {
     fatalError("Init with coder not implemented")
@@ -217,15 +209,6 @@ public class ViewController<Holder:GraphHolder> : UIViewController, SpriteDriver
   
   override public func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
-    
-//    self.driver.bind(to: store.value.canvasState.scroll.)
-//    let bestFit = driver.size
-//
-//    self.driverLayout.size = bestFit
-//    let selection = CGRect.around(viewport.canvas.frame.center, size: bestFit)
-//    self.viewport.animateSelection(to: selection)
-//
-//    self.driverLayout.layout(in: self.store.value.selection)
   }
   
   func saveSnapshot(view: UIView) {
@@ -246,14 +229,12 @@ public class ViewController<Holder:GraphHolder> : UIViewController, SpriteDriver
     // ...End Save Image
   }
   
-  
   func didAddEdge() {
     self.saveSnapshot(view: self.view)
 
     self.store.send(.saveData)
   }
   
-  //var booley = true
   override public func loadView() {
     viewport = CanvasViewport(frame: store.value.windowBounds,
                               store: store.view(value: { $0.canvasState}, action: {.canvasAction($0)}),
@@ -262,12 +243,10 @@ public class ViewController<Holder:GraphHolder> : UIViewController, SpriteDriver
     
     self.view = viewport
     self.view.backgroundColor = self.driver.spriteView.scene?.backgroundColor
-  }
-  override public func viewDidLayoutSubviews() {
-    super.viewDidLayoutSubviews()
+    
   }
   
-  /// End Scrollview
+  
   
 }
 

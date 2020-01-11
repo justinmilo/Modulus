@@ -59,13 +59,24 @@ public func createTentGridFromEaveHeiht(with bounding: CGSize3) -> (GraphPositio
   let edges = addTentParts(grid:pos)
   return (pos, edges)
 }
+public func createTentGridFromRidgeHeight(with bounding: CGSize3, baySize: CGFloat=400) -> (GraphPositions, [Edge<TentParts>]) {
+  let opposite = tan(18.0 * CGFloat.pi / 180) * bounding.width/2
+  let graphSegments = GraphSegments(
+    sX: [bounding.width/2, bounding.width/2],
+    sY: ([baySize], bounding.depth) |> maximumRepeated,
+    sZ: [bounding.elev-opposite, opposite]
+  )
+  let pos = graphSegments |> segToPos
+  let edges = addTentParts(grid:pos)
+  return (pos, edges)
+}
 
 public enum TentParts : String, Codable, Hashable {
     case base = "Base"
     case leg = "Leg"
     case rafter = "Rafter"
 //    case xbrace = "X-Brace"
-//    case purlin = "Purlin"
+    case purlin = "Purlin"
 }
 
 func addTentParts(grid:GraphPositions)->[Edge<TentParts>] {
@@ -103,6 +114,15 @@ func addTentParts(grid:GraphPositions)->[Edge<TentParts>] {
     return leftRafters + rightRafters
   }
   
+  let purlins : [Edge<TentParts>] = {
+    guard grid.pY.count > 1 else { return [] }
+    return(0 ..< grid.pY.count-1).flatMap{ y in
+      return [Edge<TentParts>(content: .purlin, p1: (0,y,1), p2: (0,y+1,1)),
+              Edge<TentParts>(content: .purlin, p1: (1,y,2), p2: (1,y+1,2)),
+              Edge<TentParts>(content: .purlin, p1: (2,y,1), p2: (2,y+1,1))]
+    }
+  }()
   
-  return basePlates + legs + rafter
+  
+  return basePlates + legs + rafter + purlins
 }

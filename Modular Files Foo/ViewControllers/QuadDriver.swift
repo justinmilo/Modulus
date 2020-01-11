@@ -9,47 +9,154 @@
 import Foundation
 
 
-class QuadDriver : PageControllerDelegate {
+public struct PageState {
+  var currentlyTop = true
+  var currentlyLeft = true
+  var horizontalIndex : Int { return currentlyLeft ? 0 : 1  }
+  var verticalIndex : Int { return currentlyTop ? 0 : 1  }
   
-  private var upper : PageController
-  private var lower : PageController
-  public var group : PageController
-  
-  init (upper:[UIViewController],
-        lower:[UIViewController]){
-    // Pre-condition could gurantee the equvalence of indices ie: 2x2 matrix
-    let hor1 : PageController = PageController(orientation: .horizontal, content:upper)
-    
-    let hor2 = PageController(orientation: .horizontal, content:lower)
-    
-    let vert = PageController(orientation: .vertical, content:[hor1, hor2])
-    hor1.newDelegate = vert
-    hor2.newDelegate = vert
-    
-    (self.upper, self.lower, self.group) = (hor1, hor2, vert)
-    
-    vert.newDelegate = self
+  public var currentQuadrant : Quadrant {
+    switch (currentlyTop, currentlyLeft) {
+    case (true, true): return .topLeft
+    case (true, false): return .topRight
+    case (false, true): return .bottomLeft
+    case (false, false): return .bottomRight
+    }
   }
+  public enum Quadrant{
+    case topLeft, topRight, bottomLeft, bottomRight
+  }
+}
+
+public enum PageAction {
+  case didPageVertically
+  case didPageHorizontally
+}
+
+import Combine
+import Singalong
+let pageReducer =  {(state: inout PageState, action: PageAction) -> [Effect<PageAction>] in
+  switch action {
+  case .didPageVertically:
+    state.currentlyTop.toggle()
+  case .didPageHorizontally:
+    state.currentlyLeft.toggle()
+  }
+  return []
+} |> logging
+
+import ComposableArchitecture
+
+
+class QuadDriverCA : NSObject{
+
+  public var store: Store<PageState,PageAction>
+  private var upperPVC : UIPageViewController
+  private var lowerPVC : UIPageViewController
+  private var groupPVC : UIPageViewController
+  public var group : UIViewController { groupPVC }
+  private var cancellable : AnyCancellable!
   
-  func didTransition(to viewController: UIViewController, within pageController: PageController){
-    
-    enum Controller { case group, top, bottom }
-    
-    let type : Controller = pageController==group
-      ? .group
-      : pageController==upper
-      ? .top
-      : .bottom
-    
-    switch type {
-    case .group: return
-    case .top:
-      let index = upper.content.firstIndex(of: viewController)!
-      lower.quitelySetViewController(lower.content[index])
-    case .bottom:
-      let index = lower.content.firstIndex(of: viewController)!
-      upper.quitelySetViewController(upper.content[index])
+  public var upper : [UIViewController]
+  public var lower : [UIViewController]
+  private var groupMatrix : [[UIViewController]] { return [upper, lower] }
+  
+  init (store: Store<PageState,PageAction>, upper:[UIViewController],
+        lower:[UIViewController]){
+    self.store = store
+    let hor1 = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal)
+    let hor2 = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal)
+    let vert = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .vertical)
+    (self.upperPVC, self.lowerPVC, self.groupPVC) = (hor1, hor2, vert)
+    self.upperPVC.setViewControllers([upper[0]], direction: .forward, animated: false, completion: {_ in})
+    self.lowerPVC.setViewControllers([lower[0]], direction: .forward, animated: false, completion: {_ in})
+    self.groupPVC.setViewControllers([upperPVC], direction: .forward, animated: false, completion: {_ in})
+    self.upper = upper
+    self.lower = lower
+    super.init()
+    hor1.delegate = self
+    hor1.dataSource = self
+    hor2.delegate = self
+    hor2.dataSource = self
+    vert.delegate = self
+    vert.dataSource = self
+    self.cancellable = store.$value.sink {
+      [weak self] state in
+      guard let self = self else { return }
+      self.groupPVC.title = self.groupMatrix[state.verticalIndex][state.horizontalIndex].title
+      if state.currentlyTop {
+        self.lowerPVC.setViewControllers([lower[state.horizontalIndex]], direction: .forward, animated: false, completion: {_ in})
+      } else {
+        self.upperPVC.setViewControllers([upper[state.horizontalIndex]], direction: .forward, animated: false, completion: {_ in})
+      }
+    }
+  }
+}
+extension QuadDriverCA : UIPageViewControllerDelegate, UIPageViewControllerDataSource {
+  func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
+    print(pageViewController)
+    switch  pageViewController {
+    case upperPVC:
+      switch viewController{
+      case upper[0]: return nil
+      case upper[1]: return upper[0]
+      default: fatalError()
+      }
+    case lowerPVC:
+      switch viewController{
+      case lower[0]: return nil
+      case lower[1]: return lower[0]
+      default: fatalError()
+      }
+    case groupPVC:
+      switch viewController {
+      case upperPVC: return nil
+      case lowerPVC: return upperPVC
+      default: fatalError("Only meant for three viewControllers")
+      }
+    default: fatalError("Only meant for three viewControllers")
+    }
+  }
+
+  
+  func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
+    switch  pageViewController {
+    case upperPVC:
+      switch viewController{
+      case upper[0]: return upper[1]
+      case upper[1]: return nil
+      default: fatalError()
+      }
+    case lowerPVC:
+      switch viewController{
+      case lower[0]: return lower[1]
+      case lower[1]: return nil
+      default: fatalError()
+      }
+    case groupPVC:
+      switch viewController {
+      case upperPVC: return lowerPVC
+      case lowerPVC: return nil
+      default: fatalError("Only meant for three viewControllers")
+      }
+    default: fatalError("Only meant for three viewControllers")
     }
   }
   
+  // Sent when a gesture-initiated transition begins.
+  func pageViewController(_ pageViewController: UIPageViewController, willTransitionTo pendingViewControllers: [UIViewController]) {
+    
+  }
+
+     
+     // Sent when a gesture-initiated transition ends. The 'finished' parameter indicates whether the animation finished, while the 'completed' parameter indicates whether the transition completed or bailed out (if the user let go early).
+  func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
+    if completed && (pageViewController == lowerPVC || pageViewController == upperPVC) {
+      self.store.send(.didPageHorizontally)
+    } else if completed && pageViewController == groupPVC{
+      self.store.send(.didPageVertically)
+    }
+  }
 }
+  
+  

@@ -24,7 +24,7 @@ struct TentState {
       sizePreferences: self.sizePreferences,
     scale: 1.0,
     windowBounds: UIScreen.main.bounds,
-    selection: CGRect(50, 50, 300, 400))
+    offset: CGPoint(0, 0))
   }
   
 
@@ -73,7 +73,7 @@ struct TentView : UIViewControllerRepresentable {
     let graph = TentGraph()
     
     let storeOne = self.store.view(value: {$0.planState}, action: { .plan($0) })
-    let one = tentVC(store: storeOne, title: "Top", graph: graph, tentMap: tentPlanMap)
+    let one = tentVC(store: storeOne, title: "Top")
     
     return embedInNav(one)
     

@@ -8,6 +8,8 @@
 
 import UIKit
 import SwiftUI
+@testable import Modular
+import ComposableArchitecture
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
