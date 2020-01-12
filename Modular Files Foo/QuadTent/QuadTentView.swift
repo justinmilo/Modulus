@@ -168,15 +168,8 @@ public let quadReducer =  combine(
     switch action {
     case .page: break
     case .plan:
-      state.xOffset = state.planState.selectionView.x
+      //state.xOffset = state.planState.selectionView.x
       state.yOffset = state.planState.selectionView.y
-      print("--")
-      print("plan origin ",state.planState.selectionView.x)
-      print("frame origin.x ", state.planState.canvasFrame.origin.x)
-      print("content offset ", state.planState.canvasOffset.x)
-      print("scale ", state.planState.scale)
-      print("interim Zoom ", state.planState.canvasState.scroll.centered.setter)
-      print("interim Zoom ", state.planState.canvasState.interimZoom)
       
       var aState = state.planState
       zoomEnded(state: &aState.canvasState.scroll.centered)
@@ -186,8 +179,6 @@ public let quadReducer =  combine(
       state.rotatedPlanState.scale = state.scale
       state.frontState.scale = state.scale
       state.sideState.scale = state.scale
-      
-      print("front origin", state.frontOrigin.x)
 
 
       state.frontState.selectionView = CGRect(origin: state.frontOrigin, size: state.frontState.spriteState.viewSpaceSize)
@@ -195,8 +186,12 @@ public let quadReducer =  combine(
       state.rotatedPlanState.selectionView = CGRect(origin: state.rotatedOrigin, size: state.rotatedPlanState.spriteState.viewSpaceSize)
       break
     case .rotated:
-      state.yOffsetR = state.rotatedPlanState.selectionView.x
+      //state.yOffsetR = state.rotatedPlanState.selectionView.x
       state.xOffsetR = state.rotatedPlanState.selectionView.y
+      
+      var aState = state.rotatedPlanState
+      zoomEnded(state: &aState.canvasState.scroll.centered)
+      state.yOffsetR = aState.selectionView.x
       
       state.scale = state.rotatedPlanState.scale
       state.planState.scale = state.scale
@@ -208,8 +203,13 @@ public let quadReducer =  combine(
       state.planState.selectionView = CGRect(origin: state.planOrigin, size: state.planState.spriteState.viewSpaceSize)
       break
     case .front:
-      state.xOffset = state.frontState.selectionView.x
-      state.zOffset = state.frontState.selectionView.y
+//      state.xOffset = state.frontState.selectionView.x
+//      state.zOffset = state.frontState.selectionView.y
+      
+      var aState = state.frontState
+      zoomEnded(state: &aState.canvasState.scroll.centered)
+      state.xOffset = aState.selectionView.x
+      state.zOffset = aState.selectionView.y
       
       state.scale = state.frontState.scale
       state.planState.scale = state.scale
@@ -222,8 +222,13 @@ public let quadReducer =  combine(
       break
       
     case .side:
-      state.yOffsetR = state.sideState.selectionView.x
-      state.zOffset = state.sideState.selectionView.y
+//      state.yOffsetR = state.sideState.selectionView.x
+//      state.zOffset = state.sideState.selectionView.y
+      
+      var aState = state.sideState
+      zoomEnded(state: &aState.canvasState.scroll.centered)
+      state.yOffsetR = aState.selectionView.x
+      state.zOffset = aState.selectionView.y
       
       state.scale = state.sideState.scale
       state.planState.scale = state.scale
