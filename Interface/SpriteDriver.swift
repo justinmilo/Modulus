@@ -16,22 +16,19 @@ import ComposableArchitecture
 
 
 public struct SpriteState<Holder:GraphHolder> {
-  init(screen: CGRect, scale : CGFloat, sizePreferences: [CGFloat], graph: Holder, editingViews: [GenericEditingView<Holder>] ){
-    spriteFrame = screen
+  init(spriteFrame: CGRect, scale : CGFloat, sizePreferences: [CGFloat], graph: Holder, editingViews: [GenericEditingView<Holder>] ){
+    self.spriteFrame = spriteFrame
     self.scale = scale
     self.sizePreferences = sizePreferences
     self.graph = graph
     self.editingView = editingViews[0]
     self.loadedViews = editingViews
-    //                           ICAN : Pass *Holder* into editingView.size Function to get a CGSize back
-    let boundingRect = CGRect(origin: .zero, size: .zero )
-    self.frame = Changed(boundingRect)
+    self.frame = Changed(.zero)
     self.aligned = (.center, .center)
-    self.layoutFrame = boundingRect
+    self.layoutFrame = .zero
     self.layoutOrigin = Changed(.zero)
     self.layoutSize = Changed(.zero)
-
-    self.modelSpaceAllowableSize = Changed(boundingRect.size  * self.scale)
+    self.modelSpaceAllowableSize = Changed(.zero)
   }
   
   public var spriteFrame: CGRect

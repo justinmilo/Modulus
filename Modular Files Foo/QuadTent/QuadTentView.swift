@@ -30,7 +30,7 @@ public struct QuadState {
   public var frontState: InterfaceState<TentGraph>
   public var sideState: InterfaceState<TentGraph>
   
-  public init (graph: TentGraph = TentGraph()) {
+  public init (graph: TentGraph = TentGraph(), size: CGSize = UIScreen.main.bounds.size) {
     xOffset = 50
     yOffset = 200
     zOffset = 200
@@ -50,33 +50,55 @@ public struct QuadState {
       mapping: [tentPlanMap],
       sizePreferences: self.sizePreferences,
       scale: self.scale,
-      windowBounds: UIScreen.main.bounds,
+      windowBounds: size.asRect(),
       offset: planOrigin)
     rotatedPlanState = InterfaceState(
       graph: myGraph,
       mapping: [tentPlanMapRotated],
       sizePreferences: self.sizePreferences,
       scale: self.scale,
-      windowBounds: UIScreen.main.bounds,
+      windowBounds: size.asRect(),
       offset: rotatedOrigin)
     frontState = InterfaceState(
       graph: myGraph,
       mapping: [tentFrontMap],
       sizePreferences: self.sizePreferences,
       scale: self.scale,
-      windowBounds: UIScreen.main.bounds,
+      windowBounds: size.asRect(),
       offset: frontOrigin)
     sideState = InterfaceState(
       graph: myGraph,
       mapping: [tentSideMap],
       sizePreferences: self.sizePreferences,
       scale: self.scale,
-      windowBounds: UIScreen.main.bounds,
+      windowBounds: size.asRect(),
       offset: sideOrigin)
   }
   
   
 }
+
+func zoomEnded(state: inout CenteredGrowState) {
+  let setterScale = state.grow.read.zoomScale
+  let oldFrame = state.grow.read.rootContentFrame
+  let oldOffset = state.grow.read.contentOffset
+  let portSize = state.portSize
+  
+  let (newOffset,newDelta) = factorOutNegativeScrollviewOffsets(scaledRootFrame: oldFrame, contentOffset: oldOffset)
+  let newSize = CGSize(width: oldFrame.width + newDelta.x, height: oldFrame.height + newDelta.y)
+  let additionalSizeDelta = additionalDeltaToExtendContentSizeToEdgeOfBounds(newOffset, newSize, portSize)
+  let setterSize = newSize + additionalSizeDelta
+  let setterContent = CGRect(origin: .zero, size:  setterSize)
+
+  state.grow.read.rootContentFrame = setterContent
+  state.grow.read.contentOffset = newOffset
+  state.grow.read.contentSize = setterSize
+  state.grow.read.areaOfInterest = state.grow.read.areaOfInterest.scaled(by: setterScale) + newDelta.asVector()
+  state.grow.read.zoomScale = 1.0
+  state.currentScale = state.currentScale * setterScale
+  state.setter = .finalZoom(childDelta: newDelta)
+}
+
 
 public enum QuadAction {
   case page(PageAction)
@@ -146,18 +168,32 @@ public let quadReducer =  combine(
     switch action {
     case .page: break
     case .plan:
-         state.xOffset = state.planState.selectionView.x
-         state.yOffset = state.planState.selectionView.y
-         
-         state.scale = state.planState.scale
-         state.rotatedPlanState.scale = state.scale
-         state.frontState.scale = state.scale
-         state.sideState.scale = state.scale
-         
-         state.frontState.selectionView = CGRect(origin: state.frontOrigin, size: state.frontState.spriteState.viewSpaceSize)
-         state.sideState.selectionView = CGRect(origin: state.sideOrigin, size: state.sideState.spriteState.viewSpaceSize)
-         state.rotatedPlanState.selectionView = CGRect(origin: state.rotatedOrigin, size: state.rotatedPlanState.spriteState.viewSpaceSize)
-         break
+      state.xOffset = state.planState.selectionView.x
+      state.yOffset = state.planState.selectionView.y
+      print("--")
+      print("plan origin ",state.planState.selectionView.x)
+      print("frame origin.x ", state.planState.canvasFrame.origin.x)
+      print("content offset ", state.planState.canvasOffset.x)
+      print("scale ", state.planState.scale)
+      print("interim Zoom ", state.planState.canvasState.scroll.centered.setter)
+      print("interim Zoom ", state.planState.canvasState.interimZoom)
+      
+      var aState = state.planState
+      zoomEnded(state: &aState.canvasState.scroll.centered)
+      state.xOffset = aState.selectionView.x
+      
+      state.scale = state.planState.scale
+      state.rotatedPlanState.scale = state.scale
+      state.frontState.scale = state.scale
+      state.sideState.scale = state.scale
+      
+      print("front origin", state.frontOrigin.x)
+
+
+      state.frontState.selectionView = CGRect(origin: state.frontOrigin, size: state.frontState.spriteState.viewSpaceSize)
+      state.sideState.selectionView = CGRect(origin: state.sideOrigin, size: state.sideState.spriteState.viewSpaceSize)
+      state.rotatedPlanState.selectionView = CGRect(origin: state.rotatedOrigin, size: state.rotatedPlanState.spriteState.viewSpaceSize)
+      break
     case .rotated:
       state.yOffsetR = state.rotatedPlanState.selectionView.x
       state.xOffsetR = state.rotatedPlanState.selectionView.y
@@ -246,7 +282,8 @@ public struct SingleTentView : UIViewControllerRepresentable {
   public let store :Store<InterfaceState<TentGraph>, InterfaceAction<TentGraph>>
 
   public func makeUIViewController(context: UIViewControllerRepresentableContext<SingleTentView>) -> InterfaceController<TentGraph> {
-    return tentVC(store: self.store, title: "Top")
+    let vc = InterfaceController(store:store)
+    return vc
   }
   public func updateUIViewController(_ uiViewController: InterfaceController<TentGraph>, context: UIViewControllerRepresentableContext<SingleTentView>) {
   }
@@ -257,11 +294,11 @@ public struct SingleTentView : UIViewControllerRepresentable {
 
 
 
-
+import Geo
 public struct iPadView: View {
   public init() {
     self.init(store: Store(
-       initialValue: QuadState(),
+      initialValue: QuadState(size: UIScreen.main.bounds.size * 0.5),
        reducer:  quadReducer |> logging
      )
     )
@@ -291,12 +328,12 @@ public struct iPadView: View {
   @ObservedObject public var store : Store<QuadState, QuadAction>
   
   public var body: some View {
-    VStack{
-      HStack{
+    VStack(spacing: 0){
+      HStack(spacing: 0){
         top
         right
       }
-      HStack{
+      HStack(spacing: 0){
         left
         bottom
       }

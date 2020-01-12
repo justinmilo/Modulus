@@ -27,7 +27,7 @@ class SpriteDriverViewVC : UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     let windowBounds = self.view.frame
-    var state = SpriteState(screen: windowBounds,
+    var state = SpriteState(spriteFrame: windowBounds,
                             scale : 0.5,
                             sizePreferences: [100.0],
     graph: TentGraph(),

@@ -28,7 +28,7 @@ public struct InterfaceState<Holder:GraphHolder> {
   ) {
     self.windowBounds = windowBounds
     
-    self.spriteState =  SpriteState(screen: windowBounds,
+    self.spriteState =  SpriteState(spriteFrame: windowBounds,
                                     scale : scale,
                                     sizePreferences: sizePreferences,
                                     graph: graph,
