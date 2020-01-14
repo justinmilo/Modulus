@@ -128,5 +128,3 @@ public func logging<Value, Action>(
     }] + effects
   }
 }
-
-
