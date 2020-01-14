@@ -31,21 +31,7 @@ func embedInNav(_ vc: UIViewController)-> UINavigationController {
   return ulN
 }
 
-func controllerFromMap(store:Store<AppState, AppAction>, target: Any, _ vm: (label:String, viewMap: [GraphEditingView]), graph: Item<ScaffGraph>) -> InterfaceController<ScaffGraph> {
 
-  //  let vc = ViewController(mapping: vm.viewMap, graph: graph.content, scale: 1.0, screenSize: Current.screen, store:
-  let vc = InterfaceController(store:
-    store.view (
-    value:{$0.interfaceState},
-    action: { .interfaceAction($0) }))
-  
-  
-//  let vc : ViewController = ViewController(mapping: vm.viewMap, graph: graph.content, scale: 1.0)
-  vc.title = vm.label
-  vc.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "3D", style: UIBarButtonItem.Style.plain , target: target, action: #selector(GraphNavigator.present3D))
-  
-  return vc
-}
 
 func mockControllerFromMap(target: Any, _ vm: (label:String, viewMap: [GraphEditingView]) ) -> UIViewController {
   let vc = UIViewController()

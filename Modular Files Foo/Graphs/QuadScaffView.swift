@@ -12,7 +12,7 @@ import SwiftUI
 @testable import GrippableView
 import ComposableArchitecture
 
-public struct QuadState {
+public struct QuadScaffState {
   var scale : CGFloat =  1
   public var xOffset : CGFloat
   public var xOffsetR : CGFloat
@@ -25,12 +25,12 @@ public struct QuadState {
   var sideOrigin  : CGPoint { CGPoint(yOffsetR, zOffset) }
   public var sizePreferences : [CGFloat] = [100.0]
   var pageState : PageState
-  public var planState: InterfaceState<TentGraph>
-  public var rotatedPlanState: InterfaceState<TentGraph>
-  public var frontState: InterfaceState<TentGraph>
-  public var sideState: InterfaceState<TentGraph>
+  public var planState: InterfaceState<ScaffGraph>
+  public var rotatedPlanState: InterfaceState<ScaffGraph>
+  public var frontState: InterfaceState<ScaffGraph>
+  public var sideState: InterfaceState<ScaffGraph>
   
-  public init (graph: TentGraph = TentGraph(), size: CGSize = UIScreen.main.bounds.size) {
+  public init (graph: ScaffGraph = createScaffolding((200,200,200)), size: CGSize = UIScreen.main.bounds.size) {
     xOffset = 50
     yOffset = 200
     zOffset = 200
@@ -47,124 +47,44 @@ public struct QuadState {
     let myGraph = graph
     planState = InterfaceState(
       graph: myGraph,
-      mapping: [tentPlanMap],
+      mapping: planMap,
       sizePreferences: self.sizePreferences,
       scale: self.scale,
       windowBounds: size.asRect(),
       offset: planOrigin)
     rotatedPlanState = InterfaceState(
       graph: myGraph,
-      mapping: [tentPlanMapRotated],
+      mapping: planMapRotated,
       sizePreferences: self.sizePreferences,
       scale: self.scale,
       windowBounds: size.asRect(),
       offset: rotatedOrigin)
     frontState = InterfaceState(
       graph: myGraph,
-      mapping: [tentFrontMap],
+      mapping: frontMap,
       sizePreferences: self.sizePreferences,
       scale: self.scale,
       windowBounds: size.asRect(),
       offset: frontOrigin)
     sideState = InterfaceState(
       graph: myGraph,
-      mapping: [tentSideMap],
+      mapping: sideMap,
       sizePreferences: self.sizePreferences,
       scale: self.scale,
       windowBounds: size.asRect(),
       offset: sideOrigin)
   }
-  
-  
 }
 
-func zoomEnded(state: inout CenteredGrowState) {
-  let setterScale = state.grow.read.zoomScale
-  let oldFrame = state.grow.read.rootContentFrame
-  let oldOffset = state.grow.read.contentOffset
-  let portSize = state.portSize
-  
-  let (newOffset,newDelta) = factorOutNegativeScrollviewOffsets(scaledRootFrame: oldFrame, contentOffset: oldOffset)
-  let newSize = CGSize(width: oldFrame.width + newDelta.x, height: oldFrame.height + newDelta.y)
-  let additionalSizeDelta = additionalDeltaToExtendContentSizeToEdgeOfBounds(newOffset, newSize, portSize)
-  let setterSize = newSize + additionalSizeDelta
-  let setterContent = CGRect(origin: .zero, size:  setterSize)
+let scaffInterfaceReducer :  (inout InterfaceState<ScaffGraph>,  InterfaceAction<ScaffGraph>) -> [Effect<InterfaceAction<ScaffGraph>>] = interfaceReducer
 
-  state.grow.read.rootContentFrame = setterContent
-  state.grow.read.contentOffset = newOffset
-  state.grow.read.contentSize = setterSize
-  state.grow.read.areaOfInterest = state.grow.read.areaOfInterest.scaled(by: setterScale) + newDelta.asVector()
-  state.grow.read.zoomScale = 1.0
-  state.currentScale = state.currentScale * setterScale
-  state.setter = .finalZoom(childDelta: newDelta)
-}
-
-
-public enum QuadAction<Holder: GraphHolder> {
-  case page(PageAction)
-  var page: PageAction? {
-    get {
-      guard case let .page(value) = self else { return nil }
-      return value
-    }
-    set {
-      guard case .page = self, let newValue = newValue else { return }
-      self = .page(newValue)
-    }
-  }
-  case plan(InterfaceAction<Holder>)
-  var plan: InterfaceAction<Holder>? {
-    get {
-      guard case let .plan(value) = self else { return nil }
-      return value
-    }
-    set {
-      guard case .plan = self, let newValue = newValue else { return }
-      self = .plan(newValue)
-    }
-  }
-  case rotated(InterfaceAction<Holder>)
-  var rotated: InterfaceAction<Holder>? {
-    get {
-      guard case let .rotated(value) = self else { return nil }
-      return value
-    }
-    set {
-      guard case .rotated = self, let newValue = newValue else { return }
-      self = .rotated(newValue)
-    }
-  }
-  case front(InterfaceAction<Holder>)
-  var front: InterfaceAction<Holder>? {
-    get {
-      guard case let .front(value) = self else { return nil }
-      return value
-    }
-    set {
-      guard case .front = self, let newValue = newValue else { return }
-      self = .front(newValue)
-    }
-  }
-  case side(InterfaceAction<Holder>)
-  var side: InterfaceAction<Holder>? {
-    get {
-      guard case let .side(value) = self else { return nil }
-      return value
-    }
-    set {
-      guard case .side = self, let newValue = newValue else { return }
-      self = .side(newValue)
-    }
-  }
-}
-
-public let quadReducer =  combine(
-  pullback(pageReducer, value: \QuadState.pageState, action: \QuadAction.page),
-  pullback(interfaceReducer, value: \QuadState.planState, action: \QuadAction.plan),
-  pullback(interfaceReducer, value: \QuadState.rotatedPlanState, action: \QuadAction.rotated),
-  pullback(interfaceReducer, value: \QuadState.frontState, action: \QuadAction.front),
-  pullback(interfaceReducer, value: \QuadState.sideState, action: \QuadAction.side),
-  {(state: inout QuadState, action: QuadAction) -> [Effect<QuadAction<TentGraph>>] in
+public let quadScaffReducer : (inout QuadScaffState,  QuadAction<ScaffGraph>) -> [Effect<QuadAction<ScaffGraph>>] =  combine(
+  pullback(pageReducer, value: \QuadScaffState.pageState, action: \QuadAction.page),
+  pullback(scaffInterfaceReducer, value: \QuadScaffState.planState, action: \QuadAction.plan),
+  pullback(interfaceReducer, value: \QuadScaffState.rotatedPlanState, action: \QuadAction.rotated),
+  pullback(interfaceReducer, value: \QuadScaffState.frontState, action: \QuadAction.front),
+  pullback(interfaceReducer, value: \QuadScaffState.sideState, action: \QuadAction.side),
+  {(state: inout QuadScaffState, action: QuadAction<ScaffGraph>) -> [Effect<QuadAction<ScaffGraph>>] in
     switch action {
     case .page: break
     case .plan:
@@ -248,15 +168,15 @@ public let quadReducer =  combine(
 
 
 import Singalong
-public struct QuadTentView : UIViewControllerRepresentable {
+public struct QuadScaffView : UIViewControllerRepresentable {
   public init() {
     self.init(store: Store(
-       initialValue: QuadState(),
-       reducer:  quadReducer |> logging
+       initialValue: QuadScaffState(),
+       reducer:  quadScaffReducer |> logging
      )
     )
   }
-  public init(store: Store<QuadState, QuadAction<TentGraph>> ) {
+  public init(store: Store<QuadScaffState, QuadAction<ScaffGraph>> ) {
     self.store = store
     let storeOne = self.store.view(value: {$0.planState}, action: { .plan($0) })
     let one = tentVC(store: storeOne, title: "Top")
@@ -269,68 +189,71 @@ public struct QuadTentView : UIViewControllerRepresentable {
     driver = QuadDriverCA(store: self.store.view(value: {$0.pageState}, action: { .page($0) }), upper: [one, two], lower: [three, four])
   }
   private var driver : QuadDriverCA
-  public let store : Store<QuadState, QuadAction<TentGraph>>
-  public func makeUIViewController(context: UIViewControllerRepresentableContext<QuadTentView>) -> UINavigationController {
+  public let store : Store<QuadScaffState, QuadAction<ScaffGraph>>
+  public func makeUIViewController(context: UIViewControllerRepresentableContext<QuadScaffView>) -> UINavigationController {
     return embedInNav(driver.group)
   }
   
-  public func updateUIViewController(_ uiViewController: UINavigationController, context: UIViewControllerRepresentableContext<QuadTentView>) {
+  public func updateUIViewController(_ uiViewController: UINavigationController, context: UIViewControllerRepresentableContext<QuadScaffView>) {
   }
 
   public typealias UIViewControllerType = UINavigationController
 }
 
-public struct SingleTentView : UIViewControllerRepresentable {
-  public init(store: Store<InterfaceState<TentGraph>, InterfaceAction<TentGraph>> ) {
+
+
+
+public struct SingleScaffView : UIViewControllerRepresentable {
+  public init(store: Store<InterfaceState<ScaffGraph>, InterfaceAction<ScaffGraph>> ) {
     self.store = store
   }
-  public let store :Store<InterfaceState<TentGraph>, InterfaceAction<TentGraph>>
+  public let store :Store<InterfaceState<ScaffGraph>, InterfaceAction<ScaffGraph>>
 
-  public func makeUIViewController(context: UIViewControllerRepresentableContext<SingleTentView>) -> InterfaceController<TentGraph> {
+  public func makeUIViewController(context: UIViewControllerRepresentableContext<SingleScaffView>) -> InterfaceController<ScaffGraph> {
     let vc = InterfaceController(store:store)
     return vc
   }
-  public func updateUIViewController(_ uiViewController: InterfaceController<TentGraph>, context: UIViewControllerRepresentableContext<SingleTentView>) {
+  public func updateUIViewController(_ uiViewController: InterfaceController<ScaffGraph>, context: UIViewControllerRepresentableContext<SingleScaffView>) {
   }
 
-  public typealias UIViewControllerType = InterfaceController<TentGraph>
+  public typealias UIViewControllerType = InterfaceController<ScaffGraph>
 
 }
 
 
 
 import Geo
-public struct iPadView: View {
+public struct iPadScaffView: View {
   public init() {
     self.init(store: Store(
-      initialValue: QuadState(size: UIScreen.main.bounds.size * 0.5),
-       reducer:  quadReducer |> logging
+      initialValue: QuadScaffState(size: UIScreen.main.bounds.size * 0.5),
+       reducer:  quadScaffReducer |> logging
      )
     )
   }
-  public init(store: Store<QuadState, QuadAction<TentGraph>> ) {
+  public init(store: Store<QuadScaffState, QuadAction<ScaffGraph>> ) {
     self.store = store
     
     let storeOne = store.view(value: {$0.planState}, action: { .plan($0) })
-    top = SingleTentView(store: storeOne)
+    top = SingleScaffView(store: storeOne)
 
     let store2 = store.view(value: {$0.rotatedPlanState}, action: { .rotated($0) })
-    right = SingleTentView(store: store2)
+    right = SingleScaffView(store: store2)
     
     let store3 = store.view(value: {$0.frontState}, action: { .front($0) })
-    left = SingleTentView(store: store3)
+    left = SingleScaffView(store: store3)
     
     let store4 = store.view(value: {$0.sideState}, action: { .side($0) })
-    bottom = SingleTentView(store: store4)
+    bottom = SingleScaffView(store: store4)
     
   }
-  var top: SingleTentView
-  var right: SingleTentView
-  var left: SingleTentView
-  var bottom: SingleTentView
+  var top: SingleScaffView
+  var right: SingleScaffView
+  var left: SingleScaffView
+  var bottom: SingleScaffView
 
   
-  @ObservedObject public var store : Store<QuadState, QuadAction<TentGraph>>
+  @ObservedObject public var store : Store<QuadScaffState, QuadAction<ScaffGraph>>
   
   public var body: some View {
     VStack(spacing: 0){

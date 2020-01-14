@@ -239,7 +239,7 @@ let tentSideMap = GenericEditingView<TentGraph>(
 )
 
 import Geo
-func tentVC(store: Store<InterfaceState<TentGraph>, InterfaceAction<TentGraph>>, title: String) -> InterfaceController<TentGraph> {
+func tentVC<Holder: GraphHolder>(store: Store<InterfaceState<Holder>, InterfaceAction<Holder>>, title: String) -> InterfaceController<Holder> {
   let vc = InterfaceController(store:store)
   vc.title = title
   let bottomBar = UIVisualEffectView(effect: UIBlurEffect(style:.dark))

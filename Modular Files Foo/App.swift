@@ -124,7 +124,7 @@ import Interface
 
 
 struct AppState {
-  var interfaceState : InterfaceState<ScaffGraph>
+  var quadState : Item1UpView?
   var items : ItemList<ScaffGraph>
 }
 
@@ -135,9 +135,9 @@ enum AppAction {
   
   case setItems(ItemList<ScaffGraph>)
   
-  case interfaceAction(InterfaceAction<ScaffGraph>)
+  case interfaceAction(QuadAction<ScaffGraph>)
   
-  var interfaceAction: InterfaceAction<ScaffGraph>? {
+  var interfaceAction: QuadAction<ScaffGraph>? {
     get {
       guard case let .interfaceAction(value) = self else { return nil }
       return value
@@ -150,65 +150,64 @@ enum AppAction {
 }
 
 let appReducer =  combine(
-  pullback(interfaceReducer, value: \AppState.interfaceState, action: \AppAction.interfaceAction)
+  pullback(quadScaffReducer, value: \AppState.quadState!.quad, action: \AppAction.interfaceAction),
+  { (state: inout AppState, action: AppAction) -> [Effect<AppAction>] in
+    switch action {
+      case let .itemSelected(item):
+        state.quadState = Item1UpView(quad: QuadScaffState(graph: item.content, size: Current.screen.size), item: item)
+        state.quadState!.quad.sizePreferences = item.sizePreferences.map{CGFloat($0.length.converted(to: .centimeters).value)}
+        return []
+      case let .addOrReplace(item):
+        state.items.addOrReplace(item: item)
+        return []
+        
+      case let .setItems(itemList):
+        print("WHat")
+        state.items = itemList
+        return []
+        
+      case let .interfaceAction(.plan(intfAction)),
+           let .interfaceAction(.rotated(intfAction)),
+           let .interfaceAction(.front(intfAction)),
+           let .interfaceAction(.side(intfAction)):
+        switch intfAction {
+        case .sprite : return []
+        case .canvasAction: return []
+        case .saveData:
+          let itemsCopy = state.items
+          return [Effect{_ in
+            Current.file.save(itemsCopy)
+            }
+          ]
+        case let .addOrReplace(graph):
+          let item = state.items.getItem(id: graph.id)!
+          let newItem = Item(content: graph, id: item.id, name: item.name, sizePreferences: item.sizePreferences, isEnabled: item.isEnabled, thumbnailFileName: item.thumbnailFileName)
+          state.items.addOrReplace(item: newItem)
+          return []
+          
+        case let .thumbnailsAddToCache(img, id):
+          let item = state.items.getItem(id: id)!
+          return [Effect{ callback in
+            let urlResult = Current.thumbnails.addToCache(img, nil)
+            switch urlResult {
+            case let .success(str):
+              let newItem = Item(content: item.content, id: item.id, name: item.name, sizePreferences: item.sizePreferences, isEnabled: item.isEnabled, thumbnailFileName: str)
+              callback(.addOrReplace(newItem))
+            default:
+              return
+            }
+            }]
+        }
+        
+      case .interfaceAction(.page(_)):
+        return []
+        }
+    }
 )
 
-let finalAppReducer = appReducer |> savingReducer >>> logging
 
-func savingReducer(
-  _ reducer: @escaping Reducer<AppState, AppAction>
-) -> Reducer<AppState, AppAction> {
-  return { state, action in
-  switch action {
-  case let .itemSelected(item):
-    state.interfaceState.sizePreferences = item.sizePreferences.map{CGFloat($0.length.converted(to: .centimeters).value)}
-    return []
-  case let .addOrReplace(item):
-    state.items.addOrReplace(item: item)
-    return []
-    
-  case let .setItems(itemList):
-    print("WHat")
-    state.items = itemList
-    return []
-    
-  case let .interfaceAction(intfAction):
-    switch intfAction {
-    case .sprite : return []
-    case .canvasAction: return []
 
-    case .saveData:
-      let itemsCopy = state.items
-      return [Effect{_ in
-        Current.file.save(itemsCopy)
-        }
-      ]
-    case let .addOrReplace(graph):
-      let item = state.items.getItem(id: graph.id)!
-      let newItem = Item(content: graph, id: item.id, name: item.name, sizePreferences: item.sizePreferences, isEnabled: item.isEnabled, thumbnailFileName: item.thumbnailFileName)
-      state.items.addOrReplace(item: newItem)
-      return []
-      
-    case let .thumbnailsAddToCache(img, id):
-      let item = state.items.getItem(id: id)!
-      
-      
-      return [Effect{ callback in
-        let urlResult = Current.thumbnails.addToCache(img, nil)
-        switch urlResult {
-        case let .success(str):
-          let newItem = Item(content: item.content, id: item.id, name: item.name, sizePreferences: item.sizePreferences, isEnabled: item.isEnabled, thumbnailFileName: str)
-          callback(.addOrReplace(newItem))
-        default:
-          return
-        }
-      }]
-    }
 
-  
-    }
-}
-}
 
 
 public class App {
@@ -216,22 +215,10 @@ public class App {
   }
   
   public lazy var rootController: UIViewController = loadEntryTable
-  public lazy var mock : ()->(UIViewController) = {
-    let nav = embedInNav(GraphNavigator(id: "Mock0", store: self.store).vc)
-    styleNav(nav)
-    return nav
-  }
   
-  var store: Store<AppState,AppAction> = Store(initialValue:
-    AppState(interfaceState: InterfaceState(
-      graph: ((Item.template.map{ s in CGFloat( s.length.converted(to:.centimeters).value) }, (200,200,200) |> CGSize3.init)) |> createScaffoldingFrom,
-              mapping: planMap,
-              sizePreferences: [],
-              scale:1.0,
-              windowBounds: UIScreen.main.bounds,
-              offset: CGPoint(50, 50)),
-      items: ItemList([])),
-      reducer: finalAppReducer)
+  
+  var store: Store<AppState,AppAction> = Store(initialValue: AppState(quadState: nil, items: ItemList([])),
+                                               reducer: appReducer)
   
   var editViewController : EditViewController<Item<ScaffGraph>, Cell>?
   var inputTextField : UITextField?
@@ -257,7 +244,7 @@ public class App {
     edit.tableView.rowHeight = 88
     edit.didSelect = { (item, cell) in
       self.store.send(.itemSelected(cell))
-      self.currentNavigator = GraphNavigator(id: cell.id, store: self.store)
+      self.currentNavigator = GraphNavigator(store: self.store.view(value: {$0.quadState!}, action: { .interfaceAction($0) }))
       self.loadEntryTable.pushViewController(self.currentNavigator.vc, animated: true)
     }
     edit.didSelectAccessory = { (item, cell) in
@@ -290,7 +277,7 @@ public class App {
           name: text)
         new.content.id = text
         self.store.send(.addOrReplace(new))
-        self.store.send(.interfaceAction(.saveData))
+        // self.store.send(.interfaceAction(.saveData))
         edit.undoHistory.currentValue = self.store.value.items.contents
       })))
       

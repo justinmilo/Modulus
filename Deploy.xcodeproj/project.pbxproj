@@ -43,6 +43,7 @@
 		214C6EC32385A91C00A07140 /* SwiftUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214C6EC22385A91C00A07140 /* SwiftUIView.swift */; };
 		2166F9CE238CECC7008E0FF6 /* GrapheNaked.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2166F9CD238CECC7008E0FF6 /* GrapheNaked.framework */; };
 		2166F9CF238CECC7008E0FF6 /* GrapheNaked.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2166F9CD238CECC7008E0FF6 /* GrapheNaked.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		2183F24323CC1D41005924D4 /* QuadScaffView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2183F24223CC1D41005924D4 /* QuadScaffView.swift */; };
 		21B1E5E923986DB500737B78 /* Effects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B1E5E723986DB500737B78 /* Effects.swift */; };
 		21B1E5EA23986DB500737B78 /* ComposableArchitecture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B1E5E823986DB500737B78 /* ComposableArchitecture.swift */; };
 		21BCBD4B23819DF700644B14 /* Misc Utilities Mine in Resources */ = {isa = PBXBuildFile; fileRef = 21BCBD4A23819DF700644B14 /* Misc Utilities Mine */; };
@@ -342,6 +343,7 @@
 		2147609B23BD817E001C7FAD /* QuadTentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuadTentView.swift; sourceTree = "<group>"; };
 		214C6EC22385A91C00A07140 /* SwiftUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SwiftUIView.swift; path = ../ScrollViewGrower/SwiftUIView.swift; sourceTree = "<group>"; };
 		2166F9CD238CECC7008E0FF6 /* GrapheNaked.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = GrapheNaked.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		2183F24223CC1D41005924D4 /* QuadScaffView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuadScaffView.swift; sourceTree = "<group>"; };
 		21B1E5E723986DB500737B78 /* Effects.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Effects.swift; sourceTree = "<group>"; };
 		21B1E5E823986DB500737B78 /* ComposableArchitecture.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ComposableArchitecture.swift; sourceTree = "<group>"; };
 		21BCBD4A23819DF700644B14 /* Misc Utilities Mine */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "Misc Utilities Mine"; sourceTree = "<group>"; };
@@ -599,6 +601,7 @@
 				213DC75B238CA9F90062AA43 /* ScaffGraphCore.swift */,
 				213DC759238CA9F90062AA43 /* Scaffolding.swift */,
 				213DC75A238CA9F90062AA43 /* SliceScaffoldingCore.swift */,
+				2183F24223CC1D41005924D4 /* QuadScaffView.swift */,
 			);
 			path = Graphs;
 			sourceTree = "<group>";
@@ -1378,6 +1381,7 @@
 				D0F58D08210E207300AACC8F /* ViewMaps.swift in Sources */,
 				D0F58D04210E202A00AACC8F /* TexturedView+SKSpriteNode.swift in Sources */,
 				D02391A921CC1116002C4F4A /* Environment.swift in Sources */,
+				2183F24323CC1D41005924D4 /* QuadScaffView.swift in Sources */,
 				D0B1BC3F21A6F9FB00991F16 /* Mock.swift in Sources */,
 				214C6EC32385A91C00A07140 /* SwiftUIView.swift in Sources */,
 				D0F58D00210E202900AACC8F /* ViewFunctions.swift in Sources */,
@@ -1768,7 +1772,8 @@
 				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.sound.HandlesRound.Draw.UIKit;
+				MARKETING_VERSION = 1.7;
+				PRODUCT_BUNDLE_IDENTIFIER = com.sound.HandlesRound.Draw.CA;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
@@ -1789,7 +1794,8 @@
 				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.sound.HandlesRound.Draw.UIKit;
+				MARKETING_VERSION = 1.7;
+				PRODUCT_BUNDLE_IDENTIFIER = com.sound.HandlesRound.Draw.CA;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;

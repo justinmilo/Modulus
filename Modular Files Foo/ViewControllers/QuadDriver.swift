@@ -84,10 +84,14 @@ class QuadDriverCA : NSObject{
       [weak self] state in
       guard let self = self else { return }
       self.groupPVC.title = self.groupMatrix[state.verticalIndex][state.horizontalIndex].title
-      if state.currentlyTop {
-        self.lowerPVC.setViewControllers([lower[state.horizontalIndex]], direction: .forward, animated: false, completion: {_ in})
-      } else {
-        self.upperPVC.setViewControllers([upper[state.horizontalIndex]], direction: .forward, animated: false, completion: {_ in})
+      //TODO : confirm if this is really the right way to avoid the pageview bug
+      // https://stackoverflow.com/questions/24000712/pageviewcontroller-setviewcontrollers-crashes-with-invalid-parameter-not-satisf
+      DispatchQueue.main.async {
+        if state.currentlyTop {
+          self.lowerPVC.setViewControllers([lower[state.horizontalIndex]], direction: .forward, animated: false, completion: {_ in})
+        } else {
+          self.upperPVC.setViewControllers([upper[state.horizontalIndex]], direction: .forward, animated: false, completion: {_ in})
+        }
       }
     }
   }

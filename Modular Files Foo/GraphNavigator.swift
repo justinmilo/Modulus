@@ -16,45 +16,34 @@ import ComposableArchitecture
 
 
 
-
-
+public struct Item1UpView {
+  var quad : QuadScaffState
+  var item : Item<ScaffGraph>
+}
 
 
 public class GraphNavigator {
-  init(id: String, store: Store<AppState, AppAction>) {
-    self.id = id
+  public init(store: Store<Item1UpView, QuadAction<ScaffGraph>> ) {
     self.store = store
+    self.quadStore = store.view(value: {$0.quad}, action: { $0 })
+    let storeOne = quadStore.view(value: {$0.planState}, action: { .plan($0) })
+    let one = tentVC(store: storeOne, title: "Top")
+    let store2 = quadStore.view(value: {$0.rotatedPlanState}, action: { .rotated($0) })
+    let two = tentVC(store: store2, title: "Rotated Plan")
+    let store3 = quadStore.view(value: {$0.frontState}, action: { .front($0) })
+    let three = tentVC( store: store3, title: "Front")
+    let store4 = quadStore.view(value: {$0.sideState}, action: { .side($0) })
+    let four =  tentVC(store: store4, title: "Side")
+    driver = QuadDriverCA(store: quadStore.view(value: {$0.pageState}, action: { .page($0) }), upper: [one, two], lower: [three, four])
+    driver.group  |> self.addNavBarItem
   }
+  private var driver : QuadDriverCA
+  public let store : Store<Item1UpView, QuadAction<ScaffGraph>>
+  public let quadStore :  Store<QuadScaffState, QuadAction<ScaffGraph>>
   /// graph is *the* ScaffGraph for all the Nav's VC's
   /// set at init. Graph is a refernce object shared by all instances of the graph editing viewcontrollers
   
-  let store : Store<AppState, AppAction>
-  
-  lazy var vc: UIViewController = quadVC.group
-  
-  lazy var func1 : ((label: String, viewMap: [GraphEditingView])) -> InterfaceController  =
-    { ($0,self.store.value.items.getItem(id: self.id)!) }
-      >>> curry(curry(controllerFromMap)(store))(self)
-
-  lazy var planVC : InterfaceController = {
-    return Current.viewMaps.plan |> func1
-  }()
-  lazy var rotatedVC : InterfaceController = {
-    return Current.viewMaps.rotatedPlan |> func1
-  }()
-  lazy var frontVC : InterfaceController = {
-    return Current.viewMaps.front |> func1
-  }()
-  lazy var sideVC : InterfaceController = {
-    return Current.viewMaps.side |> func1
-  }()
-  
-  lazy var quadVC : QuadDriverCA = {
-    
-    let aQD = QuadDriverCA(store: Store<PageState,PageAction>(initialValue: PageState(currentlyTop: true, currentlyLeft: true), reducer: pageReducer),upper:  [planVC, rotatedVC], lower: [frontVC, sideVC])
-    aQD.group |> self.addNavBarItem
-    return aQD
-  }()
+  lazy var vc: UIViewController = driver.group
   
   func addNavBarItem(vc :UIViewController ) {
     vc.navigationItem.rightBarButtonItems = [
@@ -64,17 +53,17 @@ public class GraphNavigator {
     ]
   }
   
-  @objc func save() {
-    store.send(.interfaceAction(.saveData))
-  }
+//  @objc func save() {
+//    store.send(.interfaceAction(.saveData))
+//  }
   
   @objc func presentInfo() {
-    let cell = self.store.value.items.getItem(id: self.id)!
+    let cell = self.store.value.item
     let driver = FormDriver(initial: cell, build: colorsForm)
     driver.formViewController.navigationItem.largeTitleDisplayMode = .never
-    driver.didUpdate = {
-      self.store.send(.addOrReplace($0))
-      self.store.send(.interfaceAction(.saveData))
+    driver.didUpdate = { _ in
+      //self.store.send(.addOrReplace($0))
+      //self.store.send(.interfaceAction(.saveData))
     }
     let nav = embedInNav(driver.formViewController)
     nav.navigationBar.prefersLargeTitles = false
@@ -87,16 +76,11 @@ public class GraphNavigator {
     self.vc.present(nav, animated: true, completion: nil)
   }
   
-  let id : String
   @objc func present3D() {
-    if let item = self.store.value.items.getItem(id: id) {
-      self.store.send(.addOrReplace(item))
-    }
-    //ICAN : AScaffProvider is linked by Graph |> Provider func however....
-    //ICANTSHOULD : Graph -> CADGeneric3DGunkInput
-    //ICANTSHOULD : ARSCNVIEWCONTROLLER should take (ScnNodes) and any other needed info
-    //ICANTSHOULD : provider func should be provided by the map
-    let scaffProvider = self.store.value.items.getItem(id: id)!.content |> provider
+//    if let item = self.store.value.items.getItem(id: id) {
+//      self.store.send(.addOrReplace(item))
+//    }
+    let scaffProvider = self.store.value.item.content |> provider
     let newVC = CADViewController(grid: scaffProvider)
     
     let ulN = UINavigationController(rootViewController: newVC)
@@ -112,15 +96,10 @@ public class GraphNavigator {
   }
   
   @objc func presentAR() {
-    if let item = self.store.value.items.getItem(id: id) {
-      self.store.send(.addOrReplace(item))
-    }
-    
-    //ICAN : AScaffProvider is linked by Graph |> Provider func however....
-    //ICANTSHOULD : Graph -> CADGeneric3DGunkInput
-    //ICANTSHOULD : ARSCNVIEWCONTROLLER should take (ScnNodes) and any other needed info
-    //ICANTSHOULD : provider func should be provided by the map
-    let scaffProvider = self.store.value.items.getItem(id: id)!.content |> provider
+//    if let item = self.store.value.items.getItem(id: id) {
+//      self.store.send(.addOrReplace(item))
+//    }
+    let scaffProvider = self.store.value.item.content |> provider
     let cadController = ARScnViewController(provider: scaffProvider)
     
     let ulN = UINavigationController(rootViewController: cadController)

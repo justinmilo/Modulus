@@ -36,7 +36,7 @@ public struct GraphEditingView {
   
 }*/
 import Interface
-typealias GraphEditingView = GenericEditingView<ScaffGraph>
+public typealias GraphEditingView = GenericEditingView<ScaffGraph>
 
 func graphViewGenerator(
   build: @escaping ([CGFloat], CGSize3, [ScaffEdge]) -> (GraphPositions, [ScaffEdge]),
@@ -64,7 +64,7 @@ let originZero : (Any) -> CGPoint = { _ in return CGPoint(0,0)}
 
 let originFirstLedger: (ScaffGraph) -> CGPoint = { graph in return CGPoint(0, graph.boundsOfGrid.1)}
 
-let planMap = graphViewGenerator(
+public let planMap = graphViewGenerator(
   build: overall,
   origin: originZero,
   size: sizeFromPlanScaff,
