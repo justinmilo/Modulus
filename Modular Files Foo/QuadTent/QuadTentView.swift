@@ -12,7 +12,7 @@ import SwiftUI
 @testable import GrippableView
 import ComposableArchitecture
 
-public struct QuadState {
+public struct QuadState<Holder:GraphHolder>{
   var scale : CGFloat =  1
   public var xOffset : CGFloat
   public var xOffsetR : CGFloat
@@ -25,11 +25,13 @@ public struct QuadState {
   var sideOrigin  : CGPoint { CGPoint(yOffsetR, zOffset) }
   public var sizePreferences : [CGFloat] = [100.0]
   var pageState : PageState
-  public var planState: InterfaceState<TentGraph>
-  public var rotatedPlanState: InterfaceState<TentGraph>
-  public var frontState: InterfaceState<TentGraph>
-  public var sideState: InterfaceState<TentGraph>
-  
+  public var planState: InterfaceState<Holder>
+  public var rotatedPlanState: InterfaceState<Holder>
+  public var frontState: InterfaceState<Holder>
+  public var sideState: InterfaceState<Holder>
+}
+
+extension QuadState where Holder == TentGraph {
   public init (graph: TentGraph = TentGraph(), size: CGSize = UIScreen.main.bounds.size) {
     xOffset = 50
     yOffset = 200
@@ -74,8 +76,6 @@ public struct QuadState {
       windowBounds: size.asRect(),
       offset: sideOrigin)
   }
-  
-  
 }
 
 func zoomEnded(state: inout CenteredGrowState) {
@@ -99,6 +99,7 @@ func zoomEnded(state: inout CenteredGrowState) {
   state.setter = .finalZoom(childDelta: newDelta)
 }
 
+ 
 
 public enum QuadAction<Holder: GraphHolder> {
   case page(PageAction)
@@ -158,13 +159,15 @@ public enum QuadAction<Holder: GraphHolder> {
   }
 }
 
-public let quadReducer =  combine(
+public func quadReducer<Holder:GraphHolder>(state: inout QuadState<Holder>, action: QuadAction<Holder>) -> [Effect<QuadAction<Holder>>]{
+  
+  let combined = combine(
   pullback(pageReducer, value: \QuadState.pageState, action: \QuadAction.page),
   pullback(interfaceReducer, value: \QuadState.planState, action: \QuadAction.plan),
   pullback(interfaceReducer, value: \QuadState.rotatedPlanState, action: \QuadAction.rotated),
   pullback(interfaceReducer, value: \QuadState.frontState, action: \QuadAction.front),
   pullback(interfaceReducer, value: \QuadState.sideState, action: \QuadAction.side),
-  {(state: inout QuadState, action: QuadAction) -> [Effect<QuadAction<TentGraph>>] in
+  {(state: inout QuadState<Holder>, action: QuadAction<Holder>) -> [Effect<QuadAction<Holder>>] in
     switch action {
     case .page: break
     case .plan:
@@ -241,11 +244,15 @@ public let quadReducer =  combine(
       break
     }
     return []
+  }
+  )
+  
+  return combined(&state, action)
+  
 }
-)
 
 
-
+public typealias QuadTentState = QuadState<TentGraph>
 
 import Singalong
 public struct QuadTentView : UIViewControllerRepresentable {
@@ -256,7 +263,7 @@ public struct QuadTentView : UIViewControllerRepresentable {
      )
     )
   }
-  public init(store: Store<QuadState, QuadAction<TentGraph>> ) {
+  public init(store: Store<QuadTentState, QuadAction<TentGraph>> ) {
     self.store = store
     let storeOne = self.store.view(value: {$0.planState}, action: { .plan($0) })
     let one = tentVC(store: storeOne, title: "Top")
@@ -269,7 +276,7 @@ public struct QuadTentView : UIViewControllerRepresentable {
     driver = QuadDriverCA(store: self.store.view(value: {$0.pageState}, action: { .page($0) }), upper: [one, two], lower: [three, four])
   }
   private var driver : QuadDriverCA
-  public let store : Store<QuadState, QuadAction<TentGraph>>
+  public let store : Store<QuadTentState, QuadAction<TentGraph>>
   public func makeUIViewController(context: UIViewControllerRepresentableContext<QuadTentView>) -> UINavigationController {
     return embedInNav(driver.group)
   }
@@ -308,7 +315,7 @@ public struct iPadView: View {
      )
     )
   }
-  public init(store: Store<QuadState, QuadAction<TentGraph>> ) {
+  public init(store: Store<QuadTentState, QuadAction<TentGraph>> ) {
     self.store = store
     
     let storeOne = store.view(value: {$0.planState}, action: { .plan($0) })
@@ -330,7 +337,7 @@ public struct iPadView: View {
   var bottom: SingleTentView
 
   
-  @ObservedObject public var store : Store<QuadState, QuadAction<TentGraph>>
+  @ObservedObject public var store : Store<QuadTentState, QuadAction<TentGraph>>
   
   public var body: some View {
     VStack(spacing: 0){

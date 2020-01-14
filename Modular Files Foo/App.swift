@@ -149,8 +149,10 @@ enum AppAction {
   }
 }
 
+
+
 let appReducer =  combine(
-  pullback(quadScaffReducer, value: \AppState.quadState!.quad, action: \AppAction.interfaceAction),
+  pullback(quadReducer, value: \AppState.quadState!.quad, action: \AppAction.interfaceAction),
   { (state: inout AppState, action: AppAction) -> [Effect<AppAction>] in
     switch action {
       case let .itemSelected(item):

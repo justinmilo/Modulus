@@ -17,7 +17,7 @@ import ComposableArchitecture
 
 
 public struct Item1UpView {
-  var quad : QuadScaffState
+  var quad : QuadState<ScaffGraph>
   var item : Item<ScaffGraph>
 }
 
@@ -39,7 +39,7 @@ public class GraphNavigator {
   }
   private var driver : QuadDriverCA
   public let store : Store<Item1UpView, QuadAction<ScaffGraph>>
-  public let quadStore :  Store<QuadScaffState, QuadAction<ScaffGraph>>
+  public let quadStore :  Store<QuadState<ScaffGraph>, QuadAction<ScaffGraph>>
   /// graph is *the* ScaffGraph for all the Nav's VC's
   /// set at init. Graph is a refernce object shared by all instances of the graph editing viewcontrollers
   
