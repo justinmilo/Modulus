@@ -23,7 +23,7 @@ public struct QuadState<Holder:GraphHolder>{
   var rotatedOrigin : CGPoint { CGPoint(yOffsetR, xOffsetR) }
   var frontOrigin  : CGPoint { CGPoint(xOffset, zOffset) }
   var sideOrigin  : CGPoint { CGPoint(yOffsetR, zOffset) }
-  public var sizePreferences : [CGFloat] = [100.0]
+  public var sizePreferences : [CGFloat]
   var pageState : PageState
   public var planState: InterfaceState<Holder>
   public var rotatedPlanState: InterfaceState<Holder>
@@ -32,7 +32,9 @@ public struct QuadState<Holder:GraphHolder>{
 }
 
 extension QuadState where Holder == TentGraph {
-  public init (graph: TentGraph = TentGraph(), size: CGSize = UIScreen.main.bounds.size) {
+  public init (graph: TentGraph = TentGraph(), size: CGSize = UIScreen.main.bounds.size, sizePreferences : [CGFloat] = [100.0]) {
+    self.sizePreferences = sizePreferences
+    
     xOffset = 50
     yOffset = 200
     zOffset = 200
@@ -255,15 +257,9 @@ public func quadReducer<Holder:GraphHolder>(state: inout QuadState<Holder>, acti
 public typealias QuadTentState = QuadState<TentGraph>
 
 import Singalong
-public struct QuadTentView : UIViewControllerRepresentable {
-  public init() {
-    self.init(store: Store(
-       initialValue: QuadState(),
-       reducer:  quadReducer |> logging
-     )
-    )
-  }
-  public init(store: Store<QuadTentState, QuadAction<TentGraph>> ) {
+public struct QuadView<Holder : GraphHolder> : UIViewControllerRepresentable {
+//  Store( initialValue: QuadState(), reducer:  quadReducer |> logging)
+  public init(store: Store<QuadState<Holder>, QuadAction<Holder>> ) {
     self.store = store
     let storeOne = self.store.view(value: {$0.planState}, action: { .plan($0) })
     let one = tentVC(store: storeOne, title: "Top")
@@ -276,68 +272,65 @@ public struct QuadTentView : UIViewControllerRepresentable {
     driver = QuadDriverCA(store: self.store.view(value: {$0.pageState}, action: { .page($0) }), upper: [one, two], lower: [three, four])
   }
   private var driver : QuadDriverCA
-  public let store : Store<QuadTentState, QuadAction<TentGraph>>
-  public func makeUIViewController(context: UIViewControllerRepresentableContext<QuadTentView>) -> UINavigationController {
+  public let store : Store<QuadState<Holder>, QuadAction<Holder>>
+  public func makeUIViewController(context: UIViewControllerRepresentableContext<QuadView<Holder>>) -> UINavigationController {
     return embedInNav(driver.group)
   }
   
-  public func updateUIViewController(_ uiViewController: UINavigationController, context: UIViewControllerRepresentableContext<QuadTentView>) {
+  public func updateUIViewController(_ uiViewController: UINavigationController, context: UIViewControllerRepresentableContext<QuadView<Holder>>) {
   }
 
   public typealias UIViewControllerType = UINavigationController
 }
 
-public struct SingleTentView : UIViewControllerRepresentable {
-  public init(store: Store<InterfaceState<TentGraph>, InterfaceAction<TentGraph>> ) {
+public struct SingleHolderView <Holder: GraphHolder>: UIViewControllerRepresentable {
+  public init(store: Store<InterfaceState<Holder>, InterfaceAction<Holder>> ) {
     self.store = store
   }
-  public let store :Store<InterfaceState<TentGraph>, InterfaceAction<TentGraph>>
+  public let store :Store<InterfaceState<Holder>, InterfaceAction<Holder>>
 
-  public func makeUIViewController(context: UIViewControllerRepresentableContext<SingleTentView>) -> InterfaceController<TentGraph> {
+  public func makeUIViewController(context: UIViewControllerRepresentableContext<SingleHolderView<Holder>>) -> InterfaceController<Holder> {
     let vc = InterfaceController(store:store)
     return vc
   }
-  public func updateUIViewController(_ uiViewController: InterfaceController<TentGraph>, context: UIViewControllerRepresentableContext<SingleTentView>) {
+  public func updateUIViewController(_ uiViewController: InterfaceController<Holder>, context: UIViewControllerRepresentableContext<SingleHolderView<Holder>>) {
   }
 
-  public typealias UIViewControllerType = InterfaceController<TentGraph>
+  public typealias UIViewControllerType = InterfaceController<Holder>
 
 }
 
 
 
 import Geo
-public struct iPadView: View {
-  public init() {
-    self.init(store: Store(
-      initialValue: QuadState(size: UIScreen.main.bounds.size * 0.5),
-       reducer:  quadReducer |> logging
-     )
-    )
-  }
-  public init(store: Store<QuadTentState, QuadAction<TentGraph>> ) {
+public struct iPadView<Holder: GraphHolder>: View {
+//  Store(
+//   initialValue: QuadState(size: UIScreen.main.bounds.size * 0.5),
+//    reducer:  quadReducer |> logging
+//  )
+  
+  public init(store: Store<QuadState<Holder>, QuadAction<Holder>> ) {
     self.store = store
     
     let storeOne = store.view(value: {$0.planState}, action: { .plan($0) })
-    top = SingleTentView(store: storeOne)
+    top = SingleHolderView(store: storeOne)
 
     let store2 = store.view(value: {$0.rotatedPlanState}, action: { .rotated($0) })
-    right = SingleTentView(store: store2)
+    right = SingleHolderView(store: store2)
     
     let store3 = store.view(value: {$0.frontState}, action: { .front($0) })
-    left = SingleTentView(store: store3)
+    left = SingleHolderView(store: store3)
     
     let store4 = store.view(value: {$0.sideState}, action: { .side($0) })
-    bottom = SingleTentView(store: store4)
+    bottom = SingleHolderView(store: store4)
     
   }
-  var top: SingleTentView
-  var right: SingleTentView
-  var left: SingleTentView
-  var bottom: SingleTentView
+  var top: SingleHolderView<Holder>
+  var right: SingleHolderView<Holder>
+  var left: SingleHolderView<Holder>
+  var bottom: SingleHolderView<Holder>
 
-  
-  @ObservedObject public var store : Store<QuadTentState, QuadAction<TentGraph>>
+  @ObservedObject public var store : Store<QuadState<Holder>, QuadAction<Holder>>
   
   public var body: some View {
     VStack(spacing: 0){

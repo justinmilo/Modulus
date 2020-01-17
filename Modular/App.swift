@@ -156,8 +156,10 @@ let appReducer =  combine(
   { (state: inout AppState, action: AppAction) -> [Effect<AppAction>] in
     switch action {
       case let .itemSelected(item):
-        state.quadState = Item1UpView(quad: QuadScaffState(graph: item.content, size: Current.screen.size), item: item)
-        state.quadState!.quad.sizePreferences = item.sizePreferences.map{CGFloat($0.length.converted(to: .centimeters).value)}
+        state.quadState = Item1UpView(quad: QuadScaffState(graph: item.content,
+                                                           size: Current.screen.size,
+                                                           sizePreferences: item.sizePreferences.map{CGFloat($0.length.converted(to: .centimeters).value)}),
+                                      item: item)
         return []
       case let .addOrReplace(item):
         state.items.addOrReplace(item: item)

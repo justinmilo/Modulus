@@ -13,7 +13,10 @@ import SwiftUI
 import ComposableArchitecture
 
 extension QuadState where Holder == ScaffGraph {
-  public init (graph: ScaffGraph = createScaffolding((200,200,200)), size: CGSize = UIScreen.main.bounds.size) {
+  public init (graph: ScaffGraph = createScaffolding((200,200,200)), size: CGSize = UIScreen.main.bounds.size, sizePreferences : [CGFloat] = [100.0] ) {
+    
+    self.sizePreferences = sizePreferences
+    
     xOffset = 50
     yOffset = 200
     zOffset = 200

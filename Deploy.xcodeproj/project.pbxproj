@@ -23,6 +23,10 @@
 		2111C86A238B25A7000485F1 /* BlackCricket.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D09F3671210D0C4200D38F4C /* BlackCricket.framework */; };
 		2111C870238B26B5000485F1 /* GenericViewMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2111C86F238B26B5000485F1 /* GenericViewMap.swift */; };
 		2111C871238C1895000485F1 /* GraphicsCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21BCBD4F23819E3700644B14 /* GraphicsCore.swift */; };
+		2131887723CFB0310093CD75 /* ScallopGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2131887623CFB0310093CD75 /* ScallopGraph.swift */; };
+		2131887923CFBB710093CD75 /* ScallopGraphMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2131887823CFBB710093CD75 /* ScallopGraphMap.swift */; };
+		2131887B23CFBE850093CD75 /* ScallopComposite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2131887A23CFBE850093CD75 /* ScallopComposite.swift */; };
+		2131887D23D0FDA80093CD75 /* QuadScallopInit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2131887C23D0FDA80093CD75 /* QuadScallopInit.swift */; };
 		213DC739238C93850062AA43 /* ComposableArchitecture.h in Headers */ = {isa = PBXBuildFile; fileRef = 213DC737238C93850062AA43 /* ComposableArchitecture.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		213DC73C238C93850062AA43 /* ComposableArchitecture.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 213DC735238C93850062AA43 /* ComposableArchitecture.framework */; };
 		213DC73D238C93850062AA43 /* ComposableArchitecture.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 213DC735238C93850062AA43 /* ComposableArchitecture.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -40,7 +44,6 @@
 		2147609723B94560001C7FAD /* TentAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2147609523B94507001C7FAD /* TentAppTests.swift */; };
 		2147609C23BD8183001C7FAD /* QuadTentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2147609B23BD817E001C7FAD /* QuadTentView.swift */; };
 		214A084E2383A85E0016FE80 /* TentViewMaps.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213B4FBC23839EEF00E87F5A /* TentViewMaps.swift */; };
-		214C6EC32385A91C00A07140 /* SwiftUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214C6EC22385A91C00A07140 /* SwiftUIView.swift */; };
 		2166F9CE238CECC7008E0FF6 /* GrapheNaked.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2166F9CD238CECC7008E0FF6 /* GrapheNaked.framework */; };
 		2166F9CF238CECC7008E0FF6 /* GrapheNaked.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2166F9CD238CECC7008E0FF6 /* GrapheNaked.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		2183F24323CC1D41005924D4 /* QuadScaffView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2183F24223CC1D41005924D4 /* QuadScaffView.swift */; };
@@ -91,11 +94,6 @@
 		D00069DE200BD08300E8D5F3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D00069DC200BD08300E8D5F3 /* LaunchScreen.storyboard */; };
 		D02391A921CC1116002C4F4A /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = D02391A721CC108C002C4F4A /* Environment.swift */; };
 		D02FCBC0212E08AD001BD55E /* GraphNavigator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D02FCBBF212E08AD001BD55E /* GraphNavigator.swift */; };
-		D03E03DA20124DB8002D47F3 /* Testing.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03E03D920124DB8002D47F3 /* Testing.swift */; };
-		D052B3FC211F2CE8008DD455 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D052B3FB211F2CE8008DD455 /* AppDelegate.swift */; };
-		D052B3FE211F2CE8008DD455 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D052B3FD211F2CE8008DD455 /* ViewController.swift */; };
-		D052B403211F2CEA008DD455 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D052B402211F2CEA008DD455 /* Assets.xcassets */; };
-		D052B406211F2CEA008DD455 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D052B404211F2CEA008DD455 /* LaunchScreen.storyboard */; };
 		D05505F421A72074005BA9B4 /* Scaff2D->SKNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05505F221A72074005BA9B4 /* Scaff2D->SKNode.swift */; };
 		D05505F621A72262005BA9B4 /* C2Edge->Scaff2D.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05505F521A72262005BA9B4 /* C2Edge->Scaff2D.swift */; };
 		D06C66BE2198D8BF005D5F35 /* FormsCopy.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D06C66BD2198D8BF005D5F35 /* FormsCopy.framework */; };
@@ -124,7 +122,6 @@
 		D0B5424121B2EE1E00518809 /* Line.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B5424021B2EE1E00518809 /* Line.swift */; };
 		D0B5424321B2F3FB00518809 /* Oval.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B5424221B2F3FB00518809 /* Oval.swift */; };
 		D0B69D262043632D00AEA01B /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = D0B69D252043632D00AEA01B /* GameScene.sks */; };
-		D0CBE3F6211F90CB00A661F0 /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0CBE3F5211F90CB00A661F0 /* App.swift */; };
 		D0CBE402211F9EB100A661F0 /* Modular.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0F58CF4210E201200AACC8F /* Modular.framework */; };
 		D0CBE403211F9EB100A661F0 /* Modular.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D0F58CF4210E201200AACC8F /* Modular.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D0CD290B214496D1008498B7 /* BlackCricket.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D09F3671210D0C4200D38F4C /* BlackCricket.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -321,6 +318,10 @@
 		2111C85D238B2324000485F1 /* Layout.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Layout.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2111C868238B2579000485F1 /* ScaffGraphComposite.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScaffGraphComposite.swift; sourceTree = "<group>"; };
 		2111C86F238B26B5000485F1 /* GenericViewMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericViewMap.swift; sourceTree = "<group>"; };
+		2131887623CFB0310093CD75 /* ScallopGraph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScallopGraph.swift; sourceTree = "<group>"; };
+		2131887823CFBB710093CD75 /* ScallopGraphMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScallopGraphMap.swift; sourceTree = "<group>"; };
+		2131887A23CFBE850093CD75 /* ScallopComposite.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScallopComposite.swift; sourceTree = "<group>"; };
+		2131887C23D0FDA80093CD75 /* QuadScallopInit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuadScallopInit.swift; sourceTree = "<group>"; };
 		213B4FBC23839EEF00E87F5A /* TentViewMaps.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TentViewMaps.swift; sourceTree = "<group>"; };
 		213CF21423C54C6C00E4BEC1 /* ComposableArchitecture.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ComposableArchitecture.h; sourceTree = "<group>"; };
 		213CF21523C54C6C00E4BEC1 /* ComposableArchitecture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComposableArchitecture.swift; sourceTree = "<group>"; };
@@ -341,7 +342,6 @@
 		2147609223B814D3001C7FAD /* SimpleSpriteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleSpriteView.swift; sourceTree = "<group>"; };
 		2147609523B94507001C7FAD /* TentAppTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TentAppTests.swift; sourceTree = "<group>"; };
 		2147609B23BD817E001C7FAD /* QuadTentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuadTentView.swift; sourceTree = "<group>"; };
-		214C6EC22385A91C00A07140 /* SwiftUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SwiftUIView.swift; path = ../ScrollViewGrower/SwiftUIView.swift; sourceTree = "<group>"; };
 		2166F9CD238CECC7008E0FF6 /* GrapheNaked.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = GrapheNaked.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2183F24223CC1D41005924D4 /* QuadScaffView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuadScaffView.swift; sourceTree = "<group>"; };
 		21B1E5E723986DB500737B78 /* Effects.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Effects.swift; sourceTree = "<group>"; };
@@ -380,17 +380,11 @@
 		D033E37A20F2C6130026E1C4 /* IssuedLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssuedLayout.swift; sourceTree = "<group>"; };
 		D036097A20D5968100C11E79 /* Interface.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Interface.swift; sourceTree = "<group>"; };
 		D0360A1A20D6DA9700C11E79 /* ViewDiagramDriver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewDiagramDriver.swift; sourceTree = "<group>"; };
-		D03E03D920124DB8002D47F3 /* Testing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Testing.swift; sourceTree = "<group>"; };
 		D03E03F720125DF8002D47F3 /* Sprite2DView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sprite2DView.swift; sourceTree = "<group>"; };
 		D03E03FB20125DF8002D47F3 /* DrawingPrimitives.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DrawingPrimitives.swift; sourceTree = "<group>"; };
 		D03E03FE20125DF8002D47F3 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D04153C1202B7CA300BD7B72 /* Array+CGPoint+Utility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+CGPoint+Utility.swift"; sourceTree = "<group>"; };
 		D052B3F9211F2CE8008DD455 /* QuadPage.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = QuadPage.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		D052B3FB211F2CE8008DD455 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		D052B3FD211F2CE8008DD455 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		D052B402211F2CEA008DD455 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		D052B405211F2CEA008DD455 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		D052B407211F2CEA008DD455 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D05505F221A72074005BA9B4 /* Scaff2D->SKNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Scaff2D->SKNode.swift"; sourceTree = "<group>"; };
 		D05505F521A72262005BA9B4 /* C2Edge->Scaff2D.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "C2Edge->Scaff2D.swift"; sourceTree = "<group>"; };
 		D06C66BB2198D89E005D5F35 /* FormsCopy.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = FormsCopy.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -423,7 +417,6 @@
 		D0B69D252043632D00AEA01B /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
 		D0B86C64202FC09200CCB3F7 /* ViewFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewFunctions.swift; sourceTree = "<group>"; };
 		D0BAD734204228F700406E70 /* ViewComposite.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewComposite.swift; sourceTree = "<group>"; };
-		D0CBE3F5211F90CB00A661F0 /* App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
 		D0D21FB221A44037000FB885 /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
 		D0D5612A212DDA500059874B /* QuadDriver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuadDriver.swift; sourceTree = "<group>"; };
 		D0D6808120CEB0EF0074E97D /* ViewMaps.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewMaps.swift; sourceTree = "<group>"; };
@@ -571,6 +564,17 @@
 			path = "Should Move To Earlier Frameworks";
 			sourceTree = "<group>";
 		};
+		2131887523CFAF700093CD75 /* Scallops */ = {
+			isa = PBXGroup;
+			children = (
+				2131887623CFB0310093CD75 /* ScallopGraph.swift */,
+				2131887A23CFBE850093CD75 /* ScallopComposite.swift */,
+				2131887823CFBB710093CD75 /* ScallopGraphMap.swift */,
+				2131887C23D0FDA80093CD75 /* QuadScallopInit.swift */,
+			);
+			path = Scallops;
+			sourceTree = "<group>";
+		};
 		213CF21323C54C6C00E4BEC1 /* ComposableArchitecture */ = {
 			isa = PBXGroup;
 			children = (
@@ -616,9 +620,12 @@
 			path = QuadTent;
 			sourceTree = "<group>";
 		};
-		21BCBD4923819CA400644B14 /* Modular Files Foo */ = {
+		21BCBD4923819CA400644B14 /* Modular */ = {
 			isa = PBXGroup;
 			children = (
+				D0F58CF6210E201200AACC8F /* Modular.h */,
+				D0F58CF7210E201200AACC8F /* Info.plist */,
+				2131887523CFAF700093CD75 /* Scallops */,
 				2147609A23BD8124001C7FAD /* QuadTent */,
 				213DC74A238CA9560062AA43 /* Graphs */,
 				D0FD710621172C2A00B27092 /* TableViewController */,
@@ -633,7 +640,7 @@
 				21BCBD4C23819E3700644B14 /* Modular Files */,
 				21BCBD4A23819DF700644B14 /* Misc Utilities Mine */,
 			);
-			path = "Modular Files Foo";
+			path = Modular;
 			sourceTree = "<group>";
 		};
 		21BCBD4C23819E3700644B14 /* Modular Files */ = {
@@ -719,21 +726,16 @@
 		D00069C7200BD08300E8D5F3 = {
 			isa = PBXGroup;
 			children = (
-				214C6EC22385A91C00A07140 /* SwiftUIView.swift */,
 				21BCBD652381A0F800644B14 /* Info.plist */,
-				21BCBD4923819CA400644B14 /* Modular Files Foo */,
-				D0AEF45D2013A6FC005F761B /* Deploy App */,
-				D052B3FA211F2CE8008DD455 /* QuadPage */,
+				213DC736238C93850062AA43 /* ComposableArchitecture */,
 				D03E03F520125DF8002D47F3 /* BlackCricket */,
+				2111C84F238B224D000485F1 /* Interface */,
+				21BCBD4923819CA400644B14 /* Modular */,
+				D0AEF45D2013A6FC005F761B /* Deploy App */,
+				21D703B5238EB5AC005D5CBE /* TentApp */,
 				D0326761207FFE3800BBF563 /* HandlesCoreTests */,
 				D0915FA9208901DD0067C02A /* GraphicsCoreTests */,
-				D09F3672210D0C4200D38F4C /* BlackCricket */,
-				D0F58CF5210E201200AACC8F /* Modular */,
-				2111C84F238B224D000485F1 /* Interface */,
-				213DC736238C93850062AA43 /* ComposableArchitecture */,
-				21D703B5238EB5AC005D5CBE /* TentApp */,
 				D00069D1200BD08300E8D5F3 /* Products */,
-				D03E03D920124DB8002D47F3 /* Testing.swift */,
 				D0F3326921336DF6009BBDD9 /* Frameworks */,
 			);
 			sourceTree = "<group>";
@@ -790,22 +792,11 @@
 				D0DE1BB22089411B00775312 /* Primitive+SpriteKit.swift */,
 				D04153C1202B7CA300BD7B72 /* Array+CGPoint+Utility.swift */,
 				D0BAD734204228F700406E70 /* ViewComposite.swift */,
+				D09F3673210D0C4200D38F4C /* BlackCricket.h */,
+				D09F3674210D0C4200D38F4C /* Info.plist */,
 			);
 			path = BlackCricket;
 			sourceTree = SOURCE_ROOT;
-		};
-		D052B3FA211F2CE8008DD455 /* QuadPage */ = {
-			isa = PBXGroup;
-			children = (
-				D052B3FB211F2CE8008DD455 /* AppDelegate.swift */,
-				D0CBE3F5211F90CB00A661F0 /* App.swift */,
-				D052B3FD211F2CE8008DD455 /* ViewController.swift */,
-				D052B402211F2CEA008DD455 /* Assets.xcassets */,
-				D052B404211F2CEA008DD455 /* LaunchScreen.storyboard */,
-				D052B407211F2CEA008DD455 /* Info.plist */,
-			);
-			path = QuadPage;
-			sourceTree = "<group>";
 		};
 		D07BAE5A20DAFA8E00E4A3A5 /* Drivers */ = {
 			isa = PBXGroup;
@@ -822,15 +813,6 @@
 				D0915FAC208901DD0067C02A /* Info.plist */,
 			);
 			path = GraphicsCoreTests;
-			sourceTree = "<group>";
-		};
-		D09F3672210D0C4200D38F4C /* BlackCricket */ = {
-			isa = PBXGroup;
-			children = (
-				D09F3673210D0C4200D38F4C /* BlackCricket.h */,
-				D09F3674210D0C4200D38F4C /* Info.plist */,
-			);
-			path = BlackCricket;
 			sourceTree = "<group>";
 		};
 		D0AEF45D2013A6FC005F761B /* Deploy App */ = {
@@ -902,15 +884,6 @@
 				D08F2AC221D2EB130080F052 /* CompositeButtons.swift */,
 			);
 			path = ViewMaps;
-			sourceTree = "<group>";
-		};
-		D0F58CF5210E201200AACC8F /* Modular */ = {
-			isa = PBXGroup;
-			children = (
-				D0F58CF6210E201200AACC8F /* Modular.h */,
-				D0F58CF7210E201200AACC8F /* Info.plist */,
-			);
-			path = Modular;
 			sourceTree = "<group>";
 		};
 		D0FD710621172C2A00B27092 /* TableViewController */ = {
@@ -1225,8 +1198,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D052B406211F2CEA008DD455 /* LaunchScreen.storyboard in Resources */,
-				D052B403211F2CEA008DD455 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1299,7 +1270,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				D00069D4200BD08300E8D5F3 /* AppDelegate.swift in Sources */,
-				D03E03DA20124DB8002D47F3 /* Testing.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1307,9 +1277,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D052B3FE211F2CE8008DD455 /* ViewController.swift in Sources */,
-				D052B3FC211F2CE8008DD455 /* AppDelegate.swift in Sources */,
-				D0CBE3F6211F90CB00A661F0 /* App.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1369,8 +1336,12 @@
 				D0B1BC3A21A6F90C00991F16 /* Result.swift in Sources */,
 				D05505F621A72262005BA9B4 /* C2Edge->Scaff2D.swift in Sources */,
 				D0F58D0C210E207300AACC8F /* ViewDiagramDriver.swift in Sources */,
+				2131887B23CFBE850093CD75 /* ScallopComposite.swift in Sources */,
+				2131887723CFB0310093CD75 /* ScallopGraph.swift in Sources */,
 				213DC753238CA9910062AA43 /* ScaffGraph.swift in Sources */,
+				2131887923CFBB710093CD75 /* ScallopGraphMap.swift in Sources */,
 				21BCBD5E23819F8200644B14 /* Measurement+Formatter.swift in Sources */,
+				2131887D23D0FDA80093CD75 /* QuadScallopInit.swift in Sources */,
 				D08F2AC321D2EB130080F052 /* CompositeButtons.swift in Sources */,
 				213DC757238CA9910062AA43 /* EdgePredicates.swift in Sources */,
 				D0B1BC4121A7092400991F16 /* ItemList.swift in Sources */,
@@ -1383,7 +1354,6 @@
 				D02391A921CC1116002C4F4A /* Environment.swift in Sources */,
 				2183F24323CC1D41005924D4 /* QuadScaffView.swift in Sources */,
 				D0B1BC3F21A6F9FB00991F16 /* Mock.swift in Sources */,
-				214C6EC32385A91C00A07140 /* SwiftUIView.swift in Sources */,
 				D0F58D00210E202900AACC8F /* ViewFunctions.swift in Sources */,
 				21BCBD6023819F8400644B14 /* SelectionCore.swift in Sources */,
 				D0FD71012117275400B27092 /* EditViewController.swift in Sources */,
@@ -1469,14 +1439,6 @@
 			isa = PBXVariantGroup;
 			children = (
 				D00069DD200BD08300E8D5F3 /* Base */,
-			);
-			name = LaunchScreen.storyboard;
-			sourceTree = "<group>";
-		};
-		D052B404211F2CEA008DD455 /* LaunchScreen.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				D052B405211F2CEA008DD455 /* Base */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
