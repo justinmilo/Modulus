@@ -20,9 +20,6 @@ public let createScaffolding :  ((CGFloat, CGFloat, CGFloat)) -> ScaffGraph = CG
 public let createScaffoldingFrom = createGrid(with:bounding:) >>> ScaffGraph.init
 public let curriedScaffoldingFrom = curry(detuple(createScaffoldingFrom))
 
-
-
-
 public func createGrid(with sizes: [CGFloat], bounding: CGSize3) -> (GraphPositions, [ScaffEdge]) {
   let screwJack : [CGFloat] = [30]
   let graphSegments = GraphSegments(

@@ -1,4 +1,14 @@
 //
+//  QuadView.swift
+//  Modular
+//
+//  Created by Justin Smith Nussli on 1/17/20.
+//  Copyright © 2020 Justin Smith. All rights reserved.
+//
+
+import Foundation
+
+//
 //  TentView.swift
 //  TentApp
 //
@@ -11,6 +21,7 @@ import SwiftUI
 @testable import Interface
 @testable import GrippableView
 import ComposableArchitecture
+import Geo
 
 public struct QuadState<Holder:GraphHolder>{
   var scale : CGFloat =  1
@@ -31,54 +42,6 @@ public struct QuadState<Holder:GraphHolder>{
   public var sideState: InterfaceState<Holder>
 }
 
-extension QuadState where Holder == TentGraph {
-  public init (graph: TentGraph = TentGraph(), size: CGSize = UIScreen.main.bounds.size, sizePreferences : [CGFloat] = [100.0]) {
-    self.sizePreferences = sizePreferences
-    
-    xOffset = 50
-    yOffset = 200
-    zOffset = 200
-    xOffsetR = 50
-    yOffsetR = 200
-    
-    let planOrigin : CGPoint = CGPoint(xOffset, yOffset)
-    let rotatedOrigin : CGPoint = CGPoint(yOffsetR, xOffsetR)
-    let frontOrigin  : CGPoint = CGPoint(xOffset, zOffset)
-    let sideOrigin  : CGPoint = CGPoint(yOffsetR, zOffset)
-    
-    pageState = PageState(currentlyTop: true, currentlyLeft: true)
-    
-    let myGraph = graph
-    planState = InterfaceState(
-      graph: myGraph,
-      mapping: [tentPlanMap],
-      sizePreferences: self.sizePreferences,
-      scale: self.scale,
-      windowBounds: size.asRect(),
-      offset: planOrigin)
-    rotatedPlanState = InterfaceState(
-      graph: myGraph,
-      mapping: [tentPlanMapRotated],
-      sizePreferences: self.sizePreferences,
-      scale: self.scale,
-      windowBounds: size.asRect(),
-      offset: rotatedOrigin)
-    frontState = InterfaceState(
-      graph: myGraph,
-      mapping: [tentFrontMap],
-      sizePreferences: self.sizePreferences,
-      scale: self.scale,
-      windowBounds: size.asRect(),
-      offset: frontOrigin)
-    sideState = InterfaceState(
-      graph: myGraph,
-      mapping: [tentSideMap],
-      sizePreferences: self.sizePreferences,
-      scale: self.scale,
-      windowBounds: size.asRect(),
-      offset: sideOrigin)
-  }
-}
 
 func zoomEnded(state: inout CenteredGrowState) {
   let setterScale = state.grow.read.zoomScale
@@ -105,70 +68,22 @@ func zoomEnded(state: inout CenteredGrowState) {
 
 public enum QuadAction<Holder: GraphHolder> {
   case page(PageAction)
-  var page: PageAction? {
-    get {
-      guard case let .page(value) = self else { return nil }
-      return value
-    }
-    set {
-      guard case .page = self, let newValue = newValue else { return }
-      self = .page(newValue)
-    }
-  }
   case plan(InterfaceAction<Holder>)
-  var plan: InterfaceAction<Holder>? {
-    get {
-      guard case let .plan(value) = self else { return nil }
-      return value
-    }
-    set {
-      guard case .plan = self, let newValue = newValue else { return }
-      self = .plan(newValue)
-    }
-  }
   case rotated(InterfaceAction<Holder>)
-  var rotated: InterfaceAction<Holder>? {
-    get {
-      guard case let .rotated(value) = self else { return nil }
-      return value
-    }
-    set {
-      guard case .rotated = self, let newValue = newValue else { return }
-      self = .rotated(newValue)
-    }
-  }
   case front(InterfaceAction<Holder>)
-  var front: InterfaceAction<Holder>? {
-    get {
-      guard case let .front(value) = self else { return nil }
-      return value
-    }
-    set {
-      guard case .front = self, let newValue = newValue else { return }
-      self = .front(newValue)
-    }
-  }
   case side(InterfaceAction<Holder>)
-  var side: InterfaceAction<Holder>? {
-    get {
-      guard case let .side(value) = self else { return nil }
-      return value
-    }
-    set {
-      guard case .side = self, let newValue = newValue else { return }
-      self = .side(newValue)
-    }
-  }
 }
+
+import CasePathse
 
 public func quadReducer<Holder:GraphHolder>(state: inout QuadState<Holder>, action: QuadAction<Holder>) -> [Effect<QuadAction<Holder>>]{
   
   let combined = combine(
-  pullback(pageReducer, value: \QuadState.pageState, action: \QuadAction.page),
-  pullback(interfaceReducer, value: \QuadState.planState, action: \QuadAction.plan),
-  pullback(interfaceReducer, value: \QuadState.rotatedPlanState, action: \QuadAction.rotated),
-  pullback(interfaceReducer, value: \QuadState.frontState, action: \QuadAction.front),
-  pullback(interfaceReducer, value: \QuadState.sideState, action: \QuadAction.side),
+  pullback(pageReducer, value: \QuadState.pageState, action: /QuadAction.page),
+  pullback(interfaceReducer, value: \QuadState.planState, action: /QuadAction.plan),
+  pullback(interfaceReducer, value: \QuadState.rotatedPlanState, action: /QuadAction.rotated),
+  pullback(interfaceReducer, value: \QuadState.frontState, action: /QuadAction.front),
+  pullback(interfaceReducer, value: \QuadState.sideState, action: /QuadAction.side),
   {(state: inout QuadState<Holder>, action: QuadAction<Holder>) -> [Effect<QuadAction<Holder>>] in
     switch action {
     case .page: break
@@ -283,66 +198,4 @@ public struct QuadView<Holder : GraphHolder> : UIViewControllerRepresentable {
   public typealias UIViewControllerType = UINavigationController
 }
 
-public struct SingleHolderView <Holder: GraphHolder>: UIViewControllerRepresentable {
-  public init(store: Store<InterfaceState<Holder>, InterfaceAction<Holder>> ) {
-    self.store = store
-  }
-  public let store :Store<InterfaceState<Holder>, InterfaceAction<Holder>>
 
-  public func makeUIViewController(context: UIViewControllerRepresentableContext<SingleHolderView<Holder>>) -> InterfaceController<Holder> {
-    let vc = InterfaceController(store:store)
-    return vc
-  }
-  public func updateUIViewController(_ uiViewController: InterfaceController<Holder>, context: UIViewControllerRepresentableContext<SingleHolderView<Holder>>) {
-  }
-
-  public typealias UIViewControllerType = InterfaceController<Holder>
-
-}
-
-
-
-import Geo
-public struct iPadView<Holder: GraphHolder>: View {
-//  Store(
-//   initialValue: QuadState(size: UIScreen.main.bounds.size * 0.5),
-//    reducer:  quadReducer |> logging
-//  )
-  
-  public init(store: Store<QuadState<Holder>, QuadAction<Holder>> ) {
-    self.store = store
-    
-    let storeOne = store.view(value: {$0.planState}, action: { .plan($0) })
-    top = SingleHolderView(store: storeOne)
-
-    let store2 = store.view(value: {$0.rotatedPlanState}, action: { .rotated($0) })
-    right = SingleHolderView(store: store2)
-    
-    let store3 = store.view(value: {$0.frontState}, action: { .front($0) })
-    left = SingleHolderView(store: store3)
-    
-    let store4 = store.view(value: {$0.sideState}, action: { .side($0) })
-    bottom = SingleHolderView(store: store4)
-    
-  }
-  var top: SingleHolderView<Holder>
-  var right: SingleHolderView<Holder>
-  var left: SingleHolderView<Holder>
-  var bottom: SingleHolderView<Holder>
-
-  @ObservedObject public var store : Store<QuadState<Holder>, QuadAction<Holder>>
-  
-  public var body: some View {
-    VStack(spacing: 0){
-      HStack(spacing: 0){
-        top
-        right
-      }
-      HStack(spacing: 0){
-        left
-        bottom
-      }
-    }
-  }
-  
-}

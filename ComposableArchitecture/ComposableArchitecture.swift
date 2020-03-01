@@ -90,22 +90,22 @@ public func combine<Value, Action>(
   }
 }
 
+
+import CasePathse
 public func pullback<LocalValue, GlobalValue, LocalAction, GlobalAction>(
   _ reducer: @escaping Reducer<LocalValue, LocalAction>,
   value: WritableKeyPath<GlobalValue, LocalValue>,
-  action: WritableKeyPath<GlobalAction, LocalAction?>
+  action: CasePath<GlobalAction, LocalAction>
 ) -> Reducer<GlobalValue, GlobalAction> {
   return { globalValue, globalAction in
-    guard let localAction = globalAction[keyPath: action] else { return [] }
+   
+   guard let localAction = action.extract(from: globalAction) else { return [] }
     let localEffects = reducer(&globalValue[keyPath: value], localAction)
 
     return localEffects.map { localEffect in
       Effect { callback in
-//        guard let localAction = localEffect() else { return nil }
         localEffect.run { localAction in
-          var globalAction = globalAction
-          globalAction[keyPath: action] = localAction
-          callback(globalAction)
+          callback(action.embed(localAction))
         }
       }
     }
@@ -113,6 +113,60 @@ public func pullback<LocalValue, GlobalValue, LocalAction, GlobalAction>(
 //    return effect
   }
 }
+
+
+
+public func pullback<LocalValue, GlobalValue, Action>(
+  _ reducer: @escaping Reducer<LocalValue, Action>,
+  value: WritableKeyPath<GlobalValue, LocalValue>
+) -> Reducer<GlobalValue, Action> {
+  return { globalValue, action in
+   
+    let localEffects = reducer(&globalValue[keyPath: value], action)
+
+    return localEffects.map { localEffect in
+      Effect { callback in
+        localEffect.run { action in
+          callback(action)
+        }
+      }
+    }
+
+//    return effect
+  }
+}
+
+public func pullback<Value, LocalAction, GlobalAction>(
+  _ reducer: @escaping Reducer<Value, LocalAction>,
+  action: CasePath<GlobalAction, LocalAction>
+) -> Reducer<Value, GlobalAction> {
+  return { value, globalAction  in
+   guard let localAction = action.extract(from: globalAction) else { return [] }
+
+   let localEffects = reducer(&value, localAction)
+   
+    return localEffects.map { localEffect in
+          Effect { callback in
+            localEffect.run { localAction in
+               callback(action.embed(localAction))
+            }
+          }
+        }
+
+//    return effect
+  }
+}
+
+/// Constrains a  a reducer's transformation along a property specified by the path
+public func constrained<Whole, Part, Action>(_ reducer: @escaping Reducer<Whole, Action>, around path: WritableKeyPath<Whole,Part>  ) -> Reducer<Whole, Action> {
+   return { whole, action in
+      let part = whole[keyPath: path]
+      let effects = reducer(&whole, action)
+      whole[keyPath: path] = part
+      return effects
+   }
+}
+
 
 public func logging<Value, Action>(
   _ reducer: @escaping Reducer<Value, Action>
@@ -124,6 +178,34 @@ public func logging<Value, Action>(
       print("Action: \(action)")
       print("Value:")
       dump(newValue)
+      print("---")
+    }] + effects
+  }
+}
+
+public func logging<WholeValue,ValueablePart, Action>( _ path: WritableKeyPath<WholeValue, ValueablePart>,
+  _ reducer: @escaping Reducer<WholeValue, Action>) -> Reducer<WholeValue, Action> {
+  return { value, action in
+    let effects = reducer(&value, action)
+    let newValue = value
+    return [Effect { _ in
+      print("Action: \(action)")
+      print("Value:")
+      dump(newValue[keyPath: path])
+      print("---")
+    }] + effects
+  }
+}
+
+public func logging<WholeValue,ValueablePart, Action>( _ get: @escaping (WholeValue)-> ValueablePart,
+  _ reducer: @escaping Reducer<WholeValue, Action>) -> Reducer<WholeValue, Action> {
+  return { value, action in
+    let effects = reducer(&value, action)
+    let newValue = value
+    return [Effect { _ in
+      print("Action: \(action)")
+      print("Value:")
+      dump(get(newValue))
       print("---")
     }] + effects
   }

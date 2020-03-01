@@ -89,31 +89,19 @@ extension InterfaceState {
 }
 
 public enum InterfaceAction<Holder:GraphHolder> {
-  case saveData
-  case addOrReplace(Holder)
-  case thumbnailsAddToCache(UIImage, id: String)
   case canvasAction(CanvasSelectionAction)
-  var  canvasAction:CanvasSelectionAction? {
-    get {
-      guard case let .canvasAction(value) = self else { return nil }
-      return value
-    }
-    set {
-      guard case .canvasAction = self, let newValue = newValue else { return }
-      self = .canvasAction(newValue)
-    }
-  }
-  case sprite
+  case sprite(SpriteAction)
 }
+
+import CasePathse
 
 public func interfaceReducer<Holder:GraphHolder>(state: inout InterfaceState<Holder>, action: InterfaceAction<Holder>) -> [Effect<InterfaceAction<Holder>>] {
   let reducer =  combine (
-    pullback(canvasSelectionReducer, value: \InterfaceState<Holder>.canvasState, action: \InterfaceAction<Holder>.canvasAction),
+    pullback(spriteReducer, value: \InterfaceState<Holder>.spriteState, action: /InterfaceAction<Holder>.sprite),
+    pullback(canvasSelectionReducer, value: \InterfaceState<Holder>.canvasState, action: /InterfaceAction<Holder>.canvasAction),
     { (state: inout InterfaceState<Holder>, action: InterfaceAction<Holder>) -> [Effect<InterfaceAction<Holder>>] in
         switch action {
-        case  .thumbnailsAddToCache,
-          .saveData,
-            .addOrReplace,
+        case
             .canvasAction(.handles(.handles(.top(.timerUpdate)))),
             .canvasAction(.handles(.handles(.top(.handle(.didPress(_)))))),
             .canvasAction(.handles(.handles(.top(.handle(.animationComplete))))),
@@ -189,7 +177,7 @@ public func interfaceReducer<Holder:GraphHolder>(state: inout InterfaceState<Hol
 }
 
 import Combine
-public class InterfaceController<Holder:GraphHolder> : UIViewController, SpriteDriverDelegate {
+public class InterfaceController<Holder:GraphHolder> : UIViewController {
   var viewport : CanvasViewport!
   var driver : SpriteDriver<Holder>
   public let store: Store<InterfaceState<Holder>, InterfaceAction<Holder>>
@@ -197,42 +185,15 @@ public class InterfaceController<Holder:GraphHolder> : UIViewController, SpriteD
   
   public init(store: Store<InterfaceState<Holder>, InterfaceAction<Holder>> ){
     self.store = store
-    self.driver = SpriteDriver(store: store.view(value: {$0.spriteState}, action: { _ in .sprite }))
+    self.driver = SpriteDriver(store: store.view(value: {$0.spriteState}, action: { .sprite($0) }))
     super.init(nibName: nil, bundle: nil)
-    self.driver.delgate = self
   }
-  
   required init?(coder aDecoder: NSCoder) {
     fatalError("Init with coder not implemented")
   }
-  
-  
+   
   override public func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
-  }
-  
-  func saveSnapshot(view: UIView) {
-    // Save Image to Cache...
-
-    let img = image(with:view)!
-    //let img = image(with:self.view)!
-    let newSize = CGSize(width: view.bounds.width,  height: view.bounds.height)
-    
-    DispatchQueue.global(qos: .background).async {
-      let cropped = cropToBounds(image: img, width: newSize.width, height:newSize
-        .height)
-      
-      self.store.send(.thumbnailsAddToCache(cropped, id: self.store.value.spriteState.graph.id))
-      //let urlRes = Current.thumbnails.addToCache(cropped, item.thumbnailFileName)
-      
-      }
-    // ...End Save Image
-  }
-  
-  func didAddEdge() {
-    self.saveSnapshot(view: self.view)
-
-    self.store.send(.saveData)
   }
   
   override public func loadView() {

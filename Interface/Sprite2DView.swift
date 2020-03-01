@@ -44,7 +44,7 @@ public class Sprite2DView : SKView {
     }
   }
   
-  override init(frame: CGRect) {
+  public override init(frame: CGRect) {
     mainNode = SKNode()
     super.init(frame: frame)
     

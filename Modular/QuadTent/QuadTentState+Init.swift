@@ -1,26 +1,19 @@
 //
-//  QuadScallopInit.swift
-//  Modular
+//  TentView.swift
+//  TentApp
 //
-//  Created by Justin Smith Nussli on 1/16/20.
-//  Copyright © 2020 Justin Smith. All rights reserved.
+//  Created by Justin Smith Nussli on 11/27/19.
+//  Copyright © 2019 Justin Smith. All rights reserved.
 //
 
-import Foundation
-import GrapheNaked
-import Singalong
-import Interface
+import UIKit
+import SwiftUI
+@testable import Interface
+@testable import GrippableView
+import ComposableArchitecture
 
-extension ScallopGraph {
-  public convenience init() {
-    let (pos, edges) = createScallopGroup(from: CGSize3(width:Scallop.width, depth:Scallop.depth, elev:Scallop.height))
-    self.init(positions:pos, edges:edges)
-  }
-  
-}
-
-extension QuadState where Holder == ScallopGraph {
-  public init (graph: ScallopGraph = ScallopGraph(), size: CGSize = UIScreen.main.bounds.size, sizePreferences : [CGFloat] = [100.0]) {
+extension QuadState where Holder == TentGraph {
+  public init (graph: TentGraph = TentGraph(), size: CGSize = UIScreen.main.bounds.size, sizePreferences : [CGFloat] = [100.0]) {
     self.sizePreferences = sizePreferences
     
     xOffset = 50
@@ -39,28 +32,28 @@ extension QuadState where Holder == ScallopGraph {
     let myGraph = graph
     planState = InterfaceState(
       graph: myGraph,
-      mapping: [scallopPlanMap],
+      mapping: [tentPlanMap],
       sizePreferences: self.sizePreferences,
       scale: self.scale,
       windowBounds: size.asRect(),
       offset: planOrigin)
     rotatedPlanState = InterfaceState(
       graph: myGraph,
-      mapping: [scallopPlanMapRotated],
+      mapping: [tentPlanMapRotated],
       sizePreferences: self.sizePreferences,
       scale: self.scale,
       windowBounds: size.asRect(),
       offset: rotatedOrigin)
     frontState = InterfaceState(
       graph: myGraph,
-      mapping: [scallopFrontMap],
+      mapping: [tentFrontMap],
       sizePreferences: self.sizePreferences,
       scale: self.scale,
       windowBounds: size.asRect(),
       offset: frontOrigin)
     sideState = InterfaceState(
       graph: myGraph,
-      mapping: [scallopSideMap],
+      mapping: [tentSideMap],
       sizePreferences: self.sizePreferences,
       scale: self.scale,
       windowBounds: size.asRect(),

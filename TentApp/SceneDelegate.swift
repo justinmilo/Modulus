@@ -23,7 +23,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     // Create the SwiftUI view that provides the window contents.
    // let contentView = QuadTentView().edgesIgnoringSafeArea(.all)
-    let contentView = iPadView().edgesIgnoringSafeArea(.all)
+    let store : Store<QuadState<TentGraph>, QuadAction<TentGraph>> = Store(initialValue: QuadState(), reducer: quadReducer)
+    let contentView = iPadView(store:store).edgesIgnoringSafeArea(.all)
 
 
     // Use a UIHostingController as window root view controller.

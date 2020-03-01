@@ -21,6 +21,25 @@ public struct Item1UpView {
   var item : Item<ScaffGraph>
 }
 
+extension Item1UpView {
+   var arProvider : ARProviderState { ARProviderState(provider: self.item.content |> provider )}
+   var scnProvider : SCNProviderState { SCNProviderState(provider: self.item.content |> provider,
+                                                         view: quad.pageState.currentQuadrant |> cameraView)
+   }
+}
+
+private func cameraView(from quadrant:PageState.Quadrant) -> CameraView {
+   switch quadrant {
+   case .topLeft: return .top
+   case .topRight: return .top
+   case .bottomLeft: return .front
+   case .bottomRight: return .leftSide
+   }
+}
+
+public enum Item1UpAction {
+  case technical(QuadAction<ScaffGraph>)
+}
 
 public class GraphNavigator {
   public init(store: Store<Item1UpView, QuadAction<ScaffGraph>> ) {
@@ -80,8 +99,7 @@ public class GraphNavigator {
 //    if let item = self.store.value.items.getItem(id: id) {
 //      self.store.send(.addOrReplace(item))
 //    }
-    let scaffProvider = self.store.value.item.content |> provider
-    let newVC = CADViewController(grid: scaffProvider)
+    let newVC = CADViewController(store: self.store.view(value: { $0.scnProvider }, action: { _ in fatalError() }))
     
     let ulN = UINavigationController(rootViewController: newVC)
     ulN.navigationBar.prefersLargeTitles = false
@@ -99,8 +117,7 @@ public class GraphNavigator {
 //    if let item = self.store.value.items.getItem(id: id) {
 //      self.store.send(.addOrReplace(item))
 //    }
-    let scaffProvider = self.store.value.item.content |> provider
-    let cadController = ARScnViewController(provider: scaffProvider)
+    let cadController = ARScnViewController(store: self.store.view(value: { $0.arProvider }, action: { _ in fatalError() }))
     
     let ulN = UINavigationController(rootViewController: cadController)
     ulN.navigationBar.prefersLargeTitles = false
@@ -121,6 +138,23 @@ public class GraphNavigator {
     self.vc.dismiss(animated: true, completion: nil)
   }
   
+   // *** TODO Doesn't work yet with composable ****
+   func saveSnapshot(view: UIView) {
+     // Save Image to Cache...
+
+     let img = image(with:view)!
+     //let img = image(with:self.view)!
+     let newSize = CGSize(width: view.bounds.width,  height: view.bounds.height)
+     
+     DispatchQueue.global(qos: .background).async {
+       let cropped = cropToBounds(image: img, width: newSize.width, height:newSize
+         .height)
+       
+       //self.store.send(.thumbnailsAddToCache(cropped, id: self.store.value.spriteState.graph.id))
+       
+       }
+     // ...End Save Image
+   }
   
   
 }

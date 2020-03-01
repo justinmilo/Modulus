@@ -30,9 +30,6 @@ public struct SpriteState<Holder:GraphHolder> {
     self.layoutSize = Changed(.zero)
     self.modelSpaceAllowableSize = Changed(.zero)
   }
-  
-  public var spriteFrame: CGRect
-  public var scale : CGFloat
   public var frame : Changed<CGRect> {
     didSet {
       if let newFrame = frame.changed {
@@ -53,27 +50,99 @@ public struct SpriteState<Holder:GraphHolder> {
       }
     }
   }
-  
-  fileprivate var modelSpaceAllowableSize : Changed<CGSize>
+  public var spriteFrame: CGRect
+  public var scale : CGFloat
   public let graph : Holder
   var sizePreferences : [CGFloat]
-  public var modelSpaceSize : CGSize { self.graph |> self.editingView.size }
-  public var viewSpaceSize : CGSize { modelSpaceSize * self.scale }
   let editingView : GenericEditingView<Holder>
   let loadedViews : [GenericEditingView<Holder>]
+  public var modelSpaceSize : CGSize { self.graph |> self.editingView.size }
+  public var viewSpaceSize : CGSize { modelSpaceSize * self.scale }
   public var nodeOrigin : CGPoint {
     CGPoint(x: self.layoutOrigin.value.x,
             y: self.spriteFrame.height - self.viewSpaceSize.height - self.layoutOrigin.value.y)
   }
   public var aligned : (HorizontalPosition, VerticalPosition)
-   
+  
+  fileprivate var modelSpaceAllowableSize : Changed<CGSize>
   private(set) var layoutOrigin : Changed<CGPoint>
   private(set) var layoutSize : Changed<CGSize>
   private(set) var layoutFrame : CGRect
+  
+  func uiPointToSprite(_ point: CGPoint) -> CGPoint {
+    //translateToCGPointInSKCoordinates(from: self.spriteFrame, to: self.spriteFrame)
+    let skPointFunc : (CGPoint)->SKPoint = translate(from: self.spriteFrame, toSKCoordIn: self.spriteFrame)
+    //translateToCGRectInSKCoordinates(from: self.spriteFrame, to: self.spriteFrame)
+    //return    CGPoint(x: point.x, y: self.spriteFrame.height - point.y)
+    return skPointFunc(point).rawValue
+  }
+  func uiRectToSprite(_ rect: CGRect) -> CGRect {
+    //translateToCGPointInSKCoordinates(from: self.spriteFrame, to: self.spriteFrame)
+    let skPointFunc : (CGRect)->SKRect = translate(from: self.spriteFrame, toSKCoordIn: self.spriteFrame)
+    //translateToCGRectInSKCoordinates(from: self.spriteFrame, to: self.spriteFrame)
+    //return    CGPoint(x: point.x, y: self.spriteFrame.height - point.y)
+    return skPointFunc(rect).rawValue
+  }
+  
+  var rectAnimations : CGRect?
 }
 
-protocol SpriteDriverDelegate : class {
-  func didAddEdge()
+public enum SpriteAction {
+  case spriteTapped(location: CGPoint)
+  case endRectAnimation
+}
+
+func spriteReducer<Holder:GraphHolder>(state: inout SpriteState<Holder>, action: SpriteAction) -> [Effect<SpriteAction>] {
+  switch action {
+  case .endRectAnimation:
+    state.rectAnimations = nil
+
+    return []
+  case .spriteTapped(location: let touch):
+     
+    // Properly Controllers concern
+    let tS = touch |> state.uiPointToSprite
+    let rectS = state.layoutFrame |> state.uiRectToSprite
+    
+    let viewSpaceToModelSpace : (CGPoint, CGRect, CGFloat) -> CGPoint = { (viewPoint, viewModelFrame, scale) -> CGPoint in
+      CGPoint(viewPoint.x - viewModelFrame.origin.x, viewPoint.y - viewModelFrame.origin.y) * (1/scale)
+    }
+    let p = (tS, rectS, state.scale) |> viewSpaceToModelSpace
+    // Properly models concern
+    // ICAN : Pass *Holder* into editingView.grid2D Function to get Graph Positions 2D Sorted back
+    let editBoundaries = state.graph |> state.editingView.grid2D
+    let indicesOpt = pointToGridIndices(editBoundaries, p)
+    guard let opt1 = indicesOpt.0, let opt2 = indicesOpt.1 else {
+      return []
+    }
+    let indices = (opt1, opt2)
+    
+    // Get Model Rect
+    let mRect = (indices, editBoundaries) |> modelRect
+    // mRect is something like (0.0, 30.0, 100.0, 100.0)
+    // (0.0, 0.0, 100.0, 30.0)
+    
+    let scaledMRect = mRect.scaled(by: state.scale)
+//
+    let copyToSprite = state.uiPointToSprite
+    let yToSprite = { copyToSprite(CGPoint(0, $0)) }  >>> { return $0.y }
+    
+    // bring model rect into the real world!
+    let mRect2 = mRect.scaled(by: 1/state.scale)
+//    let z = (scaledMRect, self._previousOrigin.ui.asVector() ) |> moveByVector
+    let z = (scaledMRect, state.layoutOrigin.value.asVector() ) |> moveByVector
+    let cellRectValue = z |> state.uiRectToSprite
+    let y = state.layoutFrame.midY |> yToSprite
+    let flippedRect = (cellRectValue, y )  |> mirrorVertically
+    // flipped rect is situated in sprite kit space
+    
+    state.graph.edges = state.editingView.selectedCell(indices, state.graph.grid, state.graph.edges)
+    state.rectAnimations = flippedRect
+
+    return [Effect{ call in
+      call(.endRectAnimation)
+      }]
+  }
 }
 
 public protocol GraphHolder : class {
@@ -85,21 +154,23 @@ public protocol GraphHolder : class {
 }
 
 import Combine
-class SpriteDriver<Holder:GraphHolder> {
+public class SpriteDriver<Holder:GraphHolder> {
   
   
   var id: String?
-  weak var delgate : SpriteDriverDelegate?
   public var spriteView : Sprite2DView
   var content : UIView { return self.spriteView }
-  let store: Store<SpriteState<Holder>, Never>
+  let store: Store<SpriteState<Holder>, SpriteAction>
   var cancellable : AnyCancellable!
-  
-  public init(store: Store<SpriteState<Holder>, Never>) {
+  var dontRefire : Bool = false
+
+  public init(store: Store<SpriteState<Holder>, SpriteAction>) {
     self.store = store
     
     spriteView = Sprite2DView(frame:store.value.spriteFrame )
  
+    spriteView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(SpriteDriver.tap)))
+    
     self.cancellable = store.$value.sink {
       [weak self] state in
       guard let self = self else { return }
@@ -117,10 +188,15 @@ class SpriteDriver<Holder:GraphHolder> {
           let geom = self.store.value.graph |> self.store.value.editingView.composite
           self.spriteView.redraw(geom)
       }
+      
+      if let rect = state.rectAnimations {
+        self.spriteView.addTempRect(rect: rect, color: .white)
+        let geom = self.store.value.graph |> self.store.value.editingView.composite
+        self.spriteView.redraw(geom)
+      }
+      
+      
     }
-    
-    
-    
   }
   
  
@@ -129,7 +205,23 @@ class SpriteDriver<Holder:GraphHolder> {
   
   
   // MARK: ...TAP ITEMS
-
+  // MARK: TAP ITEMS...
+  @objc func tap(g: UIGestureRecognizer) {
+    self.store.send(.spriteTapped(location:  g.location(ofTouch: 0, in: self.spriteView) ))
+  }
+//
+//  private var swapIndex = 0
+//  func changeCompositeStyle ()
+//  {
+//    swapIndex = swapIndex+1 >= loadedViews.count ? 0 : swapIndex+1
+//    self.editingView = loadedViews[swapIndex]
+//    //      buildFromScratch()
+//    self._layout(size: _previousSize)
+//
+//  }
+//
+//  private var swapIndex2 = 0
+  
 }
 
 

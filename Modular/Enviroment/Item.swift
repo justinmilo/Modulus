@@ -89,7 +89,9 @@ extension Set where Element == ScaffoldingGridSizes {
     })
     return metricItems.count >= impItems.count
   }
-  
+  var toCentimeterFloats : [CGFloat] {
+    self.map{CGFloat($0.length.converted(to: .centimeters).value)}
+  }
 }
 
 
