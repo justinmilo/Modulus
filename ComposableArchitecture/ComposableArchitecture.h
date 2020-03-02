@@ -2,7 +2,7 @@
 //  ComposableArchitecture.h
 //  ComposableArchitecture
 //
-//  Created by Justin Smith Nussli on 11/25/19.
+//  Created by Justin Smith  on 11/25/19.
 //  Copyright © 2019 Justin Smith. All rights reserved.
 //
 

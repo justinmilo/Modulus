@@ -2,7 +2,7 @@
 //  QuadView.swift
 //  Modular
 //
-//  Created by Justin Smith Nussli on 1/17/20.
+//  Created by Justin Smith  on 1/17/20.
 //  Copyright © 2020 Justin Smith. All rights reserved.
 //
 
@@ -12,7 +12,7 @@ import Foundation
 //  TentView.swift
 //  TentApp
 //
-//  Created by Justin Smith Nussli on 11/27/19.
+//  Created by Justin Smith  on 11/27/19.
 //  Copyright © 2019 Justin Smith. All rights reserved.
 //
 

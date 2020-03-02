@@ -2,7 +2,7 @@
 //  CasePathse.h
 //  CasePathse
 //
-//  Created by Justin Smith Nussli on 2/12/20.
+//  Created by Justin Smith  on 2/12/20.
 //  Copyright © 2020 Justin Smith. All rights reserved.
 //
 

@@ -2,7 +2,7 @@
 //  GenericViewMap.swift
 //  Interface
 //
-//  Created by Justin Smith Nussli on 11/24/19.
+//  Created by Justin Smith  on 11/24/19.
 //  Copyright © 2019 Justin Smith. All rights reserved.
 //
 

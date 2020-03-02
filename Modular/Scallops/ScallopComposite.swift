@@ -2,7 +2,7 @@
 //  ScallopComposite.swift
 //  Modular
 //
-//  Created by Justin Smith Nussli on 1/15/20.
+//  Created by Justin Smith  on 1/15/20.
 //  Copyright © 2020 Justin Smith. All rights reserved.
 //
 

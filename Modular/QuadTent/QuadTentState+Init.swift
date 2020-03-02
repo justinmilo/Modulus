@@ -2,7 +2,7 @@
 //  TentView.swift
 //  TentApp
 //
-//  Created by Justin Smith Nussli on 11/27/19.
+//  Created by Justin Smith  on 11/27/19.
 //  Copyright © 2019 Justin Smith. All rights reserved.
 //
 

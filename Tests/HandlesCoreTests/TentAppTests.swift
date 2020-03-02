@@ -2,7 +2,7 @@
 //  TentAppTests.swift
 //  
 //
-//  Created by Justin Smith Nussli on 12/29/19.
+//  Created by Justin Smith  on 12/29/19.
 //
 
 import XCTest
