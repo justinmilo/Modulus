@@ -1,4 +1,4 @@
-# modulus
+# Modulus
 Open Platform for Modular Structures and Architecture in Swift
 
 
