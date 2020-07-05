@@ -15,7 +15,20 @@ import BlackCricket
 import ComposableArchitecture
 
 
-public struct SpriteState<Holder:GraphHolder> {
+public struct SpriteState<Holder:GraphHolder> : Equatable {
+   public static func == (lhs: SpriteState<Holder>, rhs: SpriteState<Holder>) -> Bool {
+      // TODO : Make sure this is right
+      if lhs.graph == rhs.graph { return true } else { return false }
+//      spriteFrame
+//      scale
+//      graph
+//      sizePreferences
+//      layoutOrigin
+//      layoutSize
+//      layoutFrame
+//      modelSpaceAllowableSize
+   }
+   
   init(spriteFrame: CGRect, scale : CGFloat, sizePreferences: [CGFloat], graph: Holder, editingViews: [GenericEditingView<Holder>] ){
     self.spriteFrame = spriteFrame
     self.scale = scale
@@ -91,13 +104,17 @@ public enum SpriteAction {
   case spriteTapped(location: CGPoint)
   case endRectAnimation
 }
+struct SpriteEnvironment { }
 
-func spriteReducer<Holder:GraphHolder>(state: inout SpriteState<Holder>, action: SpriteAction) -> [Effect<SpriteAction>] {
+func spriteReducer<Holder:GraphHolder>()->Reducer<SpriteState<Holder>, SpriteAction, SpriteEnvironment>{
+   
+   Reducer{
+      (state: inout SpriteState<Holder>, action: SpriteAction, environment:SpriteEnvironment ) -> Effect<SpriteAction, Never> in
   switch action {
   case .endRectAnimation:
     state.rectAnimations = nil
 
-    return []
+    return .none
   case .spriteTapped(location: let touch):
      
     // Properly Controllers concern
@@ -113,7 +130,7 @@ func spriteReducer<Holder:GraphHolder>(state: inout SpriteState<Holder>, action:
     let editBoundaries = state.graph |> state.editingView.grid2D
     let indicesOpt = pointToGridIndices(editBoundaries, p)
     guard let opt1 = indicesOpt.0, let opt2 = indicesOpt.1 else {
-      return []
+      return .none
     }
     let indices = (opt1, opt2)
     
@@ -139,13 +156,13 @@ func spriteReducer<Holder:GraphHolder>(state: inout SpriteState<Holder>, action:
     state.graph.edges = state.editingView.selectedCell(indices, state.graph.grid, state.graph.edges)
     state.rectAnimations = flippedRect
 
-    return [Effect{ call in
-      call(.endRectAnimation)
-      }]
+    return Effect(value: .endRectAnimation)
+      
   }
+      }
 }
 
-public protocol GraphHolder : class {
+public protocol GraphHolder : class, Equatable {
   associatedtype Content : Codable
   var id : String { get }
   var edges : [Edge<Content>] { get set }
@@ -161,17 +178,20 @@ public class SpriteDriver<Holder:GraphHolder> {
   public var spriteView : Sprite2DView
   var content : UIView { return self.spriteView }
   let store: Store<SpriteState<Holder>, SpriteAction>
-  var cancellable : AnyCancellable!
+   let viewStore: ViewStore<SpriteState<Holder>, SpriteAction>
+
+  var cancellables : Set<AnyCancellable> = []
   var dontRefire : Bool = false
 
   public init(store: Store<SpriteState<Holder>, SpriteAction>) {
     self.store = store
+   self.viewStore = ViewStore(self.store)
     
-    spriteView = Sprite2DView(frame:store.value.spriteFrame )
+    spriteView = Sprite2DView(frame:viewStore.spriteFrame )
  
     spriteView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(SpriteDriver.tap)))
-    
-    self.cancellable = store.$value.sink {
+
+    viewStore.publisher.sink {
       [weak self] state in
       guard let self = self else { return }
       
@@ -185,18 +205,18 @@ public class SpriteDriver<Holder:GraphHolder> {
       
       if let size = state.layoutSize.changed {
           // Set & Redraw Geometry
-          let geom = self.store.value.graph |> self.store.value.editingView.composite
+          let geom = self.viewStore.graph |> self.viewStore.editingView.composite
           self.spriteView.redraw(geom)
       }
       
       if let rect = state.rectAnimations {
         self.spriteView.addTempRect(rect: rect, color: .white)
-        let geom = self.store.value.graph |> self.store.value.editingView.composite
+        let geom = self.viewStore.graph |> self.viewStore.editingView.composite
         self.spriteView.redraw(geom)
       }
       
       
-    }
+    }.store(in: &self.cancellables)
   }
   
  
@@ -207,7 +227,7 @@ public class SpriteDriver<Holder:GraphHolder> {
   // MARK: ...TAP ITEMS
   // MARK: TAP ITEMS...
   @objc func tap(g: UIGestureRecognizer) {
-    self.store.send(.spriteTapped(location:  g.location(ofTouch: 0, in: self.spriteView) ))
+    self.viewStore.send(.spriteTapped(location:  g.location(ofTouch: 0, in: self.spriteView) ))
   }
 //
 //  private var swapIndex = 0

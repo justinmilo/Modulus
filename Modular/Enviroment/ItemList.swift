@@ -8,7 +8,8 @@
 
 import Foundation
 
-struct ItemList<T:Equatable> {
+struct ItemList<T:Equatable> : Equatable {
+   
   init<S:Sequence> (_ s: S) where S.Element == Item<T> {
     self.store = zip(0...,s).reduce([:]) { (res, next) in
       let (seqIndex, item) = next
@@ -21,7 +22,7 @@ struct ItemList<T:Equatable> {
   }
   
   typealias ID = Item<T>.ID
-  struct IndexGroup {
+   struct IndexGroup : Equatable{
     let item: Item<T>,index: Int
   }
   
@@ -42,6 +43,7 @@ struct ItemList<T:Equatable> {
   }
   
   mutating func addOrReplace(item: Item<T>) {
+   
     
     if let previous = store[item.id] {
       store[item.id] = IndexGroup(item: item, index: previous.index)

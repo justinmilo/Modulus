@@ -6,7 +6,7 @@
 //
 
 import XCTest
-@testable import Interface
+
 @testable import Modular
 
 class TentAppTests: XCTestCase {
@@ -20,13 +20,13 @@ class TentAppTests: XCTestCase {
     }
 
     func testExample() {
-      
-      var spriteState =  SpriteState(screen: CGRect.zero,
+      /*
+      var spriteState =  SpriteState(spriteFrame: CGRect.zero,
                                       scale : 1.0,
                                       sizePreferences: [1.0],
                                       graph: TentGraph(),
                                       editingViews: [tentPlanMap] )
-      
+      */
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
     }

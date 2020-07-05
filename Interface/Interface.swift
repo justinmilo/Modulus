@@ -17,7 +17,7 @@ import GrapheNaked
 
 
 
-public struct InterfaceState<Holder:GraphHolder> {
+public struct InterfaceState<Holder:GraphHolder> : Equatable {
   public init(
     graph: Holder,
     mapping: [GenericEditingView<Holder>],
@@ -93,9 +93,15 @@ public enum InterfaceAction<Holder:GraphHolder> {
   case sprite(SpriteAction)
 }
 
-import CasePathse
+public struct InterfaceEnvironment { }
 
-public func interfaceReducer<Holder:GraphHolder>(state: inout InterfaceState<Holder>, action: InterfaceAction<Holder>) -> [Effect<InterfaceAction<Holder>>] {
+import CasePathse
+public func interfaceReducer<Holder:GraphHolder>()->Reducer<InterfaceState<Holder>,InterfaceAction<Holder>, InterfaceEnvironment> {
+   Reducer.combine(
+      spriteReducer().pullback(state: \InterfaceState<Holder>.spriteState, action: /InterfaceAction<Holder>.sprite, environment: {(int: InterfaceEnvironment) -> SpriteEnvironment in SpriteEnvironment() })
+   )
+}
+/*
   let reducer =  combine (
     pullback(spriteReducer, value: \InterfaceState<Holder>.spriteState, action: /InterfaceAction<Holder>.sprite),
     pullback(canvasSelectionReducer, value: \InterfaceState<Holder>.canvasState, action: /InterfaceAction<Holder>.canvasAction),
@@ -175,17 +181,21 @@ public func interfaceReducer<Holder:GraphHolder>(state: inout InterfaceState<Hol
   let effects = reducer(&state, action)
   return effects
 }
-
+*/
+ 
 import Combine
 public class InterfaceController<Holder:GraphHolder> : UIViewController {
   var viewport : CanvasViewport!
   var driver : SpriteDriver<Holder>
   public let store: Store<InterfaceState<Holder>, InterfaceAction<Holder>>
+   public let viewStore: ViewStore<InterfaceState<Holder>, InterfaceAction<Holder>>
+
   private var cancellable : AnyCancellable!
   
   public init(store: Store<InterfaceState<Holder>, InterfaceAction<Holder>> ){
     self.store = store
-    self.driver = SpriteDriver(store: store.view(value: {$0.spriteState}, action: { .sprite($0) }))
+   self.viewStore = ViewStore(self.store)
+    self.driver = SpriteDriver(store: store.scope(state: {$0.spriteState}, action: { InterfaceAction.sprite($0) }))
     super.init(nibName: nil, bundle: nil)
   }
   required init?(coder aDecoder: NSCoder) {
@@ -197,8 +207,8 @@ public class InterfaceController<Holder:GraphHolder> : UIViewController {
   }
   
   override public func loadView() {
-    viewport = CanvasViewport(frame: store.value.windowBounds,
-                              store: store.view(value: { $0.canvasState}, action: {.canvasAction($0)}),
+   viewport = CanvasViewport(frame: viewStore.windowBounds,
+                              store: store.scope(state: { $0.canvasState}, action: {.canvasAction($0)}),
                               rootContent: self.driver.content
     )
     

@@ -9,7 +9,7 @@
 import Foundation
 
 
-public struct PageState {
+public struct PageState : Equatable {
   var currentlyTop = true
   var currentlyLeft = true
   var horizontalIndex : Int { return currentlyLeft ? 0 : 1  }
@@ -33,17 +33,22 @@ public enum PageAction {
   case didPageHorizontally
 }
 
+public struct PageEnvironment {
+   
+}
+
 import Combine
 import Singalong
-let pageReducer =  {(state: inout PageState, action: PageAction) -> [Effect<PageAction>] in
+let pageReducer =  Reducer<PageState, PageAction, PageEnvironment>{
+   (state: inout PageState, action: PageAction, env: PageEnvironment) in
   switch action {
   case .didPageVertically:
     state.currentlyTop.toggle()
   case .didPageHorizontally:
     state.currentlyLeft.toggle()
   }
-  return []
-} |> logging
+   return .none
+}
 
 import ComposableArchitecture
 
@@ -51,11 +56,13 @@ import ComposableArchitecture
 class QuadDriverCA : NSObject{
 
   public var store: Store<PageState,PageAction>
+   public var viewStore: ViewStore<PageState,PageAction>
+   private var cancellables : Set<AnyCancellable> = []
+
   private var upperPVC : UIPageViewController
   private var lowerPVC : UIPageViewController
   private var groupPVC : UIPageViewController
   public var group : UIViewController { groupPVC }
-  private var cancellable : AnyCancellable!
   
   public var upper : [UIViewController]
   public var lower : [UIViewController]
@@ -64,6 +71,7 @@ class QuadDriverCA : NSObject{
   init (store: Store<PageState,PageAction>, upper:[UIViewController],
         lower:[UIViewController]){
     self.store = store
+   self.viewStore = ViewStore(self.store)
     let hor1 = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal)
     let hor2 = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal)
     let vert = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .vertical)
@@ -80,7 +88,7 @@ class QuadDriverCA : NSObject{
     hor2.dataSource = self
     vert.delegate = self
     vert.dataSource = self
-    self.cancellable = store.$value.sink {
+    viewStore.publisher.sink {
       [weak self] state in
       guard let self = self else { return }
       self.groupPVC.title = self.groupMatrix[state.verticalIndex][state.horizontalIndex].title
@@ -93,7 +101,7 @@ class QuadDriverCA : NSObject{
           self.upperPVC.setViewControllers([upper[state.horizontalIndex]], direction: .forward, animated: false, completion: {_ in})
         }
       }
-    }
+    }.store(in: &self.cancellables)
   }
 }
 extension QuadDriverCA : UIPageViewControllerDelegate, UIPageViewControllerDataSource {
@@ -156,9 +164,9 @@ extension QuadDriverCA : UIPageViewControllerDelegate, UIPageViewControllerDataS
      // Sent when a gesture-initiated transition ends. The 'finished' parameter indicates whether the animation finished, while the 'completed' parameter indicates whether the transition completed or bailed out (if the user let go early).
   func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
     if completed && (pageViewController == lowerPVC || pageViewController == upperPVC) {
-      self.store.send(.didPageHorizontally)
+      self.viewStore.send(.didPageHorizontally)
     } else if completed && pageViewController == groupPVC{
-      self.store.send(.didPageVertically)
+      self.viewStore.send(.didPageVertically)
     }
   }
 }

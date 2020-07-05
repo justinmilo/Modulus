@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 48;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -29,8 +29,6 @@
 		2131887F23D248F50093CD75 /* iPadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2131887E23D248F40093CD75 /* iPadView.swift */; };
 		2131888123D2497D0093CD75 /* QuadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2131888023D2497D0093CD75 /* QuadView.swift */; };
 		213DC739238C93850062AA43 /* ComposableArchitecture.h in Headers */ = {isa = PBXBuildFile; fileRef = 213DC737238C93850062AA43 /* ComposableArchitecture.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		213DC73C238C93850062AA43 /* ComposableArchitecture.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 213DC735238C93850062AA43 /* ComposableArchitecture.framework */; };
-		213DC73D238C93850062AA43 /* ComposableArchitecture.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 213DC735238C93850062AA43 /* ComposableArchitecture.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		213DC745238C93AC0062AA43 /* ComposableArchitecture.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 213DC735238C93850062AA43 /* ComposableArchitecture.framework */; };
 		213DC753238CA9910062AA43 /* ScaffGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213DC74D238CA9900062AA43 /* ScaffGraph.swift */; };
 		213DC757238CA9910062AA43 /* EdgePredicates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213DC751238CA9900062AA43 /* EdgePredicates.swift */; };
@@ -43,6 +41,7 @@
 		214A084E2383A85E0016FE80 /* TentViewMaps.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213B4FBC23839EEF00E87F5A /* TentViewMaps.swift */; };
 		2166F9CE238CECC7008E0FF6 /* GrapheNaked.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2166F9CD238CECC7008E0FF6 /* GrapheNaked.framework */; };
 		2166F9CF238CECC7008E0FF6 /* GrapheNaked.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2166F9CD238CECC7008E0FF6 /* GrapheNaked.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		216E35C2249E1C8900C2D083 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = 216E35C1249E1C8900C2D083 /* ComposableArchitecture */; };
 		2183F24323CC1D41005924D4 /* QuadScaffView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2183F24223CC1D41005924D4 /* QuadScaffView.swift */; };
 		21B1E5E923986DB500737B78 /* Effects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B1E5E723986DB500737B78 /* Effects.swift */; };
 		21B1E5EA23986DB500737B78 /* ComposableArchitecture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B1E5E823986DB500737B78 /* ComposableArchitecture.swift */; };
@@ -54,8 +53,6 @@
 		21BCBD6023819F8400644B14 /* SelectionCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21BCBD5F23819F8400644B14 /* SelectionCore.swift */; };
 		21BCBD662381A3EB00644B14 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 21BCBD4E23819E3700644B14 /* Media.xcassets */; };
 		21C33EC523F4E32900F7C5BF /* CasePathse.h in Headers */ = {isa = PBXBuildFile; fileRef = 21C33EC323F4E32900F7C5BF /* CasePathse.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		21C33EC823F4E32900F7C5BF /* CasePathse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21C33EC123F4E32900F7C5BF /* CasePathse.framework */; };
-		21C33EC923F4E32900F7C5BF /* CasePathse.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 21C33EC123F4E32900F7C5BF /* CasePathse.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		21C33ECD23F4E33200F7C5BF /* CasePath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21C33EB923F4E2E400F7C5BF /* CasePath.swift */; };
 		21C33ECE23F4E33200F7C5BF /* CasePaths.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21C33EB823F4E2E400F7C5BF /* CasePaths.swift */; };
 		21C33ECF23F4E33200F7C5BF /* EnumReflection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21C33EBA23F4E2E400F7C5BF /* EnumReflection.swift */; };
@@ -176,13 +173,6 @@
 			remoteGlobalIDString = D09F3670210D0C4200D38F4C;
 			remoteInfo = BlackCricket;
 		};
-		213DC73A238C93850062AA43 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = D00069C8200BD08300E8D5F3 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 213DC734238C93850062AA43;
-			remoteInfo = ComposableArchitecture;
-		};
 		213DC747238C93AC0062AA43 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = D00069C8200BD08300E8D5F3 /* Project object */;
@@ -196,13 +186,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = D09F3670210D0C4200D38F4C;
 			remoteInfo = BlackCricket;
-		};
-		21C33EC623F4E32900F7C5BF /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = D00069C8200BD08300E8D5F3 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 21C33EC023F4E32900F7C5BF;
-			remoteInfo = CasePathse;
 		};
 		21C33ED323F5E78F00F7C5BF /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -317,8 +300,6 @@
 				D0CD290D214496D1008498B7 /* Make2D.framework in Embed Frameworks */,
 				D0CD290E214496D1008498B7 /* Volume.framework in Embed Frameworks */,
 				D0CD290F214496D1008498B7 /* OffsetableCore.framework in Embed Frameworks */,
-				21C33EC923F4E32900F7C5BF /* CasePathse.framework in Embed Frameworks */,
-				213DC73D238C93850062AA43 /* ComposableArchitecture.framework in Embed Frameworks */,
 				2166F9CF238CECC7008E0FF6 /* GrapheNaked.framework in Embed Frameworks */,
 				D0CD2910214496D1008498B7 /* GrippableView.framework in Embed Frameworks */,
 				D0CD2911214496D1008498B7 /* Layout.framework in Embed Frameworks */,
@@ -522,14 +503,13 @@
 				D0F3327721336E22009BBDD9 /* OffsetableCore.framework in Frameworks */,
 				D0F3327521336E1C009BBDD9 /* GrippableView.framework in Frameworks */,
 				D0F3327321336E16009BBDD9 /* Layout.framework in Frameworks */,
-				21C33EC823F4E32900F7C5BF /* CasePathse.framework in Frameworks */,
-				213DC73C238C93850062AA43 /* ComposableArchitecture.framework in Frameworks */,
 				2166F9CE238CECC7008E0FF6 /* GrapheNaked.framework in Frameworks */,
 				D0F3327121336E0D009BBDD9 /* Geo.framework in Frameworks */,
 				D0F3326F21336E08009BBDD9 /* Diagrams.framework in Frameworks */,
 				2111C855238B224D000485F1 /* Interface.framework in Frameworks */,
 				D0F3326B21336DF6009BBDD9 /* Singalong.framework in Frameworks */,
 				D09F3678210D0C4200D38F4C /* BlackCricket.framework in Frameworks */,
+				216E35C2249E1C8900C2D083 /* ComposableArchitecture in Frameworks */,
 				D0F58CFB210E201200AACC8F /* Modular.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1084,11 +1064,12 @@
 			);
 			dependencies = (
 				D09F3677210D0C4200D38F4C /* PBXTargetDependency */,
-				213DC73B238C93850062AA43 /* PBXTargetDependency */,
 				D0F58CFA210E201200AACC8F /* PBXTargetDependency */,
-				21C33EC723F4E32900F7C5BF /* PBXTargetDependency */,
 			);
 			name = Deploy;
+			packageProductDependencies = (
+				216E35C1249E1C8900C2D083 /* ComposableArchitecture */,
+			);
 			productName = HandlesRound1;
 			productReference = D00069D0200BD08300E8D5F3 /* Deploy.app */;
 			productType = "com.apple.product-type.application";
@@ -1205,6 +1186,7 @@
 					D0915FA7208901DD0067C02A = {
 						CreatedOnToolsVersion = 9.4;
 						ProvisioningStyle = Automatic;
+						TestTargetID = D00069CF200BD08300E8D5F3;
 					};
 					D09F3670210D0C4200D38F4C = {
 						CreatedOnToolsVersion = 10.0;
@@ -1226,6 +1208,7 @@
 			);
 			mainGroup = D00069C7200BD08300E8D5F3;
 			packageReferences = (
+				216E35C0249E1C8900C2D083 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
 			);
 			productRefGroup = D00069D1200BD08300E8D5F3 /* Products */;
 			projectDirPath = "";
@@ -1470,11 +1453,6 @@
 			target = D09F3670210D0C4200D38F4C /* BlackCricket */;
 			targetProxy = 2111C86C238B25A7000485F1 /* PBXContainerItemProxy */;
 		};
-		213DC73B238C93850062AA43 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 213DC734238C93850062AA43 /* ComposableArchitecture */;
-			targetProxy = 213DC73A238C93850062AA43 /* PBXContainerItemProxy */;
-		};
 		213DC748238C93AC0062AA43 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 213DC734238C93850062AA43 /* ComposableArchitecture */;
@@ -1484,11 +1462,6 @@
 			isa = PBXTargetDependency;
 			target = D09F3670210D0C4200D38F4C /* BlackCricket */;
 			targetProxy = 21BCBD422380947100644B14 /* PBXContainerItemProxy */;
-		};
-		21C33EC723F4E32900F7C5BF /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 21C33EC023F4E32900F7C5BF /* CasePathse */;
-			targetProxy = 21C33EC623F4E32900F7C5BF /* PBXContainerItemProxy */;
 		};
 		21C33ED423F5E78F00F7C5BF /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -1573,7 +1546,11 @@
 				INFOPLIST_FILE = Interface/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.eventor.nus.Interface;
@@ -1602,7 +1579,11 @@
 				INFOPLIST_FILE = Interface/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.eventor.nus.Interface;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
@@ -1632,7 +1613,11 @@
 				INFOPLIST_FILE = ComposableArchitecture/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.eventor.nus.ComposableArchitecture;
@@ -1665,7 +1650,11 @@
 				INFOPLIST_FILE = ComposableArchitecture/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.eventor.nus.ComposableArchitecture;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
@@ -1694,7 +1683,11 @@
 				INFOPLIST_FILE = CasePathse/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.eventor.nus.CasePathse;
@@ -1723,7 +1716,11 @@
 				INFOPLIST_FILE = CasePathse/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.eventor.nus.CasePathse;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
@@ -1747,7 +1744,10 @@
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = TentApp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.eventor.nus.TentApp;
@@ -1769,7 +1769,10 @@
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = TentApp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.eventor.nus.TentApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1884,7 +1887,8 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
-				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -1901,7 +1905,10 @@
 				DEVELOPMENT_TEAM = V69QAU95S7;
 				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				MARKETING_VERSION = 1.7;
 				PRODUCT_BUNDLE_IDENTIFIER = com.sound.HandlesRound.Draw.CA;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1923,7 +1930,10 @@
 				DEVELOPMENT_TEAM = V69QAU95S7;
 				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				MARKETING_VERSION = 1.7;
 				PRODUCT_BUNDLE_IDENTIFIER = com.sound.HandlesRound.Draw.CA;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1943,7 +1953,10 @@
 				DEVELOPMENT_TEAM = V69QAU95S7;
 				INFOPLIST_FILE = QuadPage/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				PRODUCT_BUNDLE_IDENTIFIER = com.sound.sands.mac.QuadPage;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1962,7 +1975,10 @@
 				DEVELOPMENT_TEAM = V69QAU95S7;
 				INFOPLIST_FILE = QuadPage/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.sound.sands.mac.QuadPage;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
@@ -1978,11 +1994,16 @@
 				DEVELOPMENT_TEAM = V69QAU95S7;
 				INFOPLIST_FILE = GraphicsCoreTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.sound.sands.GraphicsCoreTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Deploy.app/Deploy";
 			};
 			name = Debug;
 		};
@@ -1994,11 +2015,16 @@
 				DEVELOPMENT_TEAM = V69QAU95S7;
 				INFOPLIST_FILE = GraphicsCoreTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.sound.sands.GraphicsCoreTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Deploy.app/Deploy";
 			};
 			name = Release;
 		};
@@ -2018,7 +2044,11 @@
 				INFOPLIST_FILE = BlackCricket/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				PRODUCT_BUNDLE_IDENTIFIER = com.sound.sands.mac.BlackCricket;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
@@ -2047,7 +2077,11 @@
 				INFOPLIST_FILE = BlackCricket/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.sound.sands.mac.BlackCricket;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -2074,7 +2108,11 @@
 				INFOPLIST_FILE = Modular/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				PRODUCT_BUNDLE_IDENTIFIER = com.sound.sands.mac.Modular;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
@@ -2101,7 +2139,11 @@
 				INFOPLIST_FILE = Modular/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.sound.sands.mac.Modular;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -2206,6 +2248,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		216E35C0249E1C8900C2D083 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pointfreeco/swift-composable-architecture";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.4.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		216E35C1249E1C8900C2D083 /* ComposableArchitecture */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 216E35C0249E1C8900C2D083 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;
+			productName = ComposableArchitecture;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = D00069C8200BD08300E8D5F3 /* Project object */;
 }

@@ -123,7 +123,7 @@ import Interface
 
 
 
-struct AppState {
+struct AppState: Equatable {
   var quadState : Item1UpView?
   var items : ItemList<ScaffGraph>
 }
@@ -138,37 +138,42 @@ enum AppAction {
   case interfaceAction(QuadAction<ScaffGraph>)
 }
 
+struct AppEnvironment {
+   
+}
+
 import CasePathse
 
-let appReducer =  combine(
-  pullback(quadReducer, value: \AppState.quadState!.quad, action: /AppAction.interfaceAction),
-  { (state: inout AppState, action: AppAction) -> [Effect<AppAction>] in
+let appReducer =  Reducer<AppState, AppAction, AppEnvironment>
+   .combine(
+      quadReducer().pullback(state: \AppState.quadState!.quad, action: /AppAction.interfaceAction, environment: { appEnv in QuadEnvironment() }),
+      Reducer{ (state: inout AppState, action: AppAction, env: AppEnvironment) -> Effect<AppAction, Never> in
     switch action {
       case let .itemSelected(item):
         state.quadState = Item1UpView(quad:QuadScaffState(graph: item.content,
                                                           size: Current.screen.size,
                                                           sizePreferences: item.sizePreferences.toCentimeterFloats),
                                       item: item)
-        return []
+        return .none
       case let .addOrReplace(item):
         state.items.addOrReplace(item: item)
-        return []
+        return .none
         
       case let .setItems(itemList):
         state.items = itemList
-        return []
+        return .none
         
       case let .interfaceAction(.plan(intfAction)),
            let .interfaceAction(.rotated(intfAction)),
            let .interfaceAction(.front(intfAction)),
            let .interfaceAction(.side(intfAction)):
         switch intfAction {
-        case .sprite : return []
-        case .canvasAction: return []
+        case .sprite : return .none
+        case .canvasAction: return .none
         }
         
       case .interfaceAction(.page(_)):
-        return []
+        return .none
         }
     }
 )
@@ -185,8 +190,11 @@ public class App {
   public lazy var rootController: UIViewController = loadEntryTable
   
   
-  var store: Store<AppState,AppAction> = Store(initialValue: AppState(quadState: nil, items: ItemList([])),
-                                               reducer: appReducer)
+   var store: Store<AppState,AppAction> = Store(initialState: AppState(quadState: nil, items: ItemList([])),
+                                                reducer: appReducer, environment: AppEnvironment())
+   lazy var viewStore: ViewStore<AppState,AppAction> = {
+      ViewStore(store)
+   }()
   
   var editViewController : EditViewController<Item<ScaffGraph>, Cell>?
   var inputTextField : UITextField?
@@ -197,29 +205,29 @@ public class App {
     
     switch load {
     case let .success(value):
-      self.store.send(.setItems(value))
+      self.viewStore.send(.setItems(value))
     case let .error(error):
-       self.store.send(.setItems(ItemList.mock))
+       self.viewStore.send(.setItems(ItemList.mock))
     }
             
     let edit = EditViewController(
-      config: EditViewContConfiguration( initialValue: self.store.value.items.contents, configure: createCell)
+      config: EditViewContConfiguration( initialValue: viewStore.items.contents, configure: createCell)
     )
     edit.willAppear = {
-      let a = self.store.value.items.contents
-      edit.undoHistory.currentValue = self.store.value.items.contents
+      let a = self.viewStore.items.contents
+      edit.undoHistory.currentValue = self.viewStore.items.contents
     }
     edit.tableView.rowHeight = 88
     edit.didSelect = { (item, cell) in
-      self.store.send(.itemSelected(cell))
-      self.currentNavigator = GraphNavigator(store: self.store.view(value: {$0.quadState!}, action: { .interfaceAction($0) }))
+      self.viewStore.send(.itemSelected(cell))
+      self.currentNavigator = GraphNavigator(store: self.store.scope(state: {$0.quadState!}, action: { .interfaceAction($0) }))
       self.loadEntryTable.pushViewController(self.currentNavigator.vc, animated: true)
     }
     edit.didSelectAccessory = { (item, cell) in
       let driver = FormDriver(initial: cell, build: colorsForm)
       driver.formViewController.navigationItem.largeTitleDisplayMode = .never
         driver.didUpdate = {
-          self.store.send(.addOrReplace($0))
+          self.viewStore.send(.addOrReplace($0))
           //Current.model.addOrReplace(item: $0)
         }
         self.loadEntryTable.pushViewController(driver.formViewController, animated: true)
@@ -244,9 +252,9 @@ public class App {
           id: text,
           name: text)
         new.content.id = text
-        self.store.send(.addOrReplace(new))
+        self.viewStore.send(.addOrReplace(new))
         // self.store.send(.interfaceAction(.saveData))
-        edit.undoHistory.currentValue = self.store.value.items.contents
+         edit.undoHistory.currentValue = self.viewStore.items.contents
       })))
       
       self.rootController.present(listNamePrompt, animated: true, completion: nil)

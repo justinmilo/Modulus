@@ -91,7 +91,11 @@ sideLabels
 import Interface
 import ComposableArchitecture
 
-public class TentGraph : GraphHolder {
+public class TentGraph : GraphHolder, Equatable {
+   public static func == (lhs: TentGraph, rhs: TentGraph) -> Bool {
+      (lhs.edges == rhs.edges) && (lhs.grid == rhs.grid)
+   }
+   
   public typealias Content = TentParts
   public var id : String
   public var edges : [Edge<Content>]

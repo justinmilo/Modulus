@@ -56,7 +56,11 @@ func halfSolidHalfClearScallopFrom(grid:GraphPositions) -> [Edge<ScallopParts>] 
 
 
 import Interface
-public class ScallopGraph : GraphHolder {
+public class ScallopGraph : GraphHolder, Equatable {
+   public static func == (lhs: ScallopGraph, rhs: ScallopGraph) -> Bool {
+      (lhs.edges == rhs.edges) && (lhs.grid == rhs.grid)
+   }
+   
   public typealias Content = ScallopParts
   public var id : String
   public var edges : [Edge<Content>]

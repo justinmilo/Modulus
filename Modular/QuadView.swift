@@ -23,7 +23,7 @@ import SwiftUI
 import ComposableArchitecture
 import Geo
 
-public struct QuadState<Holder:GraphHolder>{
+public struct QuadState<Holder:GraphHolder> : Equatable{
   var scale : CGFloat =  1
   public var xOffset : CGFloat
   public var xOffsetR : CGFloat
@@ -74,17 +74,24 @@ public enum QuadAction<Holder: GraphHolder> {
   case side(InterfaceAction<Holder>)
 }
 
+public struct QuadEnvironment {
+   
+}
+
 import CasePathse
 
-public func quadReducer<Holder:GraphHolder>(state: inout QuadState<Holder>, action: QuadAction<Holder>) -> [Effect<QuadAction<Holder>>]{
-  
-  let combined = combine(
-  pullback(pageReducer, value: \QuadState.pageState, action: /QuadAction.page),
-  pullback(interfaceReducer, value: \QuadState.planState, action: /QuadAction.plan),
-  pullback(interfaceReducer, value: \QuadState.rotatedPlanState, action: /QuadAction.rotated),
-  pullback(interfaceReducer, value: \QuadState.frontState, action: /QuadAction.front),
-  pullback(interfaceReducer, value: \QuadState.sideState, action: /QuadAction.side),
-  {(state: inout QuadState<Holder>, action: QuadAction<Holder>) -> [Effect<QuadAction<Holder>>] in
+public func quadReducer<Holder: GraphHolder>()->Reducer<QuadState<Holder>, QuadAction<Holder>, QuadEnvironment>{
+
+      Reducer.combine(
+         pageReducer.pullback(state: \QuadState<Holder>.pageState, action: /QuadAction<Holder>.page, environment: {_ in PageEnvironment() }),
+         interfaceReducer().pullback(state: \QuadState.planState, action: /QuadAction.plan, environment: {_ in InterfaceEnvironment() })
+         )
+}
+/*
+         interfaceReducer.pullback(state: \QuadState.rotatedPlanState, action: /QuadAction.rotated),
+         interfaceReducer.pullback(state: \QuadState.frontState, action: /QuadAction.front),
+         interfaceReducer.pullback(state: \QuadState.sideState, action: /QuadAction.side),
+  {(state: inout QuadState<Holder>, action: QuadAction<Holder>, env : QuadEnvironment) in
     switch action {
     case .page: break
     case .plan:
@@ -163,11 +170,9 @@ public func quadReducer<Holder:GraphHolder>(state: inout QuadState<Holder>, acti
     return []
   }
   )
-  
-  return combined(&state, action)
-  
 }
 
+*/
 
 public typealias QuadTentState = QuadState<TentGraph>
 
@@ -176,18 +181,20 @@ public struct QuadView<Holder : GraphHolder> : UIViewControllerRepresentable {
 //  Store( initialValue: QuadState(), reducer:  quadReducer |> logging)
   public init(store: Store<QuadState<Holder>, QuadAction<Holder>> ) {
     self.store = store
-    let storeOne = self.store.view(value: {$0.planState}, action: { .plan($0) })
+   self.storeView = ViewStore(self.store)
+   let storeOne = self.store.scope(state: {$0.planState}, action: { .plan($0) })
     let one = tentVC(store: storeOne, title: "Top")
-    let store2 = self.store.view(value: {$0.rotatedPlanState}, action: { .rotated($0) })
+   let store2 = self.store.scope(state: {$0.rotatedPlanState}, action: { .rotated($0) })
     let two = tentVC(store: store2, title: "Rotated Plan")
-    let store3 = self.store.view(value: {$0.frontState}, action: { .front($0) })
+   let store3 = self.store.scope(state: {$0.frontState}, action: { .front($0) })
     let three = tentVC( store: store3, title: "Front")
-    let store4 = self.store.view(value: {$0.sideState}, action: { .side($0) })
+   let store4 = self.store.scope(state: {$0.sideState}, action: { .side($0) })
     let four =  tentVC(store: store4, title: "Side")
-    driver = QuadDriverCA(store: self.store.view(value: {$0.pageState}, action: { .page($0) }), upper: [one, two], lower: [three, four])
+   driver = QuadDriverCA(store: self.store.scope(state: {$0.pageState}, action: { .page($0) }), upper: [one, two], lower: [three, four])
   }
   private var driver : QuadDriverCA
   public let store : Store<QuadState<Holder>, QuadAction<Holder>>
+   public let storeView : ViewStore<QuadState<Holder>, QuadAction<Holder>>
   public func makeUIViewController(context: UIViewControllerRepresentableContext<QuadView<Holder>>) -> UINavigationController {
     return embedInNav(driver.group)
   }

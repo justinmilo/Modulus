@@ -157,15 +157,6 @@ public func pullback<Value, LocalAction, GlobalAction>(
   }
 }
 
-/// Constrains a  a reducer's transformation along a property specified by the path
-public func constrained<Whole, Part, Action>(_ reducer: @escaping Reducer<Whole, Action>, around path: WritableKeyPath<Whole,Part>  ) -> Reducer<Whole, Action> {
-   return { whole, action in
-      let part = whole[keyPath: path]
-      let effects = reducer(&whole, action)
-      whole[keyPath: path] = part
-      return effects
-   }
-}
 
 
 public func logging<Value, Action>(

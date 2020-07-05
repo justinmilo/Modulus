@@ -38,17 +38,17 @@ public struct iPadView<Holder: GraphHolder>: View {
   
   public init(store: Store<QuadState<Holder>, QuadAction<Holder>> ) {
     self.store = store
-    
-    let storeOne = store.view(value: {$0.planState}, action: { .plan($0) })
+   self.viewStore = ViewStore(self.store)
+    let storeOne = store.scope(state: {$0.planState}, action: { .plan($0) })
     top = SingleHolderView(store: storeOne)
 
-    let store2 = store.view(value: {$0.rotatedPlanState}, action: { .rotated($0) })
+    let store2 = store.scope(state: {$0.rotatedPlanState}, action: { .rotated($0) })
     right = SingleHolderView(store: store2)
     
-    let store3 = store.view(value: {$0.frontState}, action: { .front($0) })
+    let store3 = store.scope(state: {$0.frontState}, action: { .front($0) })
     left = SingleHolderView(store: store3)
     
-    let store4 = store.view(value: {$0.sideState}, action: { .side($0) })
+    let store4 = store.scope(state: {$0.sideState}, action: { .side($0) })
     bottom = SingleHolderView(store: store4)
     
   }
@@ -57,7 +57,9 @@ public struct iPadView<Holder: GraphHolder>: View {
   var left: SingleHolderView<Holder>
   var bottom: SingleHolderView<Holder>
 
-  @ObservedObject public var store : Store<QuadState<Holder>, QuadAction<Holder>>
+  public var store : Store<QuadState<Holder>, QuadAction<Holder>>
+   public var viewStore : ViewStore<QuadState<Holder>, QuadAction<Holder>>
+
   
   public var body: some View {
     VStack(spacing: 0){

@@ -71,22 +71,23 @@ import Singalong
 public struct QuadScaffView : UIViewControllerRepresentable {
   public init() {
     self.init(store: Store(
-       initialValue: QuadScaffState(),
-       reducer:  quadReducer |> logging
+      initialState: QuadScaffState(),
+      reducer:  quadReducer().debug(),
+      environment: QuadEnvironment()
      )
     )
   }
   public init(store: Store<QuadScaffState, QuadAction<ScaffGraph>> ) {
     self.store = store
-    let storeOne = self.store.view(value: {$0.planState}, action: { .plan($0) })
+   let storeOne = self.store.scope(state: {$0.planState}, action: { .plan($0) })
     let one = tentVC(store: storeOne, title: "Top")
-    let store2 = self.store.view(value: {$0.rotatedPlanState}, action: { .rotated($0) })
+   let store2 = self.store.scope(state: {$0.rotatedPlanState}, action: { .rotated($0) })
     let two = tentVC(store: store2, title: "Rotated Plan")
-    let store3 = self.store.view(value: {$0.frontState}, action: { .front($0) })
+   let store3 = self.store.scope(state: {$0.frontState}, action: { .front($0) })
     let three = tentVC( store: store3, title: "Front")
-    let store4 = self.store.view(value: {$0.sideState}, action: { .side($0) })
+   let store4 = self.store.scope(state: {$0.sideState}, action: { .side($0) })
     let four =  tentVC(store: store4, title: "Side")
-    driver = QuadDriverCA(store: self.store.view(value: {$0.pageState}, action: { .page($0) }), upper: [one, two], lower: [three, four])
+    driver = QuadDriverCA(store: self.store.scope(state: {$0.pageState}, action: { .page($0) }), upper: [one, two], lower: [three, four])
   }
   private var driver : QuadDriverCA
   public let store : Store<QuadScaffState, QuadAction<ScaffGraph>>
@@ -126,24 +127,26 @@ import Geo
 public struct iPadScaffView: View {
   public init() {
     self.init(store: Store(
-      initialValue: QuadScaffState(size: UIScreen.main.bounds.size * 0.5),
-       reducer:  quadReducer |> logging
+      initialState: QuadScaffState(size: UIScreen.main.bounds.size * 0.5),
+      reducer:  quadReducer().debug(),
+      environment: QuadEnvironment()
      )
     )
   }
   public init(store: Store<QuadScaffState, QuadAction<ScaffGraph>> ) {
     self.store = store
+   self.viewStore = ViewStore(self.store)
     
-    let storeOne = store.view(value: {$0.planState}, action: { .plan($0) })
+    let storeOne = store.scope(state: {$0.planState}, action: { .plan($0) })
     top = SingleScaffView(store: storeOne)
 
-    let store2 = store.view(value: {$0.rotatedPlanState}, action: { .rotated($0) })
+    let store2 = store.scope(state: {$0.rotatedPlanState}, action: { .rotated($0) })
     right = SingleScaffView(store: store2)
     
-    let store3 = store.view(value: {$0.frontState}, action: { .front($0) })
+    let store3 = store.scope(state: {$0.frontState}, action: { .front($0) })
     left = SingleScaffView(store: store3)
     
-    let store4 = store.view(value: {$0.sideState}, action: { .side($0) })
+    let store4 = store.scope(state: {$0.sideState}, action: { .side($0) })
     bottom = SingleScaffView(store: store4)
     
   }
@@ -152,8 +155,8 @@ public struct iPadScaffView: View {
   var left: SingleScaffView
   var bottom: SingleScaffView
 
-  
-  @ObservedObject public var store : Store<QuadScaffState, QuadAction<ScaffGraph>>
+  public var store : Store<QuadScaffState, QuadAction<ScaffGraph>>
+  @ObservedObject public var viewStore : ViewStore<QuadScaffState, QuadAction<ScaffGraph>>
   
   public var body: some View {
     VStack(spacing: 0){
