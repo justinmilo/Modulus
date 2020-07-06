@@ -22,8 +22,8 @@ public struct Item1UpView : Equatable {
 }
 
 extension Item1UpView {
-   var arProvider : ARProviderState { ARProviderState(provider: self.item.content |> provider )}
-   var scnProvider : SCNProviderState { SCNProviderState(provider: self.item.content |> provider,
+   var arProvider : ARProviderState { ARProviderState(scaff: self.item.content |> members )}
+   var scnProvider : SCNProviderState { SCNProviderState(scaff: self.item.content |> members,
                                                          view: quad.pageState.currentQuadrant |> cameraView)
    }
 }

@@ -97,4 +97,3 @@ func members(graph: ScaffGraph) -> [ScaffMember] {
   }
 }
 
-let provider = members >>> AScaffProvider.init

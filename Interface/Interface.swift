@@ -95,7 +95,6 @@ public enum InterfaceAction<Holder:GraphHolder> {
 
 public struct InterfaceEnvironment { }
 
-import CasePathse
 public func interfaceReducer<Holder:GraphHolder>()->Reducer<InterfaceState<Holder>,InterfaceAction<Holder>, InterfaceEnvironment> {
    Reducer.combine(
       spriteReducer().pullback(state: \InterfaceState<Holder>.spriteState, action: /InterfaceAction<Holder>.sprite, environment: {(int: InterfaceEnvironment) -> SpriteEnvironment in SpriteEnvironment() })

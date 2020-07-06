@@ -78,8 +78,6 @@ public struct QuadEnvironment {
    
 }
 
-import CasePathse
-
 public func quadReducer<Holder: GraphHolder>()->Reducer<QuadState<Holder>, QuadAction<Holder>, QuadEnvironment>{
 
       Reducer.combine(
