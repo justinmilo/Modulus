@@ -18,7 +18,18 @@ import ComposableArchitecture
 public struct SpriteState<Holder:GraphHolder> : Equatable {
    public static func == (lhs: SpriteState<Holder>, rhs: SpriteState<Holder>) -> Bool {
       // TODO : Make sure this is right
-      if lhs.graph == rhs.graph { return true } else { return false }
+      if lhs.graph == rhs.graph,
+         lhs.spriteFrame == rhs.spriteFrame,
+      lhs.scale == rhs.scale,
+      lhs.graph == rhs.graph,
+      lhs.sizePreferences == rhs.sizePreferences,
+      lhs.layoutOrigin == rhs.layoutOrigin,
+      lhs.layoutSize == rhs.layoutSize,
+      lhs.layoutFrame == rhs.layoutFrame,
+      lhs.modelSpaceAllowableSize == rhs.modelSpaceAllowableSize
+         
+      { return true } else { return false }
+      
 //      spriteFrame
 //      scale
 //      graph

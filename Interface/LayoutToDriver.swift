@@ -34,7 +34,7 @@ public struct Edge2<Content> where Content : Codable {
   }
 }
 
-public struct Changed<A: Equatable> {
+public struct Changed<A: Equatable> : Equatable {
   private(set) var changed : A?
   var value: A { return previous }
   mutating func update(_ val: A) {

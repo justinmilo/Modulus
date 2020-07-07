@@ -9,7 +9,6 @@
 import UIKit
 import SwiftUI
 @testable import Interface
-@testable import GrippableView
 import ComposableArchitecture
 
 extension QuadState where Holder == TentGraph {

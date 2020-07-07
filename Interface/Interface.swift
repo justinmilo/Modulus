@@ -8,7 +8,6 @@
 
 import UIKit
 import Geo
-@testable import GrippableView
 import Singalong
 import Make2D
 import ComposableArchitecture
@@ -97,14 +96,10 @@ public struct InterfaceEnvironment { }
 
 public func interfaceReducer<Holder:GraphHolder>()->Reducer<InterfaceState<Holder>,InterfaceAction<Holder>, InterfaceEnvironment> {
    Reducer.combine(
-      spriteReducer().pullback(state: \InterfaceState<Holder>.spriteState, action: /InterfaceAction<Holder>.sprite, environment: {(int: InterfaceEnvironment) -> SpriteEnvironment in SpriteEnvironment() })
-   )
-}
-/*
-  let reducer =  combine (
-    pullback(spriteReducer, value: \InterfaceState<Holder>.spriteState, action: /InterfaceAction<Holder>.sprite),
-    pullback(canvasSelectionReducer, value: \InterfaceState<Holder>.canvasState, action: /InterfaceAction<Holder>.canvasAction),
-    { (state: inout InterfaceState<Holder>, action: InterfaceAction<Holder>) -> [Effect<InterfaceAction<Holder>>] in
+      spriteReducer().pullback(state: \InterfaceState<Holder>.spriteState, action: /InterfaceAction<Holder>.sprite, environment: {(int: InterfaceEnvironment) -> SpriteEnvironment in SpriteEnvironment() }),
+      spriteReducer().pullback(state: \InterfaceState<Holder>.spriteState, action: /InterfaceAction<Holder>.sprite, environment: {(int: InterfaceEnvironment) -> SpriteEnvironment in SpriteEnvironment() }),
+      canvasSelectionReducer.pullback(state: \InterfaceState<Holder>.canvasState, action: /InterfaceAction<Holder>.canvasAction, environment: {_ in CanvasSelectionEnvironment() }),
+      Reducer{(state: inout InterfaceState<Holder>, action: InterfaceAction<Holder>, environment: InterfaceEnvironment ) in
         switch action {
         case
             .canvasAction(.handles(.handles(.top(.timerUpdate)))),
@@ -127,26 +122,26 @@ public func interfaceReducer<Holder:GraphHolder>()->Reducer<InterfaceState<Holde
             .canvasAction(.scroll(.scroll(.grow(.onDecelerate)))),
             .canvasAction(.scroll(.scroll(.grow(.onDecelerateEnd)))),
             .sprite:
-              return []
+         return .none
         case .canvasAction(.handles(.handles(.top(.handle(.didLetGo))))),
              .canvasAction(.handles(.handles(.bottom(.handle(.didLetGo))))),
              .canvasAction(.handles(.handles(.left(.handle(.didLetGo))))),
              .canvasAction(.handles(.handles(.right(.handle(.didLetGo))))):
           state.canvasState.selection = state.spriteState.layoutFrame
-          return []
+          return .none
         case .canvasAction(.handles(.handles(.top(.handle(.didMoveFinger(_)))))),
              .canvasAction(.handles(.handles(.bottom(.handle(.didMoveFinger(_)))))),
              .canvasAction(.handles(.handles(.left(.handle(.didMoveFinger(_)))))),
              .canvasAction(.handles(.handles(.right(.handle(.didMoveFinger(_)))))):
           state.spriteState.spriteFrame = state.canvasFrame
           state.spriteState.frame.update(state.selection)
-          return []
+          return .none
         case .canvasAction(.scroll(.scroll(.grow(.onZoomEnd)))):
           state.spriteState.scale = state.scale
-          return []
+          return .none
       }
   },
-    { (state: inout InterfaceState<Holder>, action: InterfaceAction<Holder>) -> [Effect<InterfaceAction<Holder>>] in
+      Reducer{ (state: inout InterfaceState<Holder>, action: InterfaceAction<Holder>, environment: InterfaceEnvironment) in
         switch action {
         case  .canvasAction(.scroll(.scroll(.grow(.onZoomBegin)))),
           .canvasAction(.scroll(.scroll(.grow(.onZoom)))),
@@ -174,13 +169,12 @@ public func interfaceReducer<Holder:GraphHolder>()->Reducer<InterfaceState<Holde
         default:
           break
         }
-        return []
+        return .none
     }
   )
-  let effects = reducer(&state, action)
-  return effects
 }
-*/
+
+
  
 import Combine
 public class InterfaceController<Holder:GraphHolder> : UIViewController {

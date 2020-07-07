@@ -19,7 +19,6 @@ import Foundation
 import UIKit
 import SwiftUI
 @testable import Interface
-@testable import GrippableView
 import ComposableArchitecture
 import Geo
 
@@ -82,14 +81,12 @@ public func quadReducer<Holder: GraphHolder>()->Reducer<QuadState<Holder>, QuadA
 
       Reducer.combine(
          pageReducer.pullback(state: \QuadState<Holder>.pageState, action: /QuadAction<Holder>.page, environment: {_ in PageEnvironment() }),
-         interfaceReducer().pullback(state: \QuadState.planState, action: /QuadAction.plan, environment: {_ in InterfaceEnvironment() })
-         )
-}
-/*
-         interfaceReducer.pullback(state: \QuadState.rotatedPlanState, action: /QuadAction.rotated),
-         interfaceReducer.pullback(state: \QuadState.frontState, action: /QuadAction.front),
-         interfaceReducer.pullback(state: \QuadState.sideState, action: /QuadAction.side),
-  {(state: inout QuadState<Holder>, action: QuadAction<Holder>, env : QuadEnvironment) in
+         interfaceReducer().pullback(state: \QuadState.planState, action: /QuadAction.plan, environment: {_ in InterfaceEnvironment() }),
+
+         interfaceReducer().pullback(state: \QuadState.rotatedPlanState, action: /QuadAction.rotated, environment: {_ in InterfaceEnvironment() }),
+         interfaceReducer().pullback(state: \QuadState.frontState, action: /QuadAction.front, environment: {_ in InterfaceEnvironment() }),
+         interfaceReducer().pullback(state: \QuadState.sideState, action: /QuadAction.side, environment: {_ in InterfaceEnvironment() }),
+   Reducer{(state: inout QuadState<Holder>, action: QuadAction<Holder>, env : QuadEnvironment) in
     switch action {
     case .page: break
     case .plan:
@@ -165,12 +162,10 @@ public func quadReducer<Holder: GraphHolder>()->Reducer<QuadState<Holder>, QuadA
       state.planState.selectionView = CGRect(origin: state.planOrigin, size: state.planState.spriteState.viewSpaceSize)
       break
     }
-    return []
+      return .none
   }
   )
 }
-
-*/
 
 public typealias QuadTentState = QuadState<TentGraph>
 
