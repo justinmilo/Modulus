@@ -79,6 +79,18 @@
 		21ECD6E023909DF900C83C06 /* Make2D.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D0F3327A21336E31009BBDD9 /* Make2D.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		21ECD6E123909E0D00C83C06 /* Volume.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0F3327821336E2A009BBDD9 /* Volume.framework */; };
 		21ECD6E223909E0D00C83C06 /* Volume.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D0F3327821336E2A009BBDD9 /* Volume.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		21F120AA24B3F1DF00053F92 /* Handle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F120A924B3F1DF00053F92 /* Handle.swift */; };
+		21F120AC24B3F1E600053F92 /* BoundedHandle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F120AB24B3F1E600053F92 /* BoundedHandle.swift */; };
+		21F120AE24B3F1EB00053F92 /* HandleGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F120AD24B3F1EB00053F92 /* HandleGroup.swift */; };
+		21F120B024B3F1F900053F92 /* RectGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F120AF24B3F1F900053F92 /* RectGroup.swift */; };
+		21F120B224B3F20000053F92 /* Grow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F120B124B3F20000053F92 /* Grow.swift */; };
+		21F120B424B3F20600053F92 /* CenteredGrow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F120B324B3F20600053F92 /* CenteredGrow.swift */; };
+		21F120B624B3F20E00053F92 /* AreaOfInterest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F120B524B3F20E00053F92 /* AreaOfInterest.swift */; };
+		21F120B824B3F21400053F92 /* CanvasSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F120B724B3F21400053F92 /* CanvasSelection.swift */; };
+		21F120C424B3F2FB00053F92 /* NoHitView+DebugHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F120C324B3F2FB00053F92 /* NoHitView+DebugHelpers.swift */; };
+		21F120C624B3F34200053F92 /* OffsetableViewCoreStateFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F120C524B3F34100053F92 /* OffsetableViewCoreStateFunctions.swift */; };
+		21F120C824B3F46B00053F92 /* DeepPressGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F120C724B3F46B00053F92 /* DeepPressGestureRecognizer.swift */; };
+		21F120CA24B3F47E00053F92 /* ButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F120C924B3F47E00053F92 /* ButtonView.swift */; };
 		D00069D4200BD08300E8D5F3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00069D3200BD08300E8D5F3 /* AppDelegate.swift */; };
 		D00069DB200BD08300E8D5F3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D00069DA200BD08300E8D5F3 /* Assets.xcassets */; };
 		D00069DE200BD08300E8D5F3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D00069DC200BD08300E8D5F3 /* LaunchScreen.storyboard */; };
@@ -317,6 +329,25 @@
 		21D703C2238EB5AD005D5CBE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		21D703C4238EB5AD005D5CBE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		21ECD6D023909D7E00C83C06 /* Drawable.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Drawable.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		21F120A924B3F1DF00053F92 /* Handle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Handle.swift; sourceTree = "<group>"; };
+		21F120AB24B3F1E600053F92 /* BoundedHandle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoundedHandle.swift; sourceTree = "<group>"; };
+		21F120AD24B3F1EB00053F92 /* HandleGroup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HandleGroup.swift; sourceTree = "<group>"; };
+		21F120AF24B3F1F900053F92 /* RectGroup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RectGroup.swift; sourceTree = "<group>"; };
+		21F120B124B3F20000053F92 /* Grow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Grow.swift; sourceTree = "<group>"; };
+		21F120B324B3F20600053F92 /* CenteredGrow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CenteredGrow.swift; sourceTree = "<group>"; };
+		21F120B524B3F20E00053F92 /* AreaOfInterest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AreaOfInterest.swift; sourceTree = "<group>"; };
+		21F120B724B3F21400053F92 /* CanvasSelection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CanvasSelection.swift; sourceTree = "<group>"; };
+		21F120BA24B3F25000053F92 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		21F120BB24B3F25000053F92 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		21F120BC24B3F25000053F92 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		21F120BD24B3F25100053F92 /* SwiftUIWrappers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUIWrappers.swift; sourceTree = "<group>"; };
+		21F120BE24B3F26B00053F92 /* +CustomStringConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "+CustomStringConvertible.swift"; sourceTree = "<group>"; };
+		21F120BF24B3F27A00053F92 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = ../../../ScrollViewGrower/Canvas/Assets.xcassets; sourceTree = "<group>"; };
+		21F120C124B3F27A00053F92 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = ../../../ScrollViewGrower/Canvas/Info.plist; sourceTree = "<group>"; };
+		21F120C324B3F2FB00053F92 /* NoHitView+DebugHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NoHitView+DebugHelpers.swift"; sourceTree = "<group>"; };
+		21F120C524B3F34100053F92 /* OffsetableViewCoreStateFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OffsetableViewCoreStateFunctions.swift; sourceTree = "<group>"; };
+		21F120C724B3F46B00053F92 /* DeepPressGestureRecognizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeepPressGestureRecognizer.swift; sourceTree = "<group>"; };
+		21F120C924B3F47E00053F92 /* ButtonView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ButtonView.swift; sourceTree = "<group>"; };
 		D00069D0200BD08300E8D5F3 /* Deploy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Deploy.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D00069D3200BD08300E8D5F3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D00069DA200BD08300E8D5F3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -471,6 +502,9 @@
 		2111C84F238B224D000485F1 /* Interface */ = {
 			isa = PBXGroup;
 			children = (
+				21F120A824B3F1B900053F92 /* 1.0 Canvas */,
+				21F120C224B3F2EA00053F92 /* 1.1 Canvas Helpers */,
+				21F120B924B3F23500053F92 /* 1.2 Canvas Testing Swift UI App */,
 				2111C863238B23B8000485F1 /* Should Move To Earlier Frameworks */,
 				2111C86F238B26B5000485F1 /* GenericViewMap.swift */,
 				D03E03F720125DF8002D47F3 /* Sprite2DView.swift */,
@@ -644,6 +678,46 @@
 				21D703BF238EB5AD005D5CBE /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		21F120A824B3F1B900053F92 /* 1.0 Canvas */ = {
+			isa = PBXGroup;
+			children = (
+				21F120B724B3F21400053F92 /* CanvasSelection.swift */,
+				21F120B524B3F20E00053F92 /* AreaOfInterest.swift */,
+				21F120B324B3F20600053F92 /* CenteredGrow.swift */,
+				21F120B124B3F20000053F92 /* Grow.swift */,
+				21F120AF24B3F1F900053F92 /* RectGroup.swift */,
+				21F120AD24B3F1EB00053F92 /* HandleGroup.swift */,
+				21F120AB24B3F1E600053F92 /* BoundedHandle.swift */,
+				21F120A924B3F1DF00053F92 /* Handle.swift */,
+			);
+			path = "1.0 Canvas";
+			sourceTree = "<group>";
+		};
+		21F120B924B3F23500053F92 /* 1.2 Canvas Testing Swift UI App */ = {
+			isa = PBXGroup;
+			children = (
+				21F120BF24B3F27A00053F92 /* Assets.xcassets */,
+				21F120C124B3F27A00053F92 /* Info.plist */,
+				21F120BB24B3F25000053F92 /* AppDelegate.swift */,
+				21F120BC24B3F25000053F92 /* SceneDelegate.swift */,
+				21F120BA24B3F25000053F92 /* ContentView.swift */,
+				21F120BD24B3F25100053F92 /* SwiftUIWrappers.swift */,
+				21F120BE24B3F26B00053F92 /* +CustomStringConvertible.swift */,
+			);
+			path = "1.2 Canvas Testing Swift UI App";
+			sourceTree = "<group>";
+		};
+		21F120C224B3F2EA00053F92 /* 1.1 Canvas Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				21F120C924B3F47E00053F92 /* ButtonView.swift */,
+				21F120C724B3F46B00053F92 /* DeepPressGestureRecognizer.swift */,
+				21F120C524B3F34100053F92 /* OffsetableViewCoreStateFunctions.swift */,
+				21F120C324B3F2FB00053F92 /* NoHitView+DebugHelpers.swift */,
+			);
+			path = "1.1 Canvas Helpers";
 			sourceTree = "<group>";
 		};
 		D00069C7200BD08300E8D5F3 = {
@@ -1076,13 +1150,25 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				21F120B424B3F20600053F92 /* CenteredGrow.swift in Sources */,
+				21F120C424B3F2FB00053F92 /* NoHitView+DebugHelpers.swift in Sources */,
+				21F120CA24B3F47E00053F92 /* ButtonView.swift in Sources */,
 				2111C862238B23B0000485F1 /* IssuedLayout.swift in Sources */,
+				21F120B824B3F21400053F92 /* CanvasSelection.swift in Sources */,
+				21F120C624B3F34200053F92 /* OffsetableViewCoreStateFunctions.swift in Sources */,
 				2111C861238B2372000485F1 /* TypedNotifications.swift in Sources */,
+				21F120AA24B3F1DF00053F92 /* Handle.swift in Sources */,
+				21F120AC24B3F1E600053F92 /* BoundedHandle.swift in Sources */,
 				2111C866238B24EB000485F1 /* Sprite2DView.swift in Sources */,
+				21F120B624B3F20E00053F92 /* AreaOfInterest.swift in Sources */,
 				2111C85C238B22E6000485F1 /* Interface.swift in Sources */,
 				2111C85B238B22B2000485F1 /* SpriteDriver.swift in Sources */,
+				21F120AE24B3F1EB00053F92 /* HandleGroup.swift in Sources */,
 				2111C870238B26B5000485F1 /* GenericViewMap.swift in Sources */,
+				21F120B024B3F1F900053F92 /* RectGroup.swift in Sources */,
 				2111C864238B2472000485F1 /* LayoutToDriver.swift in Sources */,
+				21F120B224B3F20000053F92 /* Grow.swift in Sources */,
+				21F120C824B3F46B00053F92 /* DeepPressGestureRecognizer.swift in Sources */,
 				2111C871238C1895000485F1 /* GraphicsCore.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
